@@ -1,0 +1,103 @@
+package com.lakala.module.news.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.dubbo.common.utils.StringUtils;
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.news.NewsMapper;
+import com.lakala.mapper.w.news.TNewsLogMapper;
+import com.lakala.model.news.TNewsLog;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.news.service.NewsService;
+import com.lakala.module.news.vo.MessageInput;
+import com.lakala.module.news.vo.NewsItemOutput;
+import com.lakala.util.BussConst;
+import com.lakala.util.ConfigUtil;
+import com.lakala.util.ImageUtil;
+import com.lakala.util.ReturnMsg;
+
+@Service("NewsServiceBean")
+public class NewsServiceImp implements NewsService {
+	
+	private static Logger logger = Logger.getLogger(NewsServiceImp.class);
+	
+	@Autowired
+	private NewsMapper  newsmapper_R;
+	
+	@Autowired
+	private TNewsLogMapper tNewsLogMapper_W;
+	
+	@Autowired
+	private com.lakala.mapper.r.news.TNewsLogMapper newslogMapper_r;
+	
+	@Autowired
+    private ConfigUtil configUtil;
+
+	@Override
+	public ObjectOutput<List<NewsItemOutput>> getInfo(Integer newsid,String terminalCode)
+			throws LakalaException {
+		ObjectOutput<List<NewsItemOutput>> data = new ObjectOutput<List<NewsItemOutput>>(); 
+		
+		List<NewsItemOutput> list = newsmapper_R.getInfo(newsid);
+		
+		if(list == null || list.size() == 0){
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("返回数据为空！");
+		}
+		else{
+		//组织图片地址
+			for(NewsItemOutput newsItemOutput: list ){
+				newsItemOutput.setPicture(ImageUtil.getImgUrl(configUtil, BussConst.IMAGE_TARGETTYPE_MSG,newsItemOutput.getItemsid().toString() ,newsItemOutput.getPicture() , "mainImg", true));
+			}
+		//更新TnewLogs 状态为3,已查看
+			if(!StringUtils.isBlank(terminalCode)){
+				TNewsLog newsLog = new TNewsLog();
+				newsLog.setNewsId(newsid);	
+				newsLog.setTerminalCode(terminalCode);
+				tNewsLogMapper_W.updateNewsLogStatus(newsLog);
+			}
+		 data.set_ReturnData(list);
+         data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+         data.set_ReturnMsg("返回成功！");
+		}
+		return data;
+	}
+
+	@Override
+	public ObjectOutput<List<NewsItemOutput>> getConsultInfo(Integer itemsid)
+			throws LakalaException {
+		ObjectOutput<List<NewsItemOutput>> data = new ObjectOutput<List<NewsItemOutput>>();
+		
+		List<NewsItemOutput> ouputList = newsmapper_R.getConsultInfo(itemsid);
+		data.set_ReturnData(ouputList);
+		return data;
+	}
+	
+	@Override
+	public ObjectOutput countUnReadMessage(MessageInput input)
+			throws LakalaException {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("terminalCode", input.getTerminalCode());
+		if(org.springframework.util.StringUtils.hasText(input.getMobile())){
+			params.put("tel", input.getMobile());
+		}
+		int count = newslogMapper_r.countNewslog(params);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("count", count);
+		
+		ObjectOutput info = new ObjectOutput();
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		info.set_ReturnData(result);
+		return info;
+	}
+
+
+}

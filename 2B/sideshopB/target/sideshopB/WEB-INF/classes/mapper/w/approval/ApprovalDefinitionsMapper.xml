@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.approval.ApprovalDefinitionsMapper">
+    <!-- 自定义查询审批数据 -->
+    <select id="findApprovalDefinitions" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select ad.wtmcode,au.approvaluserid,au.sortid ,ad.active from tapprovaldefinitions ad inner join tapprovaluser au on ad.wtmcode=au.wtmcode
+        where ad.objtype=#{objtype} and au.userid=#{userid}
+        and au.sortid not in (select sortid from tapproval where docentry=#{docentry} and objtype=#{objtype} and isreturn!=1 and isreturn!=2 )
+        order by au.sortid
+        limit 0,1;
+    </select>
+</mapper>

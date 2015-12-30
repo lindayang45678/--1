@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>小店开通</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="register.html" class="back"></a>				
+		<h1>小店开通</h1>
+	</header>
+	<section class="container">
+		<div class="shopopen">
+			<ul>
+				<li><span>手机号</span><input type="tel" name="mobile" id="mobile" maxlength="11" readonly="readonly" /></li>
+				<li class="message ml10"><span>验证码</span><input type="text" name="verificationCode" id="verificationCode" readonly="readonly" /></li>
+			</ul>
+			<ul>
+				<li><span>登录密码</span><input type="password" name="pwd" id="pwd" /></li>
+				<li class="ml10"><span>店主姓名</span><input type="text" name="shopername" id="shopername" /></li>
+				<li class="ml10">
+					<span>店铺地址</span>
+					<input type="text" id="shopadd" />
+					<div id="address" class="address">
+						<select id="provinceid"></select>
+						<select id="cityid"></select>
+						<select id="areaid"></select>
+						<input type="hidden" id="provincename"/>
+						<input type="hidden" id="cityname"/>
+						<input type="hidden" id="areaname"/>
+					</div>
+				</li>
+				<li class="hidden ml10"><span>详细地址</span><input type="text" name="shopaddress" id="shopaddress" /></li>
+			</ul>
+			<ul>
+				<li><span>开通编码</span><input type="text" name="opencode" id="opencode" placeholder="选填" /></li>
+			</ul>
+			<div class="wrap" style="margin-top:20px;">
+				<a href="javascript:;" id="goin-shop" class="btn-red goin-shop">开&nbsp;&nbsp;通</a>
+				<p class="agreement c-gray">我已阅读并同意<a href="javascript:;" id="terms">《拉卡拉身边小店商户平台用户协议》</a></p>
+			</div>
+		</div>
+	</section>
+	<div class="register-pop-ok hidden" id="register-already">
+		<div>
+			<p>恭喜您，开通成功！<br/>关注微信公众号【拉卡拉小店】领取优惠券！</p>
+			<a class="btn-red" href="login.html">登&nbsp;录</a>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" id="platJs"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+	<script type="text/javascript" src="../../js/accounts/shopopen.js"></script>
+</body>
+</html>

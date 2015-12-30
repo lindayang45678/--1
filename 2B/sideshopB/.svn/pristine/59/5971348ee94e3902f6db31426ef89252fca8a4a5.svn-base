@@ -1,0 +1,8 @@
+# lakala to pay settings  
+lakala.callbackurl=http://10.5.12.203:8083/sideshopB/app/wholesale/topay.html
+#lakala.callbackurl=http://appmts.lakalaec.com:8181/sideshopB/app/wholesale/topay.html
+# 微信网页版支付
+# 测试
+lakala.wxcallbackurl = http://10.1.80.47:8088/webpayapp/wx/getcode
+# 生产
+#lakala.wxcallbackurl = http://10.1.80.47:8089/webpay/wx/getcode

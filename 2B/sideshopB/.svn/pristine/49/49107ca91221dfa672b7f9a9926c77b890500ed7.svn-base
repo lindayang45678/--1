@@ -1,0 +1,304 @@
+/* 获得平台商品详情
+$(function(){
+	var sUrl = window.location.href;
+	var tGoodsInfoId = getParamValueByName(sUrl, "tGoodsInfoId");
+	//测试用数据
+	tGoodsInfoId = "50";
+	var content = "";
+	var nonstock = $(".nonstock-part1 ul");
+	
+	var data = {"tGoodsInfoId":tGoodsInfoId};
+	var resultJson = ajaxCommon(urlGetgoodsdetail, data);
+	resultJson = convertNullToEmpty(resultJson);
+	
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		var	imagesList = sortGoodsAndAdvert(resultJson._ReturnData.images);
+		
+		content +="<li>";
+		content +="<img src='../../images/pluse-image.png' alt=''/>";
+		content +="</li>";
+		if (imagesList.length > 0) {
+			for (var i = 0; i < imagesList.length; i++) {
+				content +="<li><img src=" + imagesList[i].url + " alt=''/>";
+				content +="</li>";
+			};
+		}
+		//图片，商品名，商品简介
+		nonstock.html("").append(content);
+		$(".max-3").html("").html(_ReturnData.goodName);
+		$(".max-n").html("").html(_ReturnData.goodIntroduce);
+		
+		//商品规格
+		var	skusList = resultJson._ReturnData.skus;
+		$('.increase-content').addClass('hidden');
+		$('.del-content').addClass('hidden');
+		
+//		var tRealCateId = resultJson._ReturnData.tRealCateId;
+//		var data = {"tRealCateId":tRealCateId};
+//		alert(tRealCateId);
+//		var url = "../../goods/querygoodproperty/" + tRealCateId;
+//		var resultJson = ajaxCommon(url, data);
+		
+		if (skusList.length > 0) {
+			for (var i = 0; i < skusList.length; i++) {
+				//TODO 750gx草莓味
+				var sku = skusList[i].skuFrontDisNameStr.split('x');
+				if(skusList.length-1 == i){
+					//sku=["750g","草莓味"];
+					showRemoveSku(sku);
+				}else{
+					//sku=["750g","草莓味"];
+					showAddSku(sku);
+				}
+			};
+		}
+		
+//		//配送方式
+//		if(_ReturnData.isExpressToHome===1){
+//			$("#dx4").prop('checked',true);
+//		}
+		
+	}else{
+		//接口返回错误
+	}
+});
+
+
+function showRemoveSku(sku){
+		var removecontent="";
+		removecontent+="<div class='nonstock-part3 del-content'>";
+		removecontent+="<div class='item clearfix'>";
+		removecontent+="<div class='half select-color'>";
+		removecontent+="<span>颜色：</span>";
+		removecontent+="<div><em>"+sku[0]+"</em><ul class='hidden'><li>红色</li><li>蓝色</li><li>黑色</li></ul></div>";
+		removecontent+="</div>";
+		removecontent+="<div class='half select-size'>";
+		removecontent+="<span>尺码：</span>";
+		removecontent+="<div><em>"+sku[1]+"</em><ul class='hidden'><li>31码</li><li>32码</li></ul></div>";
+		removecontent+="</div>";
+		removecontent+="</div>";
+		removecontent+="<div class='item clearfix'>";
+		removecontent+="<div class='half'><span>销售价：</span><input type='number' value=''/>元</div>";
+		removecontent+="<div class='half'><span>市场价：</span><input type='number' value=''>元</div>";
+		removecontent+="</div>";
+		removecontent+="<div class='item clearfix'>";
+		removecontent+="<div class='half'><span>库存：</span><input type='number' value=''/></div>";
+		removecontent+="<div class='half del'>删除规格</div>";
+		removecontent+="</div>";
+		removecontent+="</div>";
+		$('.increase-content').after(removecontent);
+}
+
+function showAddSku(sku){
+	var addcontent="";
+		addcontent+="<div class='nonstock-part3 increase-content'>";
+		addcontent+="<div class='item clearfix'>";
+		addcontent+="<div class='half select-color'>";
+		addcontent+="<span>颜色：</span>";
+		addcontent+="<div><em>"+sku[0]+"</em><ul class='hidden'><li>红色</li><li>蓝色</li><li>黑色</li></ul></div>";
+		addcontent+="</div>";
+		addcontent+="<div class='half select-size'>";
+		addcontent+="<span>尺码：</span>";
+		addcontent+="<div><em>"+sku[1]+"</em><ul class='hidden'><li>31码</li><li>32码</li></ul></div>";
+		addcontent+="</div>";
+		addcontent+="</div>";
+		addcontent+="<div class='item clearfix'>";
+		addcontent+="<div class='half'><span>销售价：</span><input type='number' value=''/>元</div>";
+		addcontent+="<div class='half'><span>市场价：</span><input type='number' value=''>元</div>";
+		addcontent+="</div>";
+		addcontent+="<div class='item clearfix'>";
+		addcontent+="<div class='half'><span>库存：</span><input type='number' value=''/></div>";
+		addcontent+="<div class='half add'>添加规格</div>";
+		addcontent+="</div>";
+		addcontent+="</div>";
+		$('.shopedit-3item').after(addcontent);
+}
+ */
+
+$(function(){
+	//初始化商品页面
+	writeGoodsInfo.initPage(59);
+	
+	//选择规格
+	selectSku();
+	//删除规格
+	removeSku();
+})
+
+//添加规格
+$(function(){
+	$('.add').on('tap',function(){
+		var addcontent=""
+		addcontent+="<div class='nonstock-part3 del-content'>";
+		addcontent+="<div class='item clearfix'>";
+		addcontent+= goodsProUtils.parseJson();
+		addcontent+="</div>";
+		addcontent+="<div class='item clearfix'>";
+		addcontent+="<div class='half'><span>销售价：</span><input type='number' value='13'/>元</div>";
+		addcontent+="<div class='half'><span>市场价：</span><input type='number' value='33'>元</div>";
+		addcontent+="</div>";
+		addcontent+="<div class='item clearfix'>";
+		addcontent+="<div class='half'><span>库存：</span><input type='number' value='12'/></div>";
+		addcontent+="<div class='half del'>删除规格</div>";
+		addcontent+="</div>";
+		addcontent+="</div>";
+		$('.increase-content').after(addcontent);
+		selectSku();
+		removeSku();
+	});
+});
+
+function selectSku(){
+	$('.select-sku').on('tap',function(){
+		if($(this).find('ul').hasClass('hidden')){
+			$(this).find('ul').removeClass('hidden');
+		}else{
+			$(this).find('ul').addClass('hidden');
+		}
+	});
+	
+	$('.select-sku').find('li').on('tap',function(){
+		$(this).parent().siblings('em').html($(this).html());
+		$(this).find('ul').addClass('hidden');
+	});
+}
+
+function removeSku(){
+	/*删除规格*/
+	$('.del').on('tap',function(){
+		$(this).parent().parent().remove();
+	});
+}
+/*删除照片	*/
+$(function(){
+	$('.nonstock-part1').find('del').on('tap',function(){
+		$(this).parent().remove();
+		
+	});
+	
+});
+
+/**
+ *  商品属性工具 zhiziwei
+ * */
+var goodsProUtils = {
+	
+	trealcateid : "", //结算分类ID
+	
+	resultJson : null, //接口返回结果
+	
+	//初始化
+	init : function (trealcateid){
+		this.trealcateid = trealcateid;
+		$($(".increase-content > .item")[0]).append(this.getProperties());
+	},
+	
+	//请求指定分类下的属性，及属性值
+	getProperties : function (){
+		var content = "";
+		
+		//调用接口
+		var data = {"token" : "1212321", "tRealCateId" : this.trealcateid};
+		var resultJson = ajaxCommon(urlQuerygoodproperty, data);
+		this.resultJson = convertNullToEmpty(resultJson);
+		
+		//解析结果
+		if(this.resultJson._ReturnCode === returnCodeSuccess) {
+			content = this.parseJson();
+		} else {
+			showAlertMsg(msgLoginError);
+		}
+		return content;
+	},
+	
+	//解析接口返回JSON
+	parseJson : function (){
+		var _this = this;
+		var content = "";
+		//遍历属性
+		$.each(this.resultJson._ReturnData, function(index, pk){
+			content += "<div class='half'>";
+			content += "	<span>" + pk.propertyName + "：</span><div class='select-sku'>{0}<ul class='hidden'>";
+			//遍历属性值
+			$.each(pk.propertyValues, function(index, pv){
+				if (index == 0) {
+					content = content.replace(new RegExp("\\{0\\}","g"), "<em>" + pv.propertyValue + "</em>");  
+				} else {
+					content += "<li>" + pv.propertyValue + "</li>";
+				}
+			});
+			content += "</ul></div></div>"
+		});
+		
+		return content;
+	}
+	
+}
+
+/**
+ * 反写平台商品数据 zhiziwei
+ */
+var writeGoodsInfo = {
+	
+	initPage : function (tgoodsinfoid){
+		this.getGoodsData(tgoodsinfoid);
+	},
+	
+	//调接口，获取商品数据
+	getGoodsData : function (tgoodsinfoid){
+		//调用接口
+		var data = {"token" : "1212321", "tGoodsInfoId" : tgoodsinfoid};
+		var resultJson = ajaxCommon(urlGetgoodsdetail, data);
+		resultJson = convertNullToEmpty(resultJson);
+			
+		//解析结果
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			this.parseBaseData(resultJson);
+		} else {
+			showAlertMsg(msgLoginError);
+		}
+	},
+	
+	//解析接口返回商品基本数据
+	parseBaseData : function (resultJson){
+		//商品名称
+		var goodName = resultJson._ReturnData.goodName;
+		//商品简介
+		var goodIntroduce = resultJson._ReturnData.goodIntroduce;
+		//商品分类信息
+		var tRealCateId = resultJson._ReturnData.tRealCateId;
+		var tRealCateDisc = resultJson._ReturnData.tRealCateDisc;
+		var tRealCateTreeDisc = resultJson._ReturnData.tRealCateTreeDisc;
+		
+		
+		$(".max-3").html(goodName);
+		$(".max-n").html(goodIntroduce);
+		
+		//初始化该商品属性模块
+		goodsProUtils.init(tRealCateId);
+		
+		//初始商品图片数据
+		var imgStr = this.parseImgData(resultJson._ReturnData.images);
+		$(".nonstock-part1 > ul").append(imgStr);
+	},
+	
+	//解析商品图片数据
+	parseImgData : function (imgs){
+		var content = "";
+		$.each(imgs, function (index, img){
+			content += "<li><img src='" + img.url + "'/></li>"
+			content += (index == 0 ? "" : "<del></del>");
+		});
+		return content;
+	}
+	
+}
+
+/**
+ * 新增商品
+ * */
+ 
+function submitAddGoods(){
+	
+}

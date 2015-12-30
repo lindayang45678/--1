@@ -1,0 +1,66 @@
+package com.lakala.module.goods.cache.ehcache;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.lakala.base.model.Realcate;
+import com.lakala.base.model.VirtualCate;
+import com.lakala.exception.LakalaException;
+import com.lakala.module.goods.cache.CategoryExt;
+@Component
+public class CategoryExtEhcache implements CategoryExt{
+	
+	@Autowired
+    private com.lakala.mapper.r.virtualcat.VirtualCateMapper virtualCateMapper_R;
+	
+	@Autowired
+    private com.lakala.mapper.r.realcat.RealcateMapper  realcateMapper_R;
+
+	@Override
+	@CategoryCache
+	public List<Realcate> getRealCats(String virtualcatid)
+			throws LakalaException {
+		//根据页面选中分类，获取下级子类，包含当前选种分类 zhiziwei
+		List<VirtualCate> vcs = new ArrayList<VirtualCate>();
+		List<VirtualCate> vp = new ArrayList<VirtualCate>();
+		VirtualCate vc = new VirtualCate();
+		vc.setTvirtualcateid(Integer.parseInt(virtualcatid));
+		vp.add(vc);
+		vcs.add(vc);
+		getSubVitureCate(vcs, vp);
+		
+		//过滤掉没有商品的分类
+		List<VirtualCate> _vcs = virtualCateMapper_R.selectHasGoodsSubVcsd(vcs);
+		
+		//获取以上分类关联的结算分类
+		List<Realcate> realcatelist = this.realcateMapper_R.selectRcByVirtualCates(_vcs);
+		return realcatelist;
+	}
+	
+	/**
+	 * 获取父虚分类下的子分类 zhiziwei
+	 */
+	private List<VirtualCate> getSubVitureCate(List<VirtualCate> list, List<VirtualCate> input) throws LakalaException{
+		try {
+			Map<String, Object> parm = new HashMap<String, Object>();
+			parm.put("parentid", input);
+			List<VirtualCate> catList = virtualCateMapper_R.selectByParentId(parm);
+			if (null != catList && catList.size() > 0) {
+				//缓存查到的结果
+				list.addAll(catList);
+				//递归查询下面的子分类
+				getSubVitureCate(list, catList);
+			}
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+		return list;
+	}
+	
+
+}

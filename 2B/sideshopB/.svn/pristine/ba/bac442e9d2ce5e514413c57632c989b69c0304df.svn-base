@@ -1,0 +1,60 @@
+package com.lakala.module.order.vo;
+
+/**
+ * 商品级
+ * @author ls
+ *
+ */
+public class ShouhuoOutput_Provider_Goods {
+	//隐含用到
+	private String orderitemid;
+	private Integer goodsid;
+	private String goodsname;
+	private String norms;
+	private String goodsnum;
+	private String actualnum;
+	private String goodbigpic;
+	
+	public Integer getGoodsid() {
+		return goodsid;
+	}
+	public void setGoodsid(Integer goodsid) {
+		this.goodsid = goodsid;
+	}
+	public String getGoodbigpic() {
+		return goodbigpic;
+	}
+	public void setGoodbigpic(String goodbigpic) {
+		this.goodbigpic = goodbigpic;
+	}
+	public String getActualnum() {
+		return actualnum;
+	}
+	public void setActualnum(String actualnum) {
+		this.actualnum = actualnum;
+	}
+	public String getOrderitemid() {
+		return orderitemid;
+	}
+	public void setOrderitemid(String orderitemid) {
+		this.orderitemid = orderitemid;
+	}
+	public String getGoodsname() {
+		return goodsname;
+	}
+	public void setGoodsname(String goodsname) {
+		this.goodsname = goodsname;
+	}
+	public String getNorms() {
+		return norms;
+	}
+	public void setNorms(String norms) {
+		this.norms = norms;
+	}
+	public String getGoodsnum() {
+		return goodsnum;
+	}
+	public void setGoodsnum(String goodsnum) {
+		this.goodsnum = goodsnum;
+	}
+}

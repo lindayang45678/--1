@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>升级身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1>升级身边小店</h1>
+	</header>
+	<section id="shopupdate" class="container shopupdate f-12">
+		<h2 class="f-14 center color hidden"><span><i></i>恭喜您，申请提交成功，等待审核！</span></h2>
+		<div class="shop-info">
+			<div><span>店主姓名<input type="text" id="shopkeeper"/></span></div>
+			<div><span>店主手机<input type="tel" id="phoneno"/></span></div>
+			<div><span>身份证号<input type="text" id="id_no"/></span></div>
+			<div class="id-card"><span>身份证照片<img id="zm" class="zm" src="../../images/ico-idcard-p.png" /><i>+</i><img id="fm" class="fm" src="../../images/ico-idcard-r.png" /></span></div>
+			<div><span>小店名称<input type="text" id="shopname"/></span></div>
+			<div class="shop-address"><span>小店地址<em></em><input type="text" id="address"/></span></div>
+			<div class="licence"><span>营业执照<img id="licence" src="../../images/ico-licence.png"></span></div>
+			<div><span>地图位置<em>以下是地图定位，请确保您是在店铺进行操作！</em></span></div>
+		</div>
+		<div class="shop-position">
+			<iframe name="baiduMapFrame" id="baiduMapFrame" src="http://10.5.12.27:8081/baidu-map-api/fixed.html" 
+			height="260px" style="width:100%;mairgin:0;padding:0;border:0;overflow:hidden;">
+			</iframe>
+		</div>
+		<footer>
+			<!-- <a href="javascript:;" class="btn-red">提 交</a> -->
+			<a href="javascript:;" class="btn-gray" >提 交</a>
+			<span>我已阅读并同意<a href="javascript:;">《拉卡拉身边小店商户平台用户协议》</a></span>
+		</footer>
+	</section>
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" id="platJs"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+	<script type="text/javascript" src="../../js/homepage/shopupdate.js"></script>
+</body>
+</html>

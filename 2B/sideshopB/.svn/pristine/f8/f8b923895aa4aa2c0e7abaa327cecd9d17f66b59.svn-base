@@ -1,0 +1,53 @@
+package com.lakala.util;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+public class ControllerInterceptor implements HandlerInterceptor {
+	
+
+	@Override
+	public boolean preHandle(HttpServletRequest request,
+			HttpServletResponse response, Object handler) throws Exception {
+		// TODO Auto-generated method stub
+		 
+		String token = request.getParameter("token");
+		String mobile = request.getParameter("mobile");
+		System.out.println(" ControllerInterceptor token ==================== >> " + token);
+		System.out.println(" ControllerInterceptor mobile =================== >>" + mobile);
+		
+		String path = request.getContextPath();
+		return true;
+		/*if(token == null && mobile == null){
+			return true;
+		}else{
+				boolean flag = TokenUtil.isValidToken(mobile, token);
+				if(flag == false){
+					response.sendRedirect(path + "/error/errorinfo");
+				}
+				return flag;
+				//return true;
+		}*/
+		
+	}
+
+	@Override
+	public void postHandle(HttpServletRequest request,
+			HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void afterCompletion(HttpServletRequest request,
+			HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

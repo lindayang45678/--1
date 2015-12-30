@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.order.ExpressMapper">
+	<resultMap id="BaseResultMap" type="com.lakala.module.order.vo.ExpressOutput">
+		<result column="providerName" property="sendName" jdbcType="VARCHAR" />
+		<result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="logisticsCode" property="logno" jdbcType="VARCHAR" />
+		<result column="corpName" property="com" jdbcType="VARCHAR" />
+		<result column="cusName" property="cusName" jdbcType="VARCHAR" />
+		<result column="tlogisticCorpId" property="deliveryComId" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="receivertime" property="receivertime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="getExpressInfo" resultMap="BaseResultMap" parameterType="com.lakala.module.order.vo.ExpressInput">
+		SELECT 
+		  l.`providerName`,
+		  l.`startTime`,
+		  l.`logisticsCode`,
+		  c.`corpName`,
+		  l.`cusName`,
+		  l.`tlogisticCorpId`, 
+		  l.`state`,
+  		  l.`receivertime`
+		FROM
+		  tlogisticsinfo l 
+		  LEFT JOIN tlogisticcorp c 
+		    ON l.`tlogisticCorpId` = c.`tlogisticCorpId` 
+		WHERE l.`logisticsCode` = #{logno,jdbcType=VARCHAR} 
+		ORDER BY logisticsId DESC 
+	</select>
+</mapper>

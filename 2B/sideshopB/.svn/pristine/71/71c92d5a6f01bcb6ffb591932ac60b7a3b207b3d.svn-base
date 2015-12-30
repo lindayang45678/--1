@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>我的小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+
+<body class="whitebg">
+	<header>
+		<a href="../homepage/index.html" class="back"></a>
+  		<h1>我的小店</h1>
+  		<a href="editshop.html" class="head-right">编辑</a>
+	</header>
+    <section class="container">
+    	<div class="shopindex-part1">
+        	<a href="editshop.html">
+            	<em class="index-logo"></em>
+            	<h2 id="shopname">店铺名称</h2>
+            	<em class="index-link"></em>
+            </a>
+        </div>
+        <div class="index-add">
+        	<span>本店商品<i id="count"></i></span>
+            <a href="addgoods.html">+ 添加商品</a>
+        </div>
+       <section class="index-main clearfix">
+       		<section class="index-menus  hidden">
+           		<div id="index-left">
+                   	<ul class="index-menu1">
+               			
+               		</ul>
+                   </div>
+           	</section>
+           	<section class="index-content  hidden">
+       			<div id="index-content">
+       				<ul class="content1">
+       				
+					</ul>
+					<p class="no-shopgoods hidden" style="text-align:center">很抱歉，该分类下，暂未发布商品！</p>
+				</div>
+				
+       		</section>
+        </section>
+    </section>
+	<div class="register-pop-ok hidden" id="unshelf-pop">
+		<div>
+			<p class="f-16 c-black">&nbsp;是否确认下架？ </p>
+			<a class="btn-gray fl" href="javascript:;" id="unshelf-cancel">取&nbsp;消</a>
+			<a class="btn-red fr pop-login" href="javascript:;" id="unshelf-confirm">确&nbsp;定</a>
+		</div>
+	</div>
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+	<!--<script type="text/javascript" src="../../js/shops/index.js"></script>-->
+    	<script>
+	function eleFocusEvnt(obj,name) {
+		var name = name || 'focus';
+		$(obj).live("touchstart", function(e) {
+			$(this).addClass(name);
+		});
+		$(obj).live("touchend", function(e) {
+			$(this).removeClass(name);
+		});
+	}
+	eleFocusEvnt('.unshelve');
+	goodcontainer=$(".content1");
+	$('.unshelve').on('tap',function(event) {
+		var tGoodsInfoId=$(this).attr('tgoodinfoid');
+		var thisLi = $(this).parent();
+		var thiscontent=thisLi.html();
+		event.preventDefault();
+		event.stopPropagation();
+		$('#unshelf-pop').removeClass('hidden');
+		$('#unshelf-cancel').on('tap',function(event) {
+			$('#unshelf-pop').addClass('hidden');
+			$('#unshelf-cancel').unbind();
+			alert(2);
+			event.preventDefault();
+			event.stopPropagation();
+		});
+		$('#unshelf-confirm').on('tap',function(event) {
+			$('#unshelf-pop').addClass('hidden');
+			$('#unshelf-confirm').unbind();
+			event.preventDefault();
+			event.stopPropagation();
+			//var date = {"token":userToken,"mobile":mobile,"opt":209,"goodsIdList[0]":tGoodsInfoId}
+			//var resultJson = ajaxCommon(urlUpShelf, data);
+			if(1) {
+				thisLi.remove();
+				goodcontainer.append('<li class="unlink">'+thiscontent+'</li>');
+				$('li:last-child .unshelve').remove();
+				$('li:last-child').append("<a href='#' class='unshelve done'>已下架</a>");
+				$('li:last-child').find('a:eq(0)').attr('href','editgoods1.html')
+				alert(1);
+			} else {   
+				showAlertMsg(resultJson._ReturnData);
+			}
+		});	
+	});
+	showNoDataMsg(msgNoAddGoods);
+	$('.none-data').height()=screen.availHeight-$('header').height()-$('.shopindex-part1').height()-$('.index-add').height();
+	</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+package com.lakala.module.user.vo;
+
+
+/**
+ * 用户信息
+ * @author ph.li
+ *
+ */
+public class UserInfoOutput{
+
+	/** 验证令牌 */
+	private String token;
+	/** 用户名 */
+	private String userName;
+	/** 用户类型 */
+	private Integer userType;
+	/** 商户类型 */
+	private Integer bizType;
+	/** 电商网点编号 */
+	private String ecNetNo;
+	/** PSAM */
+	private String psam;
+	/** 支付验证令牌 */
+	private String payToken;
+	/** 用户密码 */
+	private String pwd;
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public Integer getUserType() {
+		return userType;
+	}
+
+	public void setUserType(Integer userType) {
+		this.userType = userType;
+	}
+
+	public Integer getBizType() {
+		return bizType;
+	}
+
+	public void setBizType(Integer bizType) {
+		this.bizType = bizType;
+	}
+
+	public String getEcNetNo() {
+		return ecNetNo;
+	}
+
+	public void setEcNetNo(String ecNetNo) {
+		this.ecNetNo = ecNetNo;
+	}
+
+	public String getPsam() {
+		return psam;
+	}
+
+	public void setPsam(String psam) {
+		this.psam = psam;
+	}
+
+	public String getPayToken() {
+		return payToken;
+	}
+
+	public void setPayToken(String payToken) {
+		this.payToken = payToken;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
+}

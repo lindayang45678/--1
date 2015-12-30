@@ -1,0 +1,133 @@
+package com.lakala.module.news.vo;
+
+
+
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class NewsOutput {
+    private Integer newsid;
+
+    private String title;
+
+    private Integer publishchannels;
+
+    private Integer publishtype;
+
+    private Integer creatorid;
+
+    private String creatorname;
+
+    private Date createtime;
+
+    private Integer senderid;
+
+    private String sendername;
+
+    private Date sendtime;
+    
+    private List<NewsItemOutput> newsitem = new ArrayList<NewsItemOutput>();
+
+    private Integer issend;
+
+    public Integer getNewsid() {
+        return newsid;
+    }
+
+    public void setNewsid(Integer newsid) {
+        this.newsid = newsid;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Integer getPublishchannels() {
+        return publishchannels;
+    }
+
+    public void setPublishchannels(Integer publishchannels) {
+        this.publishchannels = publishchannels;
+    }
+
+    public Integer getPublishtype() {
+        return publishtype;
+    }
+
+    public void setPublishtype(Integer publishtype) {
+        this.publishtype = publishtype;
+    }
+
+    public Integer getCreatorid() {
+        return creatorid;
+    }
+
+    public void setCreatorid(Integer creatorid) {
+        this.creatorid = creatorid;
+    }
+
+    public String getCreatorname() {
+        return creatorname;
+    }
+
+    public void setCreatorname(String creatorname) {
+        this.creatorname = creatorname;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public Integer getSenderid() {
+        return senderid;
+    }
+
+    public void setSenderid(Integer senderid) {
+        this.senderid = senderid;
+    }
+
+    public String getSendername() {
+        return sendername;
+    }
+
+    public void setSendername(String sendername) {
+        this.sendername = sendername;
+    }
+
+    public Date getSendtime() {
+        return sendtime;
+    }
+
+    public void setSendtime(Date sendtime) {
+        this.sendtime = sendtime;
+    }
+
+    public Integer getIssend() {
+        return issend;
+    }
+
+    public void setIssend(Integer issend) {
+        this.issend = issend;
+    }
+
+	public List<NewsItemOutput> getNewsitem() {
+		return newsitem;
+	}
+
+	public void setNewsitem(List<NewsItemOutput> newsitem) {
+		this.newsitem = newsitem;
+	}
+
+    
+    
+}

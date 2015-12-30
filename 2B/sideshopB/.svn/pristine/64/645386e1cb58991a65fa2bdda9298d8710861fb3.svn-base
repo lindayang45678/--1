@@ -1,0 +1,72 @@
+package com.lakala.module.poster.controller;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.poster.model.TerminalChannel;
+import com.lakala.module.poster.service.PosterService;
+import com.lakala.module.poster.vo.PosterInput;
+import com.lakala.util.ReturnMsg;
+
+/**
+ * 只按照两种方式提供接口 1.返回JSON格式 1.1 以RETS风格请求，一般用于GET请求； 1.2 使用路径中定义参数风格获取数据； 1.3
+ * 若为POST请求，则使用@RequestParam获取数据； 1.4 返回的数据都用DATA接收，并提供处理成功或返回标示；
+ * 
+ * 2.返回对象 2.1 此种适用于直接使用JSP页面输出； 2.2 按照普通的@RequestParam获取参数； 2.3
+ * 以modle返回数据，返回的字符串为JSP文件路径；
+ * 
+ * @author zuoyb
+ * 
+ */
+
+@Controller
+@RequestMapping("/poster")
+public class PosterController {
+	Logger logger = Logger.getLogger(PosterController.class);
+
+	@Autowired
+	public PosterService posterService;
+	
+	/**
+	 * @Description: 根据终端编号、频道号，获取广告列表
+	 * @param psam号
+	 * @param channelid 终端编号
+	 * @author zhiziwei
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getposterlist", method = RequestMethod.POST)
+	public ObjectOutput<List<TerminalChannel>> getPosterList(PosterInput input) {
+		
+		ObjectOutput<List<TerminalChannel>> res = null;
+		try {
+			res = posterService.getPosterList(input);
+		} catch (LakalaException e) {
+			logger.error(e.getMessage(), e.fillInStackTrace());
+			
+			res = new ObjectOutput<List<TerminalChannel>>();
+			res.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			res.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		
+		return res;
+	}
+
+	@RequestMapping(value = "/detailtest")
+	public String testModel(Model model,
+			@RequestParam(value = "flag", required = false) String flag) {
+		model.addAttribute("testflag", "flag is ok!");
+		return "/jsp/test.jsp";
+	}
+
+}

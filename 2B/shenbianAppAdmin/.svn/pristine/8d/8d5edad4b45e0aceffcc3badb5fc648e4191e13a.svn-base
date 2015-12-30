@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>弹框分享</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<link rel="stylesheet" href="../../css/master.css"/>
+</head>
+
+<body>
+<section id="shade"></section>
+<section class="bounced-share">
+	<h2>通过社交软件分享</h2>
+    <p>分享才能获得更多客流</p>
+    <ul>
+    	<li><a href="#"><img src="../../images/weixin.png" alt=""/><span>微信</span></a></li>
+         <li><a href="#"><img src="../../images/pengyouquan.png" alt=""/><span>朋友圈</span></a></li>
+        <li><a href="#"><img src="../../images/xinxi.png" alt=""/><span>信息</span></a></li>
+        <li><a href="#"><img src="../../images/xinlang.png" alt=""/><span>新浪</span></a></li>
+        <li><a href="#"><img src="../../images/qq.png" alt=""/><span>QQ</span></a></li>
+        <li><a href="#"><img src="../../images/qqkongjian.png" alt=""/><span>QQ空间</span></a></li>
+        <li><a href="#"><img src="../../images/fuzhilianjie.png"alt=""/><span>复制链接</span></a></li>
+    </ul>
+    <button class="btn-gray">取消</button>
+</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+</html>

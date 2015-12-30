@@ -1,0 +1,24 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+
+
+/**
+ * 订单查询输入
+ * @author yhg
+ *
+ */
+public class OrderCntInput extends ObjectInput{
+
+	private String ordercate;   //订单类别 pfjh-批发进货;lsdd-零售订单;xdzsh-需店主送货
+
+	public String getOrdercate() {
+		return ordercate;
+	}
+
+	public void setOrdercate(String ordercate) {
+		this.ordercate = ordercate;
+	}
+	
+}

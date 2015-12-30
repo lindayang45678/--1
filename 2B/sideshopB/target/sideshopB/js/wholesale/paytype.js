@@ -1,0 +1,51 @@
+//改变支付选项
+$(".paytype button").on("tap",function(){
+	$(".paytype button").removeClass("paytype-selected");
+	$(this).addClass("paytype-selected");
+});
+
+$(function(){
+	var paychanel = storage.getItem("paychanel") || paychannelLklCard;
+	if(paychanel){
+		$(".paytype button").removeClass("paytype-selected");
+		paychanel = parseInt(paychanel);
+		switch (paychanel) {
+			case paychannelLklCard:
+				$(".paytype button").eq("0").addClass("paytype-selected");
+				break;
+			case paychannelLkl:
+				$(".paytype button").eq("1").addClass("paytype-selected");
+				break;
+			case paychanelWx:
+				$(".paytype button").eq("2").addClass("paytype-selected");
+				break;
+			case paychanelZfb:
+				$(".paytype button").eq("3").addClass("paytype-selected");
+				break;
+		}
+	}
+})
+
+$(function(){
+	var paychanel = paychannelLklCard;
+	var payIndex = 0;
+	$(".paytype button").on("tap", function(){
+		payIndex = parseInt($(this).attr("value"));
+		switch (payIndex) {
+			case 0:
+				paychanel = paychannelLklCard;
+				break;
+			case 1:
+				paychanel = paychannelLkl;
+				break;
+			case 2:
+				paychanel = paychanelWx;
+				break;
+			case 5:
+				paychanel = paychanelZfb;
+				break;
+		}
+		storage.setItem("paychanel",paychanel);
+		window.location.href = "fill.html";
+	})
+})

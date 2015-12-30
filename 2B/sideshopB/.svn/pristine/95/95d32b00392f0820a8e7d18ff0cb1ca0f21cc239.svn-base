@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单管理</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders pfdd-order">
+	<header>
+		<a href="../homepage/index.html" class="back"></a>
+		<h1><a href="wholesaleorders.html">批发订单<s></s></a><a href="retailorders.html" class="opacity">零售订单<s></s></a></h1>
+		<a href="javascript:void(0);" class="head-right"></a>
+		<div class="orders-search hidden">
+			<div>
+				<span class="back"></span>
+				<p><input type="text" placeholder="请输入商品名称／手机号"/></p>
+				<a href="querysucceed.html" class="head-right">搜索</a>
+			</div>
+		</div>	
+	</header>
+	<section class="container">
+		<div id="header-list" class="header-list">
+			<div id="header-list-slide" class="header-list-slide">
+				<ul class="clearfix">
+					<li><a href="#" class="f-14 active"><span>全部</span></a></li>
+					<li><a href="#" class="f-14"><span>待付款</span><i>99</i></a></li>
+					<li><a href="#" class="f-14"><span>待发货</span><i>3</i></a></li>
+					<li><a href="#" class="f-14"><span>待收货</span><i>9</i></a></li>
+					<li><a href="#" class="f-14"><span>部分收货</span><i>3</i></a></li>
+					<li><a href="#" class="f-14"><span>已收货 </span></a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="orders-items">
+			<ul class="orders-list body-white">
+				<li>
+					<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+					<a id="goods-items-1" class="goods" href="ordersdetail.html">
+						<span id="goods-items-scroll-1">
+							<img src="../../images/goods-img.jpg" />
+							<em>统一冰红茶500ml*15瓶</em>
+						</span>
+					</a>
+				</li>
+				<li>
+					<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+					<a id="goods-items-2" class="goods" href="ordersdetail.html">
+						<!-- <strong > -->
+							<span id="goods-items-scroll-2">
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+							</span>
+						<!-- </strong> -->
+					</a>
+					<p>总价：¥280.00<a class="fr" href="javascript:void(0)">去付款</a></p>
+				</li>
+			</ul>
+			<ul class="orders-list body-white">
+				<li>
+					<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+					<a id="goods-items-3" class="goods" href="ordersdetail.html">
+						<span>
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+						</span>
+					</a>
+				</li>
+			</ul>
+			<ul class="orders-list body-white">
+				<li>
+					<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+					<a id="goods-items-4" class="goods" href="ordersdetail.html">
+						<span>
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+						</span>
+					</a>
+					<p>总价：¥280.00<a class="fr" href="javascript:void(0)">店主收货</a></p>
+				</li>
+			</ul>
+			<ul class="orders-list body-white">
+				<li>
+					<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+					<a id="goods-items-5" class="goods" href="ordersdetail.html">
+						<span>
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+							<img src="../../images/goods-img.jpg" />
+						</span>
+					</a>
+					<p>总价：¥280.00<a class="fr" href="javascript:void(0)">全部收货</a></p>
+				</li>
+			</ul>
+		</div>
+	</section>
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+	<script type="text/javascript">
+		var liWidth = null;
+		$("#header-list-slide li").each(function(index){
+			console.log(index.width);
+			liWidth += parseInt($(this).width());
+		});
+		$("#header-list-slide").css("width", liWidth + 1 + "px");
+		var menuScroll = new iScroll("header-list", {
+			hScroll : true,
+			vScroll : false,
+			hScrollbar : false,
+			vScrollbar : false
+		});
+		//商品图片滑动--》待定
+		
+		/* var objscrollWidth = null;
+		var objimgCount = $("#goods2 img").length;
+		console.log(objimgCount);
+		var objimgW = $("#goods2 img").width();
+		objscrollWidth += parseInt((objimgW+10)*objimgCount);
+		console.log(objscrollWidth);
+		$("#goods2-scroll").css("width", objscrollWidth + 1 + "px");
+		var imgScroll = new iScroll("goods2", {
+			hScroll : true,
+			vScroll : false,
+			hScrollbar : false,
+			vScrollbar : false
+		}); */
+	</script>
+</body>
+</html>

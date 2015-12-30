@@ -1,0 +1,125 @@
+/* 全局时间戳 */
+var t = new Date().getTime();
+
+/* 全局的localStorage */
+var storage = window.localStorage;
+
+/* PSAM */
+var psam = storage.getItem("psam") || "CBC8D8A800000001";
+
+/* 用户手机号 */
+var mobile = storage.getItem("mobile") || "13716198076";
+
+/* 网点编号 */
+var netNo = storage.getItem("netNo") || "DCDCD0001";
+
+/* 用户token */
+var token = storage.getItem("token") || "";
+
+/* 商品key prefix */
+var productPrefix = "product_";
+
+/* 是否登录key--1:已经登录; 0:尚未登录 */
+var hasLogined = "hasLogined";
+
+/* 订单来源--93:手机商城; 94:微信商城; 95:开店宝; 96:PC商城; 334:收款宝; 97:其他 */
+var source = "";
+
+/* 订单发票类型 --89:不开发票; 90:个人; 91:公司 */
+var billtypeNone = "89";
+var billtypePersonal = "90";
+var billtypeBusiness = "91";
+
+/* 订单支付手段--237:拉卡拉; 238:银行; 239:支付宝; 240:货到付款; 241:其他 */
+var paychannelLkl = "237";
+var paychanelBnk = "238";
+var paychanelZfb = "239";
+var paychanelCod = "240";
+var paychanelOther = "241";
+
+/* 订单支付类型--82:全额; 83:分期  */
+var paytypeFull = "82";
+var paytypeInstallment = "83";
+
+/* 配送方式--86:快递到店; 87:快递到家 */
+var devicetypeShop = "86";
+var devicetypeHome = "87";
+
+/* 周末配送标志--275:是; 276:否 */
+var weekdeviceY = "275";
+var weekdeviceN = "276";
+
+/* 是否支付标志--150:是; 149:否 */
+var ispayY = "150";
+var ispayN = "149";
+
+/* 配送标示 */
+var ship1hCode = 362;
+var ship1hDesc = "【一小时送达】";
+var ship3hCode = 363;
+var ship3hDesc = "【三到五小时送达】";
+var ship3dCode = 364;
+var ship3dDesc = "【三到五天送达】";
+var ship5dCode = 365;
+var ship5dDesc = "【五天以上送达】";
+
+/* 商品自营平台标识--自营:452; 平台:453 */
+var selfGoods = "452";
+var platGoods = "453";
+
+/* 服务器端系统时间 */
+var sysDate = "";
+
+/* 当前窗口可视区域宽 */
+var windowWidth = $(window).width();
+/* 当前窗口可视区域高 */
+var windowHeight = $(window).height();
+
+/* 防止两次点击 */
+var ghostClickTime1 = null;
+var ghostClickTimeout = 500;
+
+/* 全国批发券 */
+var QGPF_Coupon = "全国批发券";
+/* 本地批发券 */
+var BDPF_Coupon = "本地批发券";
+
+/* 返回成功编码 */
+var returnCodeSuccess = "000000";
+/* 内部错误 */
+var returnCodeError = "000001";
+/* 数据检验不通过 */
+var returnCodeValidate = "000002";
+/* 批发进货验证及数据提示 */
+var returnCodeWholesale = "000003";
+
+//
+/* 地址切换--本机地址:1; 测试地址:2; 生产地址:3; */
+var globalStatus = 1;
+if(globalStatus == 1) {
+	/* 总收益接口地址  */
+	var urlToProfitHome = "../../profit/toProfitHome";
+	/* 收益查询接口地址  */
+	var urlGetEarningsData = "../../profit/getEarningsData";
+	/* 订单周期收益接口地址  */
+	var urlGetEarningsOrderList = "../../profit/getEarningsOrderList";
+	/* 订单收益详情页接口地址  */
+	var urlGetOrderDetail = "../../profit/getOrderDetail";
+	/* 单个月收益详细查询接口地址  */
+	var urlGetEarningsOrderData = "../../profit/getEarningsOrderData";
+	/* 登录接口地址 */
+	var urlLogin = "../../user/login";
+	/* 登出接口地址 */
+	var urlLogout = "../../user/logout";
+	/* 忘记登录密码接口地址 */
+	var urlForgetpwd = "../../user/forgetpwd";
+	/* 获取验证码 */
+	var urlGetCode = "../../auth/getCode";
+	/* 用户注册接口地址-xwl */
+	var urlRegister = "../../user/register";
+
+} else if(globalStatus == 2) {
+	
+} else if(globalStatus == 3) {
+	
+}

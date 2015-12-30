@@ -1,0 +1,42 @@
+/*初始化iScroll*/
+var addgoodsScroll;
+function scrollBdrx() {
+	addgoodsScroll = new iScroll("menu-left",{ hScrollbar: false, vScrollbar: false });
+}
+
+/*根据浏览器的高度计算iScroll的高度*/
+$(function(){
+	var sHeight = $(window).height();
+	$("#menu-left").css("height",sHeight-87);
+});
+
+/*批发进货首页菜单*/
+$(function() {
+	scrollBdrx();
+	$("#menu-left a").on("tap", function() {
+		$("#menu-left").find("a").removeClass("bgwhite").find("i").removeClass("red-icon");//去掉所有选中样式
+		$(this).addClass("bgwhite").find("i").addClass("red-icon");//添加当前选中样式
+		
+		if($(this).siblings("ul").hasClass("hidden")){
+			$(this).siblings("ul").removeClass("hidden");
+			addgoodsScroll.refresh();
+		}else{
+			$(this).siblings("ul").addClass("hidden");
+			$(this).parent().find("ul").addClass("hidden");
+			if($(this).siblings("ul").length != 0){
+				$(this).removeClass("bgwhite").find("i").removeClass("red-icon");//去掉当前选中样式
+			}
+			addgoodsScroll.refresh();
+		}
+		$(this).parent().siblings("li").find("a").siblings("ul").addClass("hidden");//同级隐藏
+		
+		if($(this).hasClass('promotion')){	
+			$('.add-menu1').removeClass('hidden');
+			$('.add-menu2').addClass('hidden');
+		}else{	
+			$('.add-menu1').addClass('hidden');
+			$('.add-menu2').removeClass('hidden');
+		}
+	});
+	addgoodsScroll.refresh();
+});

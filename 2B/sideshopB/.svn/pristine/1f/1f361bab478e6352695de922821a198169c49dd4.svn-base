@@ -1,0 +1,382 @@
+package com.lakala.module.user.service.impl;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import com.lakala.base.model.SDBMediaStatistics;
+import com.lakala.base.model.Timages;
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.goods.TimagesMapper;
+import com.lakala.mapper.r.sdbmediastatistics.SdbMediaStatisticsMapper;
+import com.lakala.mapper.r.sdbmediastatistics.TShopServiceMapper;
+import com.lakala.model.user.TShopService;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.ShopInfoService;
+import com.lakala.module.user.vo.ShopInfoInput;
+import com.lakala.module.user.vo.ShopInfoOutPut;
+import com.lakala.util.BussConst;
+import com.lakala.util.ConfigUtil;
+import com.lakala.util.JPGPlug;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.TokenUtil;
+
+/**
+ * 店铺信息
+ * @author zjj
+ * @date 2015年2月28日
+ */
+@Component
+public class ShopInfoServiceImpl implements ShopInfoService{ 
+	
+	private static Logger logger = Logger.getLogger(ShopInfoServiceImpl.class);
+	
+	@Autowired
+	private SdbMediaStatisticsMapper sdbMediaStatisticsMapper_r;
+	
+	@Autowired
+	private com.lakala.mapper.w.sdbmediastatistics.SdbMediaStatisticsMapper sdbMediaStatisticsMapper_w;
+	
+	@Autowired
+	private TShopServiceMapper shopserviceMapper_r;
+	
+	@Autowired
+	private TimagesMapper timagesMapper_R;
+	
+	@Autowired
+	private com.lakala.mapper.w.goods.TimagesMapper timagesMapper_w;
+	
+	@Autowired
+    private ConfigUtil cfg;
+	
+	@Autowired
+	private com.lakala.mapper.w.sdbmediastatistics.TShopServiceMapper shopServiceMapper_w;
+
+	@Override
+	public ObjectOutput findShopInfoByPK(ShopInfoInput input) throws LakalaException {	ObjectOutput info = new ObjectOutput();
+	
+	//	测试用数据
+	//	info = findShopInfoByPKTemp(input);
+		
+		
+		/*获取店铺信息*/
+		SDBMediaStatistics sdbMediaStatistics = null;
+		if(null != input.getId()){
+			sdbMediaStatistics = sdbMediaStatisticsMapper_r.selectByPrimaryKey(Long.parseLong(String.valueOf(input.getId())));
+		} else if(StringUtils.hasText(input.getPsam())){
+			sdbMediaStatistics = sdbMediaStatisticsMapper_r.selectByPsam(input.getPsam());
+		}
+		
+		if(null == sdbMediaStatistics || !StringUtils.hasText(sdbMediaStatistics.getPsam())){
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg("店铺信息丢失");
+			
+			return info;
+		}
+		
+		
+		ShopInfoOutPut out = getShopInfoOutPut(sdbMediaStatistics);
+		
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		info.set_ReturnData(out);
+		
+		return info;
+	}
+
+	 /**
+     * 商品新增：图片上传
+     */
+    @Override
+    public ObjectOutput uploadImg(ShopInfoInput input) throws LakalaException{
+        logger.info("开始处理商品图片上传......");
+        //图片上传
+        Map<String, Object> result = uploadFileToLocal(input.getReq(), String.valueOf(input.getId()));
+
+        ObjectOutput info = new ObjectOutput();
+        info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+        info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+        info.set_ReturnData(result);
+        return info;
+    }
+	
+	@Override
+	public ObjectOutput editShopInfo(ShopInfoInput input)
+			throws LakalaException {
+		
+		SDBMediaStatistics sdb = new SDBMediaStatistics();
+		sdb.setId(input.getId());
+		sdb.setNetName(input.getShopname());
+		sdb.setWeixin_no(input.getWeixin_no());
+		sdb.setAnnouncement(input.getAnnouncement());
+		sdb.setIsDoorstep(input.getHomeDeliver());
+		sdb.setIsPickup(input.getIs_pickup());
+		
+		List<Map<String, String>> list = input.getDispatcherlist();
+		
+		List<TShopService> newList = new ArrayList<TShopService>();
+		if(null != list && list.size() > 0){
+			for (int i = 0; i < list.size(); i++) {
+				Map<String, String> map = list.get(i);
+				String name = map.get("name");
+				String phone = map.get("phone");
+				
+				TShopService s = new TShopService();
+				s.setName(name);
+				s.setPhone(phone);
+				s.setShopId(sdb.getId());
+				
+				newList.add(s);
+			}
+		}
+		
+		if(StringUtils.hasText(input.getImgInfoList())){
+			/**
+			 * 处理商品图片：
+			 * targetType = 3，表示引用的商品池的图片，此时，将图片信息复制一份，更新targetId
+			 * targetType = null，表示供应商新增图片，此时，只更新targetId
+			 */
+			String tempImgsStr = "";//商品表图片字段数据格式：文件名,多张图片之间用“;”隔开
+			String[] imgs = String.valueOf(input.getImgInfoList()).split(";");//页面图片数据
+			for (int i = 0; imgs.length > 0 && i < imgs.length; i++) {
+				
+				//关联上传商品图片(多张图片之间用“;”隔开，页面传入图片数据包含图片id，及排序：图片id_排序)
+				String[] imgInfo = imgs[i].split("_");
+				Timages imgObj = timagesMapper_R.selectByPrimaryKey(Integer.valueOf(imgInfo[0]));
+				
+				if(null == imgObj.getTargettype()){//供应商新增图片
+					//移动文件：从临时路径移动到正式路径
+					String newUrl;
+					try {
+						newUrl = moveMainPic(imgObj.getUrl(), String.valueOf(sdb.getId()), input.getReq());
+						imgObj.setUrl(newUrl);
+						imgObj.setSort(Integer.valueOf(imgInfo[1]));
+						imgObj.setTargetid(sdb.getId());
+						imgObj.setTargettype(BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					//写库
+					timagesMapper_w.updateByPrimaryKeySelective(imgObj);
+				}
+			}
+		}
+		
+		sdbMediaStatisticsMapper_w.updateByPrimaryKeySelective(sdb);
+		
+		if(null != list && list.size() > 0){
+			shopServiceMapper_w.removeShopServiceList(sdb.getId());
+			shopServiceMapper_w.insertTShopServiceList(newList);
+		}else{
+			shopServiceMapper_w.removeShopServiceList(sdb.getId());
+		}
+		
+		ObjectOutput info = new ObjectOutput();
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		return info;
+	}
+
+	@Override
+	public ObjectOutput findShopListByShoperTel(ShopInfoInput input)
+			throws LakalaException {
+		List<SDBMediaStatistics> sdbList = sdbMediaStatisticsMapper_r.selectByMobile(input.getPhone());
+
+		List<ShopInfoOutPut> outputList = new ArrayList<ShopInfoOutPut>();
+		
+		for(SDBMediaStatistics sdb : sdbList){
+			ShopInfoOutPut out = getShopInfoOutPut(sdb);
+			outputList.add(out);
+		}
+		
+		ObjectOutput info = new ObjectOutput();
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		info.set_ReturnData(outputList);
+		return info;
+	}
+	
+	private ShopInfoOutPut getShopInfoOutPut(SDBMediaStatistics sdbMediaStatistics){
+		//获取派送客服电话
+		List<TShopService> list = shopserviceMapper_r.queryShopServiceByShopId(Integer.parseInt(String.valueOf(sdbMediaStatistics.getId())));
+				
+		ShopInfoOutPut out = new ShopInfoOutPut();
+		out.setShopname(sdbMediaStatistics.getNetName());
+		out.setShoppername(sdbMediaStatistics.getContactName1());
+		out.setPhone(sdbMediaStatistics.getMobile());
+		out.setProvince(sdbMediaStatistics.getProv());
+		out.setProvinceCode(sdbMediaStatistics.getProvNo());
+		out.setCity(sdbMediaStatistics.getCity());
+		out.setCityCode(sdbMediaStatistics.getCityNo());
+		out.setCityarea(sdbMediaStatistics.getCityArea());
+		out.setCityareaCode(sdbMediaStatistics.getCityAreaNo());
+		out.setAddress(sdbMediaStatistics.getAddr());
+		out.setId(sdbMediaStatistics.getId());
+		out.setToken(TokenUtil.getToken(out.getPhone()));
+		out.setHomeDeliver(sdbMediaStatistics.getIsDoorstep());
+		out.setIs_pickup(sdbMediaStatistics.getIsPickup());
+		out.setAnnouncement(sdbMediaStatistics.getAnnouncement());
+		out.setWeixin_no(sdbMediaStatistics.getWeixin_no());
+		out.setLatitude(sdbMediaStatistics.getLatitude());
+		out.setLongitude(sdbMediaStatistics.getLongitude());
+		out.setImagePath(sdbMediaStatistics.getName());
+		out.setPsam(sdbMediaStatistics.getPsam());
+		out.setNetNo(sdbMediaStatistics.getNetNo());
+		out.setIs_homepay(sdbMediaStatistics.getIshomepay());
+		out.setIs_onehour(sdbMediaStatistics.getIsOnehour());
+		out.setDispatcherlist(list);
+		
+		return out;
+	}
+	
+	 /**
+     * 获取商品主图文件名字符串，用“;”分割
+     */
+    public static String getImgNamesStr(int index, String imgUrl, int length) {
+        String temp = "";
+        if (index == length - 1)
+            temp += imgUrl.substring(imgUrl.lastIndexOf("/") + 1, imgUrl.length());
+        else
+            temp += (imgUrl.substring(imgUrl.lastIndexOf("/") + 1, imgUrl.length()) + ";");
+        return temp;
+    }
+	
+	  /**
+     * 移动商品主图片
+     */
+    private String moveMainPic(String url, String tgoodinfoid, HttpServletRequest req) throws IOException {
+		JPGPlug jp = new JPGPlug();
+        //当前WEB环境的上层目录
+        String webParentPath = cfg.getTemp() + new File(req.getSession().getServletContext().getRealPath("/")).getParent();
+        //移动前文件路径
+        File oldPath = new File(webParentPath + cfg.getSystem_name()
+                + url.substring(cfg.getAdmin_url().length(), url.length()));
+        //移动后文件路径
+        File newPath = new File(webParentPath + cfg.getSystem_name()
+                + cfg.getGoods_local_path() + "/" + tgoodinfoid.toString() + cfg.getGoods_mainimg_path());
+        //移动
+        if (oldPath.exists() && oldPath.isFile()) {
+            FileUtils.moveFileToDirectory(oldPath, newPath, true);
+            
+            //移动后，生成尺寸为100、300、600、800的图片
+			File File = new File(webParentPath + cfg.getSystem_name() + cfg.getGoods_local_path() + 
+					"/" + tgoodinfoid.toString() + cfg.getGoods_mainimg_path() + url.substring(url.lastIndexOf("/"), url.length()));
+			jp.createProductImage(webParentPath + cfg.getSystem_name() + cfg.getGoods_local_path() + 
+					"/" + tgoodinfoid.toString() + "/", File);
+        }
+
+        //最新访问地址
+        String newUrl = cfg.getImg_server_url() + cfg.getImg_server_url() + "/" + tgoodinfoid
+                + cfg.getGoods_mainimg_path() + url.substring(url.lastIndexOf("/"), url.length());
+
+        return newUrl;
+    }
+    
+    /**
+     * 图片上传(spring mvc 下)：图片上传到本地
+     */
+    private Map<String, Object> uploadFileToLocal(HttpServletRequest req, String userid) {
+        Map<String, Object> resMap = new HashMap<String, Object>();
+        List<String> sucFilePath = new ArrayList<String>();//上传成功的文件
+        List<String> failFile = new ArrayList<String>();//上传成功的文件
+        Date now = new Date(System.currentTimeMillis());
+        //文件存放路径
+        String webParentPath = cfg.getTemp() + new File(req.getSession()
+                .getServletContext().getRealPath("/")).getParent();// 当前WEB环境的上层目录
+        String path = webParentPath + cfg.getSystem_name() + cfg.getLocal_temp_path()
+                + "/" + userid + cfg.getGoods_mainimg_path();
+        logger.info("文件上传路径：" + path);
+        try {
+            //实例化多部分解析器
+            CommonsMultipartResolver resolver = new CommonsMultipartResolver(
+                    req.getSession().getServletContext());
+            //判断当前请求是否是上传文件的请求
+            if (resolver.isMultipart(req)) {
+                //强转多部分Request
+                MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) req;
+                //获取Request所有文件名
+                Iterator<String> it = mRequest.getFileNames();
+                while (it.hasNext()) {
+                    //获取文件
+                    CommonsMultipartFile file = (CommonsMultipartFile) mRequest.getFile(it.next());
+                    if (null != file) {
+                        FileItem fi = file.getFileItem();
+                        logger.info("上传前文件名称：" + fi.getName());
+                        //获取文件扩展名
+    					String extension = fi.getName().substring(fi.getName().lastIndexOf("."), fi.getName().length());
+                        //服务器上的文件名
+                        String remoteFileName = UUID.randomUUID().toString() + extension;
+                        logger.info("上传后文件名称：" + remoteFileName);
+                        //上传服务器
+                        String result = com.lakala.module.comm.RomoteIOUtil.uploadLocal(remoteFileName, path, fi.getInputStream());
+                        //对上传结果进行处理
+                        if (BussConst.OPERATION_STATUS_SUCEESS.equals(result)) {//成功
+                            //获取上传后，网络访问地址
+                            String httpUrl = cfg.getAdmin_url()
+                                    + cfg.getLocal_temp_path()
+                                    + BussConst.PATH_SEPARATOR + userid
+                                    + cfg.getGoods_mainimg_path()
+                                    + BussConst.PATH_SEPARATOR + remoteFileName;
+                            // 上传成功后，写库
+                            Timages img = new Timages();
+                            img.setUrl(httpUrl);
+                            img.setSort(0);//初始化为0，商品新增时提交更新数据
+                            img.setImagename(fi.getName());
+                            img.setLastmoddate(now);
+                            timagesMapper_w.insertSelective(img);
+                            //返回前端是的数据：图片ID_图片URL_排序
+                            sucFilePath.add(img.getTimageid() + "_" + httpUrl);
+                        } else {//失败
+                            failFile.add(fi.getName());
+                        }
+                    }
+                }
+            }
+            //成功上传后，封装返回结果
+            resMap.put("SUCCESS", sucFilePath);
+            resMap.put("FAIL", failFile);
+        } catch (IOException e) {
+            logger.debug(BussConst.SYSTEM_ERROR, e.fillInStackTrace());
+            e.printStackTrace();
+        }
+        return resMap;
+    }
+	
+	//-------测试数据---------------------------------------------------------------
+	private ObjectOutput findShopInfoByPKTemp(ShopInfoInput input){	
+		ObjectOutput info = null;
+		info = new ObjectOutput();
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg("");
+		
+		ShopInfoOutPut out = new ShopInfoOutPut();
+		out.setProvince("北京市");
+		out.setCity("北京市");
+		out.setCityarea("海淀区");
+		out.setShopname("测试拉卡拉小店");
+		out.setPhone("18612189254");
+		out.setAddress("北京市丹棱街6号金融大厦8层");
+		out.setToken(TokenUtil.getToken(input.getPhone()));
+		
+		info.set_ReturnData(out);
+		return info;
+	}
+}

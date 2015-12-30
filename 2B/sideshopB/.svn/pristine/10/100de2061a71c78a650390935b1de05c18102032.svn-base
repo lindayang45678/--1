@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lakala.mapper.w.user.TmemberMapper">
+  <!-- 会员表 -->
+  <update id="updateTmemberPwdById" parameterType="map">
+    update tmember
+    set memberpwd = #{record.pwd,jdbcType=VARCHAR}
+    where membername = #{record.mobile,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateTmemberTCodeById" parameterType="map">
+    update tmember
+    set terminalCode = #{record.terminalCode,jdbcType=VARCHAR}
+    where membername = #{record.mobile,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="addTmember" parameterType="com.lakala.module.user.vo.UserRegisterInput" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tmember
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mobile != null" >
+        membername,
+      </if>
+      <if test="pwd != null" >
+        memberpwd,
+      </if>
+        membertype,
+        state
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      321,
+      333
+    </trim>
+  </insert>
+</mapper>

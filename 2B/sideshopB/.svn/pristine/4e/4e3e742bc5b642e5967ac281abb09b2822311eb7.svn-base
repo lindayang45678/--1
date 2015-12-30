@@ -1,0 +1,33 @@
+package com.lakala.mapper.r.order;
+
+import java.util.List;
+import java.util.Map;
+
+import com.lakala.base.model.Torderitems;
+
+public interface TorderitemsMapper {
+    com.lakala.base.model.Torderitems selectByPrimaryKey(String torderitemsid);
+    
+    //查询指定psam，近一个月内，下过单的商品  zhiziwei
+    List<Torderitems> getGoodsListByPsam(String psam);
+    
+	/**
+     * 校验某torder级或供应商级的下的子订单是否已全部取消
+	 * @param map 参数orderid标识torder表主键,参数 orderproviderid标识供应商级订单主键
+     * @return
+     * @author: yhg 
+     * @time: 2015年4月25日 下午4:00:30
+     * @todo: TODO
+     */
+	int checkOrderIsAllCancel(Map<String,Object> map);
+	
+	/**
+	 * 根据map查询商品订单list
+	 * @param map
+	 * @return
+	 * @author: yhg 
+	 * @time: 2015年4月25日 下午4:05:27
+	 * @todo: TODO
+	 */
+	List<Torderitems> selectOrderItemsList(Map map);
+}

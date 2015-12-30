@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.skunetinfo.SkunetinfoMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Skunetinfo">
+        <id column="skunetinfoid" property="skunetinfoid" jdbcType="INTEGER"/>
+        <result column="skuid" property="skuid" jdbcType="INTEGER"/>
+        <result column="saleprice" property="saleprice" jdbcType="DECIMAL"/>
+        <result column="goodsname" property="goodsname" jdbcType="VARCHAR"/>
+        <result column="netno" property="netno" jdbcType="VARCHAR"/>
+        <result column="stock" property="stock" jdbcType="INTEGER"/>
+        <result column="soldstock" property="soldstock" jdbcType="INTEGER"/>
+        <result column="dpsallnum" property="dpsallnum" jdbcType="INTEGER"/>
+        <result column="returnallnum" property="returnallnum" jdbcType="INTEGER"/>
+        <result column="ypsallnum" property="ypsallnum" jdbcType="INTEGER"/>
+        <result column="providerid" property="providerid" jdbcType="INTEGER"/>
+        <result column="providername" property="providername" jdbcType="VARCHAR"/>
+        <result column="settleprice" property="settleprice" jdbcType="DECIMAL"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    skunetinfoid, skuid, saleprice, goodsname, netno, stock, soldstock, dpsallnum, returnallnum, 
+    ypsallnum, providerid, providername, settleprice
+  </sql>
+    <sql id="tskunetinfowhere">
+        <where>
+            <if test="providerid != null and providerid != ''">
+                and providerid = #{providerid,jdbcType=INTEGER}
+            </if>
+            <if test="providername != null and providername != ''">
+                and providername like CONCAT('%',#{providername},'%')
+            </if>
+            <if test="skuid != null and skuid != ''">
+                and skuid = #{skuid,jdbcType=INTEGER}
+            </if>
+            <if test="goodsname != null and goodsname != ''">
+                and goodsname like CONCAT('%',#{goodsname},'%')
+            </if>
+            <if test="netno != null and netno != ''">
+                and netno = #{netno,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+    </sql>
+    <select id="findSkunetinfoByMap" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tskunetinfo
+        <include refid="tskunetinfowhere"/>
+    </select>
+</mapper>

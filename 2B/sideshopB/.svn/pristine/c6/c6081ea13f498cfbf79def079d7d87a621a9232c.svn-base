@@ -1,0 +1,230 @@
+package com.lakala.util;
+
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+/**
+ * JPG图片处理
+ * 
+ */
+public class JPGPlug  {
+	/**
+	 * 商品图片尺寸(都是正方形)
+	 */
+	public final static int PRODUCT_PHOTO_100 = 100;
+	public final static int PRODUCT_PHOTO_300 = 300;
+	public final static int PRODUCT_PHOTO_600 = 600;
+	public final static int PRODUCT_PHOTO_800 = 800;
+	
+	public static JPGPlug jpgplug;
+	
+	public final static String path = "D:/bak/";
+	
+	/** 获取文件 */
+	public static JPGPlug getInstance(){
+		 if(jpgplug == null){
+			 jpgplug = new JPGPlug();
+		 }
+		 return jpgplug;
+	}
+	
+	
+	public final String getImagePath(Integer productId,int type){
+		   return path+productId+File.separator+type+File.separator+productId+".jpg";
+	}
+	
+	/*
+	 * 生成商品图片
+	 */
+	public final void createProductImage(String destPath, File source) throws IOException {
+		if(!source.exists()) return;
+		Image srcimg = javax.imageio.ImageIO.read(source);
+		final int width = srcimg.getWidth(null);
+		final int height = srcimg.getHeight(null);
+		Scale scale = getPhoto100Scale(width, height);
+		convertPhotoFile(srcimg,new File(destPath + 100 + "/" + source.getName()),100,scale);
+		scale = getPhoto300Scale(width, height);
+		convertPhotoFile(srcimg,new File(destPath + 300 + "/" + source.getName()),300,scale);
+		scale = getPhoto600Scale(width, height);
+		convertPhotoFile(srcimg,new File(destPath + 600 + "/" + source.getName()),600,scale);
+		scale = getPhoto800Scale(width, height);
+		convertPhotoFile(srcimg,new File(destPath + 800 + "/" + source.getName()),800,scale);
+		srcimg = null;
+	}
+
+	/**
+	 * 商品图片生成
+	 * 
+	 * @param src
+	 * @param desc
+	 * @param width
+	 * @param height
+	 * @throws IOException
+	 */
+	protected void convertPhotoFile(Image src, File desc, int fixedsize, Scale scale)
+			throws IOException {
+		if(!desc.getParentFile().exists()){
+			desc.getParentFile().mkdirs();
+		}
+		BufferedImage tag;
+		if (fixedsize > 0) {
+			tag = new BufferedImage(fixedsize, fixedsize,
+					BufferedImage.TYPE_INT_RGB);
+			tag.getGraphics().setColor(Color.WHITE);
+			tag.getGraphics().fillRect(0, 0, fixedsize, fixedsize);
+			tag.getGraphics().drawImage(
+					src.getScaledInstance(scale.width, scale.height,
+							Image.SCALE_SMOOTH), (fixedsize - scale.width) / 2,
+					(fixedsize - scale.height) / 2, scale.width, scale.height,
+					null);
+		} else {
+			tag = new BufferedImage(scale.width, scale.height,
+					BufferedImage.TYPE_INT_RGB);
+			tag.getGraphics().drawImage(
+					src.getScaledInstance(scale.width, scale.height,
+							Image.SCALE_SMOOTH), 0, 0, scale.width,
+					scale.height, null);
+		}
+
+		ImageIO.write(tag, "JPEG", desc);
+		
+		tag = null;
+	}
+
+	/**
+	 * 生成100尺寸的图片
+	 * @param sourcewidth
+	 * @param sourceheight
+	 * @return
+	 */
+	protected final static Scale getPhoto100Scale(int sourcewidth,
+			int sourceheight) {
+		return scalephoto(true, PRODUCT_PHOTO_100, PRODUCT_PHOTO_100,
+				sourcewidth, sourceheight);
+	}
+
+	/**
+	 * 生成300尺寸的图片
+	 * @param sourcewidth
+	 * @param sourceheight
+	 * @return
+	 */
+	protected final static Scale getPhoto300Scale(int sourcewidth,
+			int sourceheight) {
+		return scalephoto(true, PRODUCT_PHOTO_300, PRODUCT_PHOTO_300,
+				sourcewidth, sourceheight);
+	}
+	
+	/**
+	 * 生成600尺寸的图片
+	 * @param sourcewidth
+	 * @param sourceheight
+	 * @return
+	 */
+	protected final static Scale getPhoto600Scale(int sourcewidth,
+			int sourceheight) {
+		return scalephoto(true, PRODUCT_PHOTO_600, PRODUCT_PHOTO_600,
+				sourcewidth, sourceheight);
+	}
+	
+	/**
+	 * 生成800尺寸的图片
+	 * @param sourcewidth
+	 * @param sourceheight
+	 * @return
+	 */
+	protected final static Scale getPhoto800Scale(int sourcewidth,
+			int sourceheight) {
+		return scalephoto(true, PRODUCT_PHOTO_800, PRODUCT_PHOTO_800,
+				sourcewidth, sourceheight);
+	}
+
+	/**
+	 * 
+	 * @param autoscale
+	 *            是否自动对两边进行对比后再缩放
+	 * @param scaleper
+	 * @param sourcewidth
+	 * @param sourceheight
+	 * @return
+	 */
+	protected final static JPGPlug.Scale scalephoto(boolean autoscale,
+			int scalewidth, int scaleheight, int sourcewidth, int sourceheight) {
+		int descwidth = sourcewidth, descheight = sourceheight;
+		int temps = sourcewidth;
+		int tempscale = scalewidth;
+		if (autoscale && sourceheight > sourcewidth) {
+			temps = sourceheight;
+			tempscale = scaleheight;
+		}
+		if (temps > tempscale) {
+			double scaleper = (double) (temps - tempscale) / temps;
+			if (autoscale && sourceheight > sourcewidth) {
+				descheight = scaleheight;
+				descwidth = (int) (sourcewidth - scaleper * sourcewidth);
+			} else {
+				descwidth = scalewidth;
+				descheight = (int) (sourceheight - scaleper * sourceheight);
+			}
+		}
+		JPGPlug.Scale newScale = new JPGPlug().new Scale(sourcewidth,
+				sourceheight, descwidth, descheight);
+		return newScale;
+	}
+
+	public class Scale {
+		public int width;
+		public int height;
+		public int oldwidth;
+		public int oldheight;
+
+		public Scale() {
+
+		}
+
+		public Scale(int oldwidth, int oldheight, int width, int height) {
+			this.oldheight = oldwidth;
+			this.oldheight = oldheight;
+			this.width = width;
+			this.height = height;
+		}
+
+		public int getWidth() {
+			return width;
+		}
+
+		public void setWidth(int width) {
+			this.width = width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public void setHeight(int height) {
+			this.height = height;
+		}
+
+		public int getOldwidth() {
+			return oldwidth;
+		}
+
+		public void setOldwidth(int oldwidth) {
+			this.oldwidth = oldwidth;
+		}
+
+		public int getOldheight() {
+			return oldheight;
+		}
+
+		public void setOldheight(int oldheight) {
+			this.oldheight = oldheight;
+		}
+
+	}
+
+}

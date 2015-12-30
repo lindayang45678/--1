@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>发起售后</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css"/>
+	<link rel="stylesheet" href="../../css/admin.css"/>
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html">批发进货</a>
+			<a href="../order-query/order-query.html" class="active">订单查询</a>
+			<a href="../benefit-query/order-income.html">收益查询</a>
+			<a href="../sales-manage/sales-list.html">销售员管理</a>
+			<a href="../tools/index.html">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+			<menu>
+				<a href="../order-query/waiting-goods.html" class="active">待发货<span class="ico-white color">1</span></a>
+				<a href="../order-query/shipped.html">已发货</a>
+				<a href="../order-query/signed.html">已签收<span class="ico-blue c-white">1</span></a>
+				<a href="../order-query/order-query.html">订单查询</a>
+				<a href="../order-query/express-query.html">快递查询</a>
+				<a href="../tools/index.html">返回店主工具</a>
+				<a href="#">返回商城首页</a>
+			</menu>
+			<section class="main">
+				<div class="title">
+					<h2>发起售后</h2>
+				</div>
+				<div class="main-wrap">
+					<section class="waiting-customer-service">
+						<table>
+							<tr>
+								<td>订单号：<em>12345678912345678</em></td>
+								<td>订单时间：<span>2014-07-01</span><span>08:20:55</span>
+							</tr>
+							<tr>
+								<td>订单金额：￥<span>50.00</span></td>
+								<td>订单状态：<span>已完成</span></td>
+							</tr>
+							<tr>
+								<td>收货人手机号：<span>13512345678</span></td>
+								<td>收货人姓名：<span>巫龙飞</span></td>
+							</tr>
+						</table>
+						<div id="customer-goods">
+							<section>
+								<div class="customer-goods-head clearfix"><div class="selectbox"></div><div>请选择售后商品：</div></div>
+								<ul class="customer-goods-list">
+									<li>
+										<div class="selectbox checktrue"></div>
+										<dl>
+											<dt><img src="../../images/admin/goodsmallpic.png"/></dt>
+											<dd>棉麻布艺抱枕套 午睡抱枕套 沙发靠垫套</dd>
+											<dd class="addnumber">数量：<input type="button" value="-"/><input type="text" name="goods-nub" value="1"/><input type="button" value="+" /></dd>
+											<dd>
+												<div>颜色：<span>红色</span></div>
+												<div>尺码：<span>XL</span></div>
+												<div>型号：<span>大大型号</span></div>
+												<div>款式：<span>大款式</span></div>
+											</dd>
+										</dl>
+									</li>
+									<li>
+										<div class="selectbox"></div>
+										<dl>
+											<dt><img src="../../images/admin/goodsmallpic.png"/></dt>
+											<dd>棉麻布艺抱枕套 午睡抱枕套 沙发靠垫套</dd>
+											<dd class="addnumber">数量：<input type="button" value="-"/><input type="text" name="goods-nub" value="1"/><input type="button" value="+" /></dd>
+											<dd>
+												<div>颜色：<span>红色</span></div>
+												<div>尺码：<span>XL</span></div>
+												<div>型号：<span>大大型号</span></div>
+												<div>款式：<span>大款式</span></div>
+											</dd>
+										</dl>
+									</li>
+								</ul>
+							</section>
+						</div>
+						<div class="foot-line"></div>
+						<ul class="customer-goods-foot">
+							<li>请选择售后类型：<span>退货</span><span class="colorb">换货</span><span>维修</span></li>
+							<li>退货地址：<em>北京市海淀区丹棱街6号中关村金融大厦7层</em></li>
+							<li>退货收货人电话：<em>13512345678</em></li>
+							<li>退货收货人姓名：<em>巫龙飞</em></li>
+							<li>联系人电话：<input type="text"/></li>
+							<li>联系人姓名：<input type="text"/></li>
+							
+						</ul>
+						<div class="customer-submit"><a href="#" class="btn-white">取消</a><a href="#" class="btn-blue">确认提交</a></div>
+					</div>
+			</section>
+	</section>
+
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myscroll = new iScroll("customer-goods",{hScrollbar:false, vScrollbar:true, fixedScrollbar:true, hideScrollbar:true});
+		});
+	</script>
+</body>
+
+</html>

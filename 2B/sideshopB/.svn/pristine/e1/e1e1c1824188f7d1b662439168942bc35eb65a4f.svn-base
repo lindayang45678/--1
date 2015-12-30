@@ -1,0 +1,188 @@
+package com.lakala.model.order;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+public class OrderItemsInfo implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7169417258517387033L;
+
+	/**
+	 * @author: yhg
+	 * @project:sideshopB
+	 * @time: 2015年3月5日 上午9:54:04
+	 * @todo: TODO
+	 */
+	
+	private Integer torderitemsid;
+	
+	private Integer goodsid;
+	
+	private String goodbigpic;
+	
+	private String goodsname;
+	
+	private Integer ispay;
+	
+    private String logisticscode;
+    
+    private String corpname;
+    
+    private BigDecimal goodssaleprice;
+    
+    private Integer goodscount;
+    
+    private Integer invalidstate;
+    
+    private String norms;
+    
+    private Integer is3h;
+    
+    private Integer state;
+    
+    private Integer cancelstate;
+    
+    private Integer platorself;
+    
+    private Integer isdelivertohome;
+    
+    private Integer paychanel;
+
+	public Integer getTorderitemsid() {
+		return torderitemsid;
+	}
+
+	public void setTorderitemsid(Integer torderitemsid) {
+		this.torderitemsid = torderitemsid;
+	}
+
+	public Integer getGoodsid() {
+		return goodsid;
+	}
+
+	public void setGoodsid(Integer goodsid) {
+		this.goodsid = goodsid;
+	}
+
+	public String getGoodbigpic() {
+		return goodbigpic;
+	}
+
+	public void setGoodbigpic(String goodbigpic) {
+		this.goodbigpic = goodbigpic;
+	}
+
+	public String getGoodsname() {
+		return goodsname;
+	}
+
+	public void setGoodsname(String goodsname) {
+		this.goodsname = goodsname;
+	}
+
+	public Integer getIspay() {
+		return ispay;
+	}
+
+	public void setIspay(Integer ispay) {
+		this.ispay = ispay;
+	}
+
+	public String getLogisticscode() {
+		return logisticscode;
+	}
+
+	public void setLogisticscode(String logisticscode) {
+		this.logisticscode = logisticscode;
+	}
+
+	public String getCorpname() {
+		return corpname;
+	}
+
+	public void setCorpname(String corpname) {
+		this.corpname = corpname;
+	}
+
+	public BigDecimal getGoodssaleprice() {
+		return goodssaleprice;
+	}
+
+	public void setGoodssaleprice(BigDecimal goodssaleprice) {
+		this.goodssaleprice = goodssaleprice;
+	}
+
+	public Integer getGoodscount() {
+		return goodscount;
+	}
+
+	public void setGoodscount(Integer goodscount) {
+		this.goodscount = goodscount;
+	}
+
+	public Integer getInvalidstate() {
+		return invalidstate;
+	}
+
+	public void setInvalidstate(Integer invalidstate) {
+		this.invalidstate = invalidstate;
+	}
+
+	public String getNorms() {
+		return norms;
+	}
+
+	public void setNorms(String norms) {
+		this.norms = norms;
+	}
+
+	public Integer getIs3h() {
+		return is3h;
+	}
+
+	public void setIs3h(Integer is3h) {
+		this.is3h = is3h;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	public Integer getCancelstate() {
+		return cancelstate;
+	}
+
+	public void setCancelstate(Integer cancelstate) {
+		this.cancelstate = cancelstate;
+	}
+
+	public Integer getPlatorself() {
+		return platorself;
+	}
+
+	public void setPlatorself(Integer platorself) {
+		this.platorself = platorself;
+	}
+
+	public Integer getIsdelivertohome() {
+		return isdelivertohome;
+	}
+
+	public void setIsdelivertohome(Integer isdelivertohome) {
+		this.isdelivertohome = isdelivertohome;
+	}
+
+	public Integer getPaychanel() {
+		return paychanel;
+	}
+
+	public void setPaychanel(Integer paychanel) {
+		this.paychanel = paychanel;
+	}
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.news.TNewsLogMapper" >
+ <resultMap id="BaseResultMap" type="com.lakala.model.news.TNewsLog" > 
+  	<id column="id" property="id" jdbcType="INTEGER" />
+    <result column="newsId" property="newsId" jdbcType="INTEGER" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="terminalCode" property="terminalCode" jdbcType="VARCHAR" />
+    <result column="terminalType" property="terminalType" jdbcType="INTEGER" />
+    <result column="sendTime" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+
+	<insert id="insertNewsLog" parameterType="com.lakala.base.model.TNewsLog" useGeneratedKeys="false">
+	 <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+		insert into tnewslog(newsId,tel,terminalCode,terminalType,sendTime,source,status) values(
+			#{newsId,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR}, #{terminalCode,jdbcType=VARCHAR},
+			#{terminalType,jdbcType=INTEGER},now(), #{source,jdbcType=INTEGER},#{status,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<insert id="insertNewsLogs" parameterType="java.util.List" useGeneratedKeys="false">
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+		<foreach collection="list" item="item" index="index" separator=";">
+			insert into tnewslog(newsId,tel,terminalCode,terminalType,sendTime,source,status) values(
+			#{item.newsId}, #{item.tel}, #{item.terminalCode},
+			#{item.terminalType},now(), #{item.source},#{item.status}
+		)
+		</foreach>
+	</insert>
+	
+	<update id="updateNewsLogStatus" parameterType="com.lakala.base.model.TNewsLog">
+	    update tnewslog set status = 3 where newsId = #{newsId,jdbcType=INTEGER} and terminalCode = #{terminalCode,jdbcType=VARCHAR}
+	</update>
+</mapper>

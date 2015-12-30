@@ -1,0 +1,63 @@
+// JavaScript Document
+function mytab(n){
+	for(i=1;i<=2;i++){
+		document.getElementById('tab'+i).className='';
+		document.getElementById('content'+i).className='incurtab';
+	}
+	document.getElementById('tab'+n).className='active';
+	document.getElementById('content'+n).className='curtab';
+	/*一级菜单左右滚动*/
+	var liWidth = null;
+	$("#sorts li").each(function(){
+		liWidth += parseInt($(this).width());
+	});
+	$("#sorts .sorts-in").css("width", liWidth + 1 + "px");
+	/*二级菜单左右滚动*/
+	var twoWidth = null;
+	$("#menu2 li").each(function(){
+		twoWidth += parseInt($(this).width());
+	});
+	$("#menu2-list").css("width", twoWidth + 1 + "px");
+	//调用iScroll
+	$(function(){
+		var LiobjScroll = new iScroll("sorts", {
+			hScroll : true,
+			vScroll :false
+		});
+		var menuScroll = new iScroll("menu2", {
+			hScroll : true,
+			vScroll : false
+		});
+	});
+}
+
+
+function mtab(n){
+	for(i=1;i<=2;i++){
+		document.getElementById('tab'+'-'+i).className='';
+		document.getElementById('content'+'-'+i).className='incurtab-1';
+	}
+		document.getElementById('tab'+'-'+n).className='activer';
+		document.getElementById('content'+'-'+n).className='curtab-1';
+}
+/*删除*/
+$(function(){
+	$('.del').on('tap',function(){
+		$(this).parent().parent().remove('slow');
+	})
+});
+/*一级菜单选中*/
+$(function(){
+	$('.sorts-in').find('a').on('tap',function(){
+		$('.sorts-in').find('a').removeClass('color');
+		$(this).addClass('color');
+	})
+});
+/*二级菜单选中*/
+$(function(){
+	$('.menu2-in').find('a').on('tap',function(){
+		$('.menu2-in').find('a').removeClass('color');
+		$(this).addClass('color');
+	});
+});
+

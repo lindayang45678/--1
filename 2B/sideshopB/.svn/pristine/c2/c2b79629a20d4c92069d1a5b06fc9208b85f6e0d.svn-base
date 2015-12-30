@@ -1,0 +1,19 @@
+package com.lakala.module.order.vo;
+
+public class ShouhuoInputParam {
+	private String orderitemid;
+	private Integer actualnum;
+	
+	public String getOrderitemid() {
+		return orderitemid;
+	}
+	public void setOrderitemid(String orderitemid) {
+		this.orderitemid = orderitemid;
+	}
+	public Integer getActualnum() {
+		return actualnum;
+	}
+	public void setActualnum(Integer actualnum) {
+		this.actualnum = actualnum;
+	}
+}

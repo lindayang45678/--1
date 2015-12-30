@@ -1,0 +1,70 @@
+//点击叉的时候删除
+$('.fill-close').live('tap',function(){	
+	$(this).parent().remove();
+});
+//添加地址超过5个的时候弹窗否则添加
+$('.fill-add-address').on('tap',function(){
+	var n=$('.fill-address li').length;
+	if(n>=5)
+	{	$('.popup').removeClass('hidden');
+		$('.masker').removeClass('hidden');
+	}
+	else
+	{	$('.fill-edit-address').removeClass('hidden');
+		$('.fill-add-address').addClass('hidden');
+		$('.btn-save-addressa').removeClass('hidden');
+		$('.btn-save-addressb').addClass('hidden');
+		$('.fill-edit-address input').val('');
+		$('.edit-area input').val('默认');
+
+		$('.btn-save-addressa').on('tap',function(){	
+			var ret='';
+			var newname=$('.edit-name input').val();
+			var newphone=$('.edit-phone input').val();
+			var newarea=$('.edit-area input').val();
+			var newdetail=$('.edit-address input').val();
+			ret+='<li class="f-14">';
+			ret+='<a href="fill.html"><em><i class="address-name">'+newname+'</i>&nbsp;<i class="address-phone">'+newphone+'</i></em>';
+			ret+='<em><i class="address-area">'+newarea+'</i></em>';
+			ret+='<em><i class="address-detail">'+newdetail+'</i></em></a>';
+			ret+='<div class="fill-close"></div>';
+			ret+='<a href="javascript:;" class="fill-edit">编辑</a></li>';
+			$('.fill-address').append(ret);
+			$('.fill-edit-address').addClass('hidden');
+			$('.fill-add-address').removeClass('hidden');
+		});
+	};
+});
+//弹窗点击确定的时候弹窗消失
+$('.popup-btn').on('tap',function(){	
+	$('.popup').addClass('hidden');
+	$('.masker').addClass('hidden');
+});
+
+//点击编辑时候进行编辑
+$('.fill-edit').live('tap',function(){	
+	//编辑的是第几个进行标记
+	$('.fill-edit').parent().removeClass('mark');
+	$(this).parent().addClass('mark');
+	$('.fill-edit-address').removeClass('hidden');
+	$('.fill-add-address').addClass('hidden');
+	$('.btn-save-addressb').removeClass('hidden');
+	$('.btn-save-addressa').addClass('hidden');
+	$('.edit-name input').val($('.mark').find('.address-name').text());
+	$('.edit-phone input').val($('.mark').find('.address-phone').text());
+	$('.edit-area input').val('默认');
+	$('.edit-address input').val($('.mark').find('.address-detail').text());
+	$('.btn-save-addressb').live('tap',function(){	
+		var newname=$('.edit-name input').val();
+		var newphone=$('.edit-phone input').val();
+		var newarea=$('.edit-area input').val('默认');
+		var newdetail=$('.edit-address input').val();
+		$('.mark').find('.address-name').text(newname);
+		$('.mark').find('.address-phone').text(newphone);
+		$('.mark').find('.address-area').text($('.edit-area input').val());
+		$('.mark').find('.address-detail').text(newdetail);
+		$('.mark').removeClass('mark');
+		$('.fill-edit-address').addClass('hidden');
+		$('.fill-add-address').removeClass('hidden');
+	});
+});

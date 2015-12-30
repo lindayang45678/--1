@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.messagebase.MessageBaseMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.model.messagebase.MessageBase">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="psam" property="psam" jdbcType="VARCHAR"/>
+        <result column="netpoint_code" property="netpointCode" jdbcType="VARCHAR"/>
+        <result column="canal_id" property="canalId" jdbcType="INTEGER"/>
+        <result column="channel_id" property="channelId" jdbcType="INTEGER"/>
+        <result column="category" property="category" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="visible" property="visible" jdbcType="TINYINT"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.lakala.model.messagebase.MessageBase"
+               extends="BaseResultMap">
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id, psam, netpoint_code, canal_id, channel_id, category, title, visible, user_id,
+      user_name, create_date, update_date
+    </sql>
+    <sql id="Blob_Column_List">
+      content
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from tmessage_base
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

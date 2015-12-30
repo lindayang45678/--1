@@ -1,0 +1,285 @@
+package com.lakala.model.user;
+
+import java.util.Date;
+
+public class Tmember {
+    private String membername;
+
+    private String memberpwd;
+
+    private Integer source;
+
+    private Integer membertype;
+
+    private String provincecode;
+
+    private String provincename;
+
+    private String citycode;
+
+    private String cityname;
+
+    private String areacode;
+
+    private String areaname;
+
+    private String address;
+
+    private String psam;
+
+    private String netno;
+
+    private String branchcorp;
+
+    private Integer deploytype;
+
+    private String sourcename;
+
+    private String name;
+
+    private String nickname;
+
+    private String sex;
+
+    private Short age;
+
+    private Date birthday;
+
+    private String email;
+
+    private String acountno;
+
+    private String acountname;
+
+    private String bankname;
+
+    private Date createddate;
+
+    private Date updateddate;
+
+    private Long groupid;
+
+    public String getMembername() {
+        return membername;
+    }
+
+    public void setMembername(String membername) {
+        this.membername = membername;
+    }
+
+    public String getMemberpwd() {
+        return memberpwd;
+    }
+
+    public void setMemberpwd(String memberpwd) {
+        this.memberpwd = memberpwd;
+    }
+
+    public Integer getSource() {
+        return source;
+    }
+
+    public void setSource(Integer source) {
+        this.source = source;
+    }
+
+    public Integer getMembertype() {
+        return membertype;
+    }
+
+    public void setMembertype(Integer membertype) {
+        this.membertype = membertype;
+    }
+
+    public String getProvincecode() {
+        return provincecode;
+    }
+
+    public void setProvincecode(String provincecode) {
+        this.provincecode = provincecode;
+    }
+
+    public String getProvincename() {
+        return provincename;
+    }
+
+    public void setProvincename(String provincename) {
+        this.provincename = provincename;
+    }
+
+    public String getCitycode() {
+        return citycode;
+    }
+
+    public void setCitycode(String citycode) {
+        this.citycode = citycode;
+    }
+
+    public String getCityname() {
+        return cityname;
+    }
+
+    public void setCityname(String cityname) {
+        this.cityname = cityname;
+    }
+
+    public String getAreacode() {
+        return areacode;
+    }
+
+    public void setAreacode(String areacode) {
+        this.areacode = areacode;
+    }
+
+    public String getAreaname() {
+        return areaname;
+    }
+
+    public void setAreaname(String areaname) {
+        this.areaname = areaname;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPsam() {
+        return psam;
+    }
+
+    public void setPsam(String psam) {
+        this.psam = psam;
+    }
+
+    public String getNetno() {
+        return netno;
+    }
+
+    public void setNetno(String netno) {
+        this.netno = netno;
+    }
+
+    public String getBranchcorp() {
+        return branchcorp;
+    }
+
+    public void setBranchcorp(String branchcorp) {
+        this.branchcorp = branchcorp;
+    }
+
+    public Integer getDeploytype() {
+        return deploytype;
+    }
+
+    public void setDeploytype(Integer deploytype) {
+        this.deploytype = deploytype;
+    }
+
+    public String getSourcename() {
+        return sourcename;
+    }
+
+    public void setSourcename(String sourcename) {
+        this.sourcename = sourcename;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Short getAge() {
+        return age;
+    }
+
+    public void setAge(Short age) {
+        this.age = age;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAcountno() {
+        return acountno;
+    }
+
+    public void setAcountno(String acountno) {
+        this.acountno = acountno;
+    }
+
+    public String getAcountname() {
+        return acountname;
+    }
+
+    public void setAcountname(String acountname) {
+        this.acountname = acountname;
+    }
+
+    public String getBankname() {
+        return bankname;
+    }
+
+    public void setBankname(String bankname) {
+        this.bankname = bankname;
+    }
+
+    public Date getCreateddate() {
+        return createddate;
+    }
+
+    public void setCreateddate(Date createddate) {
+        this.createddate = createddate;
+    }
+
+    public Date getUpdateddate() {
+        return updateddate;
+    }
+
+    public void setUpdateddate(Date updateddate) {
+        this.updateddate = updateddate;
+    }
+
+    public Long getGroupid() {
+        return groupid;
+    }
+
+    public void setGroupid(Long groupid) {
+        this.groupid = groupid;
+    }
+}

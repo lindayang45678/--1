@@ -1,0 +1,11 @@
+package com.lakala.mapper.r.sdbmediastatistics;
+
+import java.util.List;
+
+import com.lakala.model.user.TShopService;
+
+public interface TShopServiceMapper {
+
+	public List<TShopService> queryShopServiceByShopId(Integer shopId);
+	
+}

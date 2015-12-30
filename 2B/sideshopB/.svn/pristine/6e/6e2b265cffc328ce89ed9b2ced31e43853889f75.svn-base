@@ -1,0 +1,126 @@
+$(function() {
+	loadJs();
+})
+
+$(function() {
+	$("#btnQuit").on("tap", function() {
+		var data = {"mobile":mobile};
+		//var resultJson = ajaxCommon(urlLogout, data);
+
+		clearStorage();
+
+		if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			//记录登录状态
+			cordova._native.saveInfo.set(hasLogined, false);
+		}
+		window.location.href = "../accounts/login.html?t=" + t;
+		//if(resultJson._ReturnCode === returnCodeSuccess) {
+			//清除所有localStorage里的信息
+			//clearStorage();
+			//window.location.href = "../accounts/login.html?t=" + t;
+		//} else {
+			//@TODO 如果接口有错改如何处理？
+			//清除所有localStorage里的信息
+			//clearStorage();
+			//window.location.href = "../accounts/login.html?t=" + t;
+		//}
+	});
+})
+
+/* 用户登出
+$(function() {
+	$("#btnQuit").on("tap", function() {
+		var data = {"mobile":mobile};
+		var resultJson = ajaxCommon(urlLogout, data);
+		clearStorage();
+		if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			//记录登录状态
+			cordova._native.saveInfo.set(hasLogined, false);
+		}
+		window.location.href = "../accounts/login.html?t=" + t;
+	});
+})*/
+
+$(function(){
+	var msgSound = storage.getItem("msgSound") || "on";
+	var msgShake = storage.getItem("msgShake") || "on";
+	if(msgSound == "on"){
+		$("#msgSound").addClass("on");
+	}else{
+		$("#msgSound").removeClass("on");
+	}
+	
+	if(msgShake == "on"){
+		$("#msgShake").addClass("on");
+	}else{
+		$("#msgShake").removeClass("on");
+	}
+})
+
+/* 设置保存key-value，供客户端调用*/
+$(function() {
+	$(".setting-choose div").on("tap", function() {
+		$(this).toggleClass("on");
+		var key = $(this).attr("id");
+		if($(this).hasClass("on")) {
+			cordova._native.saveInfo.set(key, "on");
+			storage.setItem(key,"on");
+		} else {
+			cordova._native.saveInfo.set(key, "off");
+			storage.setItem(key,"off");
+		}
+	});
+})
+
+var remark = storage.getItem("bizType");/* 商户类型--加盟型:459; 标准型:460; 旗舰型:461; */
+//升级小店
+$(function () {
+	var shipaddress = $.parseJSON(storage.getItem("shipaddress"));
+	var phoneno = shipaddress.shipmobile;
+	data = {"phoneno": phoneno}
+	var resultJson = ajaxCommon(urlGetshopupdate,data);
+	resultJson = convertNullToEmpty(resultJson);
+	//显示状态
+	if (remark == bizTypeJMX) {
+		if(resultJson._ReturnData != ""){
+			var result = resultJson._ReturnCode;
+			if (result == 163 ) {
+				$(".upgrade a .fr").html("待审批");
+				return ;
+			}
+			if (result == 164 ) {
+				$(".upgrade a .fr").html("审批通过");
+				storage.setItem("bizType",bizTypeBZX);//升级成功
+			}
+			if (result == 165 ) {
+				$(".upgrade a .fr").html("审批不通过");//升级失败
+			}
+		} else {
+			$(".upgrade a .fr").html("待升级");
+		}
+	} else if (remark == bizTypeBZX) {
+		$(".upgrade a .fr").html("标准店");
+		$(".upgrade a .fr").css("color","#bab6b6");
+	}
+	//跳转
+	$(".upgrade").on("tap", function () {
+		if (remark == bizTypeJMX) {//请求升级460
+			if(resultJson._ReturnData != ""){
+				var result = resultJson._ReturnCode;
+				if (result == 163 ) {
+					showAlertMsg("待审批中...");
+				}
+				if (result == 164 ) {
+					window.location.href = "upgradesuccessfully.html";//升级成功
+				}
+				if (result == 165 ) {
+					window.location.href = "upgradefailed.html";//升级失败
+				}
+			} else {
+				window.location.href = "shopupdate.html";//升级
+			}
+		} else if (remark == bizTypeBZX) {
+			window.location.href = "upgradesuccessfully.html";
+		}
+	})
+})

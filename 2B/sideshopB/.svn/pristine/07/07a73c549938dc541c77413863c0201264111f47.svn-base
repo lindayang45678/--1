@@ -1,0 +1,55 @@
+$(function(){
+	var url = window.location.href;
+	var settlementId = getParamValueByName(url, "settlementId");
+	var startTime = getParamValueByName(url, "orderStartTime");
+	var endTime = getParamValueByName(url, "orderEndTime");
+	var title = startTime.split("-")[1];
+	if(title[0] == "0") {
+		title = title[1];
+	}
+	$("title").html(title + "月流水");
+	$("h1").html(title + "月流水");
+	var container = $(".order-incomes ul");
+	var content = "";
+	var data = {
+			"settlementId":settlementId,
+			"ecNetNo":netNo,
+			"earningsType":selfGoods,
+			"startTime":startTime,
+			"endTime":endTime,
+			"page":1,
+			"pageSize":10
+	};
+	var resultJson = ajaxCommon(urlGetCycleOwnDateEarningsList, data);
+	if(resultJson._ReturnCode === returnCodeSuccess){
+		var _returnData = resultJson._ReturnData;
+		if(_returnData.length > 0){
+			for(var i = 0; i < _returnData.length; i ++) {
+				content += "<li>";
+				var url= "javascript:;";
+				url = "incomesmonth.html?";
+				url += "type=self";
+				url += "&ownTodayEarnings=" +_returnData[i].ownSelfAmount;
+				url += "&ownTodayOrderNum=" +_returnData[i].ownSelf0rderNum;
+				url += "&ownSettleAmont=" +_returnData[i].ownSettleAmount;
+				url += "&ownSettleNum=" +_returnData[i].ownSettle0rderNum;
+				url += "&ownSettleDate=" +_returnData[i].earningsTime;
+				url += "&from=incomes";
+				content += "<a href='" +url+"'>";
+				content += "<div class='order-incomes-title'>";
+				content += "<span>" +formatData(_returnData[i].earningsTime,"4")+ "</span>";
+				content += "</div>";
+				content += "<div class='order-incomes-item'>";
+				content += "<div>";
+				content += "<span>流水：￥<em>" +_returnData[i].ownSelfAmount+ "</em></span><span>" +_returnData[i].ownSelf0rderNum+ "单</span><br/>";
+				content += "<span>到账：￥<em>" +_returnData[i].ownSettleAmount+ "</em></span><span>" +_returnData[i].ownSettle0rderNum+ "单</span>";
+				content += "</div>";
+				content += "<div><span class='index-link'></span></div>";
+				content += "</div>";
+				content += "</a>";
+				content += "</li>";
+			}
+			container.append(content);
+		}
+	}
+});

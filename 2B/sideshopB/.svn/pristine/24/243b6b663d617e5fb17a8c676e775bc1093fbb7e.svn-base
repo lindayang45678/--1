@@ -1,0 +1,26 @@
+$(function(){
+	var data = {"mobile":mobile,"ecNetNo":netNo};
+	var resultJson = ajaxCommon(urlToProfitHome, data);
+	//测试数据
+	resultJson = {"_ReturnMsg":null,"_ReturnCode":"000000","_ReturnData":{"token":"ibhC0Yu31mcRC7Y+QpI6dg==","ownTodayEarnings":100.56,"ownTodayOrderNum":200,"ownAddEarnings":100.56,"ownAddOrderNum":100,"terraceAddEarnings":900.56,"terraceAddOrderNum":999,"terraceTodayEarnings":900.56,"terraceTodayOrderNum":777}};
+	if(resultJson._ReturnCode === returnCodeSuccess){
+		var terraceTodayEarnings = resultJson._ReturnData.terraceTodayEarnings;//平台昨日收益
+		var terraceTodayOrderNum = resultJson._ReturnData.terraceTodayOrderNum;//平台昨日订单
+		var terraceAddEarnings = resultJson._ReturnData.terraceAddEarnings;//平台累计收益
+		var terraceAddOrderNum = resultJson._ReturnData.terraceAddOrderNum;//平台累计订单
+		var ownTodayEarnings = resultJson._ReturnData.ownTodayEarnings;//自营昨日收益
+		var ownTodayOrderNum = resultJson._ReturnData.ownTodayOrderNum;//自营昨日订单
+		var ownAddEarnings = resultJson._ReturnData.ownAddEarnings;//自营累计收益
+		var ownAddOrderNum = resultJson._ReturnData.ownAddOrderNum;//自营累计订单
+		//平台商品收益-昨日收入
+		$(".incomes-l:eq(0)").find("em").html(terraceTodayEarnings).next().html(terraceTodayOrderNum+"单");
+		//平台商品收益-累计收入
+		$(".incomes-r:eq(0)").find("em").html(terraceAddEarnings).next().html(terraceAddOrderNum+"单");
+		//自营商品收益-昨日收入
+		$(".incomes-l:eq(1)").find("em").html(ownTodayEarnings).next().html(ownTodayOrderNum+"单");
+		//自营商品收益-累计收入
+		$(".incomes-r:eq(1)").find("em").html(ownAddEarnings).next().html(ownAddOrderNum+"单");
+	}else{
+		//接口返回错误
+	}
+})

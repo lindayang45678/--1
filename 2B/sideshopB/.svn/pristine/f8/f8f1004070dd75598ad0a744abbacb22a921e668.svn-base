@@ -1,0 +1,25 @@
+$(function(){
+	loadJs();
+})
+
+//分享
+$(function() {
+	$('#share').on('tap', function(e) {
+		var title = $(this).siblings('h2').text();
+		cordova._native.share.share(title, title, '', function() {
+			
+		}, function() {
+			
+		});
+	});
+});
+$(function(){
+	var resultJson = ajaxCommon(urlShopInfo, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		$("#shopname").html("").html(_ReturnData.shopname);
+	}else{
+		//接口返回错误
+	}
+});

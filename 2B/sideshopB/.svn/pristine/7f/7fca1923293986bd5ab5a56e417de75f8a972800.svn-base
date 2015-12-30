@@ -1,0 +1,124 @@
+package com.lakala.module.profit.vo;
+
+
+
+/**
+ * 收益首页数据
+ * @author pengyunle
+ *
+ */
+public class ProfitHomeOutput{
+    
+	/** 验证令牌 */
+	protected String token;
+	
+//	/**结算周期开始时间*/
+//    private Date orderStartTime;
+//    
+//    /**结算周期结束时间*/
+//	private Date orderEndtTime;
+//	
+//	/**结算金额*/
+//	private String shopTotalAmount;
+//	
+//	/**订单数量*/
+//	private Long shop0rderNum;
+	
+	/**自营今日收益*/
+	private String ownTodayEarnings;
+	
+	/**自营今日订单*/
+	private Long ownTodayOrderNum;
+	
+	/**自营累计收益*/
+	private String ownAddEarnings;
+	
+	/**自营累计订单*/
+	private Long ownAddOrderNum;
+	
+	/**平台今日收益*/
+	private String terraceTodayEarnings;
+	
+	/**平台今日订单*/
+	private Long terraceTodayOrderNum;
+	
+	/**平台累计收益*/
+	private String terraceAddEarnings;
+	
+	/**平台累计订单*/
+	private Long terraceAddOrderNum;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getOwnTodayEarnings() {
+		return ownTodayEarnings;
+	}
+
+	public void setOwnTodayEarnings(String ownTodayEarnings) {
+		this.ownTodayEarnings = ownTodayEarnings;
+	}
+
+	public Long getOwnTodayOrderNum() {
+		return ownTodayOrderNum;
+	}
+
+	public void setOwnTodayOrderNum(Long ownTodayOrderNum) {
+		this.ownTodayOrderNum = ownTodayOrderNum;
+	}
+
+	public String getOwnAddEarnings() {
+		return ownAddEarnings;
+	}
+
+	public void setOwnAddEarnings(String ownAddEarnings) {
+		this.ownAddEarnings = ownAddEarnings;
+	}
+
+	public Long getOwnAddOrderNum() {
+		return ownAddOrderNum;
+	}
+
+	public void setOwnAddOrderNum(Long ownAddOrderNum) {
+		this.ownAddOrderNum = ownAddOrderNum;
+	}
+
+	public String getTerraceTodayEarnings() {
+		return terraceTodayEarnings;
+	}
+
+	public void setTerraceTodayEarnings(String terraceTodayEarnings) {
+		this.terraceTodayEarnings = terraceTodayEarnings;
+	}
+
+	public Long getTerraceTodayOrderNum() {
+		return terraceTodayOrderNum;
+	}
+
+	public void setTerraceTodayOrderNum(Long terraceTodayOrderNum) {
+		this.terraceTodayOrderNum = terraceTodayOrderNum;
+	}
+
+	public String getTerraceAddEarnings() {
+		return terraceAddEarnings;
+	}
+
+	public void setTerraceAddEarnings(String terraceAddEarnings) {
+		this.terraceAddEarnings = terraceAddEarnings;
+	}
+
+	public Long getTerraceAddOrderNum() {
+		return terraceAddOrderNum;
+	}
+
+	public void setTerraceAddOrderNum(Long terraceAddOrderNum) {
+		this.terraceAddOrderNum = terraceAddOrderNum;
+	}
+
+	
+}

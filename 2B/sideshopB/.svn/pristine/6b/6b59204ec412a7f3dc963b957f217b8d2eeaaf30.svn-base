@@ -1,0 +1,32 @@
+package com.lakala.module.profit.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+
+
+/**
+ * 订单周期收益查询数据输入
+ * @author pengyunle
+ *
+ */
+public class OrderCycleProfitInput extends ObjectInput{
+
+	/** 用户手机号 */
+	private String mobile;
+	/** 结算周期 */
+	private String settlementId;
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	public String getSettlementId() {
+		return settlementId;
+	}
+	public void setSettlementId(String settlementId) {
+		this.settlementId = settlementId;
+	}
+	
+	
+}

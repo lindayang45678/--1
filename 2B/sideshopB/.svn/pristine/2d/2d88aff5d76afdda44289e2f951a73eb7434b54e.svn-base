@@ -1,0 +1,271 @@
+package com.lakala.module.user.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.model.user.Tmedia;
+import com.lakala.model.user.Tmember;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.SmsVerificationCodeService;
+import com.lakala.module.user.service.UserService;
+import com.lakala.module.user.vo.UserInfoOutput;
+import com.lakala.module.user.vo.UserLoginInput;
+import com.lakala.module.user.vo.UserRegisterInput;
+import com.lakala.util.MD5Util;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.TokenUtil;
+
+/**
+ * 用户服务接口实现
+ * @author ph.li
+ *
+ */
+@Service("UserServiceBean")
+public class UserServiceImpl implements UserService{
+	
+	@Autowired
+	private com.lakala.mapper.r.user.TmemberMapper tmemberMapper_R;
+	
+	@Autowired
+	private com.lakala.mapper.w.user.TmemberMapper tmemberMapper_W;
+	
+	@Autowired
+	private SmsVerificationCodeService smsService_R;
+
+//	@Autowired
+//	private com.lakala.remote.UserWebService userWebService;
+
+	@Override
+	public ObjectOutput<UserInfoOutput> login(UserLoginInput user) throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		
+		//debug
+		System.out.println(user.getMobile());
+		
+		//根据用户名查询会员信息
+		Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+		if (null != tmember) {
+			String pwd = tmember.getMemberpwd();
+			pwd = (pwd == null ? "" : pwd);
+			if (MD5Util.validatePassword(pwd, user.getPwd())) {
+				//返回登录信息
+				UserInfoOutput info = new UserInfoOutput();
+				info.setUserName(tmember.getMembername());
+				info.setToken(TokenUtil.getToken(user.getMobile()));
+				int type = tmember.getMembertype();
+				String typeName = "";
+				//会员类型 321:店主  322:销售员  323:客户
+				if (type == 321) {
+					typeName = "店主";
+				} else if (type == 322) {
+					typeName = "销售员";
+				} else if (type == 323) {
+					typeName = "客户";
+				}
+				info.setUserType(typeName);
+				
+				//根据用户名查询会店主信息
+				List<Tmedia> mediaStatistics = 
+						tmemberMapper_R.selectSdbMediaByCriteria(user.getMobile());
+				if (null != mediaStatistics && mediaStatistics.size() > 0
+						&& user.getMobile().equals(mediaStatistics.get(0).getMobile())) {
+					//更新终端编号
+					int rtn = tmemberMapper_W.updateTmemberTCodeById(user);
+					if (rtn > 0) {
+						data.set_ReturnMsg("成功登录!");
+						data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+						data.set_ReturnData(info);
+					}
+				} else {
+					data.set_ReturnMsg("该用户不是店主!");
+					data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				}
+			} else {
+				data.set_ReturnMsg("密码错误!");
+				data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			}
+		} else {
+			data.set_ReturnMsg("用户名不存在!");
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+		}
+		
+		return data;
+	}
+
+	@Override
+	public ObjectOutput<UserInfoOutput> logout(UserLoginInput user) throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		
+		//debug
+		System.out.println("logout->mobile:" + user.getMobile());
+		
+		//更新终端编号
+		user.setTerminalCode("");
+		int rtn = tmemberMapper_W.updateTmemberTCodeById(user);
+		if (rtn > 0) {
+			data.set_ReturnMsg("用户名已登出!");
+			data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		} else {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("出错了!");
+		}
+		
+		return data;
+	}
+
+	@Override
+	public ObjectOutput<UserInfoOutput> addUserRegister(UserRegisterInput user)
+			throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		//debug
+		System.out.println("addUserRegister->mobile:" + user.getMobile());
+		
+		//密码复杂度
+//		String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8}$";
+		String regex = "^[0-9A-Za-z]{6,}$";	
+		if (!(null != user.getPwd() && user.getPwd().matches(regex))) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("密码必须由数字或者字母或者数字字母的组合，且长度必须大于等于8!");
+			return data;
+		}
+		
+		//验证码
+//		Tverificationcode reqCode = new Tverificationcode();
+//		reqCode.setMobile(user.getMobile());
+//		reqCode.setCode(Integer.parseInt(user.getVerificationCode()));
+//		Tverificationcode resCode = smsService_R.queryVerificationCode(reqCode);
+//		if (null != resCode && user.getMobile().equals(resCode.getMobile())) {
+		if (true) {
+			//根据用户名查询会员信息
+			Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+			if (null != tmember) {
+				data.set_ReturnMsg("该用户已经存在!");
+				data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			} else {
+				
+				//根据用户名查询会店主信息
+				List<Tmedia> mediaStatistics = 
+						tmemberMapper_R.selectSdbMediaByCriteria(user.getMobile());
+				if (null != mediaStatistics && mediaStatistics.size() > 0
+						&& user.getMobile().equals(mediaStatistics.get(0).getMobile())) {
+
+//					//集团用户中心注册
+//					long gid = userWebService.createUserIfNotExist(user.getMobile(),user);
+//					if (gid != 0L) {
+//						//
+//					}
+					
+					user.setPwd(MD5Util.generatePassword(user.getPwd()));
+					int rtn = tmemberMapper_W.addTmember(user);
+					if (rtn > 0) {
+						UserInfoOutput info = new UserInfoOutput();
+						info.setUserName(user.getMobile());
+						info.setToken(user.getToken());
+						info.setUserType("客户");
+						
+						data.set_ReturnMsg("注册成功!");
+						data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+						data.set_ReturnData(info);
+					}
+				} else {
+					data.set_ReturnMsg("该用户没有批发进货的权限!");
+					data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				}
+			}
+		} else {
+			data.set_ReturnMsg("验证码不正确!");
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+		}
+		return data;
+	}
+
+	@Override
+	public ObjectOutput<UserInfoOutput> updateUserPwd(UserLoginInput user)
+			throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		//debug
+		System.out.println("updateUserPwd->mobile:" + user.getMobile());
+		
+		//密码复杂度
+//		String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8}$";
+		String regex = "^[0-9A-Za-z]{6,}$";	
+		if (!(null != user.getPwd() && user.getPwd().matches(regex))) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("密码必须由数字或者字母或者数字字母的组合，且长度必须大于等于8!");
+			return data;
+		}
+		
+		//验证码
+//		Tverificationcode reqCode = new Tverificationcode();
+//		reqCode.setMobile(user.getMobile());
+//		reqCode.setCode(Integer.parseInt(user.getVerificationCode()));
+//		Tverificationcode resCode = smsService_R.queryVerificationCode(reqCode);
+//		if (null != resCode && user.getMobile().equals(resCode.getMobile())) {
+		if (true) {
+			//更新用户密码
+			user.setPwd(MD5Util.generatePassword(user.getPwd()));
+			int rtn = tmemberMapper_W.updateTmemberPwdById(user);
+			if (rtn > 0) {
+				//根据用户名查询会员信息
+				Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+				if (null != tmember) {
+					UserInfoOutput info = new UserInfoOutput();
+					info.setUserName(tmember.getMembername());
+					info.setToken(user.getToken());
+					int type = tmember.getMembertype();
+					String typeName = "";
+					//会员类型 321:店主  322:销售员  323:客户
+					if (type == 321) {
+						typeName = "店主";
+					} else if (type == 322) {
+						typeName = "销售员";
+					} else if (type == 323) {
+						typeName = "客户";
+					}
+					info.setUserType(typeName);
+					
+					data.set_ReturnMsg("更新密码成功!");
+					data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+					data.set_ReturnData(info);
+				} else {
+					data.set_ReturnMsg("用户名不存在!");
+					data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				}
+			}
+		} else {
+			data.set_ReturnMsg("验证码不正确!");
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+		}
+
+		return data;
+	}
+}

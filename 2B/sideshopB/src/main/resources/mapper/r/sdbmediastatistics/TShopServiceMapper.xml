@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.sdbmediastatistics.TShopServiceMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.model.user.TShopService" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="shopId" property="shopId" jdbcType="BIGINT" />
+  </resultMap>
+  
+    <resultMap id="ResultMapWithTorderitems" type="com.lakala.model.user.TShopService"
+		extends="BaseResultMap">
+    	<result column="tOrderItemsId" property="torderitemsid" jdbcType="INTEGER" />
+	</resultMap>
+    
+    <select id="queryShopServiceByShopId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select id,name,phone , shopId from tshopservice where shopId = #{id,jdbcType=INTEGER} 
+    </select>
+    
+    <select id="queryShopServiceByOrdereMap" resultMap="ResultMapWithTorderitems" parameterType="map">
+        SELECT    
+        
+		s.tOrderItemsId as torderitemsid,t.id as id,IFNULL(t.`name`,m.contact_name_1) as name,
+		IFNULL(t.phone,m.mobile) as phone ,t.shopId as shopId
+		
+		from  torderitems  s , tshopservice t , sdb_media_statistics m
+		where  s.deviceNo = m.psam and t.shopId = m.id 
+		
+		 <if test="torderproviderid != null and torderproviderid != '' ">
+			and s.orderProviderID = #{torderproviderid} 
+		</if>
+		<if test="cancelstate != null and cancelstate != '' ">
+		    and s.cancelState = #{cancelstate}
+		</if>
+		<if test="state != null and state != '' ">
+		    and s.state = #{state}
+		</if>
+		<if test="torderitemsid != null and torderitemsid != '' ">
+			and s.tOrderItemsId = #{torderitemsid}
+		</if>
+		
+		<if test="iddescsoft != null and iddescsoft != '' ">
+			order by t.id desc
+		</if>
+		<if test="onlydisone != null and onlydisone != '' ">
+			limit 1
+		</if>
+		
+    </select>
+
+</mapper>

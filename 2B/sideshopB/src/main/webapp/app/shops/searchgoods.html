@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>搜索商品</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015070700"/>
+</head>
+
+<body>
+	<header>
+        <div class="orders-search" id="searchgoods-header">
+			<div>
+				<a href="addgoods.html" class="back"></a>
+				<p><input type="search" placeholder="请输入商品名称"/></p>
+				<a href="javascript:;" class="head-right good-search">搜索</a>
+			</div>
+		</div>
+    </header>
+    <section class="container">
+	    <section id="search-srocll">
+			<div class="search-srocll-container">
+				<!-- <div class="header f-14">共搜索到<em class="color" id="total">9</em>个相关订单 </div> -->
+				<div class="searchok-list">
+				</div>
+				<div id="loading" class="hidden">
+					<img class="loading" alt="" src="../../images/loading.png" />
+				</div>
+			</div>
+		</section>
+	</section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+	<script type="text/javascript" src="../../js/shops/searchgoods.js?t=2015070200"></script>
+</body>
+</html>

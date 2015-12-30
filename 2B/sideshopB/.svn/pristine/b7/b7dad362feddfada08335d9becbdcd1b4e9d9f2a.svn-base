@@ -1,0 +1,22 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+public class OrderDetailInput extends ObjectInput{
+	/**
+	 * @author: yhg
+	 * @project:sideshopB
+	 * @time: 2015年3月5日 上午11:25:39
+	 * @todo: TODO
+	 */
+	
+	private String torderid;
+
+	public String getTorderid() {
+		return torderid;
+	}
+
+	public void setTorderid(String torderid) {
+		this.torderid = torderid;
+	}
+}

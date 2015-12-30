@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.update.UpdateVersionMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.module.update.vo.VersionOutput">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="pre_vision" property="preVersion" jdbcType="VARCHAR"/>
+        <result column="tar_version" property="tarVersion" jdbcType="VARCHAR"/>
+        <result column="platform_type" property="platformType" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="application_type" property="appType" jdbcType="INTEGER"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="isMandatory" property="isMandatory" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="header" property="header" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="insertUpdateVersion" parameterType="com.lakala.module.update.vo.VersionInput" >
+    insert into update_version (pre_vision, tar_version, platform_type,url,application_type,isMandatory,title,description,header,parentId)
+    values (
+      #{preVersion,jdbcType=VARCHAR},
+      #{tarVersion,jdbcType=VARCHAR},
+      #{platformType,jdbcType=INTEGER}, 
+      #{url,jdbcType=VARCHAR},
+      #{appType,jdbcType=INTEGER},
+      #{isMandatory,jdbcType=INTEGER},
+      #{title,jdbcType=VARCHAR},
+      #{description,jdbcType=VARCHAR},
+      #{header,jdbcType=VARCHAR},
+      #{parentId,jdbcType=INTEGER}
+       )
+    </insert>
+    
+    <update id="updateBySelective" parameterType="com.lakala.module.update.vo.VersionInput" >
+    update update_version
+    <set >
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isMandatory != null" >
+        isMandatory = #{isMandatory,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="header != null" >
+        header = #{header,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parentId = #{parentId,jdbcType=INTEGER},
+      </if>
+    </set>
+       where pre_vision = #{preVersion,jdbcType=VARCHAR} and platform_type = #{platformType,jdbcType=INTEGER}
+        and application_type = #{appType,jdbcType=INTEGER} and tar_version = #{tarVersion,jdbcType=VARCHAR}
+    </update>
+    
+    
+  <delete id="deleteBySelective" parameterType="com.lakala.module.update.vo.VersionInput">
+  DELETE FROM update_version 
+  <where> 
+    <if test="id != null">
+        id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="preVersion != null">
+        AND pre_vision = #{preVersion,jdbcType=VARCHAR}
+    </if> 
+    <if test="platformType != null">
+        AND platform_type = #{platformType,jdbcType=INTEGER}
+    </if>
+    <if test="appType != null">
+        AND application_type = #{appType,jdbcType=INTEGER}
+    </if>
+    <if test="tarVersion != null">
+        AND tar_version = #{tarVersion,jdbcType=VARCHAR}
+    </if>
+    <if test="parentId != null">
+        AND parentId = #{parentId,jdbcType=INTEGER}
+    </if>
+  </where>
+</delete>
+</mapper>

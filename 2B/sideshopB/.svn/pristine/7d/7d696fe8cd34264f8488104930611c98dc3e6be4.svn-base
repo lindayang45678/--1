@@ -1,0 +1,165 @@
+package com.lakala.util;
+
+/**
+ * Created by HOT.LIU on 2015/5/20.
+ */
+public class MongoInterfaceUrl {
+    private String left;
+
+    private String list;
+
+    private String detail;
+
+    private String count;
+
+    private String promotion;
+
+    private String save;
+
+    private String modify;
+
+    private String down;
+
+    private String publish;
+
+    private String save_sku;
+
+    private String modify_sku;
+
+    private String mongoTestBaseUrl;
+
+    private String goodspool_find;
+
+    private String sideshop_goodslist;
+
+    private String admin_store_modify;
+    
+    public String getSave() {
+        return save;
+    }
+
+
+    public void setSave(String save) {
+        this.save = save;
+    }
+
+    public String getModify() {
+        return modify;
+    }
+
+    public void setModify(String modify) {
+        this.modify = modify;
+    }
+
+    public String getDown() {
+        return down;
+    }
+
+    public void setDown(String down) {
+        this.down = down;
+    }
+
+    public String getPublish() {
+        return publish;
+    }
+
+    public void setPublish(String publish) {
+        this.publish = publish;
+    }
+
+    public String getLeft() {
+        return left;
+    }
+
+    public void setLeft(String left) {
+        this.left = left;
+    }
+
+    public String getList() {
+        return list;
+    }
+
+    public void setList(String list) {
+        this.list = list;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(String promotion) {
+        this.promotion = promotion;
+    }
+
+    public String getMongoTestBaseUrl() {
+        return mongoTestBaseUrl;
+    }
+
+    public void setMongoTestBaseUrl(String mongoTestBaseUrl) {
+        this.mongoTestBaseUrl = mongoTestBaseUrl;
+    }
+
+
+    public String getSave_sku() {
+        return save_sku;
+    }
+
+
+    public void setSave_sku(String save_sku) {
+        this.save_sku = save_sku;
+    }
+
+
+    public String getModify_sku() {
+        return modify_sku;
+    }
+
+
+    public void setModify_sku(String modify_sku) {
+        this.modify_sku = modify_sku;
+    }
+
+    public String getGoodspool_find() {
+        return goodspool_find;
+    }
+
+
+    public void setGoodspool_find(String goodspool_find) {
+        this.goodspool_find = goodspool_find;
+    }
+
+    public String getSideshop_goodslist() {
+        return sideshop_goodslist;
+    }
+
+
+    public void setSideshop_goodslist(String sideshop_goodslist) {
+        this.sideshop_goodslist = sideshop_goodslist;
+    }
+
+
+	public String getAdmin_store_modify() {
+		return admin_store_modify;
+	}
+
+
+	public void setAdmin_store_modify(String admin_store_modify) {
+		this.admin_store_modify = admin_store_modify;
+	}
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>编辑小店信息</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015070101" />
+</head>
+<body class="x-hidden">
+	<header>
+		<a href="javascript:window.history.go(-1);" class="back"></a>
+  		<h1>编辑小店信息</h1>
+        <a href="javascript:;" class="head-right">保存</a>
+	</header>
+    <section class="container editshop">
+    	<div class="shopedit-3item">
+        	<div class="editline-n">
+            	<span class="left1">小店名称:</span>
+                <div class="leftborder">
+                    <div contenteditable="true" id="shopname" class="max-3"></div>
+                	<em class="edit"></em>
+                </div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">微信号:</span>
+                <div class="leftborder">
+                	<div contenteditable="true" id="wechat" class="max-1"></div>
+                	<em class="edit"></em>
+                </div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">小店公告:</span>
+                <div class="leftborder">
+                	<div contenteditable="true" id="xd-announce" class="max-n">欢迎光临！身边小二在这恭候多时啦！</div>
+                    <em class="edit"></em>
+                </div>
+            </div>
+        </div>
+        <div class="shopedit-2item">
+        	<div class="editline-n">
+            	<span class="left1">配送员:</span>
+                <div class="leftborder">
+                	<div id="service-name1" class="max-1"></div>
+                </div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">联系电话:</span>
+                <div class="leftborder">
+                	<div id="service-phone1" class="max-1"></div>
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" class="add-service">
+        	<p>添加配送员</p>
+        </a>
+        <div class="shopedit-2item pright-per7">
+        	<div class="editline-n">
+            	<span class="left1">小店地址:</span>
+                <div class="leftborder non-edit"><div id="shopadress" class="max-2 non-edit"></div></div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">店主姓名:</span>
+                <div class="leftborder non-edit"><div id="shopper-name" class="max-1 non-edit"></div></div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">店主手机:</span>
+                <div class="leftborder non-edit"><div id="shopper-phone" class="max-1 non-edit"></div></div>
+            </div>
+        </div>
+
+		<div class="nonstock-part4 clearfix">
+			<h3>支付方式：</h3>
+            <ul class="clearfix">
+            	<li>
+            		<input type="checkbox" id="dx1" name="pay-online" checked disabled="disabled"/><label for="dx1"></label><span>在线支付</span>
+                </li>
+                <li>
+            		<input type="checkbox" id="dx2" name="cod" checked disabled="disabled"/><label for="dx2"></label><span>货到付款</span>
+                </li>
+            </ul>
+            <h3>配送方式：</h3>
+            <ul class="clearfix">
+                <li>
+            		<input type="checkbox" id="dx3" name="sent-door" checked disabled="disabled"/><label for="dx3"></label>
+                    <span>送货上门</span><em>满29元起送，满79元免5元运费</em>
+                </li>
+                <li>
+            		<input type="checkbox" id="dx4" name="sent-door" checked disabled="disabled"/><label for="dx4"></label>
+            		<span>到店自提</span>
+                </li>
+            </ul>
+		</div>
+
+		<!-- <a href="javascript:;" class="upload-panels">
+        	<p>上传门面照片</p>
+        </a> 
+        <div class="editshop-bigimg"></div>-->
+    </section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/shops/editshop.js?t=2015070102"></script>
+</body>
+</html>

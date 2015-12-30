@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.virtualcat.VirtualCateMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.VirtualCate">
+        <id column="tVirtualCateId" property="tvirtualcateid" jdbcType="INTEGER"/>
+        <result column="virtualCateDisc" property="virtualcatedisc" jdbcType="VARCHAR"/>
+        <result column="fatherVirtualCateId" property="fathervirtualcateid" jdbcType="INTEGER"/>
+        <result column="virtualCateStatus" property="virtualcatestatus" jdbcType="INTEGER"/>
+        <result column="virtualCateIcon" property="virtualcateicon" jdbcType="VARCHAR"/>
+        <result column="createuser" property="createuser" jdbcType="INTEGER"/>
+        <result column="createdate" property="createdate" jdbcType="TIMESTAMP"/>
+        <result column="Channelid" property="channelid" jdbcType="INTEGER"/>
+        <result column="Channelname" property="channelname" jdbcType="VARCHAR"/>
+        <result column="frequencyid" property="frequencyid" jdbcType="INTEGER"/>
+        <result column="frequencyname" property="frequencyname" jdbcType="VARCHAR"/>
+        <result column="Sort" property="sort" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    tVirtualCateId, virtualCateDisc, fatherVirtualCateId, virtualCateStatus, virtualCateIcon, 
+    createuser, createdate, Channelid, Channelname, frequencyid, frequencyname, Sort
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        where tVirtualCateId = #{tvirtualcateid,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectByParentId" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        where fathervirtualcateid = #{parentid,jdbcType=INTEGER} order by sort
+        <if test="pageIndex != null and pageIndex != '' and pageSize != null and pageSize != ''">
+            limit #{pageIndex},#{pageSize}
+        </if>
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        where virtualCateStatus = 1 and frequencyid = 42 order by sort
+    </select>
+
+    <select id="findAllChildByParentId" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate 
+        WHERE fatherVirtualCateId=#{parentId}
+    </select>
+    
+    <!-- 通过实分类获取虚分类 zhiziwei -->
+    <select id="findVirCatByRealCat" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    	select tVirtualCateId, fatherVirtualCateId, virtualCateDisc
+    	from tvirtualcate 
+    	where tVirtualCateId in (select DISTINCT vid tVirtualCateId from tcategory_relation where rid = #{rid, jdbcType=INTEGER}) 
+    </select>
+
+</mapper>

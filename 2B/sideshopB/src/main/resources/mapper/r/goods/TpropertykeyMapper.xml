@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goods.TpropertykeyMapper" >
+  <resultMap type="com.lakala.base.model.GoodBaseEntity" id="GoodBaseEntity">
+	<result column="count" property="count" jdbcType="INTEGER"/>
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Tpropertykey" extends="GoodBaseEntity">
+    <id column="tPropertyKeyId" property="tpropertykeyid" jdbcType="INTEGER" />
+    <result column="tRealCateId" property="trealcateid" jdbcType="INTEGER" />
+    <result column="realCateDisc" property="realcatedisc" jdbcType="VARCHAR" />
+    <result column="realCateTreeDisc" property="realcatetreedisc" jdbcType="VARCHAR" />
+    <result column="propertyName" property="propertyname" jdbcType="VARCHAR" />
+    <result column="stock" property="stock" jdbcType="DECIMAL" />
+    <result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="lastUpdateDate" property="lastupdatedate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tPropertyKeyId, tRealCateId, realCateDisc, realCateTreeDisc, propertyName, stock, 
+    createDate, lastUpdateDate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tpropertykey
+    where tPropertyKeyId = #{tpropertykeyid,jdbcType=INTEGER}
+  </select>
+  <!-- 查询商品规格列表，带分页 -->
+  <select id="queryProList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tpropertykey
+    limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER}
+  </select>
+  <!-- 查询商品规格总数 -->
+  <select id="getProCount" resultMap="BaseResultMap">
+    select count(tPropertyKeyId) count from tpropertykey
+  </select>
+  <!-- 查询指定分类下的商品规格  zhiziwei-->
+  <select id="getGoodProperty" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select <include refid="Base_Column_List" /> from tpropertykey where tRealCateId = #{tRealCateId,jdbcType=INTEGER}
+  </select>
+</mapper>

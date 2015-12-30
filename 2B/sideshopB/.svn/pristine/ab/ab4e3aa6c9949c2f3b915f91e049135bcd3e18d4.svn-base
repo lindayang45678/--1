@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.coupon.CouponMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.coupon.Coupon" >
+    <result column="favorablecode" property="favorablecode" jdbcType="VARCHAR" />
+    <result column="batchtickeid" property="batchtickeid" jdbcType="BIGINT" />
+    <result column="batchtickename" property="batchtickename" jdbcType="VARCHAR" />
+    <result column="cost" property="cost" jdbcType="DOUBLE" />
+    <result column="favusenum" property="favusenum" jdbcType="INTEGER" />
+    <result column="usenum" property="usenum" jdbcType="INTEGER" />
+    <result column="usednum" property="usednum" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="orderamount" property="orderamount" jdbcType="DECIMAL" />
+    <result column="coupontype" property="couponType" jdbcType="INTEGER" />
+    <result column="frequencys" property="frequencys" jdbcType="VARCHAR" />
+    <result column="startflag" property="startflag" jdbcType="VARCHAR" />
+    
+    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 查询某个用户下某个状态（未使用、已使用、已过期）的优惠券 -->
+  <select id="findCoupon" parameterType="map" resultMap="BaseResultMap">
+      SELECT c.favorablecode,c.batchtickeid,c.batchtickename,c.cost,c.usenum,c.usednum,
+      	     c.starttime,c.endtime,c.status,
+      		 cb.favusenum,cb.coupontype,cb.orderamount,cb.frequencys,cb.startflag  
+	  FROM t_coupon c,t_coupon_batch cb 
+	  WHERE c.batchtickeid=cb.favid AND c.tel=#{userMark} AND c.disabled=#{disabled}  
+	  		<if test="status=='unused'">
+	  			<!-- 未使用的判断条件  ：已绑定+有效期内+剩余次数大于0 -->
+	  			AND c.endtime <![CDATA[ > ]]> (SELECT now()) 
+	  		    AND (c.usenum-c.usednum) <![CDATA[ > ]]> 0 
+	  		</if> 
+	  		<if test="status=='used'">
+	  		    <!-- 已使用的判断条件   1.已绑定+有效期内+剩余次数等于0；  2.已绑定+有效期外+已用次数大于0 -->
+	  		    AND (
+			  		    (
+			  		    	c.endtime <![CDATA[ > ]]> (SELECT now()) 
+			  		    	AND (c.usenum-c.usednum) = 0 
+			  		    )
+		  		    or
+			  		    (
+			  		    	c.endtime <![CDATA[ < ]]> (SELECT now()) 
+			  		    	AND c.usednum <![CDATA[ > ]]> 0 
+		  		    	)
+	  		    	)
+	  		</if>
+	  		
+	  		<if test="status=='outTime'">
+	  			<!-- 已过期的判断条件：已绑定+有效期外+已使用次数等于0 -->
+	  			AND c.endtime <![CDATA[ < ]]> (SELECT now())  
+	  			AND c.usednum = 0
+	  		</if>
+	  		
+	  LIMIT #{pageIndex},#{pageSize}
+  </select>
+  
+  <select id="getCouponCount" parameterType="map" resultType="long">
+      SELECT count(c.favorableid) 
+	  FROM t_coupon c,t_coupon_batch cb 
+	  WHERE c.favcode=cb.favcode AND c.tel=#{userMark} AND c.disabled=#{disabled}  
+	  		<if test="status=='unused'">
+	  			<!-- 未使用的判断条件  ：已绑定+有效期内+剩余次数大于0 -->
+	  			AND c.endtime <![CDATA[ > ]]> (SELECT now()) 
+	  		    AND (c.usenum-c.usednum) <![CDATA[ > ]]> 0 
+	  		</if> 
+	  		<if test="status=='used'">
+	  		    <!-- 已使用的判断条件   1.已绑定+有效期内+剩余次数等于0；  2.已绑定+有效期外+已用次数大于0 -->
+	  		    AND (
+			  		    (
+			  		    	c.endtime <![CDATA[ > ]]> (SELECT now()) 
+			  		    	AND (c.usenum-c.usednum) = 0 
+			  		    )
+		  		    or
+			  		    (
+			  		    	c.endtime <![CDATA[ < ]]> (SELECT now()) 
+			  		    	AND c.usednum <![CDATA[ > ]]> 0 
+		  		    	)
+	  		    	)
+	  		</if>
+	  		
+	  		<if test="status=='outTime'">
+	  			<!-- 已过期的判断条件：已绑定+有效期外+已使用次数等于0 -->
+	  			AND c.endtime <![CDATA[ < ]]> (SELECT now())  
+	  			AND c.usednum = 0
+	  		</if> 
+  </select>
+  
+  
+  
+ </mapper>

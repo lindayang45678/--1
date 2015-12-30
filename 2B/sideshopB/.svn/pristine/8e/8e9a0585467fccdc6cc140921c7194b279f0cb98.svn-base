@@ -1,0 +1,26 @@
+package com.lakala.module.news.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+public class MessageInput extends ObjectInput{
+
+	private String newsId;
+	
+	private String terminalCode;
+	
+	public String getNewsId() {
+		return newsId;
+	}
+
+	public void setNewsId(String newsId) {
+		this.newsId = newsId;
+	}
+
+	public String getTerminalCode() {
+		return terminalCode;
+	}
+
+	public void setTerminalCode(String terminalCode) {
+		this.terminalCode = terminalCode;
+	}
+}

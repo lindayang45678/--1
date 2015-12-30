@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goods.TgoodsinfopoolMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Tgoodsinfopool" >
+    <id column="tGoodInfoPoolId" property="tgoodinfopoolid" jdbcType="INTEGER" />
+    <result column="tRealCateId" property="trealcateid" jdbcType="INTEGER" />
+    <result column="tRealCateDisc" property="trealcatedisc" jdbcType="VARCHAR" />
+    <result column="tRealCateTreeDisc" property="trealcatetreedisc" jdbcType="VARCHAR" />
+    <result column="outerId" property="outerid" jdbcType="VARCHAR" />
+    <result column="tBrandId" property="tbrandid" jdbcType="INTEGER" />
+    <result column="brandName" property="brandname" jdbcType="VARCHAR" />
+    <result column="goodName" property="goodname" jdbcType="VARCHAR" />
+    <result column="goodBarCode" property="goodbarcode" jdbcType="VARCHAR" />
+    <result column="goodAdWord" property="goodadword" jdbcType="VARCHAR" />
+    <result column="goodIntroduce" property="goodintroduce" jdbcType="VARCHAR" />
+    <result column="packageList" property="packagelist" jdbcType="VARCHAR" />
+    <result column="isPayAfterArrival" property="ispayafterarrival" jdbcType="INTEGER" />
+    <result column="isNoReasonReturn" property="isnoreasonreturn" jdbcType="INTEGER" />
+    <result column="iscontractmachine" property="iscontractmachine" jdbcType="INTEGER" />
+    <result column="isExpressToHome" property="isexpresstohome" jdbcType="INTEGER" />
+    <result column="distributionFlag" property="distributionflag" jdbcType="INTEGER" />
+    <result column="expDate" property="expdate" jdbcType="INTEGER" />
+    <result column="producingArea" property="producingarea" jdbcType="VARCHAR" />
+    <result column="measureUnits" property="measureunits" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="volume" property="volume" jdbcType="DECIMAL" />
+    <result column="length" property="length" jdbcType="DECIMAL" />
+    <result column="width" property="width" jdbcType="DECIMAL" />
+    <result column="height" property="height" jdbcType="DECIMAL" />
+    <result column="carton" property="carton" jdbcType="INTEGER" />
+    <result column="cartonUnit" property="cartonunit" jdbcType="VARCHAR" />
+    <result column="isForeigngoods" property="isforeigngoods" jdbcType="INTEGER" />
+    <result column="storageCondition" property="storagecondition" jdbcType="INTEGER" />
+    <result column="distributionCondition" property="distributioncondition" jdbcType="INTEGER" />
+    <result column="goodType" property="goodtype" jdbcType="INTEGER" />
+    <result column="balanceWay" property="balanceway" jdbcType="INTEGER" />
+    <result column="createdDate" property="createddate" jdbcType="TIMESTAMP" />
+    <result column="lastUpdateDate" property="lastupdatedate" jdbcType="TIMESTAMP" />
+    <result column="lastModUser" property="lastmoduser" jdbcType="VARCHAR" />
+    <result column="tempStoreGoodsFlag" property="tempstoregoodsflag" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lakala.base.model.TgoodsinfopoolWithBLOBs" extends="BaseResultMap" >
+    <result column="goodDisc" property="gooddisc" jdbcType="LONGVARCHAR" />
+    <result column="goodBigPic" property="goodbigpic" jdbcType="LONGVARCHAR" />
+    <result column="goodSmallPic" property="goodsmallpic" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tGoodInfoPoolId, tRealCateId, tRealCateDisc, tRealCateTreeDisc, outerId, tBrandId, 
+    brandName, goodName, goodBarCode, goodAdWord, goodIntroduce, packageList, isPayAfterArrival, 
+    isNoReasonReturn, iscontractmachine, isExpressToHome, distributionFlag, expDate, 
+    producingArea, measureUnits, weight, volume, length, width, height, carton, cartonUnit, 
+    isForeigngoods, storageCondition, distributionCondition, goodType, balanceWay, createdDate, 
+    lastUpdateDate, lastModUser, tempStoreGoodsFlag
+  </sql>
+  <sql id="Blob_Column_List" >
+    goodDisc, goodBigPic, goodSmallPic
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tgoodsinfopool
+    where tGoodInfoPoolId = #{tgoodinfopoolid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询当前用户最近使用分类信息 zhiziwei -->
+  <select id="queryLastUserCate" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+  	select distinct tRealCateId, tRealCateDisc, tRealCateTreeDisc 
+  	from tgoodsinfopool 
+  	where lastModUser = #{lastModUser,jdbcType=VARCHAR}
+  	order by createdDate desc
+  	limit 10
+  </select>
+  
+  	<!-- 商品新增，校验同一结算分类下是否已存在该商品名称  zhiziwei-->
+	<select id="isExistedGoodsName" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from tgoodsinfopool
+		where tRealCateId = #{tRealCateId,jdbcType=INTEGER} and goodName = #{goodsName,jdbcType=VARCHAR} 
+	</select>
+	
+	<!-- 根绝结算分类，获取商品池商品列表  zhiziwei-->
+	<select id="getGoodsListByRealCat" resultMap="ResultMapWithBLOBs">
+		select 
+		<include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" /> 
+		from tgoodsinfopool 
+		where tRealCateId = #{tRealCateId,jdbcType=INTEGER}
+		limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据供应商商品获取关联的商品池商品  zhiziwei-->
+	<select id="getGoodsListByProviderGoodsId" resultMap="ResultMapWithBLOBs">
+		SELECT t1.tgoodinfopoolid,t1.goodname,t1.distributionflag,t1.goodbigpic
+		FROM
+			tgoodsinfopool t1,
+			tsupplierandpool t2
+		WHERE
+			t1.tGoodInfoPoolId = t2.tGoodInfoPoolId
+		AND t2.tGoodInfoId IN 
+		<foreach collection="goodslist" item="list" index="index" open="(" close=")" separator=",">
+            #{list.goodsid,jdbcType=INTEGER}
+        </foreach>
+        limit #{page,jdbcType=INTEGER},#{rows,jdbcType=INTEGER}
+	</select>
+	
+</mapper>

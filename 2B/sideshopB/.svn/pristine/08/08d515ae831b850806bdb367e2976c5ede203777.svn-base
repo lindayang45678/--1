@@ -1,0 +1,81 @@
+package com.lakala.module.goods.controller;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.service.GoodsPoolService;
+import com.lakala.module.goods.vo.GoodsPoolInfoVO;
+import com.lakala.util.ReturnMsg;
+
+/**
+ * 
+ * @ClassName: GoodsPoolController
+ * @Description: 平台商品池控制层:
+ *               只按照两种方式提供接口 1.返回JSON格式 1.1 以RETS风格请求，一般用于GET请求； 1.2
+ *               使用路径中定义参数风格获取数据； 1.3 若为POST请求，则使用@RequestParam获取数据； 1.4
+ *               返回的数据都用DATA接收，并提供处理成功或返回标示；
+ *               <p/>
+ *               2.返回对象 2.1 此种适用于直接使用JSP页面输出； 2.2 按照普通的@RequestParam获取参数； 2.3
+ *               以modle返回数据，返回的字符串为JSP文件路径；
+ *               <p/>
+ * @author zhiziwei
+ * @date 2015-3-6 上午11:24:49
+ */
+@Controller
+@RequestMapping("/goodspool")
+public class GoodsPoolController {
+	private Logger log = Logger.getLogger(GoodsPoolController.class);
+	
+	@Autowired
+	public GoodsPoolService goodsPoolService;
+	
+	/**
+     * @Description 根据结算分类，获取平台商品池商品列表
+     * @author zhiziwei
+     */
+	@RequestMapping(value = "/getgoodspoollist/{tRealCateId}/{page}/{rows}", method = RequestMethod.GET)
+	@ResponseBody
+	public ObjectOutput<List<GoodsPoolInfoVO>> getGoodsPoolList(@PathVariable String tRealCateId, 
+			@PathVariable String page, @PathVariable String rows){
+		ObjectOutput<List<GoodsPoolInfoVO>> result = null;
+		try {
+			result = goodsPoolService.getGoodsPoolList(tRealCateId, page, rows);
+		} catch (LakalaException e) {
+			log.error(e.getMessage(), e.fillInStackTrace());
+			result = new ObjectOutput<List<GoodsPoolInfoVO>>();
+			result.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			result.set_ReturnCode(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * @Description 根据结算分类，获取平台商品池商品列表
+	 * @author zhiziwei
+	 */
+	@RequestMapping(value = "/getgoodsdetail/{tGoodsInfoId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ObjectOutput<GoodsPoolInfoVO> getGoodsDetail(@PathVariable String tGoodsInfoId){
+		ObjectOutput<GoodsPoolInfoVO> result = null;
+		try {
+			result = goodsPoolService.getGoodsDetail(tGoodsInfoId);
+		} catch (LakalaException e) {
+			log.error(e.getMessage(), e.fillInStackTrace());
+			result = new ObjectOutput<GoodsPoolInfoVO>();
+			result.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			result.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		
+		return result;
+	}
+}

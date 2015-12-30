@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lakala.mapper.r.user.TShopCustomerMapper">
+  <resultMap id="BaseResultMap" type="com.lakala.model.user.TShopCustomer">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+    <result column="nickName" jdbcType="VARCHAR" property="nickName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="shopId" jdbcType="BIGINT" property="shopId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id , customerName,nickName,phone,icon ,shopId
+  </sql>
+  
+  <select id="selectCustomerListByShopMobile" parameterType="com.lakala.module.user.vo.CustomerInput" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from tshopcustomer
+    where 1 = 1 and shopId = #{id} limit #{page},#{pageSize}
+  </select>
+  
+  <select id="countCustomerList" resultType="java.lang.Integer" parameterType="com.lakala.module.user.vo.CustomerInput">
+  	select count(id) from tshopcustomer where 1 = 1 and shopId = #{id} 
+  </select>
+ 
+</mapper>

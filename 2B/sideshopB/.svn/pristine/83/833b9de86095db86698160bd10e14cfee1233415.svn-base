@@ -1,0 +1,36 @@
+$(function() {
+	var longitude = "";//经度
+	var latitude = "";//纬度
+	$("#baiduMapFrame").attr("src",baiduMapAPI);
+	//地图
+	function loadmap(){
+		var ifm = document.getElementById("baiduMapFrame");
+		var src = ifm.src;
+		if(src.indexOf("#psam=") > -1) {
+			ifm.src = src.substring(0,src.lastIndexOf("#psam=")+6) + psam;
+		} else {
+			ifm.src = src + "#psam=" + psam;
+		}
+	}
+	//提交
+	$(".tj").on("click", function() {
+		$(".pop-up-box").removeClass("hidden");
+		$("#confirm").removeAttr("disabled");
+		loadmap();//地图调用
+	});
+	
+	//请求接口
+	$("#confirm").on("click", function() {
+		$(".shop-position iframe").remove();
+		showAlertMsg(msgSubmitSuccess);
+		window.location.href = "setting.html";
+	});
+
+	//取消--重新定位
+	$("#cancel").on("click", function(){
+		$(".pop-up-box").addClass("hidden");
+		var baiduMapFrame = document.getElementById("baiduMapFrame");
+		baiduMapFrame.src = baiduMapAPI;
+	});
+
+});

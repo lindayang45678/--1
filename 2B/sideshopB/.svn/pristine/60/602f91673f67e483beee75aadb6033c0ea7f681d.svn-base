@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>批发订单</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+
+<body class="orders pfdd-order">
+    <header id="head">
+		<a href="../homepage/index.html" class="back"></a>
+		<h1><a href="javascript:;">批发订单</a><a href="retailorders.html" class="opacity">零售订单</a></h1>
+		<a href="javascript:;" class="head-right order-search"></a>
+		<div class="orders-search hidden">
+			<div>
+				<span class="back"></span>
+				<p><input type="search" placeholder="请输入商品名称/手机号/订单号"/></p>
+				<a href="javascript:;" class="head-right">搜索</a>
+			</div>
+		</div>
+	</header>
+	<section class="container">
+		<div id="header-list" class="header-list">
+			<div id="header-list-slide" class="header-list-slide">
+				<ul class="clearfix"></ul>
+			</div>
+		</div>
+		<div id="wholesaleorders-scroll">
+			<div id="pfdd-scroll">
+				<div class="orders-items"></div>
+				<div id="loading" class="hidden">
+					<img class="loading" alt="" src="../../images/loading.png" />
+				</div>
+			</div>
+		</div>
+		<div class="pop-up-box hidden">
+			<div>
+				<p class="f-18 c-gray">该订单是否已全部收货 </p>
+				<input class="btn-gray" type="button" value="取消"/>
+				<input id="confirmsignallbtn" class="btn-red" type="button" value="确认"/>
+			</div>
+		</div>
+	</section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js?t=2015070900"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+	<script type="text/javascript" src="../../js/orders/wholesaleorders.js?t=2015070200"></script>
+</body>
+</html>

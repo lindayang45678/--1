@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.sdbmediastatistics.SdbMediaStatisticsMapper">
+     <resultMap id="BaseResultMap" type="com.lakala.base.model.SDBMediaStatistics" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="prov_no" property="provNo" jdbcType="VARCHAR" />
+    <result column="prov" property="prov" jdbcType="VARCHAR" />
+    <result column="city_no" property="cityNo" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="city_area_no" property="cityAreaNo" jdbcType="VARCHAR" />
+    <result column="city_area" property="cityArea" jdbcType="VARCHAR" />
+    <result column="vdc_no" property="vdcNo" jdbcType="VARCHAR" />
+    <result column="vdc" property="vdc" jdbcType="VARCHAR" />
+    <result column="cop_no" property="copNo" jdbcType="VARCHAR" />
+    <result column="cop" property="cop" jdbcType="VARCHAR" />
+    <result column="net_type" property="netType" jdbcType="VARCHAR" />
+    <result column="net_typestr" property="netTypestr" jdbcType="VARCHAR" />
+    <result column="net_name" property="netName" jdbcType="VARCHAR" />
+    <result column="net_no" property="netNo" jdbcType="VARCHAR" />
+    <result column="net_sname" property="netSname" jdbcType="VARCHAR" />
+    <result column="term_isshangcheng" property="termIsshangcheng" jdbcType="CHAR" />
+    <result column="term_isshangchengstr" property="termIsshangchengstr" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="statestr" property="statestr" jdbcType="VARCHAR" />
+    <result column="open_date" property="openDate" jdbcType="TIMESTAMP" />
+    <result column="close_date" property="closeDate" jdbcType="TIMESTAMP" />
+    <result column="term_yetai" property="termYetai" jdbcType="VARCHAR" />
+    <result column="term_yetaistr" property="termYetaistr" jdbcType="VARCHAR" />
+    <result column="term_brand" property="termBrand" jdbcType="VARCHAR" />
+    <result column="term_brandstr" property="termBrandstr" jdbcType="VARCHAR" />
+    <result column="term_fbtype" property="termFbtype" jdbcType="VARCHAR" />
+    <result column="term_fbtypestr" property="termFbtypestr" jdbcType="VARCHAR" />
+    <result column="psam" property="psam" jdbcType="VARCHAR" />
+    <result column="machine_kind" property="machineKind" jdbcType="VARCHAR" />
+    <result column="machine_kindstr" property="machineKindstr" jdbcType="VARCHAR" />
+    <result column="dev_state" property="devState" jdbcType="VARCHAR" />
+    <result column="dev_statestr" property="devStatestr" jdbcType="VARCHAR" />
+    <result column="dev_open_date" property="devOpenDate" jdbcType="TIMESTAMP" />
+    <result column="dev_close_date" property="devCloseDate" jdbcType="TIMESTAMP" />
+    <result column="profit_type" property="profitType" jdbcType="VARCHAR" />
+    <result column="is_profit" property="isProfit" jdbcType="VARCHAR" />
+    <result column="contact_name_1" property="contactName1" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="term_lxrtel" property="termLxrtel" jdbcType="VARCHAR" />
+    <result column="addr" property="addr" jdbcType="VARCHAR" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="account_bank" property="accountBank" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+    <result column="account_type" property="accountType" jdbcType="VARCHAR" />
+    <result column="account_typestr" property="accountTypestr" jdbcType="VARCHAR" />
+    <result column="first_open_date" property="firstOpenDate" jdbcType="VARCHAR" />
+    <result column="is_fr" property="isFr" jdbcType="VARCHAR" />
+    <result column="fr_type_code" property="frTypeCode" jdbcType="VARCHAR" />
+    <result column="fr_type" property="frType" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="wh_mobile" property="whMobile" jdbcType="VARCHAR" />
+    <result column="is_onehour" property="isOnehour" jdbcType="INTEGER" />
+    <result column="is_doorstep" property="isDoorstep" jdbcType="INTEGER" />
+    <result column="is_pickup" property="isPickup" jdbcType="INTEGER" />
+    <result column="net_custom_name" property="netCustomName" jdbcType="VARCHAR" />
+    <result column="is_homepay" property="ishomepay" jdbcType="INTEGER" />
+    <result column="maxgathering" property="maxgathering" jdbcType="DECIMAL" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="announcement" property="announcement" jdbcType="VARCHAR" />
+    <result column="weixin_no" property="weixin_no" jdbcType="VARCHAR" />
+  </resultMap>
+    
+ <update id="updateByPrimaryKeySelective" parameterType="com.lakala.base.model.SDBMediaStatistics" >
+    update sdb_media_statistics
+    <set >
+      <if test="provNo != null" >
+        prov_no = #{provNo,jdbcType=VARCHAR},
+      </if>
+      <if test="prov != null" >
+        prov = #{prov,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        city_no = #{cityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAreaNo != null" >
+        city_area_no = #{cityAreaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cityArea != null" >
+        city_area = #{cityArea,jdbcType=VARCHAR},
+      </if>
+      <if test="vdcNo != null" >
+        vdc_no = #{vdcNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vdc != null" >
+        vdc = #{vdc,jdbcType=VARCHAR},
+      </if>
+      <if test="copNo != null" >
+        cop_no = #{copNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cop != null" >
+        cop = #{cop,jdbcType=VARCHAR},
+      </if>
+      <if test="netType != null" >
+        net_type = #{netType,jdbcType=VARCHAR},
+      </if>
+      <if test="netTypestr != null" >
+        net_typestr = #{netTypestr,jdbcType=VARCHAR},
+      </if>
+      <if test="netNo != null" >
+        net_no = #{netNo,jdbcType=VARCHAR},
+      </if>
+      <if test="netSname != null" >
+        net_sname = #{netSname,jdbcType=VARCHAR},
+      </if>
+      <if test="netName != null" >
+        net_name = #{netName,jdbcType=VARCHAR},
+      </if>
+      <if test="termIsshangcheng != null" >
+        term_isshangcheng = #{termIsshangcheng,jdbcType=CHAR},
+      </if>
+      <if test="termIsshangchengstr != null" >
+        term_isshangchengstr = #{termIsshangchengstr,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="statestr != null" >
+        statestr = #{statestr,jdbcType=VARCHAR},
+      </if>
+      <if test="openDate != null" >
+        open_date = #{openDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeDate != null" >
+        close_date = #{closeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="termYetai != null" >
+        term_yetai = #{termYetai,jdbcType=VARCHAR},
+      </if>
+      <if test="termYetaistr != null" >
+        term_yetaistr = #{termYetaistr,jdbcType=VARCHAR},
+      </if>
+      <if test="termBrand != null" >
+        term_brand = #{termBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="termBrandstr != null" >
+        term_brandstr = #{termBrandstr,jdbcType=VARCHAR},
+      </if>
+      <if test="termFbtype != null" >
+        term_fbtype = #{termFbtype,jdbcType=VARCHAR},
+      </if>
+      <if test="termFbtypestr != null" >
+        term_fbtypestr = #{termFbtypestr,jdbcType=VARCHAR},
+      </if>
+      <if test="psam != null" >
+        psam = #{psam,jdbcType=VARCHAR},
+      </if>
+      <if test="machineKind != null" >
+        machine_kind = #{machineKind,jdbcType=VARCHAR},
+      </if>
+      <if test="machineKindstr != null" >
+        machine_kindstr = #{machineKindstr,jdbcType=VARCHAR},
+      </if>
+      <if test="devState != null" >
+        dev_state = #{devState,jdbcType=VARCHAR},
+      </if>
+      <if test="devStatestr != null" >
+        dev_statestr = #{devStatestr,jdbcType=VARCHAR},
+      </if>
+      <if test="devOpenDate != null" >
+        dev_open_date = #{devOpenDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="devCloseDate != null" >
+        dev_close_date = #{devCloseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="profitType != null" >
+        profit_type = #{profitType,jdbcType=VARCHAR},
+      </if>
+      <if test="isProfit != null" >
+        is_profit = #{isProfit,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName1 != null" >
+        contact_name_1 = #{contactName1,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="termLxrtel != null" >
+        term_lxrtel = #{termLxrtel,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountBank != null" >
+        account_bank = #{accountBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        account_no = #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null" >
+        account_type = #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountTypestr != null" >
+        account_typestr = #{accountTypestr,jdbcType=VARCHAR},
+      </if>
+      <if test="firstOpenDate != null" >
+        first_open_date = #{firstOpenDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isFr != null" >
+        is_fr = #{isFr,jdbcType=VARCHAR},
+      </if>
+      <if test="frTypeCode != null" >
+        fr_type_code = #{frTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="frType != null" >
+        fr_type = #{frType,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="whMobile != null" >
+        wh_mobile = #{whMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="isOnehour != null" >
+        is_onehour = #{isOnehour,jdbcType=INTEGER},
+      </if>
+      <if test="isDoorstep != null" >
+        is_doorstep = #{isDoorstep,jdbcType=INTEGER},
+      </if>
+      <if test="isPickup != null" >
+        is_pickup = #{isPickup,jdbcType=INTEGER},
+      </if>
+      <if test="netCustomName != null" >
+        net_custom_name = #{netCustomName,jdbcType=VARCHAR},
+      </if>
+      <if test="isHomepay != null" >
+        is_homepay = #{isHomepay,jdbcType=INTEGER},
+      </if>
+      <if test="maxgathering != null" >
+        maxgathering = #{maxgathering,jdbcType=DECIMAL},
+      </if>
+      <if test="deliverytype != null">
+      	DeliveryType = #{deliverytype,jdbcType=INTEGER},
+      </if>
+      <if test="distributionType != null" >
+        distributionType = #{distributionType,jdbcType=VARCHAR},
+      </if>
+      <if test="announcement != null" >
+        announcement = #{announcement,jdbcType=VARCHAR},
+      </if>
+      <if test="weixin_no != null" >
+        weixin_no = #{weixin_no,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

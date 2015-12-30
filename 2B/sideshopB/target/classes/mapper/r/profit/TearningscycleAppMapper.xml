@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.profit.TearningscycleAppMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.profit.TearningscycleApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="settlementId" property="settlementid" jdbcType="VARCHAR" />
+    <result column="earningsDate" property="earningsdate" jdbcType="TIMESTAMP" />
+    <result column="netNo" property="netno" jdbcType="VARCHAR" />
+    <result column="netNum" property="netnum" jdbcType="BIGINT" />
+    <result column="tel" property="tel" jdbcType="BIGINT" />
+    <result column="pasmProvince" property="pasmprovince" jdbcType="VARCHAR" />
+    <result column="terrace0rderNum" property="terrace0rdernum" jdbcType="BIGINT" />
+    <result column="terraceAmount" property="terraceamount" jdbcType="DECIMAL" />
+    <result column="terraceRanking" property="terraceranking" jdbcType="BIGINT" />
+    <result column="self0rderNum" property="self0rdernum" jdbcType="BIGINT" />
+    <result column="selfAmount" property="selfamount" jdbcType="DECIMAL" />
+    <result column="selfRanking" property="selfranking" jdbcType="BIGINT" />
+    <result column="total0rderNum" property="total0rdernum" jdbcType="BIGINT" />
+    <result column="totalAmount" property="totalamount" jdbcType="DECIMAL" />
+    <result column="totalRanking" property="totalranking" jdbcType="BIGINT" />
+    <result column="isSettlement" property="issettlement" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="orderStartTime" property="orderstarttime" jdbcType="TIMESTAMP" />
+    <result column="orderEndTime" property="orderendtime" jdbcType="TIMESTAMP" />
+    <result column="pasmNo" property="pasmno" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, settlementId, earningsDate, netNo, netNum, tel, pasmProvince, terrace0rderNum, 
+    terraceAmount, terraceRanking, self0rderNum, selfAmount, selfRanking, total0rderNum, 
+    totalAmount, totalRanking, isSettlement, level, orderStartTime, orderEndTime, pasmNo, 
+    updateTime, createTime,settleAmount,settle0rderNum,isSettlement
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tearningscycle_app
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="selectCycleEarningsByNetNo" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tearningscycle_app
+    where netNo = #{ecNetNo,jdbcType=VARCHAR}
+                 and level=1
+                 and settlementId in
+                 <foreach collection="settlementIds"  item="settlementId"  open="(" separator="," close=")" >
+                 		  #{settlementId}
+                 </foreach>       
+  </select>
+  
+    <select id="selectCycleEarningsBySettlementId" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tearningscycle_app
+    where settlementId = #{settlementId,jdbcType=VARCHAR}
+                 and netNo =  #{ecNetNo,jdbcType=VARCHAR}
+  </select>
+  <!-- 按时间计算累计到账收益 -->
+  <select id="selectAddUp" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+	   sum(settleAmount) as settleAmount,
+	   sum(settle0rderNum) as settle0rderNum
+    from 
+    	tearningscycle_app
+    where  
+    	netNo =  #{ecNetNo,jdbcType=VARCHAR}
+    	and level=1
+    		<if test="executetimeStart != null">
+					and <![CDATA[ orderStartTime >= #{executetimeStart}]]>
+			</if>
+  </select>
+</mapper>

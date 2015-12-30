@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.approval.ApprovalDefinitionsMapper">
+   <!-- 校验模版是否配置 -->
+    <select id="checkApprovalDefinitions" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select ad.wtmcode,au.approvaluserid,au.sortid ,ad.active from tapprovaldefinitions ad inner join tapprovaluser au on ad.wtmcode=au.wtmcode
+        where ad.objtype=#{objtype} and au.userid=#{userid}
+        limit 0,1;
+    </select>
+
+</mapper>

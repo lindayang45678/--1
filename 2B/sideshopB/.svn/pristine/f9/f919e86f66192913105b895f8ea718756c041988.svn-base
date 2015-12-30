@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>商品详情</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>
+		<h1>商品详情</h1>
+	</header>
+	<section class="container">
+		<div class="wrap product">
+			<div id="wrapper">
+				<div id="scroller">
+					<ul id="product-pic">
+					</ul>
+				</div>
+			</div>
+			<ul id="pagination">
+				<li><a href="javascript:;" class="active">&nbsp;</a></li>
+				<li><a href="javascript:;">&nbsp;</a></li>
+				<li><a href="javascript:;">&nbsp;</a></li>
+				<li><a href="javascript:;">&nbsp;</a></li>
+			</ul>
+			<div class="pro-content">
+			</div>
+			<div class="pro-btn clearfix">
+				<a href="index.html" class="sku-cancel fl">关闭</a>
+				<a href="javascript:;" class="add-cart fr">加入购物车</a>	
+			</div>
+		</div>
+	</section>
+	<div class="masker hidden"></div>
+	<div id="sku" class="hidden">
+		<div class="sku-wrap">
+		</div>
+		<div class="sku-b"><em>购买数量：</em><i class="sku-minus">&minus;</i><input type="text" value="1" readonly="readonly"/><i class="sku-plus">+</i></div>
+		<a href="javascript:;" class="sku-cancel fl">取消</a>
+		<a href="javascript:;" class="sku-sure fr">加入购物车</a>
+	</div>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/wholesale/prodetail.js"></script>
+</html>

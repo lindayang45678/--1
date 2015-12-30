@@ -1,0 +1,75 @@
+package com.lakala.module.order.model;
+
+import java.io.Serializable;
+
+
+public class GoodsR implements Serializable  {
+
+	private static final long serialVersionUID = 8491280952365576838L;
+	
+	private String skuid;
+	
+	private String skuo2oid;
+	
+	private String goodscount;
+	
+	private String channelcode;
+	
+	private String goodsname;
+	
+	private double saleprice;
+
+	public String getSkuid() {
+		return skuid;
+	}
+
+	public void setSkuid(String skuid) {
+		this.skuid = skuid;
+	}
+
+	public String getGoodscount() {
+		return goodscount;
+	}
+
+	public void setGoodscount(String goodscount) {
+		this.goodscount = goodscount;
+	}
+
+	public String getChannelcode() {
+		return channelcode;
+	}
+
+	public void setChannelcode(String channelcode) {
+		this.channelcode = channelcode;
+	}
+
+	public String getGoodsname() {
+		return goodsname;
+	}
+
+	public void setGoodsname(String goodsname) {
+		this.goodsname = goodsname;
+	}
+
+	public double getSaleprice() {
+		return saleprice;
+	}
+
+	public void setSaleprice(double saleprice) {
+		this.saleprice = saleprice;
+	}
+
+	public String getSkuo2oid() {
+		return skuo2oid;
+	}
+
+	public void setSkuo2oid(String skuo2oid) {
+		this.skuo2oid = skuo2oid;
+	}
+	
+	
+	
+	
+	
+	
+}

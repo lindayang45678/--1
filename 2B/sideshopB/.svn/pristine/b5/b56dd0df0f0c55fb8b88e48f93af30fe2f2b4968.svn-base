@@ -1,0 +1,126 @@
+$(function() {
+	loadJs();
+});
+
+$(function() {		
+	//点击获取验证码
+	var wait = 60;//设定时间
+	function verificationCodetTime(obj) {
+		if (wait == 0) {
+			obj.removeAttr("disabled");
+			obj.html("重新发送验证码");
+			wait = 60;
+			obj.removeClass("getVerificationCode");
+		} else {	
+			obj.addClass("getVerificationCode");
+			obj.attr("disabled", "disabled");
+			obj.html(wait + "秒" + "获取验证码");
+			wait--;
+			setTimeout(function() {
+				verificationCodetTime(obj);
+			},1000);
+		}
+	} 
+	$("#getVerificationCode").on("tap", function(event) {
+		if(wait == 60 || wait == 0){
+			var phone = $.trim($("#mobile").val());
+			var data = {"phone":phone, "type":"6"};
+			var verificationCode = $.trim($("#verificationCode").val());
+			var resultJson = ajaxCommon(urlGetCode,data);
+			if(phone == ""){
+				showAlertMsg(msgMobileNotEmpty);
+				return ;
+			}
+			if(!phone.match(/^1\d{10}$/) || phone.match(/^1[0-2]\d{9}$/)){
+				$("#mobile").val("");
+				showAlertMsg(msgMobileError);
+				return ;
+			}	
+			if(resultJson._ReturnCode === returnCodeSuccess){
+				verificationCodetTime($("#getVerificationCode"));	
+			}
+		} 
+		event.stopPropagation();
+	});
+	
+	//进入小店
+	$("#goin-shop").on("touchend", function(e) {
+		var mobile = $.trim($("#mobile").val());
+		var verificationCode = $.trim($("#verificationCode").val());
+		var pwd = $.trim($("#pwd").val());
+		var pushToken = ""; //推送Token
+		var terminalType = "1"; //0:其他, 1:安卓, 2:苹果
+
+		if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			cordova._native.system.deviceInfo(function(res) {
+				platform = res.platform;
+				deviceId = res.deviceId;
+				terminalCode = deviceId;
+				storage.setItem("platform", platform);
+				storage.setItem("deviceId", deviceId);
+			});
+
+			cordova._native.system.remotePushInfo(function(res) {
+				subChannelId = res.subChannelId;
+				objectId = res.objectId;
+				pushToken = res.token;
+				storage.setItem("subChannelId", subChannelId);
+				storage.setItem("objectId", objectId);
+				storage.setItem("pushToken", pushToken);
+			});
+		} else {
+			terminalType = "0";
+		}
+
+		if(platform.toLowerCase() === "ios") {
+			terminalType = "2";
+		}
+		
+		if(mobile == ""){
+			showAlertMsg(msgMobileNotEmpty);
+			return ;
+		}
+		if(!mobile.match(/^1\d{10}$/)||mobile.match(/^1[0-2]\d{9}$/)){
+			$('#mobile').val('');
+			showAlertMsg(msgMobileError);
+			return ;
+		}
+		if(verificationCode == ""){	
+			showAlertMsg(msgVerificationEmpty);
+			return ;
+		}
+		if(pwd == ""){	
+			showAlertMsg(msgPawFormat);
+			return ;
+		}
+		if(!pwd.match(/^[A-Za-z0-9]{6,20}$/)){	
+			showAlertMsg(msgPawFormat);
+			return ;
+		}
+
+		var data = {"mobile":mobile, "verificationCode":verificationCode, "pwd":pwd, "terminalCode":pushToken, "terminalType":terminalType};
+		var resultJson = ajaxCommon(urlForgetpwd,data);
+		resultJson = convertNullToEmpty(resultJson);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			var token = resultJson._ReturnData.token;
+			var userName = resultJson._ReturnData.userName;
+			var userType = resultJson._ReturnData.userType;
+			var bizType = resultJson._ReturnData.bizType;  //商户类型--加盟型:459; 标准型:460; 旗舰型:461;
+			var ecNetNo = resultJson._ReturnData.ecNetNo;  //电商网店编号
+			var psam = resultJson._ReturnData.psam;  //PSAM编号
+
+			storage.setItem("userToken", userToken);
+			storage.setItem("mobile", mobile);
+			storage.setItem("password", pwd);
+			storage.setItem(hasLogined, "1");
+			storage.setItem("bizType", bizType);  //商户类型存放到storage中
+			storage.setItem("psam", psam);  //PSAM存放到storage中
+			storage.setItem("netNo", ecNetNo);  //网点编号存放到storage中
+
+			window.location.href = "../homepage/index.html?t=" + t;
+		} else {
+			showAlertMsg(resultJson._ReturnMsg);	
+		}
+		e.preventDefault();
+	});
+});

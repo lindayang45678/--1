@@ -1,0 +1,98 @@
+package com.lakala.module.order.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.model.Torder;
+import com.lakala.model.order.OrderInfo;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.vo.OrderDetailInput;
+import com.lakala.module.order.vo.OrderCntInput;
+import com.lakala.module.order.vo.OrderInfoInput;
+import com.lakala.module.order.vo.OrderMultQueryInput;
+
+
+public interface OrderService {
+	
+
+	/**
+	 * 根据订单号获取订单信息
+	 * @param orderId 订单ID
+	 * @return Torder
+	 * @see Torder
+	 */
+	public Torder loadOrderByKey(String orderId) throws LakalaException;
+	
+	/**
+	 * 根据KEY获取列表
+	 * @param key 
+	 * @return
+	 */
+	public List<Torder> listOrderByKey(String key) throws LakalaException;
+	
+	/**
+	 * 查询订单列表-用于身边店主订单多条件查询 返回json数据，
+	 * @param orderinput
+	 * @return
+	 * @throws LakalaException
+	 * @author: yhg 
+	 * @time: 2015年3月4日 下午6:21:10
+	 * @todo: TODO
+	 */
+	public ObjectOutput orderMultiquery(OrderMultQueryInput orderinput) throws LakalaException;
+	
+	/**
+	 * 查询订单列表-用于身边店主订单多条件查询
+	 * @param map
+	 * @return
+	 * @author: yhg 
+	 * @time: 2015年3月4日 下午6:17:21
+	 * @todo: TODO
+	 */
+	List<OrderInfo> queryCommonOrderByMap(Map<String,Object> map);
+	
+	/**
+	 * 查询订单总数-用于身边店主订单多条件查询
+	 * @param map
+	 * @return
+	 * @author: yhg 
+	 * @time: 2015年3月4日 下午6:18:03
+	 * @todo: TODO
+	 */
+	Integer countCommonOrderByMap(Map<String,Object> map);
+	
+	/**
+	 * 查询订单详情-用于身边店主订单多条件查询 返回json数据，
+	 * @param orderinput
+	 * @return
+	 * @throws LakalaException
+	 * @author: yhg 
+	 * @time: 2015年3月5日 上午11:21:10
+	 * @todo: TODO
+	 */
+	public ObjectOutput orderView(OrderDetailInput orderdetailinput) throws LakalaException;
+	
+	/**
+	 * 订单管理 入口-查总数
+	 * @param orderentryinput
+	 * @return
+	 * @author: yhg 
+	 * @time: 2015年3月12日 下午4:35:43
+	 * @todo: TODO
+	 */
+	public @ResponseBody ObjectOutput orderEntryCnt(OrderCntInput ordercntinput) throws LakalaException;
+	
+	/**
+	 * 订单管理 入口-查列表
+	 * @param orderentryinput
+	 * @return
+	 * @author: yhg 
+	 * @time: 2015年3月12日 下午4:35:43
+	 * @todo: TODO
+	 */
+	public @ResponseBody ObjectOutput orderEntryList(OrderInfoInput orderinfoinput) throws LakalaException;
+	
+}

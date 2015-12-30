@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>现金券卡</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="coupon">
+	<header>
+		<a href="../homepage/index.html" class="back"></a>				
+		<h1>现金券卡</h1>
+	</header>
+	<section class="container used clearfix">
+		<section class="wrap">
+			<div class="coupon-top hidden clearfix">
+				<a href="rules.html" class="rules">现金券规则</a>
+				<a href="mycoupons.html" class="btn-red receive">立刻领券</a>
+			</div>
+			<div class="header clearfix">
+				<a id="unusecount" href="unuse.html">未使用</a>
+				<a id="usedcount" class="active" href="used.html">已使用</a>
+				<a href="expired.html">激活</a>
+			</div>
+			<section id="coupon-scroll" class="coupon-scroll">
+				<div id="coupon-container" class="coupon-container">
+					<ul class="coupon-items">
+					</ul>
+					<div  id="loading" class="hidden">
+						<img class="loading" alt="" src="../../images/loading.png" />
+					</div>
+				</div>
+			</section>
+		</section>	
+	</section>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/coupons/used.js"></script>
+</body>
+</html>

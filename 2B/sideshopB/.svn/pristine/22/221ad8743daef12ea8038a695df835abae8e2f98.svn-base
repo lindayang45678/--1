@@ -1,0 +1,73 @@
+$(function() {
+	var url = window.location.href;
+	var newsId = getParamValueByName(url, "newsId");
+
+	//获取消息通知列表
+	getNewsInfoById(newsId);
+})
+
+function getNewsInfoById(newsId) {
+	var data = {"newsId":newsId};
+	var resultJson = ajaxCommon(urlGetNewsInfo, data);
+	resultJson = convertNullToEmpty(resultJson);
+	//resultJson = {"_ReturnMsg":"消息成功","_ReturnCode":"000000","_ReturnData":[{"content":"dddddddddd","type":1,"date":"3月25日 03:08:29","itemsid":7,"childtitle":"11","picture":""}]};
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		if(_ReturnData.length > 0) {
+			var newsDateTime = _ReturnData[0].date;
+			var content = "";  //消息内容
+			var type = "";  //0:商品详情 1：商品列表  2：外链  3：专题列表  4：咨询
+			var itemsid = "";  //子节点id
+			var childtitle = "";  //子消息标题
+			var picture = "";  //消息图片
+			var result = "";
+
+			$("#notice-time").html(newsDateTime);
+			for(var i = 0; i < _ReturnData.length; i ++) {
+				content = _ReturnData[i].content;
+				type = _ReturnData[i].type;
+				itemsid = _ReturnData[i].itemsid;
+				childtitle = _ReturnData[i].childtitle;
+				picture = _ReturnData[i].picture;
+				if(i == 0) {
+					result += "<a class='top' href='javascript:;'>";
+					result += "<img src='../../images/products.jpg'/>";
+					result += "<em>" + childtitle + "</em>";
+					result += "</a>";
+					result += "<ul class='items'>";
+				} else if(i == _ReturnData.length) {
+					result += "</ul>";
+				} else {
+					result += "<li class='clearfix'>";
+					result += "<a href='javascript:;'>";
+					result += "<em>" + childtitle + "</em>";
+					result += "<img src='../../images/product3.jpg' />";
+					result += "</a>";
+					result += "</li>";
+				}
+			}
+			$(".products").html(result);
+		} else {
+			showAlertMsg(msgNewsInfoFail);
+			window.location.href = "index.html?t=" + t;
+		}
+		$("#shopname").html("").html(_ReturnData.shopname);
+		var shipaddress = {
+			"shopId": _ReturnData.id,
+		    "shipname": _ReturnData.shoppername,
+		    "shipmobile": _ReturnData.phone,
+		    "shipprovinceid": _ReturnData.provinceCode,
+		    "shipprovince": _ReturnData.province,
+		    "shipcityid": _ReturnData.cityCode,
+		    "shipcity": _ReturnData.city,
+		    "shipareaid": _ReturnData.cityareaCode,
+		    "shiparea": _ReturnData.cityarea,
+		    "shipaddr": _ReturnData.address
+		};
+		storage.setItem("shopId", shopId);  //小店ID存放到storage中
+		storage.setItem("shipaddress",JSON.stringify(shipaddress));
+	} else {
+		showAlertMsg(msgNewsInfoFail);
+		window.location.href = "index.html?t=" + t;
+	}
+}

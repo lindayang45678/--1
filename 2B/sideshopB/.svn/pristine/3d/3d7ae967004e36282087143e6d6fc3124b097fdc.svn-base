@@ -1,0 +1,516 @@
+package com.lakala.module.wholesale.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.lakala.exception.LakalaException;
+import com.lakala.model.*;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.comm.RedisServiceImpl;
+import com.lakala.module.wholesale.model.Constant;
+import com.lakala.module.wholesale.model.ProductDetailForProductList;
+import com.lakala.module.wholesale.service.WholesaleService;
+import com.lakala.util.ReturnMsg;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
+import java.util.*;
+
+/**
+ * Created by HOT.LIU on 2015/2/28.
+ */
+@Service
+public class WholesaleServiceImpl extends RedisServiceImpl implements WholesaleService {
+    Logger logger = Logger.getLogger(WholesaleServiceImpl.class);
+
+
+    @Autowired
+    private com.lakala.mapper.r.sdbmediastatistics.SdbMediaStatisticsMapper sdbMediaStatisticsMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.r.goodspublishkdbskuo2o.TgoodsPublishKdbSkuO2oMapper tgoodsPublishKdbSkuO2oMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.r.goodspublishforkdb.GoodsPublishForKDBMapper goodsPublishForKDBMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.r.goods.TgoodskuinfoMapper tgoodskuinfoMapper_R;
+
+    @Override
+    public ObjectOutput left(String psam, String channelid) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+
+        if (StringUtils.isEmpty(psam) || StringUtils.isEmpty(channelid)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+
+        try {
+            data = this.getAllProductByPsam(psam, channelid);
+            Map<String, Object> map = sdbMediaStatisticsMapper_R.selectSdbMediaStatisticsByPsam(psam);
+
+            if (ReturnMsg.CODE_ERR_000003.equals(data.get_ReturnCode())) {
+                return data;
+            } else if (ReturnMsg.CODE_SUCCESS.equals(data.get_ReturnCode())) {
+                TerminalProduct tpd = (TerminalProduct) data.get_ReturnData();
+                if (tpd != null) {
+                    //现在的按照已有的频道
+                    List<ChannelVirtualCat> channelVirtualCats = tpd.getChannelVirtualCat();
+                    for (ChannelVirtualCat channelVirtualCat : channelVirtualCats) {
+                        if (channelid.equals(channelVirtualCat.getNetChannelId())) {
+                            String json = JSON.toJSONString(channelVirtualCat.getVirtualCat());
+                            if (map.isEmpty()) {
+                                data = new ObjectOutput();
+                                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                                data.set_ReturnMsg("没有找到该终端所对应的网点信息！");
+                            }
+                            if (json.indexOf("本市批发") > -1) {
+                                json = json.replaceAll("本市批发", (String) map.get("city") + "批发");
+                            }
+                            if (json.indexOf("本省") > -1) {
+                                json = json.replaceAll("本省批发", (String) map.get("prov") + "批发");
+                            }
+                            if (json.indexOf("本区") > -1) {
+                                json = json.replaceAll("本区批发", (String) map.get("city_area") + "批发");
+                            }
+                            List<VirtualCat> list = JSON.parseArray(json, VirtualCat.class);
+                            data.set_ReturnData(list);
+                        }
+                    }
+                }
+            }
+            return data;
+        } catch (LakalaException e) {
+            throw new LakalaException(e);
+        }
+    }
+
+    @Override
+    public ObjectOutput detail(String psam, String channelid, String goodsid) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+
+        if (StringUtils.isEmpty(psam) || StringUtils.isEmpty(channelid) || StringUtils.isEmpty(goodsid)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+
+        try {
+            Map<String, Object> map = this.getGoodsByIdAndSku(psam, goodsid, channelid);
+            if (map.isEmpty()) {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("没有找到该商品！");
+                return data;
+            }
+            String goodJson = JSON.toJSONString(map);
+            ProductDetailForProductList productDetailForProductList = JSON.parseObject(goodJson, ProductDetailForProductList.class);
+            data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+            data.set_ReturnData(productDetailForProductList);
+            return data;
+        } catch (LakalaException e) {
+            throw new LakalaException(e);
+        }
+
+    }
+
+    @Override
+    public ObjectOutput getAllProductByPsam(String psam, String channelid) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+
+        if (StringUtils.isEmpty(psam) || StringUtils.isEmpty(channelid)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+        try {
+            data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+            data.set_ReturnData(this.getTerminalProductByParam(psam, channelid));
+            return data;
+        } catch (LakalaException e) {
+            throw new LakalaException(e);
+        }
+    }
+
+    @Override
+    public ObjectOutput getGoodsByPsamAndVirtualCatId(String psamCode, String netChannelId, String virtualCatId) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+        List<ProductDetailedInformation> list = new ArrayList<ProductDetailedInformation>();
+        List<ProductDetail> productDetails = new ArrayList<ProductDetail>();
+        Map<String, ProductDetailedInformation> idMapping = new HashMap<String, ProductDetailedInformation>();
+
+        if (StringUtils.isEmpty(psamCode) || StringUtils.isEmpty(netChannelId) || StringUtils.isEmpty(virtualCatId)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+
+        try {
+            TerminalProduct tpd = this.getTerminalProductByParam(psamCode, netChannelId);
+            if (tpd != null) {
+                List<TerminalChannel> terminalChannels = tpd.getTerminalChannels();
+                for (TerminalChannel terminalChannel : terminalChannels) {
+                    productDetails = terminalChannel.getProductList();
+                    for (ProductDetail productDetail : productDetails) {
+                        ProductDetailedInformation productDetailedInformation = productDetail.getProductDetailedInformation();
+                        if (!"all".equals(virtualCatId)) {
+                            Arrays.sort(productDetail.getVirtualCatIds());
+                            int index = Arrays.binarySearch(productDetail.getVirtualCatIds(), virtualCatId);
+                            if (index > -1) {
+                                if (idMapping.get(productDetailedInformation.getTgoodinfoid()) == null) {
+                                    idMapping.put(productDetailedInformation.getTgoodinfoid(), productDetailedInformation);
+                                } else {
+                                    if (new BigDecimal(idMapping.get(productDetailedInformation.getTgoodinfoid()).getSaleprice_o2o()).compareTo(new BigDecimal(productDetailedInformation.getSaleprice_o2o())) == 1) {
+                                        idMapping.put(productDetailedInformation.getTgoodinfoid(), productDetailedInformation);
+                                    }
+                                }
+                            }
+                        } else {
+                            if (idMapping.get(productDetailedInformation.getTgoodinfoid()) == null) {
+                                idMapping.put(productDetailedInformation.getTgoodinfoid(), productDetailedInformation);
+                            } else {
+                                if (new BigDecimal(idMapping.get(productDetailedInformation.getTgoodinfoid()).getSaleprice_o2o()).compareTo(new BigDecimal(productDetailedInformation.getSaleprice_o2o())) == 1) {
+                                    idMapping.put(productDetailedInformation.getTgoodinfoid(), productDetailedInformation);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            } else {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("没有找到该频道下的商品！");
+                return data;
+            }
+            //多个sku相同只取价格最低显示
+            list = new ArrayList<ProductDetailedInformation>(idMapping.values());
+            Collections.sort(list, new Comparator<ProductDetailedInformation>() {
+                public int compare(ProductDetailedInformation arg0, ProductDetailedInformation arg1) {
+                    return arg1.getSort().compareTo(arg0.getSort());
+                }
+            });
+            data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+            data.set_ReturnData(list);
+            return data;
+        } catch (LakalaException e) {
+            throw new LakalaException(e);
+        }
+    }
+
+    @Override
+    public ObjectOutput searchGoods(String psamCode, String netChannelId, String virtualCatId, String param) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+        List<ProductDetailedInformation> productDetailedInformationList = new ArrayList<ProductDetailedInformation>();
+
+        if (StringUtils.isEmpty(psamCode) || StringUtils.isEmpty(netChannelId) || StringUtils.isEmpty(virtualCatId)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+
+        try {
+            data = this.getGoodsByPsamAndVirtualCatId(psamCode, netChannelId, virtualCatId);
+            if (ReturnMsg.CODE_ERR_000003.equals(data.get_ReturnCode())) {
+                return data;
+            } else if (ReturnMsg.CODE_SUCCESS.equals(data.get_ReturnCode())) {
+                List<ProductDetailedInformation> list = (List<ProductDetailedInformation>) data.get_ReturnData();
+                for (ProductDetailedInformation productDetailedInformation : list) {
+                    if (productDetailedInformation.getGoodname().indexOf(param) != -1) {
+                        productDetailedInformationList.add(productDetailedInformation);
+                    }
+                }
+            }
+
+            Collections.sort(productDetailedInformationList, new Comparator<ProductDetailedInformation>() {
+                public int compare(ProductDetailedInformation arg0, ProductDetailedInformation arg1) {
+                    return arg1.getSort().compareTo(arg0.getSort());
+                }
+            });
+            data.set_ReturnData(productDetailedInformationList);
+            return data;
+        } catch (LakalaException e) {
+            throw new LakalaException(e);
+        }
+    }
+
+    @Override
+    public ObjectOutput getPageProductDetile(List<ProductDetailedInformation> list, String psamCode) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+        List<String> o2oList = new ArrayList<String>();
+        List<String> skuList = new ArrayList<String>();
+        List<String> goodidList = new ArrayList<String>();
+        List<ProductDetailedInformation> returnList = new ArrayList<ProductDetailedInformation>();
+        Map<String, ProductDetailedInformation> idMapping = new HashMap<String, ProductDetailedInformation>();
+
+        if (list.isEmpty() || list == null || StringUtils.isEmpty(psamCode)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+
+        try {
+            for (ProductDetailedInformation productDetailedInformation : list) {
+                o2oList.add("product_o2o_" + productDetailedInformation.getId());
+                skuList.add(productDetailedInformation.getTgoodskuinfoid());
+                goodidList.add(productDetailedInformation.getTgoodinfoid());
+            }
+
+            List<byte[]> bytes = null;//redis.selectListByKeys(o2oList);
+            for (byte[] productByte : bytes) {
+                if (productByte != null) {
+                    String productInfo = new String(productByte, "UTF-8");
+                    ProductDetailedInformation productDetailedInformation = JSON.parseObject(productInfo, ProductDetailedInformation.class);
+                    idMapping.put(productDetailedInformation.getId(), productDetailedInformation);
+                }
+            }
+            for (ProductDetailedInformation productDetailedInformation : list) {
+                if (idMapping.get(productDetailedInformation.getId()) != null) {
+                    idMapping.get(productDetailedInformation.getId()).setSort(productDetailedInformation.getSort());
+                }
+            }
+            list = new ArrayList<ProductDetailedInformation>(idMapping.values());
+
+            List<Map<String, Object>> listMap = tgoodsPublishKdbSkuO2oMapper_R.getSkuStockAndSoldSkuStock(skuList);
+            List<Map<String, Object>> soldListMap = tgoodsPublishKdbSkuO2oMapper_R.getIsSoldOutByGoodIdList(goodidList);
+            for (ProductDetailedInformation productDetailedInformation : list) {
+                for (Map<String, Object> map : listMap) {
+                    if (productDetailedInformation.getTgoodskuinfoid().equals(String.valueOf(map.get("tGoodSkuInfoId")))) {
+                        productDetailedInformation.setStore(map.get("store") == null ? 0 : ((BigDecimal) map.get("store")).doubleValue());
+                        productDetailedInformation.setSoldstore(map.get("soldStore") == null ? 0 : ((BigDecimal) map.get("soldStore")).doubleValue());
+                    }
+                }
+                for (Map<String, Object> map : soldListMap) {
+                    if (productDetailedInformation.getTgoodinfoid().equals(String.valueOf(map.get("tGoodInfoId")))) {
+                        productDetailedInformation.setIssoldout(Integer.parseInt(String.valueOf(map.get("issoldout"))));
+                        productDetailedInformation.setIsmoresku(Integer.parseInt(String.valueOf(map.get("ismoresku"))));
+                    }
+                }
+                returnList.add(productDetailedInformation);
+            }
+
+            Collections.sort(returnList, new Comparator<ProductDetailedInformation>() {
+                public int compare(ProductDetailedInformation arg0, ProductDetailedInformation arg1) {
+                    return arg1.getSort().compareTo(arg0.getSort());
+                }
+            });
+            data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+            data.set_ReturnData(returnList);
+            return data;
+        } catch (Exception e) {
+            throw new LakalaException(e);
+        }
+    }
+
+    @Override
+    public ObjectOutput getSoldoutList(String psamCode, String searchparm, int page, int rows) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+        if (StringUtils.isEmpty(psamCode)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+        try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("psamCode", psamCode);
+            map.put("page", page);
+            map.put("rows", rows);
+            map.put("searchparm", searchparm);
+
+            List<ProductDetailedInformation> list = tgoodskuinfoMapper_R.getSoldoutList(map);
+            data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+            data.set_ReturnData(list);
+            return data;
+        } catch (Exception e) {
+            throw new LakalaException(e);
+        }
+    }
+
+    private TerminalProduct getTerminalProductByParam(String paramString, String channelCode) throws LakalaException {
+        Map<Long, ProductDetail> idMapping = new HashMap<Long, ProductDetail>();
+        Map<String, TerminalChannel> channelMapping = new HashMap<String, TerminalChannel>();
+        idMapping.clear();
+        channelMapping.clear();
+        TerminalProduct allGoodsTpd = new TerminalProduct();
+        TerminalProduct areaGoodsTpd = new TerminalProduct();
+        TerminalProduct terminalGoodsTpd = new TerminalProduct();
+        List<TerminalChannel> allTerminalChannels = null;
+        List<TerminalChannel> areaTerminalChannels = null;
+        List<TerminalChannel> terminalTerminalChannels = null;
+        TerminalProduct returnGoodsTpd = new TerminalProduct();
+        List<TerminalChannel> terminalChannelList = new ArrayList<TerminalChannel>();
+        try {
+            Map<String, Object> map = sdbMediaStatisticsMapper_R.selectSdbMediaStatisticsByPsam(paramString);
+            allGoodsTpd = (TerminalProduct) this.selectObjectByKey(Constant.ALL_HEADER + map.get("term_fbtype"), Constant.DUBBO_PARAMETER_PSAM_PREFIX_NEW + channelCode + "_" + (String) map.get("term_fbtype") + "_all");
+            areaGoodsTpd = (TerminalProduct) this.selectObjectByKey(Constant.AREA_HEADER + map.get("term_fbtype"), Constant.DUBBO_PARAMETER_PSAM_PREFIX_NEW + channelCode + "_" + (String) map.get("term_fbtype") + "_" + map.get("city_area_no"));
+            terminalGoodsTpd = (TerminalProduct) this.selectObjectByKey(Constant.PSAM_HEADER + map.get("term_fbtype"), Constant.DUBBO_PARAMETER_PSAM_PREFIX_NEW + channelCode + "_" + (String) map.get("term_fbtype") + "_" + paramString);
+
+            /*System.out.println(JSON.toJSONString(allGoodsTpd));
+            System.out.println(JSON.toJSONString(areaGoodsTpd));
+            System.out.println(JSON.toJSONString(terminalGoodsTpd));*/
+
+            // /如果为null的话就说明该终端没有开通MessageBaseInput
+            if (allGoodsTpd == null && areaGoodsTpd == null && terminalGoodsTpd == null) {
+                return null;
+            }
+            if (allGoodsTpd != null) {
+                allTerminalChannels = allGoodsTpd.getTerminalChannels();
+            }
+            if (areaGoodsTpd != null) {
+                areaTerminalChannels = areaGoodsTpd.getTerminalChannels();
+            }
+            if (terminalGoodsTpd != null) {
+                terminalTerminalChannels = terminalGoodsTpd.getTerminalChannels();
+            }
+
+            //把所有的商品放到map中以skuid为key去重，最终以终端中的商品为准
+            //把全部商品放入idMapping
+            if (allTerminalChannels != null) {
+                for (TerminalChannel terminalChannel : allTerminalChannels) {
+                    List<ProductDetail> productDetails = terminalChannel.getProductList();
+                    for (ProductDetail productDetail : productDetails) {
+                        idMapping.put(productDetail.getGoodSkuInfoId(), productDetail);
+                    }
+                    List<ProductDetail> productDetailList = new ArrayList(idMapping.values());
+                    terminalChannel.setProductList(productDetailList);
+                    channelMapping.put(terminalChannel.getNetChannelId(), terminalChannel);
+                }
+            }
+
+            if (areaTerminalChannels != null) {
+                //把所在区的商品放到idMapping
+                for (TerminalChannel terminalChannel : areaTerminalChannels) {
+                    List<ProductDetail> productDetails = terminalChannel.getProductList();
+                    for (ProductDetail productDetail : productDetails) {
+                        idMapping.put(productDetail.getGoodSkuInfoId(), productDetail);
+                    }
+                    List<ProductDetail> productDetailList = new ArrayList(idMapping.values());
+                    terminalChannel.setProductList(productDetailList);
+                    channelMapping.put(terminalChannel.getNetChannelId(), terminalChannel);
+                }
+            }
+
+            if (terminalTerminalChannels != null) {
+                //把终端商品放到idMapping
+                for (TerminalChannel terminalChannel : terminalTerminalChannels) {
+                    List<ProductDetail> productDetails = terminalChannel.getProductList();
+                    for (ProductDetail productDetail : productDetails) {
+                        idMapping.put(productDetail.getGoodSkuInfoId(), productDetail);
+                    }
+                    List<ProductDetail> productDetailList = new ArrayList(idMapping.values());
+                    terminalChannel.setProductList(productDetailList);
+                    channelMapping.put(terminalChannel.getNetChannelId(), terminalChannel);
+                }
+            }
+            idMapping.clear();
+            for (TerminalChannel terminalChannel : channelMapping.values()) {
+                List<ProductDetail> productDetails = terminalChannel.getProductList();
+                for (ProductDetail productDetail : productDetails) {
+                    productDetail.setProductDetailedInformation(null);
+                    productDetail.getProductDetailedInformation().setSort(productDetail.getSort());
+                    productDetail.getProductDetailedInformation().setId(String.valueOf(productDetail.getO2oid()));
+                    productDetail.getProductDetailedInformation().setGoodname(productDetail.getGoodName());
+                    productDetail.getProductDetailedInformation().setGoodintroduce(productDetail.getGoodIntroduce());
+                    productDetail.getProductDetailedInformation().setGoodbigpic(productDetail.getGoodBigPic());
+                    productDetail.getProductDetailedInformation().setPromotionPrice(productDetail.getPromotionPrice());
+                    productDetail.getProductDetailedInformation().setMarketprice(String.valueOf(productDetail.getMarketPrice() == null ? new BigDecimal("0").setScale(2, BigDecimal.ROUND_HALF_UP) : productDetail.getMarketPrice().setScale(2, BigDecimal.ROUND_HALF_UP)));
+                    productDetail.getProductDetailedInformation().setSaleprice_o2o(String.valueOf(productDetail.getSalePrice()));
+                    productDetail.getProductDetailedInformation().setTgoodinfoid(String.valueOf(productDetail.getGoodInfoId()));
+                    productDetail.getProductDetailedInformation().setTgoodskuinfoid(String.valueOf(productDetail.getGoodSkuInfoId()));
+                    productDetail.setGoodName(null);
+                    productDetail.setGoodBigPic(null);
+                    productDetail.setSalePrice(null);
+                    productDetail.setGoodIntroduce(null);
+                    productDetail.setMarketPrice(null);
+                }
+            }
+
+            terminalChannelList = new ArrayList<TerminalChannel>(channelMapping.values());
+            returnGoodsTpd.setTerminalChannels(terminalChannelList);
+            //生成终端所有虚拟类目
+            returnGoodsTpd.setChannelVirtualCatByTerminalChannel();
+            return returnGoodsTpd;
+        } catch (Exception e) {
+            throw new LakalaException(e);
+        }
+    }
+
+    public Map<String, Object> getGoodsByIdAndSku(String psam, String goodsId, String channelCode) throws LakalaException {
+
+        List<Long> o2oIds = new ArrayList<Long>();
+        List<Long> skuIds = new ArrayList<Long>();
+
+        try {
+            TerminalProduct tpd = this.getTerminalProductByParam(psam, channelCode);
+
+            List<TerminalChannel> terminalChannels = tpd.getTerminalChannels();
+
+            //组装查询参数
+            for (TerminalChannel terminalChannel : terminalChannels) {
+                if (terminalChannel.getNetChannelId().equals(channelCode)) {
+                    List<ProductDetail> productDetails = terminalChannel.getProductList();
+                    for (ProductDetail productDetail : productDetails) {
+                        if (productDetail.getGoodInfoId().equals(Long.parseLong(goodsId))) {
+                            o2oIds.add(productDetail.getO2oid());
+                            skuIds.add(productDetail.getGoodSkuInfoId());
+                        }
+                    }
+                }
+            }
+            //获取kdb_sku_o2o中的数据
+            List<Map<String, Object>> goodsSkuO2OList = new ArrayList<Map<String, Object>>();
+            if (o2oIds.size() > 0) {
+                goodsSkuO2OList = tgoodsPublishKdbSkuO2oMapper_R.selectGoodsByO2oidsAndGoodsId(o2oIds, Integer.parseInt(goodsId));
+            }
+
+            //暂存商品获取库存信息
+            List<Map<String, Object>> skunetList = new ArrayList<Map<String, Object>>();
+            if (skuIds.size() > 0) {
+                Map map2 = new HashMap();
+                map2.put("psam", psam);
+                map2.put("skuIds", skuIds);
+                skunetList = tgoodsPublishKdbSkuO2oMapper_R.selectSkunetListBySkuidsAndPsam(map2);
+            }
+            if (goodsSkuO2OList.size() > 0) {
+                for (Map<String, Object> map : goodsSkuO2OList) {
+                    Long o2oId = Long.parseLong(String.valueOf((Integer) map.get("o2oId")));
+                    Long skuInfoId = Long.parseLong(String.valueOf((Integer) map.get("tGoodSkuInfoId")));
+                    for (TerminalChannel terminalChannel : terminalChannels) {
+                        if (terminalChannel.getNetChannelId().equals(channelCode)) {
+                            List<ProductDetail> productDetails = terminalChannel.getProductList();
+                            for (ProductDetail productDetail : productDetails) {
+                                if (o2oId.equals(productDetail.getO2oid()) && skuInfoId.equals(productDetail.getGoodSkuInfoId())) {
+                                    if (productDetail.getProductDetailedInformation().getPromotionPrice().compareTo(new BigDecimal("0")) == 1) {
+                                        map.put("salePrice", productDetail.getProductDetailedInformation().getPromotionPrice());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (skunetList.size() > 0) {
+                        for (Map<String, Object> map1 : skunetList) {
+                            Long skuid = Long.parseLong(map1.get("skuid").toString());
+                            Long stock = Long.parseLong((map1.get("stock") == null ? "0" : map1.get("stock").toString()));
+                            Long soldstock = Long.parseLong((map1.get("soldstock") == null ? "0" : map1.get("soldstock").toString()));
+
+                            if (skuInfoId.equals(skuid)) {
+                                map.put("store", stock);
+                                map.put("soldStore", soldstock);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            Map<String, Object> goods = goodsPublishForKDBMapper_R.selectByPrimaryKey(Integer.parseInt(goodsId));
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("goodsSkuO2OList", goodsSkuO2OList == null ? new ArrayList<Map<String, Object>>() : goodsSkuO2OList);
+            resultMap.put("goods", goods == null ? new HashMap<String, Object>() : goods);
+
+            return resultMap;
+        } catch (LakalaException e) {
+            throw new LakalaException(e);
+        }
+    }
+}

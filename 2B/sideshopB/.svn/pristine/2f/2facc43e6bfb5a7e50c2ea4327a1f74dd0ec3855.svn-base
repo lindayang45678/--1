@@ -1,0 +1,145 @@
+package com.lakala.util;
+
+
+public class Constants {
+	
+	//地区json文件路径
+	public final static String REGIONFILEPATH = "region.json";
+	
+	//订单状态  99:未发货;100:发货中;101:部分发货;102:已发货;103:部分签收;104:已签收;216:已拒收;217:物流异常
+	public final static int TORDER_STATE_WFH = 99;
+	public final static int TORDER_STATE_FHZ = 100;
+	public final static int TORDER_STATE_BFFH = 101;
+	public final static int TORDER_STATE_YFH = 102;
+	public final static int TORDER_STATE_BFQS = 103;
+	public final static int TORDER_STATE_YQS = 104;
+	public final static int TORDER_STATE_YJS = 216;
+	public final static int TORDER_STATE_WLYC = 217;
+	public final static int TORDER_STATE_DEFAULT = -1;
+	//顾客取货状态
+	public static Integer CUSPICKUPSTATE_YQS = 1;
+	public static Integer CUSPICKUPSTATE_WQS = 0;
+	//店主取货状态
+	public static Integer SHIPSIGNSTATE_YQH = 1;
+	public static Integer SHIPSIGNSTATE_WQH = 0;
+	
+	//订单结算状态 78:未结算 ;242:部分结算(用于订单主表和供应商表);79:已结算
+	public final static int TORDER_SETTLESTATE_WJS = 78; 
+	public final static int TORDER_SETTLESTATE_BFJS = 242; 
+	public final static int TORDER_SETTLESTATE_YJS = 79;
+	
+	//订单发票类型  89:不开发票;90:个人;91:公司
+	public final static int TORDER_BILLTYPE_BKFP = 89; 
+	public final static int TORDER_BILLTYPE_GR = 90; 
+	public final static int TORDER_BILLTYPE_GS = 91; 
+	
+    //订单锁定状态  133:未锁定;134:已锁定
+	public final static int TORDER_LOCKSTATE_WSD = 133; 
+	public final static int TORDER_LOCKSTATE_YSD = 134; 
+	
+	//订单取消状态  136:未取消;137:已取消
+	public final static int TORDER_CANCELSTATE_WQX = 136; 
+	public final static int TORDER_CANCELSTATE_YQX = 137; 
+	
+	//订单是否支付  149:未支付;150:已支付
+	public final static int TORDER_ISPAY_DZF = 149; //订单是否支付
+	public final static int TORDER_ISPAY_YZF = 150; //订单是否支付
+	
+	//订单合单状态  146:未合单;147:合单
+	public final static int TORDER_MERGESTATE_WHD = 146;  
+	public final static int TORDER_MERGESTATE_YHD = 147;  
+	
+	//发货性质(或退换货订单标识 ） 112:正常订单;113:拒收换新;114:退货;293:售后换新;
+	public final static int TORDER_RETURNSTATE_ZCDD = 112; 
+	public final static int TORDER_RETURNSTATE_JSHX = 113; 
+	public final static int TORDER_RETURNSTATE_THDD = 114; 
+	public final static int TORDER_RETURNSTATE_SHHX = 293; 
+	
+	//退换货状态(订单作废状态)  116:正常订单;117:换货中;118:由换货导致当前订单作废(已换货);119:退货中;120:由退货导致当前订单作废(已退货)
+	public final static int TORDER_INVALIDSTATE_ZCDD = 116; 
+	public final static int TORDER_INVALIDSTATE_HHZ = 117; 
+	public final static int TORDER_INVALIDSTATE_HHZF = 118; 
+	public final static int TORDER_INVALIDSTATE_THZ = 119; 
+	public final static int TORDER_INVALIDSTATE_THZF = 120; 
+	
+	//订单配送方式 86-快递到店 87-快递到家
+	public final static int TORDER_ISDELIVERTOHOME_KDDD = 86;  //快递到店
+	public final static int TORDER_ISDELIVERTOHOME_KDDJ = 87;  //快递到家
+	
+	//121配送类型	 (122:快递;123:货到付款;124:自提)
+	public static final int TORDER_DELIVEERYTYPE_KD = 122;  //快递
+	public static final int TORDER_DELIVEERYTYPE_HDFK = 123;  //货到付款
+	public static final int TORDER_DELIVEERYTYPE_ZT = 124;  //自提
+	
+	//订单营销类型，0-普通，190-团购，191-抢购 ,192-抽奖
+	public static final int TORDER_ORDERTYPE_PT = 0;  //普通
+	public static final int TORDER_ORDERTYPE_TG = 190;  //团购
+	public static final int TORDER_ORDERTYPE_QG = 191;  //抢购
+	public static final int TORDER_ORDERTYPE_TQ = 192;  //抽奖
+	
+	// 订单来源  93:手机商城;94:微信商城;95:开店宝;96:PC商城;334:收款宝;wap商城:357;97:其他;
+	public static final Integer TORDER_FROM_SJSC = 93;
+	public static final Integer TORDER_FROM_WXSC = 94;
+	public static final Integer TORDER_FROM_KDB = 95;
+	public static final Integer TORDER_FROM_PCSC = 96;
+	public static final Integer TORDER_FROM_SKB = 334;
+	public static final Integer TORDER_FROM_WAPSC = 357;
+	public static final Integer TORDER_FROM_QT = 97;
+	
+	//来源渠道 27-批发进货
+	public static final String TORDER_CHANNELCODE_PFJH = "27";
+	
+	//236订单支付手段  (237:拉卡拉;238:银行;239:支付宝;240:货到付款;241:其他)
+	public static final int TORDER_PAYCHANNEL_LKL = 237;
+	public static final int TORDER_PAYCHANNEL_YH = 238;
+	public static final int TORDER_PAYCHANNEL_ZFB = 239;
+	public static final int TORDER_PAYCHANNEL_HDFK = 240;
+	public static final int TORDER_PAYCHANNEL_QT = 241;
+	
+	//3H商品标识。配送标识：	一小时送达   362;三到五小时送达  363;三到五天送达  364;五天以上送达  365
+	public static final int TORDER_IS3H_1H = 362;
+	public static final int TORDER_IS3H_3H5H = 363;
+	public static final int TORDER_IS3H_3D5D = 364;
+	public static final int TORDER_IS3H_5DMORE = 365;
+	
+	/**
+     * 换货退货数据字典
+     */
+    public static final String RETURN_GOODS_TYPE = "296"; //退货
+    public static final String EXCHANG_GOODS_TYPE = "295"; //换货
+    
+    /**
+     * 售后审批状态字典编码
+     * */
+    public static final String RETURN_STATUS_THE_COMPLETED_CODE = "301";//已完结
+    public static final String RETURN_STATUS_THROUGH_REVIEW_PENDING_RECEIPT_CODE = "300";//审核通过待收货
+    public static final String RETURN_STATUS_CANCEL_USER_CODE = "302";//用户自行取消
+    public static final String RETURN_STATUS_REFUND_EXAMINATION_NOT_THROUGH_CODE = "304";//退款审核不通过
+    public static final String RETURN_STATUS_TO_BE_AUDITED_CODE = "303";//退款待审核
+    public static final String RETURN_STATUS_REFUND_COMPLETED_CODE = "306";//退款完成
+    public static final String RETURN_STATUS_TO_BE_REFUND_CODE = "305";//待退款
+    public static final String RETURN_STATUS_PENDING_AUDIT_CODE = "298";//待审核
+    public static final String RETURN_STATUS_EXAMINATION_NOT_THROUGH_CODE = "299";//审核不通过
+    public static final String RETURN_STATUS_CANCEL_ORDER_CODE = "309";//取消订单
+    public static final String PAYMENT_FOR_GOODS_CODE = "348";//货款
+    public static final String RETURN_EXPRESS_FEE_CODE = "347";//退还快递费
+    
+    /**
+     * 批发进货的订单，438供应商发货;439自有仓库发货
+     */
+    public static final String SDB_DELIVERYTYPE_GYSFH = "438";
+    public static final String SDB_DELIVERYTYPE_ZYCKFH = "439";
+    
+    /**
+     * 配送目的地类型，424-配送到店；425:-配送到仓
+     */
+    public static final String DISTRIBUTION_TOSTOREORSHIP_PSDC = "425";
+    
+    // 暂存商品：378 暂存入店、379 暂存入仓、380 不暂存
+    public static final Integer TEMPSTOREGOODSFLAG_ZCRD = 378;
+    public static final Integer TEMPSTOREGOODSFLAG_ZCRC = 379;
+    public static final Integer TEMPSTOREGOODSFLAG_BZC = 380;
+    
+    //向WMS同步订单状态，275-已同步，276-未同步
+    public static final int TORDER_TOWMSFALG_WTB = 276;  //未同步
+}

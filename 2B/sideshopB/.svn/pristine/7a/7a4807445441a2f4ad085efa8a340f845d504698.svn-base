@@ -1,0 +1,265 @@
+package com.lakala.module.sreturn.service.impl;
+
+import com.alibaba.dubbo.common.utils.StringUtils;
+import com.lakala.base.model.*;
+import com.lakala.exception.LakalaException;
+import com.lakala.module.approval.service.ApprovalService;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.sreturn.model.Constant;
+import com.lakala.module.sreturn.model.ReturnInput;
+import com.lakala.module.sreturn.model.ReturnMoble;
+import com.lakala.module.sreturn.service.ReturnService;
+import com.lakala.util.ReturnMsg;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by HOT.LIU on 2015/2/28.
+ */
+@Service
+public class ReturnServiceImpl implements ReturnService {
+
+    @Autowired
+    private com.lakala.mapper.r.order.TorderitemsMapper torderitemsMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.w.order.TorderitemsMapper torderitemsMapper_W;
+
+    @Autowired
+    private com.lakala.mapper.w.order.TorderproviderMapper torderproviderMapper_W;
+
+    @Autowired
+    private com.lakala.mapper.w.order.TorderMapper torderMapper_W;
+
+    @Autowired
+    private com.lakala.mapper.w.returnw.ReturnMapper returnMapper_W;
+
+    @Autowired
+    private com.lakala.mapper.r.returns.ReturnMapper returnMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.w.returnitems.ReturnItemsMapper returnItemsMapper_W;
+
+    @Autowired
+    private com.lakala.mapper.r.returnitems.ReturnItemsMapper returnItemsMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.w.afterapprovalrecord.AfterapprovalrecordMapper afterapprovalrecordMapper_W;
+
+    @Autowired
+    private com.lakala.mapper.r.skunetinfo.SkunetinfoMapper skunetinfoMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.r.goods.TgoodskuinfoMapper tgoodskuinfoMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.w.skunetinfo.SkunetinfoMapper skunetinfoMapper_W;
+
+    @Autowired
+    private com.lakala.mapper.w.goods.TgoodskuinfoMapper tgoodskuinfoMapper_W;
+
+    @Autowired
+    private ApprovalService approvalService;
+
+    @Override
+    public ObjectOutput list(ReturnInput returnInput) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+
+        if (returnInput == null) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数对象为空!");
+            return data;
+        }
+
+        try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("mobile", returnInput.getMobile());
+            map.put("page", (returnInput.getPage() - 1) * returnInput.getPageSize());
+            map.put("rows", returnInput.getPageSize());
+            map.put("orderid", returnInput.getOrderid());
+
+            List<ReturnMoble> list = returnMapper_R.findAllByMobile(map);
+            data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+            data.set_ReturnData(list);
+            return data;
+        } catch (Exception e) {
+            throw new LakalaException(e);
+        }
+    }
+
+    @Override
+    public ObjectOutput approval(String treturnid, String treturnitemsid, String mobile, boolean isagree, String remarks) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+
+        if (StringUtils.isEmpty(treturnid) || StringUtils.isEmpty(treturnitemsid)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数对象为空!");
+            return data;
+        }
+
+        try {
+            Return record = returnMapper_R.selectByPrimaryKey(Integer.parseInt(treturnid));
+
+            ReturnItems returnItems = returnItemsMapper_R.selectByPrimaryKey(Integer.parseInt(treturnitemsid));
+            Torderitems torderitems = torderitemsMapper_R.selectByPrimaryKey(returnItems.getTorderitemid());
+            Map<String, Object> skunetmap = new HashMap<String, Object>();
+            skunetmap.put("providerid", torderitems.getProviderid());
+            skunetmap.put("skuid", torderitems.getGoodsskuid());
+            skunetmap.put("netno", torderitems.getSiteno());
+
+            Skunetinfo skunetinfo = skunetinfoMapper_R.findSkunetinfoByMap(skunetmap);
+            Tgoodskuinfo tgoodskuinfo = tgoodskuinfoMapper_R.selectByPrimaryKey(torderitems.getGoodsskuid());
+
+            //插入自己所有审批记录
+            Afterapprovalrecord afterapprovalrecord = new Afterapprovalrecord();
+            afterapprovalrecord.setTreturnid(Integer.parseInt(treturnid));
+            afterapprovalrecord.setTreturnitemsid(Integer.parseInt(treturnitemsid));
+            afterapprovalrecord.setApprovingusername(mobile);
+            afterapprovalrecord.setApprovingtime(new java.sql.Timestamp(new java.util.Date().getTime()));
+            afterapprovalrecord.setApprovingstatus(Constant.RETURN_STATUS_PENDING_AUDIT_CODE);
+            afterapprovalrecordMapper_W.insertSelective(afterapprovalrecord);
+
+            Torderitems updateorderitems = new Torderitems();
+            Tgoodskuinfo skuinfo = new Tgoodskuinfo();
+
+            if (isagree) {
+                //更新售后申请主表收货日期
+                record.setReceipttime(new java.sql.Timestamp(new java.util.Date().getTime()));
+
+                returnMapper_W.updateByPrimaryKeySelective(record);
+
+                //更新售后申请字表所有状态信息
+                returnItems.setReturnmoneystatus(Constant.RETURN_STATUS_TO_BE_AUDITED_CODE);
+                returnItems.setReturngoodstatus(Constant.RETURN_STATUS_THE_COMPLETED_CODE);
+                returnItems.setRefundproject(Constant.PAYMENT_FOR_GOODS_CODE);
+                returnItems.setRemark("同意");
+
+                if (returnItems.getShouldrefund() == null) {
+                    BigDecimal shouldrefund = returnItems.getAccount();
+                    returnItems.setShouldrefund(shouldrefund.setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+
+                returnItemsMapper_W.updateByPrimaryKeySelective(returnItems);
+
+                //更改订单明细表中的状态为换货成功
+                updateorderitems.setTorderitemsid(Integer.parseInt(treturnitemsid));
+
+                if (Constant.RETURN_GOODS_TYPE.equals(String.valueOf(record.getReturntype()))) {
+                    // 审批表插入供应商申请数据
+                    Approval approval = new Approval();
+                    approval.setUserId("");
+                    approval.setObjType(Constant.CUSTOMER_SERVICE_REFUND_APPLICATION_APPROVAL);
+                    approval.setDocentry(String.valueOf(returnItems.getTreturnitemsid()));
+                    approval.setOwnerRemark("售后退款申请审批！");
+                    // 审批状态：O 待审批
+                    approval.setStatus(Constant.WAIT);
+                    approval.setUrl("return/reviewview/" + record.getTreturnid() + '/' + returnItems.getTreturnitemsid());
+
+                    approvalService.insertSelective(approval);
+
+                    //更新订单明细表
+                    updateorderitems.setInvalidstate(Integer.parseInt(Constant.RETURN_STATUS_HAS_BEEN_RETURNED));
+
+                    if (Constant.ORDER_GOODS_GIFT_STATE_GOODS.equals(String.valueOf(torderitems.getGiftstate()))) {//如果为商品
+                        if (Constant.RETURN_STATUS_TEMP_STORE_GOODS_FLAG_CODE.equals(torderitems.getTempstoregoodsflag())) {
+                            skunetinfo.setStock(skunetinfo.getStock() + returnItems.getNumber().intValue());
+
+                            if (skunetinfo.getSoldstock() >= returnItems.getNumber().intValue()) {
+                                skunetinfo.setSoldstock(skunetinfo.getSoldstock() - returnItems.getNumber().intValue());
+                            }
+                            skunetinfoMapper_W.updateByPrimaryKeySelective(skunetinfo);
+                        } else {
+                            skuinfo.setTgoodskuinfoid(torderitems.getGoodsskuid());
+                            skuinfo.setSkustock(tgoodskuinfo.getSkustock().add(new BigDecimal(returnItems.getNumber())));
+                            tgoodskuinfoMapper_W.updateByPrimaryKeySelective(skuinfo);
+                        }
+                    } else if (Constant.ORDER_GOODS_GIFT_STATE_GIFT.equals(String.valueOf(torderitems.getGiftstate()))) {//如果为赠品
+                        skuinfo.setTgoodskuinfoid(torderitems.getGoodsskuid());
+                        skuinfo.setSkustock(tgoodskuinfo.getSkustock().add(new BigDecimal(returnItems.getNumber())));
+                        tgoodskuinfoMapper_W.updateByPrimaryKeySelective(skuinfo);
+                    }
+                } else if (Constant.EXCHANG_GOODS_TYPE.equals(String.valueOf(record.getReturntype()))) {
+                    updateorderitems.setInvalidstate(Integer.parseInt(Constant.RETURN_STATUS_HAVE_REPLACEMENT));
+                    updateorderitems.setState(Integer.parseInt(Constant.ORDER_STATUS_NON_DELIVERY));
+                }
+                torderitemsMapper_W.updateByPrimaryKeySelective(updateorderitems);
+            } else {
+
+                //更新售后申请字表所有状态信息
+                if (Constant.RETURN_STATUS_THE_COMPLETED_CODE.equals(returnItems.getReturngoodstatus())) {
+                    if (Constant.RETURN_STATUS_TO_BE_AUDITED_CODE.equals(returnItems.getReturnmoneystatus())) {
+                        returnItems.setReturnmoneystatus(Constant.RETURN_STATUS_REFUND_EXAMINATION_NOT_THROUGH_CODE);
+                        returnItems.setRefundproject(Constant.PAYMENT_FOR_GOODS_CODE);
+                        if (returnItems.getShouldrefund() == null) {
+                            BigDecimal shouldrefund = returnItems.getAccount();
+                            returnItems.setShouldrefund(shouldrefund.setScale(2, BigDecimal.ROUND_HALF_UP));
+                        }
+                    }
+                } else {
+                    returnItems.setReturngoodstatus(Constant.RETURN_STATUS_EXAMINATION_NOT_THROUGH_CODE);
+                }
+
+                returnItems.setRemark(remarks);
+
+                returnItemsMapper_W.updateByPrimaryKeySelective(returnItems);
+
+                Torderitems updatetorderitems = new Torderitems();
+                updatetorderitems.setTorderitemsid(torderitems.getTorderitemsid());
+                //还原子订单退货换货状态
+                updatetorderitems.setReturnstate(Integer.parseInt(Constant.ORDER_RETURN_STATUS));
+                updatetorderitems.setInvalidstate(Integer.parseInt(Constant.ORDER_INVALID_STATE));
+                //为取消订单
+                if (Constant.RETURN_STATUS_CANCEL_ORDER_CODE.equals(returnItems.getReturngoodstatus())) {
+                    //还原取消订单到待发货
+                    Torder updatetorder = new Torder();
+                    Torderprovider updatetorderprovider = new Torderprovider();
+                    updatetorder.setTorderid(torderitems.getOrderid());
+                    updatetorder.setCancelstate(Integer.parseInt(Constant.ORDER_CANCEL_STATE));
+                    updatetorderprovider.setTorderproviderid(torderitems.getOrderproviderid());
+                    updatetorderprovider.setCancelstate(Integer.parseInt(Constant.ORDER_CANCEL_STATE));
+                    updatetorderitems.setCancelstate(Integer.parseInt(Constant.ORDER_CANCEL_STATE));
+                    torderMapper_W.updateTorder(updatetorder);
+                    torderproviderMapper_W.updateTorderProvider(updatetorderprovider);
+                    torderitemsMapper_W.updateByPrimaryKeySelective(updatetorderitems);
+                }
+                //不管是什么操作，只要是审核不通过，都需要对商品或赠品进行库存和销售量的数据进行还原
+                if (Constant.PAYMENT_FOR_GOODS_CODE.equals(returnItems.getRefundproject())) {
+                    if (Constant.ORDER_GOODS_GIFT_STATE_GOODS.equals(String.valueOf(torderitems.getGiftstate()))) {//如果为商品
+                        //如果为暂存商品
+                        if (Constant.RETURN_STATUS_TEMP_STORE_GOODS_FLAG_CODE.equals(torderitems.getTempstoregoodsflag())) {
+                            if (skunetinfo.getStock() >= returnItems.getNumber().intValue()) {
+                                skunetinfo.setStock(skunetinfo.getStock() - returnItems.getNumber().intValue());
+                            }
+
+                            skunetinfo.setSoldstock(skunetinfo.getSoldstock() + returnItems.getNumber().intValue());
+                            skunetinfoMapper_W.updateByPrimaryKeySelective(skunetinfo);
+                        } else {
+                            skuinfo.setTgoodskuinfoid(torderitems.getGoodsskuid());
+                            if (tgoodskuinfo.getSkustock().compareTo(new BigDecimal(returnItems.getNumber())) > -1) {
+                                skuinfo.setSkustock(tgoodskuinfo.getSkustock().subtract(new BigDecimal(returnItems.getNumber())));
+                            }
+                            tgoodskuinfoMapper_W.updateByPrimaryKeySelective(skuinfo);
+                        }
+                    } else if (Constant.ORDER_GOODS_GIFT_STATE_GIFT.equals(String.valueOf(torderitems.getGiftstate()))) {//如果为赠品
+                        skuinfo.setTgoodskuinfoid(torderitems.getGoodsskuid());
+                        skuinfo.setSkustock(tgoodskuinfo.getSkustock().subtract(new BigDecimal(returnItems.getNumber())));
+                        tgoodskuinfoMapper_W.updateByPrimaryKeySelective(skuinfo);
+                    }
+                    //还原订单状态
+                    torderitemsMapper_W.updateByPrimaryKeySelective(updatetorderitems);
+                }
+            }
+        } catch (Exception e) {
+            throw new LakalaException(e);
+        }
+
+        data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+        data.set_ReturnMsg("操作成功！");
+        return data;
+    }
+}

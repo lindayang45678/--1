@@ -1,0 +1,12 @@
+package com.lakala.mapper.w.order;
+
+import com.lakala.base.model.Torderprovider;
+
+
+public interface TorderproviderMapper {
+
+	void updateTorderProvider(Torderprovider opNew);
+	
+	void updateTorderProviderCancelByTorderProviderId(String torderproviderid);
+
+}

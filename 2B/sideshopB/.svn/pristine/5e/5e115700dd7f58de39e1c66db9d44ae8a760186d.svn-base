@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单确认</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+	<style type="text/css">
+		/*.container,.fill-content{margin:0;}*/
+	</style>
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back"></a>
+		<h1>订单确认</h1>
+	</header>
+	<section class="container fill">
+		<div class="fill-content">
+		</div>
+		<div class="consignee-info">收货人信息</div>
+		<ul class="fill-head">
+			<li class="f-14">
+				<a href="address.html" class="clearfix" id="shipaddress">
+					<i></i>&nbsp;&nbsp;<i></i><br/>
+					<i>请选择收货地址</i><br/>
+					<i></i><br/>
+					<i class="r-arrow"></i>
+				</a>
+			</li>
+			<li>
+				<a href="paytype.html" class="clearfix">
+					<em>付款方式</em><i class="btn-circle c-black f-14 fr">拉卡拉钱包支付</i><i class="r-arrow"></i>
+				</a>
+			</li>
+			<li>
+				<a href="coupon.html" class="clearfix">
+					<em>现金券卡</em><i class="fr c-black f-14" id="coupon">请选择</i><i class="r-arrow"></i>
+				</a>
+				<i class="fill-use-coupons hidden"><em>现金券</em><i class="fr c-black f-14">暂无</i></i>
+			</li>
+			<li>
+				<a href="javascript:;" class="clearfix">
+					<em>运费</em><i class="fill-freight c-black f-14 fr">¥0.00</i>
+				</a>
+			</li>
+			<li>
+				<a href="invoice.html" class="clearfix">
+					<em class="fill-invoicem">发票</em><i class="fill-invoice fr">不需要</i><i class="r-arrow"></i>
+				</a>
+			</li>
+		</ul>
+		<div id="wholesale-foot" class="clearfix">
+			<i class="goodscart">0</i>
+			<div><i class="fill-total">应付<em class="amount-payable">￥0.00</em></i><i class="fill-middle"></i></div>
+			<a href="index.html" class="go-again">再逛逛</a>
+			<a href="javascript:;" class="gopay" id="to-pay">去结算</a>
+		</div>	
+		<div class="pop-up-box hidden">
+			<div>
+				<p class="f-18 c-gray">是否要删除该商品</p>
+				<input class="btn-gray" id="cancel" type="button" value="取消"/>
+				<input id="confirm" class="btn-red" type="button" value="确认"/>
+			</div>
+		</div>
+	</section>
+	<div class="masker hidden"><img src="../../images/loading.png" class="loading"/><p>玩命加载中...</p></div>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/wholesale/fill.m.js?t=2015063001"></script>
+	<div class="hidden">
+		<script>
+			var _hmt = _hmt || [];
+			(function() {
+			  var hm = document.createElement("script");
+			  hm.src = "//hm.baidu.com/hm.js?a77b72f5cf41fc21c2c8e619097508a4";
+			  var s = document.getElementsByTagName("script")[0]; 
+			  s.parentNode.insertBefore(hm, s);
+			})();
+		</script>
+	</div>
+</body>
+</html>

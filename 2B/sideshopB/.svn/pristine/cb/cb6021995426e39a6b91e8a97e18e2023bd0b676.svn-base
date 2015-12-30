@@ -1,0 +1,54 @@
+$(function() {
+	loadJs();
+})
+
+$(function() {
+	$("#btnQuit").on("tap", function() {
+		var data = {"mobile":mobile};
+		//var resultJson = ajaxCommon(urlLogout, data);
+
+		clearStorage();
+		window.location.href = "../accounts/login.html?t=" + t;
+		//if(resultJson._ReturnCode === returnCodeSuccess) {
+			//清除所有localStorage里的信息
+			//clearStorage();
+			//window.location.href = "../accounts/login.html?t=" + t;
+		//} else {
+			//@TODO 如果接口有错改如何处理？
+			//清除所有localStorage里的信息
+			//clearStorage();
+			//window.location.href = "../accounts/login.html?t=" + t;
+		//}
+	});
+})
+
+$(function(){
+	var msgSound = storage.getItem("msgSound") || "on";
+	var msgShake = storage.getItem("msgShake") || "on";
+	if(msgSound == "on"){
+		$("#msgSound").addClass("on");
+	}else{
+		$("#msgSound").removeClass("on");
+	}
+	
+	if(msgShake == "on"){
+		$("#msgShake").addClass("on");
+	}else{
+		$("#msgShake").removeClass("on");
+	}
+})
+
+//设置保存key-value，供客户端调用
+$(function() {
+	$(".setting-choose div").on("tap", function() {
+		$(this).toggleClass("on");
+		var key = $(this).attr("id");
+		if($(this).hasClass("on")) {
+			cordova._native.saveInfo.set(key, "on");
+			storage.setItem(key,"on");
+		} else {
+			cordova._native.saveInfo.set(key, "off");
+			storage.setItem(key,"off");
+		}
+	});
+})

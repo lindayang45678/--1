@@ -1,0 +1,10 @@
+package com.lakala.mapper.r.order;
+
+import java.util.List;
+
+import com.lakala.model.ShouhuoOutputSql;
+import com.lakala.module.order.vo.ShouhuoInput;
+
+public interface ShouhuoMapper {
+	List<ShouhuoOutputSql> getShouhuoInfo(ShouhuoInput si); 
+}

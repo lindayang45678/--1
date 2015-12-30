@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.goods.TgoodsinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Tgoodinfo" >
+    <id column="tGoodInfoId" property="tgoodinfoid" jdbcType="INTEGER" />
+    <result column="tRealCateId" property="trealcateid" jdbcType="INTEGER" />
+    <result column="tRealCateDisc" property="trealcatedisc" jdbcType="VARCHAR" />
+    <result column="tRealCateTreeDisc" property="trealcatetreedisc" jdbcType="VARCHAR" />
+    <result column="supplierId" property="supplierid" jdbcType="INTEGER" />
+    <result column="supplierName" property="suppliername" jdbcType="VARCHAR" />
+    <result column="supplierGoodId" property="suppliergoodid" jdbcType="VARCHAR" />
+    <result column="outerId" property="outerid" jdbcType="VARCHAR" />
+    <result column="tBrandId" property="tbrandid" jdbcType="INTEGER" />
+    <result column="brandName" property="brandname" jdbcType="VARCHAR" />
+    <result column="goodName" property="goodname" jdbcType="VARCHAR" />
+    <result column="goodBarCode" property="goodbarcode" jdbcType="VARCHAR" />
+    <result column="goodAdWord" property="goodadword" jdbcType="VARCHAR" />
+    <result column="goodIntroduce" property="goodintroduce" jdbcType="VARCHAR" />
+    <result column="packageList" property="packagelist" jdbcType="VARCHAR" />
+    <result column="isPayAfterArrival" property="ispayafterarrival" jdbcType="INTEGER" />
+    <result column="isNoReasonReturn" property="isnoreasonreturn" jdbcType="INTEGER" />
+    <result column="iscontractmachine" property="iscontractmachine" jdbcType="INTEGER" />
+    <result column="isExpressToHome" property="isexpresstohome" jdbcType="INTEGER" />
+    <result column="distributionFlag" property="distributionflag" jdbcType="INTEGER" />
+    <result column="expDate" property="expdate" jdbcType="INTEGER" />
+    <result column="producingArea" property="producingarea" jdbcType="VARCHAR" />
+    <result column="measureUnits" property="measureunits" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="volume" property="volume" jdbcType="DECIMAL" />
+    <result column="length" property="length" jdbcType="DECIMAL" />
+    <result column="width" property="width" jdbcType="DECIMAL" />
+    <result column="height" property="height" jdbcType="DECIMAL" />
+    <result column="carton" property="carton" jdbcType="INTEGER" />
+    <result column="cartonUnit" property="cartonunit" jdbcType="VARCHAR" />
+    <result column="isForeigngoods" property="isforeigngoods" jdbcType="INTEGER" />
+    <result column="storageCondition" property="storagecondition" jdbcType="INTEGER" />
+    <result column="distributionCondition" property="distributioncondition" jdbcType="INTEGER" />
+    <result column="goodType" property="goodtype" jdbcType="INTEGER" />
+    <result column="balanceWay" property="balanceway" jdbcType="INTEGER" />
+    <result column="oneSelfCat" property="oneselfcat" jdbcType="VARCHAR" />
+    <result column="saleDate" property="saledate" jdbcType="TIMESTAMP" />
+    <result column="notSaleDate" property="notsaledate" jdbcType="TIMESTAMP" />
+    <result column="goodStatus" property="goodstatus" jdbcType="INTEGER" />
+    <result column="auditeDate" property="auditedate" jdbcType="TIMESTAMP" />
+    <result column="createdDate" property="createddate" jdbcType="TIMESTAMP" />
+    <result column="lastUpdateDate" property="lastupdatedate" jdbcType="TIMESTAMP" />
+    <result column="tempStoreGoodsFlag" property="tempstoregoodsflag" jdbcType="INTEGER" />
+    <result column="platorself" property="platorself" jdbcType="INTEGER" />
+    <result column="onsaleTime" property="onsaletime" jdbcType="DATE" />
+    <result column="downsaleTime" property="downsaletime" jdbcType="DATE" />
+    <result column="goodsStatus" property="goodsstatus" jdbcType="INTEGER" />
+    <result column="deviceno" property="deviceno" jdbcType="VARCHAR" />
+    <result column="virtualCateIds" property="virtualcateids" jdbcType="VARCHAR" />
+    <result column="deflag" property="deflag" jdbcType="INTEGER" />
+    
+    <result column="goodDisc" property="gooddisc" jdbcType="LONGVARCHAR" />
+    <result column="goodBigPic" property="goodbigpic" jdbcType="LONGVARCHAR" />
+    <result column="goodSmallPic" property="goodsmallpic" jdbcType="LONGVARCHAR" />
+    <result column="distributionregion" property="distributionregion" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    tGoodInfoId, tRealCateId, tRealCateDisc, tRealCateTreeDisc, supplierId, supplierName, 
+    supplierGoodId, outerId, tBrandId, brandName, goodName, goodBarCode, goodAdWord, 
+    goodIntroduce, packageList, isPayAfterArrival, isNoReasonReturn, iscontractmachine, 
+    isExpressToHome, distributionFlag, expDate, producingArea, measureUnits, weight, 
+    volume, length, width, height, carton, cartonUnit, isForeigngoods, storageCondition, 
+    distributionCondition, goodType, balanceWay, oneSelfCat, saleDate, notSaleDate, goodStatus, 
+    auditeDate, createdDate, lastUpdateDate, tempStoreGoodsFlag, platorself, 
+    onsaleTime, downsaleTime, goodsStatus,deviceno,virtualCateIds,deflag
+  </sql>
+  <sql id="Blob_Column_List" >
+    goodDisc, goodBigPic, goodSmallPic, distributionregion
+  </sql>
+  
+  <update id="updateGoods4PublishByGoodsId" parameterType="com.lakala.base.model.Tgoodinfo" >
+    update tgoodsinfo
+    <set >
+      <if test="onsaletime != null" >
+        onsaleTime=#{onsaletime,jdbcType=DATE},
+      </if>
+      <if test="downsaletime != null" >
+        downsaleTime=#{downsaletime,jdbcType=DATE},
+      </if>
+      <if test="goodsstatus != null" >
+        goodsStatus=#{goodsstatus,jdbcType=DATE},
+      </if>
+    </set>
+    where tGoodInfoId = #{tgoodinfoid,jdbcType=INTEGER}
+  </update>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tgoodsinfo
+    where tGoodInfoId = #{tgoodinfoid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lakala.base.model.Tgoodinfo" >
+    insert into tgoodsinfo (tGoodInfoId, tRealCateId, tRealCateDisc, 
+      tRealCateTreeDisc, supplierId, supplierName, 
+      supplierGoodId, outerId, tBrandId, 
+      brandName, goodName, goodBarCode, 
+      goodAdWord, goodIntroduce, packageList, 
+      isPayAfterArrival, isNoReasonReturn, iscontractmachine, 
+      isExpressToHome, distributionFlag, expDate, 
+      producingArea, measureUnits, weight, 
+      volume, length, width, 
+      height, carton, cartonUnit, 
+      isForeigngoods, storageCondition, distributionCondition, 
+      goodType, balanceWay, oneSelfCat, 
+      saleDate, notSaleDate, goodStatus, 
+      auditeDate, createdDate, lastUpdateDate, 
+      tempStoreGoodsFlag, platorself, 
+      onsaleTime, downsaleTime, goodsStatus, eviceno, 
+      virtualCateIds, deflag,
+      goodDisc, goodBigPic, goodSmallPic, 
+      distributionregion)
+    values (#{tgoodinfoid,jdbcType=INTEGER}, #{trealcateid,jdbcType=INTEGER}, #{trealcatedisc,jdbcType=VARCHAR}, 
+      #{trealcatetreedisc,jdbcType=VARCHAR}, #{supplierid,jdbcType=INTEGER}, #{suppliername,jdbcType=VARCHAR}, 
+      #{suppliergoodid,jdbcType=VARCHAR}, #{outerid,jdbcType=VARCHAR}, #{tbrandid,jdbcType=INTEGER}, 
+      #{brandname,jdbcType=VARCHAR}, #{goodname,jdbcType=VARCHAR}, #{goodbarcode,jdbcType=VARCHAR}, 
+      #{goodadword,jdbcType=VARCHAR}, #{goodintroduce,jdbcType=VARCHAR}, #{packagelist,jdbcType=VARCHAR}, 
+      #{ispayafterarrival,jdbcType=INTEGER}, #{isnoreasonreturn,jdbcType=INTEGER}, #{iscontractmachine,jdbcType=INTEGER}, 
+      #{isexpresstohome,jdbcType=INTEGER}, #{distributionflag,jdbcType=INTEGER}, #{expdate,jdbcType=INTEGER}, 
+      #{producingarea,jdbcType=VARCHAR}, #{measureunits,jdbcType=VARCHAR}, #{weight,jdbcType=DECIMAL}, 
+      #{volume,jdbcType=DECIMAL}, #{length,jdbcType=DECIMAL}, #{width,jdbcType=DECIMAL}, 
+      #{height,jdbcType=DECIMAL}, #{carton,jdbcType=INTEGER}, #{cartonunit,jdbcType=VARCHAR}, 
+      #{isforeigngoods,jdbcType=INTEGER}, #{storagecondition,jdbcType=INTEGER}, #{distributioncondition,jdbcType=INTEGER}, 
+      #{goodtype,jdbcType=INTEGER}, #{balanceway,jdbcType=INTEGER}, #{oneselfcat,jdbcType=VARCHAR}, 
+      #{saledate,jdbcType=TIMESTAMP}, #{notsaledate,jdbcType=TIMESTAMP}, #{goodstatus,jdbcType=INTEGER}, 
+      #{auditedate,jdbcType=TIMESTAMP}, #{createddate,jdbcType=TIMESTAMP}, #{lastupdatedate,jdbcType=TIMESTAMP}, 
+      #{tempstoregoodsflag,jdbcType=INTEGER}, #{platorself,jdbcType=INTEGER}, 
+      #{onsaletime,jdbcType=DATE}, #{downsaletime,jdbcType=DATE}, #{goodsstatus,jdbcType=INTEGER},#{deviceno,jdbcType=VARCHAR}, 
+      #{virtualcateids,jdbcType=VARCHAR}, #{deflag,jdbcType=INTEGER},  
+      #{gooddisc,jdbcType=LONGVARCHAR}, #{goodbigpic,jdbcType=LONGVARCHAR}, #{goodsmallpic,jdbcType=LONGVARCHAR}, 
+      #{distributionregion,jdbcType=LONGVARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.lakala.base.model.Tgoodinfo" useGeneratedKeys="true" keyProperty="tgoodinfoid">
+    insert into tgoodsinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tgoodinfoid != null" >
+        tGoodInfoId,
+      </if>
+      <if test="trealcateid != null" >
+        tRealCateId,
+      </if>
+      <if test="trealcatedisc != null" >
+        tRealCateDisc,
+      </if>
+      <if test="trealcatetreedisc != null" >
+        tRealCateTreeDisc,
+      </if>
+      <if test="supplierid != null" >
+        supplierId,
+      </if>
+      <if test="suppliername != null" >
+        supplierName,
+      </if>
+      <if test="suppliergoodid != null" >
+        supplierGoodId,
+      </if>
+      <if test="outerid != null" >
+        outerId,
+      </if>
+      <if test="tbrandid != null" >
+        tBrandId,
+      </if>
+      <if test="brandname != null" >
+        brandName,
+      </if>
+      <if test="goodname != null" >
+        goodName,
+      </if>
+      <if test="goodbarcode != null" >
+        goodBarCode,
+      </if>
+      <if test="goodadword != null" >
+        goodAdWord,
+      </if>
+      <if test="goodintroduce != null" >
+        goodIntroduce,
+      </if>
+      <if test="packagelist != null" >
+        packageList,
+      </if>
+      <if test="ispayafterarrival != null" >
+        isPayAfterArrival,
+      </if>
+      <if test="isnoreasonreturn != null" >
+        isNoReasonReturn,
+      </if>
+      <if test="iscontractmachine != null" >
+        iscontractmachine,
+      </if>
+      <if test="isexpresstohome != null" >
+        isExpressToHome,
+      </if>
+      <if test="distributionflag != null" >
+        distributionFlag,
+      </if>
+      <if test="expdate != null" >
+        expDate,
+      </if>
+      <if test="producingarea != null" >
+        producingArea,
+      </if>
+      <if test="measureunits != null" >
+        measureUnits,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="volume != null" >
+        volume,
+      </if>
+      <if test="length != null" >
+        length,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="carton != null" >
+        carton,
+      </if>
+      <if test="cartonunit != null" >
+        cartonUnit,
+      </if>
+      <if test="isforeigngoods != null" >
+        isForeigngoods,
+      </if>
+      <if test="storagecondition != null" >
+        storageCondition,
+      </if>
+      <if test="distributioncondition != null" >
+        distributionCondition,
+      </if>
+      <if test="goodtype != null" >
+        goodType,
+      </if>
+      <if test="balanceway != null" >
+        balanceWay,
+      </if>
+      <if test="oneselfcat != null" >
+        oneSelfCat,
+      </if>
+      <if test="saledate != null" >
+        saleDate,
+      </if>
+      <if test="notsaledate != null" >
+        notSaleDate,
+      </if>
+      <if test="goodstatus != null" >
+        goodStatus,
+      </if>
+      <if test="auditedate != null" >
+        auditeDate,
+      </if>
+      <if test="createddate != null" >
+        createdDate,
+      </if>
+      <if test="lastupdatedate != null" >
+        lastUpdateDate,
+      </if>
+      <if test="tempstoregoodsflag != null" >
+        tempStoreGoodsFlag,
+      </if>
+      <if test="platorself != null" >
+        platorself,
+      </if>
+      <if test="onsaletime != null" >
+        onsaleTime,
+      </if>
+      <if test="downsaletime != null" >
+        downsaleTime,
+      </if>
+      <if test="goodsstatus != null" >
+        goodsStatus,
+      </if>
+      <if test="deviceno != null" >
+        deviceno,
+      </if>
+      <if test="virtualcateids != null" >
+        virtualcateIds,
+      </if>
+      <if test="deflag != null" >
+        deflag,
+      </if>
+      <if test="gooddisc != null" >
+        goodDisc,
+      </if>
+      <if test="goodbigpic != null" >
+        goodBigPic,
+      </if>
+      <if test="goodsmallpic != null" >
+        goodSmallPic,
+      </if>
+      <if test="distributionregion != null" >
+        distributionregion,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tgoodinfoid != null" >
+        #{tgoodinfoid,jdbcType=INTEGER},
+      </if>
+      <if test="trealcateid != null" >
+        #{trealcateid,jdbcType=INTEGER},
+      </if>
+      <if test="trealcatedisc != null" >
+        #{trealcatedisc,jdbcType=VARCHAR},
+      </if>
+      <if test="trealcatetreedisc != null" >
+        #{trealcatetreedisc,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierid != null" >
+        #{supplierid,jdbcType=INTEGER},
+      </if>
+      <if test="suppliername != null" >
+        #{suppliername,jdbcType=VARCHAR},
+      </if>
+      <if test="suppliergoodid != null" >
+        #{suppliergoodid,jdbcType=VARCHAR},
+      </if>
+      <if test="outerid != null" >
+        #{outerid,jdbcType=VARCHAR},
+      </if>
+      <if test="tbrandid != null" >
+        #{tbrandid,jdbcType=INTEGER},
+      </if>
+      <if test="brandname != null" >
+        #{brandname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodname != null" >
+        #{goodname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodbarcode != null" >
+        #{goodbarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodadword != null" >
+        #{goodadword,jdbcType=VARCHAR},
+      </if>
+      <if test="goodintroduce != null" >
+        #{goodintroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="packagelist != null" >
+        #{packagelist,jdbcType=VARCHAR},
+      </if>
+      <if test="ispayafterarrival != null" >
+        #{ispayafterarrival,jdbcType=INTEGER},
+      </if>
+      <if test="isnoreasonreturn != null" >
+        #{isnoreasonreturn,jdbcType=INTEGER},
+      </if>
+      <if test="iscontractmachine != null" >
+        #{iscontractmachine,jdbcType=INTEGER},
+      </if>
+      <if test="isexpresstohome != null" >
+        #{isexpresstohome,jdbcType=INTEGER},
+      </if>
+      <if test="distributionflag != null" >
+        #{distributionflag,jdbcType=INTEGER},
+      </if>
+      <if test="expdate != null" >
+        #{expdate,jdbcType=INTEGER},
+      </if>
+      <if test="producingarea != null" >
+        #{producingarea,jdbcType=VARCHAR},
+      </if>
+      <if test="measureunits != null" >
+        #{measureunits,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=DECIMAL},
+      </if>
+      <if test="length != null" >
+        #{length,jdbcType=DECIMAL},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=DECIMAL},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=DECIMAL},
+      </if>
+      <if test="carton != null" >
+        #{carton,jdbcType=INTEGER},
+      </if>
+      <if test="cartonunit != null" >
+        #{cartonunit,jdbcType=VARCHAR},
+      </if>
+      <if test="isforeigngoods != null" >
+        #{isforeigngoods,jdbcType=INTEGER},
+      </if>
+      <if test="storagecondition != null" >
+        #{storagecondition,jdbcType=INTEGER},
+      </if>
+      <if test="distributioncondition != null" >
+        #{distributioncondition,jdbcType=INTEGER},
+      </if>
+      <if test="goodtype != null" >
+        #{goodtype,jdbcType=INTEGER},
+      </if>
+      <if test="balanceway != null" >
+        #{balanceway,jdbcType=INTEGER},
+      </if>
+      <if test="oneselfcat != null" >
+        #{oneselfcat,jdbcType=VARCHAR},
+      </if>
+      <if test="saledate != null" >
+        #{saledate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notsaledate != null" >
+        #{notsaledate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodstatus != null" >
+        #{goodstatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditedate != null" >
+        #{auditedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createddate != null" >
+        #{createddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastupdatedate != null" >
+        #{lastupdatedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tempstoregoodsflag != null" >
+        #{tempstoregoodsflag,jdbcType=INTEGER},
+      </if>
+      <if test="platorself != null" >
+        #{platorself,jdbcType=INTEGER},
+      </if>
+      <if test="onsaletime != null" >
+        #{onsaletime,jdbcType=DATE},
+      </if>
+      <if test="downsaletime != null" >
+        #{downsaletime,jdbcType=DATE},
+      </if>
+      <if test="goodsstatus != null" >
+        #{goodsstatus,jdbcType=INTEGER},
+      </if>
+      <if test="deviceno != null" >
+        #{deviceno,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualcateids != null" >
+        #{virtualcateids,jdbcType=VARCHAR},
+      </if>
+      <if test="deflag != null" >
+        #{deflag,jdbcType=INTEGER},
+      </if>
+      <if test="gooddisc != null" >
+        #{gooddisc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="goodbigpic != null" >
+        #{goodbigpic,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="goodsmallpic != null" >
+        #{goodsmallpic,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="distributionregion != null" >
+        #{distributionregion,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lakala.base.model.Tgoodinfo" >
+    update tgoodsinfo
+    <set >
+      <if test="trealcateid != null" >
+        tRealCateId = #{trealcateid,jdbcType=INTEGER},
+      </if>
+      <if test="trealcatedisc != null" >
+        tRealCateDisc = #{trealcatedisc,jdbcType=VARCHAR},
+      </if>
+      <if test="trealcatetreedisc != null" >
+        tRealCateTreeDisc = #{trealcatetreedisc,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierid != null" >
+        supplierId = #{supplierid,jdbcType=INTEGER},
+      </if>
+      <if test="suppliername != null" >
+        supplierName = #{suppliername,jdbcType=VARCHAR},
+      </if>
+      <if test="suppliergoodid != null" >
+        supplierGoodId = #{suppliergoodid,jdbcType=VARCHAR},
+      </if>
+      <if test="outerid != null" >
+        outerId = #{outerid,jdbcType=VARCHAR},
+      </if>
+      <if test="tbrandid != null" >
+        tBrandId = #{tbrandid,jdbcType=INTEGER},
+      </if>
+      <if test="brandname != null" >
+        brandName = #{brandname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodname != null" >
+        goodName = #{goodname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodbarcode != null" >
+        goodBarCode = #{goodbarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodadword != null" >
+        goodAdWord = #{goodadword,jdbcType=VARCHAR},
+      </if>
+      <if test="goodintroduce != null" >
+        goodIntroduce = #{goodintroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="packagelist != null" >
+        packageList = #{packagelist,jdbcType=VARCHAR},
+      </if>
+      <if test="ispayafterarrival != null" >
+        isPayAfterArrival = #{ispayafterarrival,jdbcType=INTEGER},
+      </if>
+      <if test="isnoreasonreturn != null" >
+        isNoReasonReturn = #{isnoreasonreturn,jdbcType=INTEGER},
+      </if>
+      <if test="iscontractmachine != null" >
+        iscontractmachine = #{iscontractmachine,jdbcType=INTEGER},
+      </if>
+      <if test="isexpresstohome != null" >
+        isExpressToHome = #{isexpresstohome,jdbcType=INTEGER},
+      </if>
+      <if test="distributionflag != null" >
+        distributionFlag = #{distributionflag,jdbcType=INTEGER},
+      </if>
+      <if test="expdate != null" >
+        expDate = #{expdate,jdbcType=INTEGER},
+      </if>
+      <if test="producingarea != null" >
+        producingArea = #{producingarea,jdbcType=VARCHAR},
+      </if>
+      <if test="measureunits != null" >
+        measureUnits = #{measureunits,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="volume != null" >
+        volume = #{volume,jdbcType=DECIMAL},
+      </if>
+      <if test="length != null" >
+        length = #{length,jdbcType=DECIMAL},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=DECIMAL},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=DECIMAL},
+      </if>
+      <if test="carton != null" >
+        carton = #{carton,jdbcType=INTEGER},
+      </if>
+      <if test="cartonunit != null" >
+        cartonUnit = #{cartonunit,jdbcType=VARCHAR},
+      </if>
+      <if test="isforeigngoods != null" >
+        isForeigngoods = #{isforeigngoods,jdbcType=INTEGER},
+      </if>
+      <if test="storagecondition != null" >
+        storageCondition = #{storagecondition,jdbcType=INTEGER},
+      </if>
+      <if test="distributioncondition != null" >
+        distributionCondition = #{distributioncondition,jdbcType=INTEGER},
+      </if>
+      <if test="goodtype != null" >
+        goodType = #{goodtype,jdbcType=INTEGER},
+      </if>
+      <if test="balanceway != null" >
+        balanceWay = #{balanceway,jdbcType=INTEGER},
+      </if>
+      <if test="oneselfcat != null" >
+        oneSelfCat = #{oneselfcat,jdbcType=VARCHAR},
+      </if>
+      <if test="saledate != null" >
+        saleDate = #{saledate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notsaledate != null" >
+        notSaleDate = #{notsaledate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodstatus != null" >
+        goodStatus = #{goodstatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditedate != null" >
+        auditeDate = #{auditedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createddate != null" >
+        createdDate = #{createddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastupdatedate != null" >
+        lastUpdateDate = #{lastupdatedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tempstoregoodsflag != null" >
+        tempStoreGoodsFlag = #{tempstoregoodsflag,jdbcType=INTEGER},
+      </if>
+      <if test="platorself != null" >
+        platorself = #{platorself,jdbcType=INTEGER},
+      </if>
+      <if test="onsaletime != null" >
+        onsaleTime = #{onsaletime,jdbcType=DATE},
+      </if>
+      <if test="downsaletime != null" >
+        downsaleTime = #{downsaletime,jdbcType=DATE},
+      </if>
+      <if test="goodsstatus != null" >
+        goodsStatus = #{goodsstatus,jdbcType=INTEGER},
+      </if>
+      <if test="deviceno != null" >
+        deviceno = #{deviceno,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualcateids != null" >
+        virtualCateIds = #{virtualcateids,jdbcType=VARCHAR},
+      </if>
+      <if test="deflag != null" >
+        deflag = #{deflag,jdbcType=INTEGER},
+      </if>
+      <if test="gooddisc != null" >
+        goodDisc = #{gooddisc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="goodbigpic != null" >
+        goodBigPic = #{goodbigpic,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="goodsmallpic != null" >
+        goodSmallPic = #{goodsmallpic,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="distributionregion != null" >
+        distributionregion = #{distributionregion,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where tGoodInfoId = #{tgoodinfoid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lakala.base.model.Tgoodinfo" >
+    update tgoodsinfo
+    set tRealCateId = #{trealcateid,jdbcType=INTEGER},
+      tRealCateDisc = #{trealcatedisc,jdbcType=VARCHAR},
+      tRealCateTreeDisc = #{trealcatetreedisc,jdbcType=VARCHAR},
+      supplierId = #{supplierid,jdbcType=INTEGER},
+      supplierName = #{suppliername,jdbcType=VARCHAR},
+      supplierGoodId = #{suppliergoodid,jdbcType=VARCHAR},
+      outerId = #{outerid,jdbcType=VARCHAR},
+      tBrandId = #{tbrandid,jdbcType=INTEGER},
+      brandName = #{brandname,jdbcType=VARCHAR},
+      goodName = #{goodname,jdbcType=VARCHAR},
+      goodBarCode = #{goodbarcode,jdbcType=VARCHAR},
+      goodAdWord = #{goodadword,jdbcType=VARCHAR},
+      goodIntroduce = #{goodintroduce,jdbcType=VARCHAR},
+      packageList = #{packagelist,jdbcType=VARCHAR},
+      isPayAfterArrival = #{ispayafterarrival,jdbcType=INTEGER},
+      isNoReasonReturn = #{isnoreasonreturn,jdbcType=INTEGER},
+      iscontractmachine = #{iscontractmachine,jdbcType=INTEGER},
+      isExpressToHome = #{isexpresstohome,jdbcType=INTEGER},
+      distributionFlag = #{distributionflag,jdbcType=INTEGER},
+      expDate = #{expdate,jdbcType=INTEGER},
+      producingArea = #{producingarea,jdbcType=VARCHAR},
+      measureUnits = #{measureunits,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DECIMAL},
+      volume = #{volume,jdbcType=DECIMAL},
+      length = #{length,jdbcType=DECIMAL},
+      width = #{width,jdbcType=DECIMAL},
+      height = #{height,jdbcType=DECIMAL},
+      carton = #{carton,jdbcType=INTEGER},
+      cartonUnit = #{cartonunit,jdbcType=VARCHAR},
+      isForeigngoods = #{isforeigngoods,jdbcType=INTEGER},
+      storageCondition = #{storagecondition,jdbcType=INTEGER},
+      distributionCondition = #{distributioncondition,jdbcType=INTEGER},
+      goodType = #{goodtype,jdbcType=INTEGER},
+      balanceWay = #{balanceway,jdbcType=INTEGER},
+      oneSelfCat = #{oneselfcat,jdbcType=VARCHAR},
+      saleDate = #{saledate,jdbcType=TIMESTAMP},
+      notSaleDate = #{notsaledate,jdbcType=TIMESTAMP},
+      goodStatus = #{goodstatus,jdbcType=INTEGER},
+      auditeDate = #{auditedate,jdbcType=TIMESTAMP},
+      createdDate = #{createddate,jdbcType=TIMESTAMP},
+      lastUpdateDate = #{lastupdatedate,jdbcType=TIMESTAMP},
+      tempStoreGoodsFlag = #{tempstoregoodsflag,jdbcType=INTEGER},
+      platorself = #{platorself,jdbcType=INTEGER},
+      onsaleTime = #{onsaletime,jdbcType=DATE},
+      downsaleTime = #{downsaletime,jdbcType=DATE},
+      goodsStatus = #{goodsstatus,jdbcType=INTEGER},
+      deviceno = #{deviceno,jdbcType=VARCHAR},
+      virtualCateIds = #{virtualcateids,jdbcType=VARCHAR},
+      deflag = #{deflag,jdbcType=INTEGER},
+      goodDisc = #{gooddisc,jdbcType=LONGVARCHAR},
+      goodBigPic = #{goodbigpic,jdbcType=LONGVARCHAR},
+      goodSmallPic = #{goodsmallpic,jdbcType=LONGVARCHAR},
+      distributionregion = #{distributionregion,jdbcType=LONGVARCHAR}
+    where tGoodInfoId = #{tgoodinfoid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lakala.base.model.Tgoodinfo" >
+    update tgoodsinfo
+    set tRealCateId = #{trealcateid,jdbcType=INTEGER},
+      tRealCateDisc = #{trealcatedisc,jdbcType=VARCHAR},
+      tRealCateTreeDisc = #{trealcatetreedisc,jdbcType=VARCHAR},
+      supplierId = #{supplierid,jdbcType=INTEGER},
+      supplierName = #{suppliername,jdbcType=VARCHAR},
+      supplierGoodId = #{suppliergoodid,jdbcType=VARCHAR},
+      outerId = #{outerid,jdbcType=VARCHAR},
+      tBrandId = #{tbrandid,jdbcType=INTEGER},
+      brandName = #{brandname,jdbcType=VARCHAR},
+      goodName = #{goodname,jdbcType=VARCHAR},
+      goodBarCode = #{goodbarcode,jdbcType=VARCHAR},
+      goodAdWord = #{goodadword,jdbcType=VARCHAR},
+      goodIntroduce = #{goodintroduce,jdbcType=VARCHAR},
+      packageList = #{packagelist,jdbcType=VARCHAR},
+      isPayAfterArrival = #{ispayafterarrival,jdbcType=INTEGER},
+      isNoReasonReturn = #{isnoreasonreturn,jdbcType=INTEGER},
+      iscontractmachine = #{iscontractmachine,jdbcType=INTEGER},
+      isExpressToHome = #{isexpresstohome,jdbcType=INTEGER},
+      distributionFlag = #{distributionflag,jdbcType=INTEGER},
+      expDate = #{expdate,jdbcType=INTEGER},
+      producingArea = #{producingarea,jdbcType=VARCHAR},
+      measureUnits = #{measureunits,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DECIMAL},
+      volume = #{volume,jdbcType=DECIMAL},
+      length = #{length,jdbcType=DECIMAL},
+      width = #{width,jdbcType=DECIMAL},
+      height = #{height,jdbcType=DECIMAL},
+      carton = #{carton,jdbcType=INTEGER},
+      cartonUnit = #{cartonunit,jdbcType=VARCHAR},
+      isForeigngoods = #{isforeigngoods,jdbcType=INTEGER},
+      storageCondition = #{storagecondition,jdbcType=INTEGER},
+      distributionCondition = #{distributioncondition,jdbcType=INTEGER},
+      goodType = #{goodtype,jdbcType=INTEGER},
+      balanceWay = #{balanceway,jdbcType=INTEGER},
+      oneSelfCat = #{oneselfcat,jdbcType=VARCHAR},
+      saleDate = #{saledate,jdbcType=TIMESTAMP},
+      notSaleDate = #{notsaledate,jdbcType=TIMESTAMP},
+      goodStatus = #{goodstatus,jdbcType=INTEGER},
+      auditeDate = #{auditedate,jdbcType=TIMESTAMP},
+      createdDate = #{createddate,jdbcType=TIMESTAMP},
+      lastUpdateDate = #{lastupdatedate,jdbcType=TIMESTAMP},
+      tempStoreGoodsFlag = #{tempstoregoodsflag,jdbcType=INTEGER},
+      platorself = #{platorself,jdbcType=INTEGER},
+      onsaleTime = #{onsaletime,jdbcType=DATE},
+      downsaleTime = #{downsaletime,jdbcType=DATE},
+      goodsStatus = #{goodsstatus,jdbcType=INTEGER}
+      deviceno = #{deviceno,jdbcType=VARCHAR},
+      virtualCateIds = #{virtualcateids,jdbcType=VARCHAR},
+      deflag = #{deflag,jdbcType=INTEGER}
+    where tGoodInfoId = #{tgoodinfoid,jdbcType=INTEGER}
+  </update>
+</mapper>

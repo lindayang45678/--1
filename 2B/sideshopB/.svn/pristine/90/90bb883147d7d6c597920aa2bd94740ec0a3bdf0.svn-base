@@ -1,0 +1,129 @@
+package com.lakala.module.user.controller;
+
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.ShopUpdateInfoService;
+import com.lakala.module.user.vo.TstoreApprove;
+import com.lakala.util.ReturnMsg;
+
+
+@Component
+@RequestMapping("/shopupdate")
+public class ShopUpdateController {
+	
+	private static Logger logger = Logger.getLogger(ShopUpdateController.class);
+	
+	@Autowired
+	private ShopUpdateInfoService shopUpdateInfoService;
+
+	/**
+	 * 查看店铺信息
+	 * @param id 店铺ID
+	 * @return
+	 */
+	@RequestMapping(value = "/shopupdate",method = RequestMethod.POST)
+	public @ResponseBody ObjectOutput<TstoreApprove> shopUpdateInfo(HttpServletRequest request, TstoreApprove input){
+		
+		ObjectOutput<TstoreApprove> info =  new ObjectOutput<TstoreApprove>();
+		if(null == input || null == input.getId_no() || !StringUtils.hasText(input.getPhoneno())){
+			logger.error("请求参数丢失");
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			info.set_ReturnMsg("输入参数不全，请输入身份证及手机号");
+			info.set_ReturnData(input);
+			return info;
+		}
+		if(input.getIdimage_positive() == null || "".equals(input.getIdimage_positive()) ){
+			logger.error("请求参数丢失");
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			info.set_ReturnMsg("输入参数不全，请输入身份证正面图片");
+			info.set_ReturnData(input);
+			return info;
+		}
+		if(input.getIdimage_negative() == null || "".equals(input.getIdimage_negative()) ){
+			logger.error("请求参数丢失");
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			info.set_ReturnMsg("输入参数不全，请输入身份证反面图片");
+			info.set_ReturnData(input);
+			return info;
+		}
+		if(input.getBusinessLicence() == null || "".equals(input.getBusinessLicence()) ){
+			logger.error("请求参数丢失");
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			info.set_ReturnMsg("输入参数不全，请输入营业执照图片");
+			info.set_ReturnData(input);
+			return info;
+		}
+		try {
+			//校验店铺是否已经注册
+			if(shopUpdateInfoService.checkShopExists(input) <= 0 && shopUpdateInfoService.checkShopExistsInTmemberb(input) <= 0){
+				info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				info.set_ReturnMsg("店铺未注册，请注册店铺！");
+				info.set_ReturnData(input);
+				return info;
+			}
+			
+			int type = shopUpdateInfoService.checkShopType(input);
+			//是否是标准店
+			if(type != 460){
+				info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				info.set_ReturnMsg("店铺不是标准店，不能升级！");
+				info.set_ReturnData(input);
+				return info;
+			}else if(type == 461){//是否已是旗舰店
+				info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				info.set_ReturnMsg("店铺已是旗舰店，不能再升级！");
+				info.set_ReturnData(input);
+				return info;
+			}
+			
+			return shopUpdateInfoService.shopUpdateInfo(request, input);
+		} catch (LakalaException e) {
+			logger.error("获取店铺信息失败！");
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			info.set_ReturnMsg("获取店铺信息失败！");
+			info.set_ReturnData(input);
+			return info;
+		}
+	}
+	
+	/**
+	 * 查看店铺信息
+	 * @param id 店铺ID
+	 * @return
+	 */
+	@RequestMapping(value = "/getshopupdate",method = RequestMethod.POST)
+	public @ResponseBody ObjectOutput<TstoreApprove> getShopInfo(HttpServletRequest request, @RequestParam String phoneno){
+		
+		ObjectOutput<TstoreApprove> info =  new ObjectOutput<TstoreApprove>();
+		try {
+			TstoreApprove store =  shopUpdateInfoService.getShopInfo(request, phoneno);
+			if(store != null){
+				info.set_ReturnCode(store.getApprovestate() + "");
+				info.set_ReturnData(store);
+			}else{
+				info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				info.set_ReturnData(null);
+				info.set_ReturnMsg("没有此店铺手机号数据！");
+			}
+
+		} catch (LakalaException e) {
+			logger.error("获取店铺信息失败！");
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			info.set_ReturnMsg("获取店铺信息失败！");
+			return info;
+		}
+		return info;
+	}
+}

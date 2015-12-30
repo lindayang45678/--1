@@ -1,0 +1,197 @@
+package com.lakala.util;
+
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+/**
+ * JPG图片处理
+ * 
+ */
+public class JPGPlug  {
+	
+	private int[] sizes;
+	
+	public static JPGPlug jpgplug;
+	
+	public JPGPlug(){
+		
+	}
+	
+	public JPGPlug(int[] sizes){
+		this.setSizes(sizes);
+	}
+	
+	/** 获取文件 */
+	public static JPGPlug getInstance(int[] sizes){
+		 if(jpgplug == null){
+			 jpgplug = new JPGPlug(sizes);
+		 }
+		 return jpgplug;
+	}
+	
+	/*
+	 * 生成商品图片
+	 */
+	public final void createProductImage(String destPath, File source) throws IOException {
+		if(!source.exists()) return;
+		
+		Image srcimg = javax.imageio.ImageIO.read(source);
+		final int width = srcimg.getWidth(null);
+		final int height = srcimg.getHeight(null);
+		
+		for (int i = 0; i < this.sizes.length; i++) {
+			int size = sizes[i];//缩放尺寸
+			Scale scale = getPhotoScale(width, height, size, size);
+			convertPhotoFile(srcimg,new File(destPath + "/" + size + "/" + source.getName()),size,scale);
+		}
+		
+		srcimg = null;
+	}
+
+	/**
+	 * 商品图片生成
+	 * 
+	 * @param src
+	 * @param desc
+	 * @param width
+	 * @param height
+	 * @throws IOException
+	 */
+	protected void convertPhotoFile(Image src, File desc, int fixedsize, Scale scale)
+			throws IOException {
+		if(!desc.getParentFile().exists()){
+			desc.getParentFile().mkdirs();
+		}
+		BufferedImage tag;
+		if (fixedsize > 0) {
+			tag = new BufferedImage(fixedsize, fixedsize,
+					BufferedImage.TYPE_INT_RGB);
+			tag.getGraphics().setColor(Color.WHITE);
+			tag.getGraphics().fillRect(0, 0, fixedsize, fixedsize);
+			tag.getGraphics().drawImage(
+					src.getScaledInstance(scale.width, scale.height,
+							Image.SCALE_SMOOTH), (fixedsize - scale.width) / 2,
+					(fixedsize - scale.height) / 2, scale.width, scale.height,
+					null);
+		} else {
+			tag = new BufferedImage(scale.width, scale.height,
+					BufferedImage.TYPE_INT_RGB);
+			tag.getGraphics().drawImage(
+					src.getScaledInstance(scale.width, scale.height,
+							Image.SCALE_SMOOTH), 0, 0, scale.width,
+					scale.height, null);
+		}
+
+		ImageIO.write(tag, "JPEG", desc);
+		
+		tag = null;
+	}
+
+	/**
+	 * 生成指定尺寸的图片
+	 * @param sourcewidth
+	 * @param sourceheight
+	 * @return
+	 */
+	protected final static Scale getPhotoScale(int sourcewidth,
+			int sourceheight, int destwidth, int destheight) {
+		return scalephoto(true, destwidth, destheight, sourcewidth, sourceheight);
+	}
+	
+	/**
+	 * 
+	 * @param autoscale
+	 *            是否自动对两边进行对比后再缩放
+	 * @param scaleper
+	 * @param sourcewidth
+	 * @param sourceheight
+	 * @return
+	 */
+	protected final static JPGPlug.Scale scalephoto(boolean autoscale,
+			int scalewidth, int scaleheight, int sourcewidth, int sourceheight) {
+		int descwidth = sourcewidth, descheight = sourceheight;
+		int temps = sourcewidth;
+		int tempscale = scalewidth;
+		if (autoscale && sourceheight > sourcewidth) {
+			temps = sourceheight;
+			tempscale = scaleheight;
+		}
+		if (temps > tempscale) {
+			double scaleper = (double) (temps - tempscale) / temps;
+			if (autoscale && sourceheight > sourcewidth) {
+				descheight = scaleheight;
+				descwidth = (int) (sourcewidth - scaleper * sourcewidth);
+			} else {
+				descwidth = scalewidth;
+				descheight = (int) (sourceheight - scaleper * sourceheight);
+			}
+		}
+		JPGPlug.Scale newScale = new JPGPlug().new Scale(sourcewidth,
+				sourceheight, descwidth, descheight);
+		return newScale;
+	}
+
+	public int[] getSizes() {
+		return sizes;
+	}
+
+	public void setSizes(int[] sizes) {
+		this.sizes = sizes;
+	}
+
+	public class Scale {
+		public int width;
+		public int height;
+		public int oldwidth;
+		public int oldheight;
+
+		public Scale() {
+
+		}
+
+		public Scale(int oldwidth, int oldheight, int width, int height) {
+			this.oldheight = oldwidth;
+			this.oldheight = oldheight;
+			this.width = width;
+			this.height = height;
+		}
+
+		public int getWidth() {
+			return width;
+		}
+
+		public void setWidth(int width) {
+			this.width = width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public void setHeight(int height) {
+			this.height = height;
+		}
+
+		public int getOldwidth() {
+			return oldwidth;
+		}
+
+		public void setOldwidth(int oldwidth) {
+			this.oldwidth = oldwidth;
+		}
+
+		public int getOldheight() {
+			return oldheight;
+		}
+
+		public void setOldheight(int oldheight) {
+			this.oldheight = oldheight;
+		}
+
+	}
+
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>发票信息</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="fill.html" class="x-close">x</a>
+		<h1>发票信息</h1>
+	</header>
+	<section class="container invoice-wrap">
+		<ul class="invoice-index">
+			<li><i>发票类型：</i><em class="personal invoice-ok">个人</em><em class="invoice-company">公司</em></li>
+			<li class="hidden"><i>发票抬头：</i><input type="text"/></li>
+		</ul>
+		<div class="wrap">
+			<a href="#" class="btn-red invoice-sure">确定</a>
+		</div>
+	</section>	
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/accounts/login.js"></script>
+</html>

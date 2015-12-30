@@ -1,0 +1,24 @@
+$(function() {
+	$("#btnRegister").on("tap", function() {
+		var mobile = $.trim($("#mobile").val());
+		var verificationCode=$.trim($("#verificationCode").val()); //验证码
+		var pwd = $.trim($("#pwd").val());
+		var data = {"mobile":mobile,"verificationCode":verificationCode,"pwd":pwd};
+		var resultJson = ajaxCommon(urlRegister, data);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			alert(1);
+			var userToken = resultJson._ReturnData.token;
+			var userName = resultJson._ReturnData.userName;
+			var userType = resultJson._ReturnData.userType;
+
+			if(token == "") {
+				storage.setItem("token", userToken);
+			}
+			storage.setItem("mobile", mobile);
+			storage.setItem(hasLogined, "1");
+			window.location.href = "shop.html?t=" + t;
+		} else {
+			alert(resultJson._ReturnMsg);
+		}
+	});
+});

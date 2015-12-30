@@ -1,0 +1,598 @@
+package com.lakala.module.order.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.model.Torder;
+import com.lakala.model.order.OrderInfo;
+import com.lakala.model.order.OrderProviderQueryInfo;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.model.Constant;
+import com.lakala.module.order.service.OrderService;
+import com.lakala.module.order.vo.OrderCntOutput;
+import com.lakala.module.order.vo.OrderDetailInput;
+import com.lakala.module.order.vo.OrderDetailOutput;
+import com.lakala.module.order.vo.OrderCntInput;
+import com.lakala.module.order.vo.OrderInfoInput;
+import com.lakala.module.order.vo.OrderInfoOutput;
+import com.lakala.module.order.vo.OrderMultQueryInput;
+import com.lakala.module.order.vo.OrderMultQueryOutput;
+import com.lakala.module.sreturn.model.ReturnMoble;
+import com.lakala.util.ReturnMsg;
+
+
+@Service("OrderServiceBean")
+public class OrderServiceImpl implements OrderService {
+	
+	Logger logger = Logger.getLogger(OrderServiceImpl.class);
+	
+	@Autowired
+    private  com.lakala.mapper.r.order.TorderMapper torderMapper_R;
+	
+	@Autowired
+	private com.lakala.mapper.r.returns.ReturnMapper returnMapper_R;
+
+
+	@Override
+	public Torder loadOrderByKey(String orderId) throws LakalaException{
+		//判断orderId合法性
+		if(orderId == null || orderId.equalsIgnoreCase("")) return null;
+		Torder order = null;
+		try{
+			order = torderMapper_R.selectByPrimaryKey(orderId);
+		}catch(Exception e){
+			throw new LakalaException(e.getMessage());
+		}
+		return order;
+	}
+
+	@Override
+	public List<Torder> listOrderByKey(String key) throws LakalaException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	@Override
+	public ObjectOutput orderMultiquery(OrderMultQueryInput orderinput)
+			throws LakalaException {
+
+		ObjectOutput data = new ObjectOutput();
+		if (orderinput == null || StringUtils.isEmpty(orderinput.getSiteno())) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return data;
+		}
+
+		List<OrderProviderQueryInfo> orderproviderlist = new ArrayList<OrderProviderQueryInfo>(); 
+		List list = new ArrayList(); // 包括订单总数和订单id List
+		Integer total = 0;
+		Map<String, Object> map = new HashMap();
+		OrderMultQueryOutput info = new OrderMultQueryOutput();
+
+		String[] stateattr = {};
+		String[] sourceattr = {};
+		String[] ispayattr = {};
+		String[] paychannelattr = {};
+		String state = orderinput.getState();
+		String source = orderinput.getSource();
+		String ispay = orderinput.getIspay();
+		String paychannel = orderinput.getPaychannel();
+		String torderid = orderinput.getTorderid();
+		String starttime = orderinput.getStarttime();
+		String endtime = orderinput.getEndtime();
+		String custelno = orderinput.getCustelno();
+		String mobile = orderinput.getMobile();
+		String is3h = orderinput.getIs3h();
+		String ispfchannelcode = orderinput.getIspfchannelcode();
+		String nopfchannelcode = orderinput.getNopfchannelcode();
+		String siteno = orderinput.getSiteno();
+		// yes-标识查询订单总数；no-不查订单总数(传空也标识不查订单总数)
+		String queryordertotal = orderinput.getQueryordertotal();
+
+		Integer page = orderinput.getPage() == null ? 1 : orderinput.getPage();
+		Integer rows = orderinput.getPageSize() == null ? 10 : orderinput
+				.getPageSize();
+		Integer start = (page - 1) * rows;
+		map.put("start", start);
+		map.put("rows", rows);
+
+		// 待发货显示已支付的，或者货到付款的
+		map.put("ispayfornodeliver", "true");
+		map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+
+		if (!StringUtils.isEmpty(state)) {
+			state = orderinput.getState();
+			if (state.startsWith(",")) {
+				stateattr = state.substring(1).split(",");
+			} else {
+				stateattr = state.split(",");
+			}
+			map.put("stateids", stateattr);
+		}
+
+		if (!StringUtils.isEmpty(source)) {
+			if (source.startsWith(",")) {
+				sourceattr = source.substring(1).split(",");
+			} else {
+				sourceattr = source.split(",");
+			}
+			map.put("sourceids", sourceattr);
+		}
+
+		if (!StringUtils.isEmpty(ispay)) {
+			if (ispay.startsWith(",")) {
+				ispayattr = ispay.substring(1).split(",");
+			} else {
+				ispayattr = ispay.split(",");
+			}
+			map.put("ispays", ispayattr);
+		}
+		if (!StringUtils.isEmpty(paychannel)) {
+			if (paychannel.startsWith(",")) {
+				paychannelattr = paychannel.substring(1).split(",");
+			} else {
+				paychannelattr = paychannel.split(",");
+			}
+			map.put("paychannels", paychannelattr);
+		}
+
+		if (!StringUtils.isEmpty(torderid)) {
+			map.put("torderid", torderid);
+		}
+
+		if (!StringUtils.isEmpty(starttime)) {
+			map.put("starttime", starttime);
+		}
+
+		if (!StringUtils.isEmpty(orderinput.getEndtime())) {
+			map.put("endtime", endtime);
+		}
+
+		if (!StringUtils.isEmpty(custelno)) {
+			map.put("custelno", custelno);
+		}
+
+		if (!StringUtils.isEmpty(mobile)) {
+			map.put("mobile", mobile);
+		}
+
+		if (!StringUtils.isEmpty(is3h)) {
+			map.put("is3h", is3h);
+		}
+
+		if (!StringUtils.isEmpty(ispfchannelcode)) {
+			map.put("ispfchannelcode", "true");
+		}
+
+		if (!StringUtils.isEmpty(nopfchannelcode)) {
+			map.put("nopfchannelcode", "true");
+		}
+		
+		if (!StringUtils.isEmpty(siteno)) {
+			map.put("siteno", siteno);
+		}
+
+		try {
+			orderproviderlist = torderMapper_R
+					.queryCommonOrderProviderByMap(map);
+			info.setOrderproviderlist(orderproviderlist);
+
+			// yes-标识查询订单总数；no-不查订单总数(传空也标识不查订单总数)
+			if (!StringUtils.isEmpty(queryordertotal)
+					&& "yes".equals(queryordertotal)) {
+				total = torderMapper_R.countCommonOrderProviderByMap(map);
+				info.setTotal(total);
+			}
+			data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			data.set_ReturnData(info);
+			data.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		} catch (Exception e) {
+			throw new LakalaException(e.getMessage());
+		}
+
+		return data;
+	}
+	
+	
+
+	@Override
+	public List<OrderInfo> queryCommonOrderByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return torderMapper_R.queryCommonOrderByMap(map);
+	}
+
+	@Override
+	public Integer countCommonOrderByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return torderMapper_R.countCommonOrderByMap(map);
+	}
+
+	@Override
+	public ObjectOutput orderView(OrderDetailInput orderdetailinput)
+			throws LakalaException {
+		// TODO Auto-generated method stub
+		ObjectOutput data = new ObjectOutput();
+		if(orderdetailinput == null||StringUtils.isEmpty(orderdetailinput.getSiteno())){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return data;
+		}
+		
+		OrderDetailOutput info = new OrderDetailOutput();
+		try{
+			OrderProviderQueryInfo orderproviderinfo = torderMapper_R.viewCommonOrderProviderByMap(orderdetailinput);
+			info.setOrderproviderqueryinfo(orderproviderinfo);
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new LakalaException(e.getMessage());
+		}
+		
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(info);
+		data.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		return data;
+	}
+    
+	
+	@Override
+	public ObjectOutput orderEntryCnt(OrderCntInput ordercntinput)
+			throws LakalaException {
+		// TODO Auto-generated method stub
+		
+		ObjectOutput data = new ObjectOutput();
+		if (ordercntinput == null
+				|| StringUtils.isEmpty(ordercntinput.getOrdercate())
+				|| StringUtils.isEmpty(ordercntinput.getSiteno())
+				|| (!"pfjh".equals(ordercntinput.getOrdercate())
+						&& !"lsdd".equals(ordercntinput.getOrdercate()) && !"xdzsh"
+							.equals(ordercntinput.getOrdercate()))) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return data;
+		}
+
+		OrderCntOutput info = new OrderCntOutput();
+		try{
+			info = getOrderEntryCnt(ordercntinput);
+		}catch(Exception e){
+			throw new LakalaException(e.getMessage());
+		}
+		
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(info);
+		data.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		return data;
+	}
+	
+	
+	/**
+	 * 根据输入返回OrderCntOutput实体
+	 * @param ordercntinput
+	 * @return  OrderCntOutput实体
+	 * @author: yhg 
+	 * @time: 2015年3月12日 下午6:04:55
+	 * @todo: TODO
+	 */
+	public OrderCntOutput getOrderEntryCnt(OrderCntInput ordercntinput){
+		
+		OrderCntOutput info = new OrderCntOutput();
+		String siteno = ordercntinput.getSiteno();
+		
+         if("pfjh".equals(ordercntinput.getOrdercate())){
+			
+        	Integer pf2needpaynum = 0;    //待付款总数-用于批发订单
+        	Integer pf2nodelivernum = 0;  //待发货总数-用于批发订单
+        	Integer pf2deliverednum = 0;  //已发货总数-用于批发订单
+        	Integer pf2partreceivenum = 0; //部分收货总数-用于批发订单
+        	Integer pf2receivednum = 0;  //已收货总数-用于批发订单
+        	
+        	Map<String,Object> pf_needpay_map = new HashMap<String,Object>();  //待发货总数-用于批发订单
+        	pf_needpay_map.put("mobile", ordercntinput.getMobile());
+        	pf_needpay_map.put("ispfchannelcode", "true");
+        	pf_needpay_map.put("state", Constant.TORDER_STATE_WFH);
+        	pf_needpay_map.put("ispay", Constant.TORDER_ISPAY_DZF);
+        	pf_needpay_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+        	pf_needpay_map.put("isrestore", Constant.TORDER_ISRESTORE_WTB);
+        	pf2needpaynum = torderMapper_R.countCommonOrderByMap(pf_needpay_map);
+			
+			Map<String,Object> pf_nodeliver_map = new HashMap<String,Object>();  //待发货总数-用于批发订单
+			pf_nodeliver_map.put("siteno", siteno);
+			pf_nodeliver_map.put("ispfchannelcode", "true");
+			pf_nodeliver_map.put("state", Constant.TORDER_STATE_WFH);
+			pf_nodeliver_map.put("ispayfornodeliver", "true");
+			pf_nodeliver_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			pf2nodelivernum = torderMapper_R.countCommonOrderProviderByMap(pf_nodeliver_map);
+
+			Map<String,Object> pf_delivered_map = new HashMap<String,Object>();  //已发货总数-用于批发订单
+			pf_delivered_map.put("siteno", siteno);
+			pf_delivered_map.put("ispfchannelcode", "true");
+			pf_delivered_map.put("state", Constant.TORDER_STATE_YFH);
+			pf_delivered_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			pf2deliverednum = torderMapper_R.countCommonOrderProviderByMap(pf_delivered_map);
+
+			Map<String,Object> pf_partreceive_map = new HashMap<String,Object>();  //部分收货总数-用于批发订单
+			pf_partreceive_map.put("siteno", siteno);
+			pf_partreceive_map.put("ispfchannelcode", "true");
+			pf_partreceive_map.put("state", Constant.TORDER_STATE_BFQS);
+			pf_partreceive_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			pf2partreceivenum = torderMapper_R.countCommonOrderProviderByMap(pf_partreceive_map);
+
+			Map<String,Object> pf_received_map = new HashMap<String,Object>();  //已收货总数-用于批发订单
+			pf_received_map.put("siteno", siteno);
+			pf_received_map.put("ispfchannelcode", "true");
+			pf_received_map.put("state", Constant.TORDER_STATE_YQS);
+			pf_received_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			pf2receivednum = torderMapper_R.countCommonOrderProviderByMap(pf_received_map);
+			
+			info.setPf2needpaynum(pf2needpaynum==null?0:pf2needpaynum);  //待付款总数-用于批发订单
+			info.setPf2nodelivernum(pf2nodelivernum==null?0:pf2nodelivernum);  //待发货总数-用于批发订单
+			info.setPf2deliverednum(pf2deliverednum==null?0:pf2deliverednum);  //已发货总数-用于批发订单
+			info.setPf2partreceivenum(pf2partreceivenum==null?0:pf2partreceivenum);  //部分收货总数-用于批发订单
+			info.setPf2receivednum(pf2receivednum==null?0:pf2receivednum);  //已收货总数-用于批发订单
+			
+		}else if("lsdd".equals(ordercntinput.getOrdercate())){
+			
+			Integer ls2nodelivernum = 0;  //待发货总数-用于零售订单
+			Integer ls2deliverednum = 0;  //已发货总数 -用于零售订单
+			Integer ls2signednum = 0;  //已签收数 -用于零售订单
+			Integer ls2aftersalenum = 0;  //售后总数 -用于零售订单
+			
+			Map<String,Object> ls_nodeliver_map = new HashMap<String,Object>();   //待发货总数-用于零售订单
+			ls_nodeliver_map.put("siteno", siteno);
+			ls_nodeliver_map.put("nopfchannelcode", "true");
+			ls_nodeliver_map.put("state", Constant.TORDER_STATE_WFH);
+			ls_nodeliver_map.put("ispayfornodeliver", "true");
+			ls_nodeliver_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			ls2nodelivernum = torderMapper_R.countCommonOrderProviderByMap(ls_nodeliver_map);
+
+			Map<String,Object> ls_delivered_map = new HashMap<String,Object>(); //已发货总数 -用于零售订单
+			ls_delivered_map.put("siteno", siteno);
+			ls_delivered_map.put("nopfchannelcode", "true");
+			ls_delivered_map.put("state", Constant.TORDER_STATE_YFH);
+			ls_delivered_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			ls2deliverednum = torderMapper_R.countCommonOrderProviderByMap(ls_delivered_map);
+
+			Map<String,Object> ls_signed_map = new HashMap<String,Object>(); //已签收总数 -用于零售订单
+			ls_signed_map.put("siteno", siteno);
+			ls_signed_map.put("nopfchannelcode", "true");
+			ls_signed_map.put("state", Constant.TORDER_STATE_YQS);
+			ls_signed_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			ls2signednum = torderMapper_R.countCommonOrderProviderByMap(ls_signed_map);
+
+			Map<String,Object> ls_aftersale_map = new HashMap<String,Object>(); //售后总数 -用于零售订单
+			ls_aftersale_map.put("mobile", ordercntinput.getMobile());
+			ls2aftersalenum = returnMapper_R.countAllByMobile(ls_aftersale_map);
+			
+			
+			info.setLs2nodelivernum(ls2nodelivernum==null?0:ls2nodelivernum);  //待发货总数-用于零售订单
+			info.setLs2deliverednum(ls2deliverednum==null?0:ls2deliverednum);  //已发货总数 -用于零售订单
+			info.setLs2signednum(ls2signednum==null?0:ls2signednum);  //已发货总数 -用于零售订单
+			info.setLs2aftersalenum(ls2aftersalenum==null?0:ls2aftersalenum);  //售后总数 -用于零售订单
+			
+		}
+			
+            //根据原型，店主送货数量不管在批发还是零售时候，其分类上需展示数量
+			Integer sxneedbsendnum = 0;   //需店主送货订单总数-用于需店主送货
+			Map<String,Object> sx_needbsend_map = new HashMap<String,Object>(); //需店主送货订单总数-用于需店主送货
+			sx_needbsend_map.put("siteno", siteno);
+			sx_needbsend_map.put("is3h", Constant.TORDER_IS3H_3H5H);
+			sx_needbsend_map.put("isdelivertohome", Constant.TORDER_ISDELIVERTOHOME_KDDJ);
+			sx_needbsend_map.put("state", Constant.TORDER_STATE_YFH);
+            //待发货显示已支付的，或者货到付款的
+			sx_needbsend_map.put("ispayfornodeliver", "true");
+			sx_needbsend_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			sxneedbsendnum = torderMapper_R.countCommonOrderByMap(sx_needbsend_map);
+			
+			info.setSxneedbsendnum(sxneedbsendnum==null?0:sxneedbsendnum);  //需店主送货订单总数-用于需店主送货
+         
+         return info;
+	}
+	
+	
+	
+	/**
+	 * 根据输入返回OrderInfoOutput实体
+	 * @param OrderInfoInput
+	 * @return  OrderInfoOutput实体
+	 * @author: yhg 
+	 * @time: 2015年3月12日 下午6:04:55
+	 * @todo: TODO
+	 */
+	public OrderInfoOutput getOrderEntryList(OrderInfoInput orderinfoinput){
+		
+		OrderInfoOutput info = new OrderInfoOutput();
+		List<OrderInfo> orderlist = new ArrayList<OrderInfo>();
+		List<OrderProviderQueryInfo> orderproviderlist = new ArrayList<OrderProviderQueryInfo>();
+		List<ReturnMoble> returnlist = new ArrayList<ReturnMoble>();
+		Integer page = orderinfoinput.getPage()==null?1:orderinfoinput.getPage();
+		Integer rows = orderinfoinput.getPageSize()==null?10:orderinfoinput.getPageSize();
+        Integer start = (page - 1) * rows;
+        String siteno = orderinfoinput.getSiteno();
+		
+		/**--订单查询类别
+		 *
+		 *     代码     :备注
+		 *  pfdfk  :待付款-用于批发订单;   
+			pfdfh  :待发货-用于批发订单;
+			pfyfh  :已发货-用于批发订单;
+			pfbfsh :部分收货-用于批发订单;
+			pfysh  :已收货-用于批发订单;
+			lsdfh  :待发货-用于零售订单;
+			lsyfh  :已发货 -用于零售订单;
+			lsyqs  :已签收 -用于零售订单;
+			lssh   :售后 -用于零售订单;
+			sxxdzsh:需店主送货订单-用于需店主送货; 
+		--**/
+        if("pfdfk".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> pf_needpay_map = new HashMap<String,Object>();  //待发货总数-用于批发订单
+			pf_needpay_map.put("start", start);
+			pf_needpay_map.put("rows", rows);
+			pf_needpay_map.put("mobile", orderinfoinput.getMobile());
+			pf_needpay_map.put("ispfchannelcode", "true");
+			pf_needpay_map.put("state", Constant.TORDER_STATE_WFH);
+			pf_needpay_map.put("ispay", Constant.TORDER_ISPAY_DZF);
+			pf_needpay_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			pf_needpay_map.put("isrestore", Constant.TORDER_ISRESTORE_WTB);
+			orderlist = torderMapper_R.queryCommonOrderByMap(pf_needpay_map);
+			info.setOrderlist(orderlist);
+		}else if("pfdfh".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> pf_nodeliver_map = new HashMap<String,Object>();  //待发货总数-用于批发订单
+			pf_nodeliver_map.put("start", start);
+			pf_nodeliver_map.put("rows", rows);
+			pf_nodeliver_map.put("siteno", siteno);
+			pf_nodeliver_map.put("ispfchannelcode", "true");
+			pf_nodeliver_map.put("state", Constant.TORDER_STATE_WFH);
+			pf_nodeliver_map.put("ispayfornodeliver", "true");
+			pf_nodeliver_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			orderproviderlist = torderMapper_R.queryCommonOrderProviderByMap(pf_nodeliver_map);
+		}else if("pfyfh".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> pf_delivered_map = new HashMap<String,Object>();  //已发货总数-用于批发订单
+			pf_delivered_map.put("start", start);
+			pf_delivered_map.put("rows", rows);
+			pf_delivered_map.put("siteno", siteno);
+			pf_delivered_map.put("ispfchannelcode", "true");
+			pf_delivered_map.put("state", Constant.TORDER_STATE_YFH);
+			pf_delivered_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			orderproviderlist = torderMapper_R.queryCommonOrderProviderByMap(pf_delivered_map);
+		}else if("pfbfsh".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> pf_partreceive_map = new HashMap<String,Object>();  //部分收货总数-用于批发订单
+			pf_partreceive_map.put("start", start);
+			pf_partreceive_map.put("rows", rows);
+			pf_partreceive_map.put("siteno", siteno);
+			pf_partreceive_map.put("ispfchannelcode", "true");
+			pf_partreceive_map.put("state", Constant.TORDER_STATE_BFQS);
+			pf_partreceive_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			orderproviderlist = torderMapper_R.queryCommonOrderProviderByMap(pf_partreceive_map);
+			
+		}else if("pfysh".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> pf_received_map = new HashMap<String,Object>();  //已收货总数-用于批发订单
+			pf_received_map.put("start", start);
+			pf_received_map.put("rows", rows);
+			pf_received_map.put("siteno", siteno);
+			pf_received_map.put("ispfchannelcode", "true");
+			pf_received_map.put("state", Constant.TORDER_STATE_YQS);
+			pf_received_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			orderproviderlist = torderMapper_R.queryCommonOrderProviderByMap(pf_received_map);
+			
+		}else if("lsdfh".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> ls_nodeliver_map = new HashMap<String,Object>();   //待发货总数-用于零售订单
+			ls_nodeliver_map.put("start", start);
+			ls_nodeliver_map.put("rows", rows);
+			ls_nodeliver_map.put("siteno", siteno);
+			ls_nodeliver_map.put("nopfchannelcode", "true");
+			ls_nodeliver_map.put("state", Constant.TORDER_STATE_WFH);
+			ls_nodeliver_map.put("ispayfornodeliver", "true");
+			ls_nodeliver_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			orderproviderlist = torderMapper_R.queryCommonOrderProviderByMap(ls_nodeliver_map);
+			
+		}else if("lsyfh".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> ls_delivered_map = new HashMap<String,Object>(); //已发货总数 -用于零售订单
+			ls_delivered_map.put("start", start);
+			ls_delivered_map.put("rows", rows);
+			ls_delivered_map.put("siteno", siteno);
+			ls_delivered_map.put("nopfchannelcode", "true");
+			ls_delivered_map.put("state", Constant.TORDER_STATE_YFH);
+			ls_delivered_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			orderproviderlist = torderMapper_R.queryCommonOrderProviderByMap(ls_delivered_map);
+			
+		}else if("lsyqs".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> ls_signed_map = new HashMap<String,Object>(); //已签收总数 -用于零售订单
+			ls_signed_map.put("start", start);
+			ls_signed_map.put("rows", rows);
+			ls_signed_map.put("siteno", siteno);
+			ls_signed_map.put("nopfchannelcode", "true");
+			ls_signed_map.put("state", Constant.TORDER_STATE_YQS);
+			ls_signed_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			orderproviderlist = torderMapper_R.queryCommonOrderProviderByMap(ls_signed_map);
+			
+		}else if("lssh".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> ls_aftersale_map = new HashMap<String,Object>(); //售后总数 -用于零售订单
+			ls_aftersale_map.put("page", start);
+			ls_aftersale_map.put("rows", rows);
+			ls_aftersale_map.put("mobile", orderinfoinput.getMobile()); //零售售后传手机号
+			returnlist = returnMapper_R.findAllByMobile(ls_aftersale_map);
+			info.setReturnlist(returnlist);
+			
+		}else if("sxxdzsh".equals(orderinfoinput.getQuerytype())){
+			Map<String,Object> sx_needbsend_map = new HashMap<String,Object>(); //需店主送货订单总数-用于需店主送货
+			sx_needbsend_map.put("start", start);
+			sx_needbsend_map.put("rows", rows);
+			sx_needbsend_map.put("siteno", siteno);
+			sx_needbsend_map.put("is3h", Constant.TORDER_IS3H_3H5H);
+			sx_needbsend_map.put("isdelivertohome", Constant.TORDER_ISDELIVERTOHOME_KDDJ);
+			sx_needbsend_map.put("state", Constant.TORDER_STATE_YFH);
+            //待发货显示已支付的，或者货到付款的
+			sx_needbsend_map.put("ispayfornodeliver", "true");
+			sx_needbsend_map.put("cancelstate", Constant.TORDER_CANCELSTATE_WQX);
+			orderproviderlist = torderMapper_R.queryCommonOrderProviderByMap(sx_needbsend_map);
+		}
+		
+		info.setOrderproviderlist(orderproviderlist);
+        return info;
+	}
+
+	@Override
+	public ObjectOutput orderEntryList(OrderInfoInput orderinfoinput)
+			throws LakalaException {
+		// TODO Auto-generated method stub
+		ObjectOutput data = new ObjectOutput();
+		
+		/**--订单查询类别
+		 *
+		 *     代码     :备注
+		 *  pfdfk  :待付款-用于批发订单;
+			pfdfh  :待发货-用于批发订单;
+			pfyfh  :已发货-用于批发订单;
+			pfbfsh :部分收货-用于批发订单;
+			pfysh  :已收货-用于批发订单;
+			lsdfh  :待发货-用于零售订单;
+			lsyfh  :已发货 -用于零售订单;
+			lsyqs  :已签收 -用于零售订单;
+			lssh   :售后 -用于零售订单;
+			sxxdzsh:需店主送货订单-用于需店主送货; 
+		--**/
+		
+		if (orderinfoinput == null
+				|| StringUtils.isEmpty(orderinfoinput.getQuerytype())
+				|| StringUtils.isEmpty(orderinfoinput.getSiteno())
+				|| !("pfdfk".equals(orderinfoinput.getQuerytype())
+						||"pfdfh".equals(orderinfoinput.getQuerytype())
+						|| "pfyfh".equals(orderinfoinput.getQuerytype())
+						|| "pfyfh".equals(orderinfoinput.getQuerytype())
+						|| "pfbfsh".equals(orderinfoinput.getQuerytype())
+						|| "pfysh".equals(orderinfoinput.getQuerytype())
+						|| "lsdfh".equals(orderinfoinput.getQuerytype())
+						|| "lsyfh".equals(orderinfoinput.getQuerytype())
+						|| "lsyqs".equals(orderinfoinput.getQuerytype())
+						|| "lssh".equals(orderinfoinput.getQuerytype()) 
+						|| "sxxdzsh".equals(orderinfoinput.getQuerytype()))
+						) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return data;
+		}
+
+		OrderInfoOutput info = new OrderInfoOutput();
+		try{
+			info = getOrderEntryList(orderinfoinput);
+		}catch(Exception e){
+			throw new LakalaException(e.getMessage());
+		}
+		
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(info);
+		data.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		return data;
+	}
+
+	
+}

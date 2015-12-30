@@ -1,0 +1,376 @@
+package com.lakala.util;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import org.springframework.util.StringUtils;
+
+import com.lakala.model.Torder;
+import com.lakala.module.order.model.Constant;
+
+public class SendMessageUtil {
+	
+	private static ExecutorService threadPool = Executors.newCachedThreadPool();
+	public static String sendSms(String mobile,String message) throws IOException {
+		String pUrl="http://10.1.80.44:8080/sms/authcode";
+		URL urlObject = new URL(pUrl);
+		HttpURLConnection urlConn = (HttpURLConnection) urlObject.openConnection();
+	    urlConn.setDoInput(true);
+	    urlConn.setDoOutput(true);
+	    urlConn.setRequestMethod("POST");
+	    urlConn.connect();
+	    BufferedWriter ou = new BufferedWriter(new OutputStreamWriter(urlConn.getOutputStream()));
+	    ou.write("m="+mobile+"&c="+message);
+	    ou.flush();
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(),"utf-8"));//设置编码,否则中文乱码
+        String line;
+        String lines = "";
+        while ((line = reader.readLine()) != null){
+            lines += line;
+        }
+        reader.close();
+        // 断开连接
+        return lines;
+	}
+	public static void sendmsg(String type,String mobile,Long ordercount,Long goodscount){
+		//发送给店主
+		String message = "恭喜您订购成功！您在拉卡拉社区商城的"+ordercount+"个订单，"+goodscount+"件商品会尽快配送到您的收货地址，请您耐心等待！关注微信号拉卡拉身边小店惊喜不断！";
+		if(type.equals("kddd")){
+			String kdddmobile = cusnamecheck(mobile);
+			if(!kdddmobile.equals("")){
+				try {
+					SendMessageUtil.sendSms(kdddmobile, message);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}else{
+			if(!mobile.equals("")){
+				try {
+					SendMessageUtil.sendSms(mobile, message);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
+	    //店主微信
+		public static String sendGoodDeliveringForSaler(String mobile, String title, String deliverName, String orderName, String reMark, String urlparam) throws IOException {
+			String pUrl="http://10.1.80.44:8080/weixinSendMessage/send/2";
+			URL urlObject = new URL(pUrl);
+			HttpURLConnection urlConn = (HttpURLConnection) urlObject.openConnection();
+		    urlConn.setDoInput(true);
+		    urlConn.setDoOutput(true);
+		    urlConn.setRequestMethod("POST");
+		    urlConn.connect();
+		    BufferedWriter ou = new BufferedWriter(new OutputStreamWriter(urlConn.getOutputStream()));
+		    ou.write("mobile="+mobile+"&title="+title+"&deliverName="+deliverName+"&orderName="+orderName+"&reMark="+reMark+"&urlparam="+urlparam); 
+		    ou.flush();
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(),"utf-8"));//设置编码,否则中文乱码
+	        String line;
+	        String lines = "";
+	        while ((line = reader.readLine()) != null){
+	            lines += line;
+	        }
+	        reader.close();
+	        // 断开连接
+	        return lines;
+		}
+		// 店主微信
+		public static String sendGoodDeliveringForCustomer(String mobile, String title, String deliverName, String orderName, String reMark, String urlparam) throws IOException {
+			String pUrl="http://10.1.80.44:8080/weixinSendMessage/send/3";
+			URL urlObject = new URL(pUrl);
+			HttpURLConnection urlConn = (HttpURLConnection) urlObject.openConnection();
+		    urlConn.setDoInput(true);
+		    urlConn.setDoOutput(true);
+		    urlConn.setRequestMethod("POST");
+		    urlConn.connect();
+		    BufferedWriter ou = new BufferedWriter(new OutputStreamWriter(urlConn.getOutputStream()));
+		    ou.write("mobile="+mobile+"&title="+title+"&deliverName="+deliverName+"&orderName="+orderName+"&reMark="+reMark+"&urlparam="+urlparam); 
+		    ou.flush();
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(),"utf-8"));//设置编码,否则中文乱码
+	        String line;
+	        String lines = "";
+	        while ((line = reader.readLine()) != null){
+	            lines += line;
+	        }
+	        reader.close();
+	        // 断开连接
+	        return lines;
+		}
+	
+	/**
+	 * 判定订单cusname()括号中的手机号
+	 * @param cusname
+	 * @return
+	 */
+	public static String cusnamecheck(String cusname){
+		String mobile = "";
+		if(StringUtil.verdict(cusname)){
+			if(cusname.indexOf("(")>-1 && cusname.indexOf(")")>-1){
+				mobile = cusname.substring(cusname.indexOf("(")+1, cusname.indexOf(")"));
+				if(StringUtil.verdict(mobile)){
+					return mobile;
+				}
+			}
+			if(cusname.indexOf("（")>-1 && cusname.indexOf("）")>-1){
+				mobile = cusname.substring(cusname.indexOf("（")+1, cusname.indexOf("）"));
+				if(StringUtil.verdict(mobile)){
+					return mobile;
+				}
+			}
+			if((cusname.indexOf("(") == -1 && cusname.indexOf(")") == -1)||(cusname.indexOf("（") == -1 && cusname.indexOf("）") == -1)){
+				if(cusname.indexOf("1")>-1){
+					mobile = cusname.substring(cusname.indexOf("1"));
+					if(StringUtil.verdict(mobile)){
+						return mobile;
+					}
+				}
+			}
+		}
+		return mobile;
+	}
+	
+	
+	//店主微信  多线程
+	public static String sendGoodDeliveringForSalerCallable(final String mobile, final String title, final String deliverName, final String orderName, final String reMark, final String urlparam) {
+	
+		String ret = "";
+		if(threadPool==null){
+			threadPool = Executors.newCachedThreadPool();
+		}
+		
+        Future<String> future = threadPool.submit(new Callable<String>() {  
+            public String call() throws Exception {  
+            	return sendGoodDeliveringForSaler(mobile,title,deliverName,orderName,reMark,urlparam);
+            }  
+        });
+		return ret;  
+    }
+	
+	
+	
+	
+	//顾客微信  多线程
+	public static String sendGoodDeliveringForCustomerCallable(final String mobile, final String title, final String deliverName, final String orderName, final String reMark, final String urlparam) {
+	
+		String ret = "";
+		
+		if(threadPool==null){
+			threadPool = Executors.newCachedThreadPool();
+		}
+		
+        Future<String> future = threadPool.submit(new Callable<String>() {  
+            public String call() throws Exception {  
+            	return sendGoodDeliveringForCustomer(mobile,title,deliverName,orderName,reMark,urlparam);
+            }  
+        });
+		return ret;  
+    }
+	
+	
+	//发货短信  多线程
+	public static String sendSmsCallable(final String mobile,final String message) throws IOException{
+		
+			String ret = "";
+			if(threadPool==null){
+				threadPool = Executors.newCachedThreadPool();
+			}
+			
+	        threadPool.submit(new Callable<String>() {  
+	            public String call() throws Exception {  
+	            	return sendSms(mobile,message);
+	            }  
+	        });
+			return ret;  
+	 }
+	
+	
+	/**
+	 * 订单取消给用户的短信
+	 * @param smsgoodMap
+	 * @param smspriceMap
+	 * @author: yhg 
+	 * @throws IOException 
+	 * @time: 2015年4月28日 下午3:25:09
+	 * @todo: TODO
+	 */
+	public static void sendMsgWhen2BCancel(
+			final String custelno,
+			Set<Integer> smsset,
+			Map<Integer, String> smsgoodMap,
+			Map<Integer, BigDecimal> smspriceMap) throws IOException{
+		
+		for(Integer sincecode : smsset){
+			
+			String smsgoodsname = smsgoodMap.get(sincecode)==null?"":String.valueOf(smsgoodMap.get(sincecode));
+			BigDecimal tempprice = (new BigDecimal(smspriceMap.get(sincecode).toString())).setScale(2, BigDecimal.ROUND_HALF_UP); //四舍五入
+			
+			String msgcontent =  "很抱歉，您购买的商品"+smsgoodsname+"，小店名称不能提供服务，订单已取消，如已支付的金额"+String.valueOf(tempprice)+"元会退回您支付的银行卡！";
+			SendMessageUtil.sendSms(custelno, msgcontent);
+		    WeixinTemplateMsgUtil.WeiXinGoodDeliveringForCustomerCallable(custelno, msgcontent, "拉卡拉自配送", String.valueOf(sincecode), "",null);
+		}
+		
+	}
+	
+	
+	/**
+	 * 下单短信微信提醒
+	 * @param order  订单实体
+	 * @param sms3hset  自提码set
+	 * @param smsgoodMap  自提码与商品名称集合对应的map.map.put(自提码,"商品名称1、商品名称2");
+	 * @param smspriceMap  自提码与商品goodsFinalPrice集合对应的map.map.put(自提码,"商品goodsFinalPrice+商品goodsFinalPrice的和");
+	 * @param smsorderproviderMap  自提码与供应商级订单对应的map.map.put(自提码,"供应商级订单");
+	 * @param smsaddrMap 自提码与发货地址对应的map.map.put(自提码,"地址全称");
+	 * @param paychannel 支付类型 240标识货到付款，非240标识在线付款
+	 * @author: yhg 
+	 * @time: 下午7:55:10
+	 * @todo: TODO
+	 * 备注，传入的订单实体中devcontactname1,devmobile分别对应店主的姓名和手机号，在快递到家时候必须赋值
+	 */
+	public static void sendMessageBy3hOrderDeliver(
+			Torder order,
+			Set<Integer> sms3hset, Map<Integer, String> smsgoodMap,
+			Map<Integer, BigDecimal> smspriceMap,
+			Map<Integer, String> smsorderproviderMap, 
+			Map<Integer, String> smsaddrMap,
+			int paychannel) {
+	    String dzmessage = "";  //店主短信内容
+		String gkmessage = "";  //顾客短信内容
+		String hdfkmsg = "";    //货到付款短信内容
+		String custelno = "";
+		String mobile = "";
+		String moneydes = "";
+		String weixin_remark = "如有问题，请电话联系客服，客服电话：4007666666";
+		Integer isdelivertohome = order.getIsdelivertohome();
+		String deliverName = "";
+		
+		mobile = order.getDevmobile();
+		
+		   if(Constants.TORDER_FROM_WAPSC.equals(order.getSource())){
+			   //顾客手机号
+			   custelno = order.getMembername();
+		   }else{
+			   //顾客手机号
+			   custelno = order.getCustelno();
+		   }
+		
+		
+				 for(Integer sincecode : sms3hset){
+					   
+					   String torderproviderid = "";
+					   String smsaddr = "";
+					   String smsgoodsname = "";
+					   torderproviderid = smsorderproviderMap.get(sincecode).toString();
+					   smsaddr = smsaddrMap.get(sincecode)==null?"":smsaddrMap.get(sincecode).toString();
+					   smsgoodsname = smsgoodMap.get(sincecode)==null?"":smsgoodMap.get(sincecode).toString();
+					   
+					   if(Constants.TORDER_PAYCHANNEL_HDFK == paychannel){
+						   if(!StringUtils.isEmpty(smspriceMap.get(sincecode))){
+							   BigDecimal tempprice = new BigDecimal(smspriceMap.get(sincecode).toString()); 
+							   //b=b.setScale(2, BigDecimal.ROUND_DOWN); //小数位 直接舍去
+							   tempprice=tempprice.setScale(2, BigDecimal.ROUND_HALF_UP); //四舍五入
+							   moneydes = "和"+tempprice.toString()+"元货款,";
+						   }else{
+							   moneydes = ",";
+						   }
+					   }else{
+						   moneydes = ",";
+					   }
+					   
+					   
+					//快递到店  顾客姓名 为 customer
+					   if(isdelivertohome==Constants.TORDER_ISDELIVERTOHOME_KDDD){
+						   
+						   deliverName = "到店自提";
+						   
+						   //小B
+						    dzmessage = "您好，请电话通知客户("+custelno+")到店取货（"+smsgoodsname+"），"
+						   		+ "客户取货时需向客户索要取货码"+moneydes
+						   				+ "并在http://m.lakalaec.com/express/tolist?orderId="+torderproviderid+"\t进行签收验证，"
+						   						+ "关注微信号"+Constant.WEIXIN_SHOPKEEPER+"赚钱秘籍等着你！"; 
+						    //小C
+						    gkmessage = "您好，您在拉卡拉身边小店购买的商品（"+smsgoodsname+"）已发货，取货时请出示取货码："+sincecode+"，"
+						    		+ "取货店铺:<"+ smsaddr +"、"+order.getCusname()+">，关注微信号拉卡拉身边小店惊喜不断！"; 
+					   }else{
+						//快递到家 
+						   
+						   deliverName = "送货上门";
+						   
+						   //小B
+						   dzmessage = "您好，客户（"+custelno+"）在贵店拉卡拉身边小店购买的商品（"+smsgoodsname+"）需要送货，"
+						   		+ "送货地址："+ smsaddr +","
+						   				+ "送货时需向客户索要取货码"+moneydes+"并在http://m.lakalaec.com/express/tolist?orderId="+torderproviderid+"\t进行签收验证，关注微信号"+Constant.WEIXIN_SHOPKEEPER+"赚钱秘籍等着你！";
+						   
+						   //小C
+						   gkmessage = "您好，您在拉卡拉身边小店购买的商品（"+smsgoodsname+"）已发货，"
+						   		+ "货物送达时请出示取货码:"+sincecode+",送货员电话："+order.getDevcontactname1()+"("+order.getDevmobile()+")，关注微信号拉卡拉身边小店惊喜不断！";
+					   }
+					   
+					   
+					try {
+						
+						 //给小B短信   mobile
+						System.out.println("order.getTowmsfalg() ========== " + order.getTowmsfalg());
+						if(null == order.getTowmsfalg()){
+							SendMessageUtil.sendSms(mobile, dzmessage);
+							WeixinTemplateMsgUtil.WeiXinGoodDeliveringForSalerCallable(mobile, dzmessage, deliverName, "暂无", "",torderproviderid);
+						}else{
+							if(276 != order.getTowmsfalg().intValue() && 275 != order.getTowmsfalg().intValue()){
+								System.out.println("in order.getTowmsfalg() ========== " + order.getTowmsfalg());
+								System.out.println("mobile ========== " + mobile);
+								System.out.println("dzmessage ============ " + dzmessage);
+								SendMessageUtil.sendSms(mobile, dzmessage);
+								WeixinTemplateMsgUtil.WeiXinGoodDeliveringForSalerCallable(mobile, dzmessage, deliverName, "暂无", "",torderproviderid);
+							}
+						}
+						
+						//给小C发短信 custelno
+					    //SendMessageUtil.sendSms("13552384725", gkmessage);
+						SendMessageUtil.sendSms(custelno, gkmessage);
+					    WeixinTemplateMsgUtil.WeiXinGoodDeliveringForCustomerCallable(custelno, gkmessage, deliverName, String.valueOf(sincecode), weixin_remark,null);
+					 } catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					 }
+					
+				 }
+				 
+				 //货到付款短信内容
+				 if(!StringUtils.isEmpty(order.getPaychanel())&&Constants.TORDER_PAYCHANNEL_HDFK==order.getPaychanel()){
+					    hdfkmsg = "恭喜您订购成功！商品会尽快配送到您的收货地址，请耐心等待，关注微信"+Constant.WEIXIN_SHOPKEEPER+"惊喜不断！";
+					    //快递到店
+					    if(isdelivertohome==Constants.TORDER_ISDELIVERTOHOME_KDDD){
+					    	deliverName = "到店自提";
+					    }else{
+					    //快递到家	
+					    	deliverName = "送货上门";
+					    }
+					    
+					    
+					    try {
+							SendMessageUtil.sendSms(custelno, hdfkmsg);
+							WeixinTemplateMsgUtil.WeiXinGoodDeliveringForCustomerCallable(custelno, hdfkmsg, deliverName, "", weixin_remark,null);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				 }
+			
+		}
+	
+}

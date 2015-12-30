@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.order.ShouhuoMapper">
+	<resultMap id="BaseResultMap" type="com.lakala.model.ShouhuoOutputSql">
+		<result column="corpName" property="deliverycom" jdbcType="VARCHAR" />
+	    <result column="cusName" property="cusname" jdbcType="VARCHAR" />
+		<result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+		<result column="channelCode" property="channelcode" jdbcType="INTEGER" />
+		<result column="orderProviderID" property="torderproviderid" jdbcType="VARCHAR" />
+		<result column="providerName" property="providername" jdbcType="VARCHAR" />
+		<result column="goodsID" property="goodsid" jdbcType="INTEGER" />
+		<result column="goodsName" property="goodsname" jdbcType="VARCHAR" />
+		<result column="goodsCount" property="goodsnum" jdbcType="INTEGER" />
+		<result column="norms" property="norms" jdbcType="VARCHAR" />
+		<result column="tOrderItemsId" property="orderitemid" jdbcType="INTEGER" />
+		<result column="logisticsId" property="logid" jdbcType="INTEGER" />
+		<result column="orderID" property="orderid" jdbcType="VARCHAR" />
+		<result column="state" property="providerstate" jdbcType="INTEGER" />
+		<result column="actualnum" property="actualnum" jdbcType="INTEGER" />
+		<result column="lstate" property="lstate" jdbcType="INTEGER" />
+		<result column="goodBigPic" property="goodbigpic" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getShouhuoInfo" resultMap="BaseResultMap" parameterType="com.lakala.module.order.vo.ShouhuoInput">
+		SELECT 
+		  c.`corpName`,
+		  l.cusName,
+		  l.cusTelNo,
+		  i.`channelCode`,
+		  i.`orderProviderID`,
+		  i.`providerName`,
+		  i.`goodsID`,
+		  i.`goodsName`,
+		  i.`norms`,
+		  i.`goodsCount`,
+  		  i.`tOrderItemsId`,
+  		  l.`logisticsId`,
+          i.`orderID`,
+          p.`state`,
+  		  i.`actualnum`,
+  		  l.`state` AS lstate,
+  		  g.`goodBigPic`  
+		FROM
+		  tlogisticsinfo l
+		  INNER JOIN torderitems i 
+		    ON l.`logisticsId` = i.`logisticsId` 
+		  INNER JOIN torderprovider p 
+    		ON i.`orderProviderID` = p.`tOrderProviderId` 
+		  LEFT JOIN tlogisticcorp c 
+		    ON l.`tlogisticCorpId` = c.`tlogisticCorpId` 
+		  LEFT JOIN tgoodsinfo g 
+    		ON i.`goodsID` = g.`tGoodInfoId` 
+		WHERE l.logisticsCode = #{logno,jdbcType=VARCHAR}
+		  AND i.`ecnetno` = #{netno,jdbcType=VARCHAR}
+		  AND (i.`channelCode` = 27 OR i.`channelCode` = 43) 
+		ORDER BY l.`logisticsId` DESC
+	</select>
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.logisticsinfo.TlogisticsinfoMapper" >
+  
+  <insert id="insertSelective" parameterType="com.lakala.base.model.Tlogisticsinfo" useGeneratedKeys="true" keyProperty="logisticsid">
+    insert into tlogisticsinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logisticsid != null" >
+        logisticsId,
+      </if>
+      <if test="logisticscode != null" >
+        logisticsCode,
+      </if>
+      <if test="providerid != null" >
+        providerID,
+      </if>
+      <if test="acount != null" >
+        acount,
+      </if>
+      <if test="tlogisticcorpid != null" >
+        tlogisticCorpId,
+      </if>
+        startTime,
+      <if test="reachtime != null" >
+        reachTime,
+      </if>
+      <if test="isnormal != null" >
+        isNormal,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="logisticsremark != null" >
+        logisticsRemark,
+      </if>
+      <if test="providername != null" >
+        providerName,
+      </if>
+      <if test="custelno != null" >
+        cusTelNo,
+      </if>
+      <if test="cusname != null" >
+        cusName,
+      </if>
+      <if test="isweekenddeliver != null" >
+        isWeekendDeliver,
+      </if>
+      <if test="isdelivertohome != null" >
+        isDeliverToHome,
+      </if>
+      <if test="addressprovincename != null" >
+        addressProvinceName,
+      </if>
+      <if test="addressprovince != null" >
+        addressProvince,
+      </if>
+      <if test="addresscityname != null" >
+        addressCityName,
+      </if>
+      <if test="addresscity != null" >
+        addressCity,
+      </if>
+      <if test="addressareaname != null" >
+        addressAreaName,
+      </if>
+      <if test="addressarea != null" >
+        addressArea,
+      </if>
+      <if test="addressfull != null" >
+        addressFull,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="deliverytype != null" >
+        deliverytype,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="quhuotime != null" >
+        quhuoTime,
+      </if>
+      <if test="receivername != null" >
+        receivername,
+      </if>
+      <if test="receivertime != null" >
+        receivertime,
+      </if>
+      <if test="shiptime != null" >
+        shiptime,
+      </if>
+      <if test="searchtime != null" >
+        searchtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logisticsid != null" >
+        #{logisticsid,jdbcType=INTEGER},
+      </if>
+      <if test="logisticscode != null" >
+        #{logisticscode,jdbcType=VARCHAR},
+      </if>
+      <if test="providerid != null" >
+        #{providerid,jdbcType=INTEGER},
+      </if>
+      <if test="acount != null" >
+        #{acount,jdbcType=DECIMAL},
+      </if>
+      <if test="tlogisticcorpid != null" >
+        #{tlogisticcorpid,jdbcType=INTEGER},
+      </if>
+        now(),
+      <if test="reachtime != null" >
+        #{reachtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isnormal != null" >
+        #{isnormal,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsremark != null" >
+        #{logisticsremark,jdbcType=VARCHAR},
+      </if>
+      <if test="providername != null" >
+        #{providername,jdbcType=VARCHAR},
+      </if>
+      <if test="custelno != null" >
+        #{custelno,jdbcType=VARCHAR},
+      </if>
+      <if test="cusname != null" >
+        #{cusname,jdbcType=VARCHAR},
+      </if>
+      <if test="isweekenddeliver != null" >
+        #{isweekenddeliver,jdbcType=INTEGER},
+      </if>
+      <if test="isdelivertohome != null" >
+        #{isdelivertohome,jdbcType=INTEGER},
+      </if>
+      <if test="addressprovincename != null" >
+        #{addressprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="addressprovince != null" >
+        #{addressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscityname != null" >
+        #{addresscityname,jdbcType=VARCHAR},
+      </if>
+      <if test="addresscity != null" >
+        #{addresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="addressareaname != null" >
+        #{addressareaname,jdbcType=VARCHAR},
+      </if>
+      <if test="addressarea != null" >
+        #{addressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="addressfull != null" >
+        #{addressfull,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverytype != null" >
+        #{deliverytype,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="quhuotime != null" >
+        #{quhuotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receivername != null" >
+        #{receivername,jdbcType=VARCHAR},
+      </if>
+      <if test="receivertime != null" >
+        #{receivertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shiptime != null" >
+        #{shiptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="searchtime != null" >
+        #{searchtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

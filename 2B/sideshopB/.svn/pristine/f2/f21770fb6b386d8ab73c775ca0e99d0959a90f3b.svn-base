@@ -1,0 +1,50 @@
+package com.lakala.module.order.controller;
+
+import java.io.IOException;
+
+
+
+
+
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.service.ShouhuoAllService;
+import com.lakala.module.order.vo.ShouhuoAllInput;
+import com.lakala.util.ReturnMsg;
+
+@Controller
+@RequestMapping("/order/shouhuoall")
+public class ShouhuoAllController {
+	
+	Logger logger = Logger.getLogger(ShouhuoAllController.class);
+	@Autowired
+	private ShouhuoAllService sas;
+	/**
+	 * 全部收货
+	 * @param sai
+	 * @return
+	 * @throws IOException
+	 */
+	@ResponseBody
+	@RequestMapping(value="/confirmshall")
+	public ObjectOutput<String> confirmshall(ShouhuoAllInput sai, HttpServletRequest request) throws IOException{
+		ObjectOutput<String> info = null;
+		try{
+			info = sas.updateshall(sai, request);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			info = new ObjectOutput<String>();
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		return info;
+	}
+}

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.profit.TorderitemsMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.profit.Torderitems" >
+    <id column="tOrderItemsId" property="torderitemsid" jdbcType="INTEGER" />
+    <result column="orderProviderID" property="orderproviderid" jdbcType="VARCHAR" />
+    <result column="orderID" property="orderid" jdbcType="VARCHAR" />
+    <result column="goodsID" property="goodsid" jdbcType="INTEGER" />
+    <result column="goodsSkuID" property="goodsskuid" jdbcType="INTEGER" />
+    <result column="goodsSkuO2OID" property="goodsskuo2oid" jdbcType="INTEGER" />
+    <result column="goodsName" property="goodsname" jdbcType="VARCHAR" />
+    <result column="goodsInProviderCode" property="goodsinprovidercode" jdbcType="VARCHAR" />
+    <result column="providerID" property="providerid" jdbcType="INTEGER" />
+    <result column="providerName" property="providername" jdbcType="VARCHAR" />
+    <result column="logisticsId" property="logisticsid" jdbcType="INTEGER" />
+    <result column="goodsIsOwnOrSupport" property="goodsisownorsupport" jdbcType="INTEGER" />
+    <result column="goodsCount" property="goodscount" jdbcType="INTEGER" />
+    <result column="ruleID" property="ruleid" jdbcType="INTEGER" />
+    <result column="ruleName" property="rulename" jdbcType="VARCHAR" />
+    <result column="goodsRuleType" property="goodsruletype" jdbcType="INTEGER" />
+    <result column="goodsFavoRuleMoney" property="goodsfavorulemoney" jdbcType="DECIMAL" />
+    <result column="goodsDeductionPoints" property="goodsdeductionpoints" jdbcType="REAL" />
+    <result column="goodsPayOff" property="goodspayoff" jdbcType="DECIMAL" />
+    <result column="goodsSalePrice" property="goodssaleprice" jdbcType="DECIMAL" />
+    <result column="goodsFinalPrice" property="goodsfinalprice" jdbcType="DECIMAL" />
+    <result column="goodsProfits" property="goodsprofits" jdbcType="DECIMAL" />
+    <result column="goodsRetainedProfits" property="goodsretainedprofits" jdbcType="DECIMAL" />
+    <result column="storeProfits" property="storeprofits" jdbcType="DECIMAL" />
+    <result column="deductionBasePoints" property="deductionbasepoints" jdbcType="REAL" />
+    <result column="companyDiscount" property="companydiscount" jdbcType="REAL" />
+    <result column="companyProfit" property="companyprofit" jdbcType="DECIMAL" />
+    <result column="storeDiscount" property="storediscount" jdbcType="REAL" />
+    <result column="storeProfit" property="storeprofit" jdbcType="DECIMAL" />
+    <result column="operatorDiscount" property="operatordiscount" jdbcType="REAL" />
+    <result column="operatorProfit" property="operatorprofit" jdbcType="DECIMAL" />
+    <result column="returnAmount" property="returnamount" jdbcType="DECIMAL" />
+    <result column="subsidyAmount" property="subsidyamount" jdbcType="DECIMAL" />
+    <result column="goodsLogisticState" property="goodslogisticstate" jdbcType="INTEGER" />
+    <result column="channelCode" property="channelcode" jdbcType="VARCHAR" />
+    <result column="virtualClassificationID" property="virtualclassificationid" jdbcType="VARCHAR" />
+    <result column="goodsClassificationID" property="goodsclassificationid" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="mergeState" property="mergestate" jdbcType="INTEGER" />
+    <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+    <result column="cancelState" property="cancelstate" jdbcType="INTEGER" />
+    <result column="lastModifyTime" property="lastmodifytime" jdbcType="TIMESTAMP" />
+    <result column="norms" property="norms" jdbcType="VARCHAR" />
+    <result column="lockState" property="lockstate" jdbcType="INTEGER" />
+    <result column="discountID" property="discountid" jdbcType="INTEGER" />
+    <result column="exportstatus" property="exportstatus" jdbcType="INTEGER" />
+    <result column="settleState" property="settlestate" jdbcType="INTEGER" />
+    <result column="providerDataSettleState" property="providerdatasettlestate" jdbcType="INTEGER" />
+    <result column="confirmReturnRemark" property="confirmreturnremark" jdbcType="VARCHAR" />
+    <result column="providerSettleTime" property="providersettletime" jdbcType="TIMESTAMP" />
+    <result column="providerSettleState" property="providersettlestate" jdbcType="INTEGER" />
+    <result column="providerSettleMoney" property="providersettlemoney" jdbcType="DECIMAL" />
+    <result column="shipSettleState" property="shipsettlestate" jdbcType="INTEGER" />
+    <result column="shipSettleTime" property="shipsettletime" jdbcType="TIMESTAMP" />
+    <result column="shipSettleMoney" property="shipsettlemoney" jdbcType="DECIMAL" />
+    <result column="phoneMemberName" property="phonemembername" jdbcType="VARCHAR" />
+    <result column="phoneMemberIdCard" property="phonememberidcard" jdbcType="VARCHAR" />
+    <result column="giftState" property="giftstate" jdbcType="INTEGER" />
+    <result column="giftParentId" property="giftparentid" jdbcType="VARCHAR" />
+    <result column="returnState" property="returnstate" jdbcType="INTEGER" />
+    <result column="invalidState" property="invalidstate" jdbcType="INTEGER" />
+    <result column="returnParentID" property="returnparentid" jdbcType="INTEGER" />
+    <result column="isRestore" property="isrestore" jdbcType="INTEGER" /> 
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lakala.model.profit.Torderitems" extends="BaseResultMap" >
+    <result column="fav" property="fav" jdbcType="LONGVARCHAR" />
+  </resultMap>
+      	<resultMap id="orderItemsResultMap" type="com.lakala.model.profit.Torderitems"  extends="ResultMapWithBLOBs">
+        <result column="receiverTime" property="receivertime" jdbcType="INTEGER" />
+        <result column="logisticsCode" property="logisticscode" jdbcType="VARCHAR" />
+        <result column="corpName" property="corpname" jdbcType="VARCHAR" />
+        <association property="tgoodsinfo" column="goodsid" 
+                     select="com.lakala.mapper.r.profit.TgoodsinfoMapper.selectByPrimaryKey" >
+        </association>
+        <association property="tgiftgoodsinfo" column="giftparentid" 
+                     select="com.lakala.mapper.r.profit.TgoodsinfoMapper.selectGiftGoodByPrimaryKey" >
+        </association>
+    </resultMap>
+      <resultMap id="BaseResultMap2" type="com.lakala.base.model.Torderitems" >
+        <id column="tOrderItemsId" property="torderitemsid" jdbcType="INTEGER" />
+        <result column="orderProviderID" property="orderproviderid" jdbcType="VARCHAR" />
+        <result column="orderID" property="orderid" jdbcType="VARCHAR" />
+        <result column="goodsID" property="goodsid" jdbcType="INTEGER" />
+        <result column="goodsSkuID" property="goodsskuid" jdbcType="INTEGER" />
+        <result column="goodsSkuO2OID" property="goodsskuo2oid" jdbcType="INTEGER" />
+        <result column="goodsName" property="goodsname" jdbcType="VARCHAR" />
+        <result column="goodsInProviderCode" property="goodsinprovidercode" jdbcType="VARCHAR" />
+        <result column="providerID" property="providerid" jdbcType="INTEGER" />
+        <result column="providerName" property="providername" jdbcType="VARCHAR" />
+        <result column="logisticsId" property="logisticsid" jdbcType="INTEGER" />
+        <result column="goodsIsOwnOrSupport" property="goodsisownorsupport" jdbcType="INTEGER" />
+        <result column="goodsCount" property="goodscount" jdbcType="INTEGER" />
+        <result column="ruleID" property="ruleid" jdbcType="INTEGER" />
+        <result column="ruleName" property="rulename" jdbcType="VARCHAR" />
+        <result column="goodsFavoRuleMoney" property="goodsfavorulemoney" jdbcType="DECIMAL" />
+        <result column="goodsDeductionPoints" property="goodsdeductionpoints" jdbcType="REAL" />
+        <result column="goodsPayOff" property="goodspayoff" jdbcType="DECIMAL" />
+        <result column="goodsSalePrice" property="goodssaleprice" jdbcType="DECIMAL" />
+        <result column="goodsFinalPrice" property="goodsfinalprice" jdbcType="DECIMAL" />
+        <result column="goodsProfits" property="goodsprofits" jdbcType="DECIMAL" />
+        <result column="goodsRetainedProfits" property="goodsretainedprofits" jdbcType="DECIMAL" />
+        <result column="storeProfits" property="storeprofits" jdbcType="DECIMAL" />
+        <result column="deductionBasePoints" property="deductionbasepoints" jdbcType="REAL" />
+        <result column="companyDiscount" property="companydiscount" jdbcType="REAL" />
+        <result column="companyProfit" property="companyprofit" jdbcType="DECIMAL" />
+        <result column="storeDiscount" property="storediscount" jdbcType="REAL" />
+        <result column="storeProfit" property="storeprofit" jdbcType="DECIMAL" />
+        <result column="operatorDiscount" property="operatordiscount" jdbcType="REAL" />
+        <result column="operatorProfit" property="operatorprofit" jdbcType="DECIMAL" />
+        <result column="returnAmount" property="returnamount" jdbcType="DECIMAL" />
+        <result column="subsidyAmount" property="subsidyamount" jdbcType="DECIMAL" />
+        <result column="goodsLogisticState" property="goodslogisticstate" jdbcType="INTEGER" />
+        <result column="channelCode" property="channelcode" jdbcType="VARCHAR" />
+        <result column="virtualClassificationID" property="virtualclassificationid" jdbcType="VARCHAR" />
+        <result column="goodsClassificationID" property="goodsclassificationid" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="mergeState" property="mergestate" jdbcType="INTEGER" />
+        <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+        <result column="fav" property="fav" jdbcType="VARCHAR" />
+        <result column="cancelState" property="cancelstate" jdbcType="INTEGER" />
+        <result column="lastModifyTime" property="lastmodifytime" jdbcType="TIMESTAMP" />
+        <result column="norms" property="norms" jdbcType="VARCHAR" />
+        <result column="lockState" property="lockstate" jdbcType="INTEGER" />
+        <result column="discountID" property="discountid" jdbcType="INTEGER" />
+        <result column="exportstatus" property="exportstatus" jdbcType="INTEGER" />
+        <result column="settleState" property="settlestate" jdbcType="INTEGER" />
+        <result column="confirmReturnRemark" property="confirmreturnremark" jdbcType="VARCHAR" />
+        <result column="providerSettleState" property="providersettlestate" jdbcType="INTEGER" />
+        <result column="providerSettleMoney" property="providersettlemoney" jdbcType="DECIMAL" />
+        <result column="shipSettleState" property="shipsettlestate" jdbcType="INTEGER" />
+        <result column="shipSettleMoney" property="shipsettlemoney" jdbcType="DECIMAL" />
+        <result column="phoneMemberName" property="phonemembername" jdbcType="VARCHAR" />
+        <result column="phoneMemberIdCard" property="phonememberidcard" jdbcType="VARCHAR" />
+        <result column="giftState" property="giftstate" jdbcType="INTEGER" />
+        <result column="giftParentId" property="giftparentid" jdbcType="VARCHAR" />
+        <result column="returnState" property="returnstate" jdbcType="INTEGER" />
+        <result column="invalidState" property="invalidstate" jdbcType="INTEGER" />
+        <result column="returnParentID" property="returnparentid" jdbcType="INTEGER" />
+        <result column="providerSettleTime" property="providersettletime" jdbcType="TIMESTAMP" />
+        <result column="shipSettleTime" property="shipsettletime" jdbcType="TIMESTAMP" />
+        <result column="tempStoreGoodsFlag" property="tempstoregoodsflag" jdbcType="INTEGER" />
+        <result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER" />
+        <result column="siteNo" property="siteno" jdbcType="VARCHAR" />
+        <result column="deviceNo" property="deviceno" jdbcType="VARCHAR" />
+        <result column="customer" property="customer" jdbcType="VARCHAR" />
+        <result column="tAllOrderId" property="tallorderid" jdbcType="INTEGER" />
+        <result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+        <result column="cusName" property="cusname" jdbcType="VARCHAR" />
+        <result column="logisticsfee" property="logisticsfee" jdbcType="DECIMAL" />
+        <result column="isRestore" property="isrestore" jdbcType="INTEGER" />
+        <result column="sinceCode" property="sincecode" jdbcType="INTEGER" />
+        <result column="addressProvinceName" property="addressprovincename" jdbcType="VARCHAR" />
+        <result column="addressProvince" property="addressprovince" jdbcType="VARCHAR" />
+        <result column="addressCityName" property="addresscityname" jdbcType="VARCHAR" />
+        <result column="addressCity" property="addresscity" jdbcType="VARCHAR" />
+        <result column="addressAreaName" property="addressareaname" jdbcType="VARCHAR" />
+        <result column="addressArea" property="addressarea" jdbcType="VARCHAR" />
+        <result column="addressFull" property="addressfull" jdbcType="VARCHAR" />
+    </resultMap>
+  <sql id="Base_Column_List" >
+    tOrderItemsId, orderProviderID, orderID, goodsID, goodsSkuID, goodsSkuO2OID, goodsName, 
+    goodsInProviderCode, providerID, providerName, logisticsId, goodsIsOwnOrSupport, 
+    goodsCount, ruleID, ruleName, goodsRuleType, goodsFavoRuleMoney, goodsDeductionPoints, 
+    goodsPayOff, goodsSalePrice, goodsFinalPrice, goodsProfits, goodsRetainedProfits, 
+   IFNULL( storeProfits,0.00) as  storeProfits, deductionBasePoints, companyDiscount, companyProfit, storeDiscount, 
+    storeProfit, operatorDiscount, operatorProfit,IFNULL( returnAmount,0.00) as  returnAmount, 
+     IFNULL(subsidyAmount,0.00) as subsidyAmount, goodsLogisticState, 
+    channelCode, virtualClassificationID, goodsClassificationID, state, mergeState, orderTime, 
+    cancelState, lastModifyTime, norms, lockState, discountID, exportstatus, settleState, 
+    confirmReturnRemark, providerSettleTime, providerSettleState, providerSettleMoney, 
+    shipSettleState, shipSettleTime, shipSettleMoney, phoneMemberName, phoneMemberIdCard, 
+    giftState, giftParentId, returnState, invalidState, returnParentID, isRestore, sinceCode, 
+    returnCode
+  </sql>
+  <sql id="Blob_Column_List" >
+    fav
+  </sql>
+ <select id="selectByPrimaryKey" resultMap="BaseResultMap2" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from torderitems
+    where tOrderItemsId = #{torderitemsid,jdbcType=INTEGER}
+  </select>
+    <select id="selectByCondtion" resultMap="ResultMapWithBLOBs" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />,t2.fr_ratio as frRatio ,t2.re_ratio as reRatio ,sb_ratio as sbRatio
+    from torderitems t1, torder t2
+    where 
+              t1.orderID=t2.tOrderId,
+              <!-- 订单是否支付  149:未支付;150:已支付 -->
+	    		and t2.isPay = '150'
+	    			<!-- 	93:手机商城;94:微信商城;95:开店宝;96:PC商城;334:收款宝;97:其他; -->
+	    		and t2.source in('95','334')
+           	<if test="executetime != null">
+				and <![CDATA[ DATE_FORMAT(t2.orderTime ,   '%Y-%m-%d') <= <![CDATA[ DATE_FORMAT(#{executetime} ,   '%Y-%m-%d')]]>
+			</if>
+  </select>
+  <select id="selectByOrderProviderId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+     		select
+				t1.tOrderItemsId,
+				t1.orderProviderID,
+				t1.orderID,
+				t1.goodsID,
+				t1.goodsName,
+				t1.goodsCount,
+				t1.ruleID,
+				t1.ruleName,
+				t1.goodsRuleType,
+				t1.goodsFavoRuleMoney,
+				t1.goodsPayOff,
+				t1.goodsSalePrice,
+				t1.goodsFinalPrice,
+				IFNULL(t2.divideProfit, 0.00) AS storeProfits,
+				IFNULL(t2.returnAmount, 0.00) AS returnAmount,
+				IFNULL(t2.subsidyAmount, 0.00) AS subsidyAmount,
+				t1.channelCode,
+				t1.state,
+				t1.orderTime,
+				t1.cancelState,
+				t1.returnState,
+				t1.invalidState,
+				t6.receiverTime,
+				t6.logisticsCode as logisticsCode,
+				t9.returnTime as returntime,
+				t3.payrate as payRate,
+				t1.platorself as platorSelf,
+				t2.returnFlg,
+				 t4.nameCN as  stateStr,
+				 t5.nameCN as  invalidstateStr
+			FROM
+			torderitems t1 LEFT JOIN tlogisticsinfoitem t7 ON t1.tOrderItemsId = t7.tOrderItemsId
+										   LEFT JOIN tlogisticsinfo t6 ON t7.logisticsId = t6.logisticsId
+										   LEFT JOIN treturn t9 ON t9.orderID = t1.orderID
+										   left join  tdictionary  t4 on t4.dictionayId = t1.state
+										   left join  tdictionary  t5 on t5.dictionayId = t1.invalidState ,
+			torderearnings t2, torder t3				    
+			where t1.orderProviderID =#{orderProviderId,jdbcType=VARCHAR} 
+			               	and t1.tOrderItemsId=t2.orderItemsId
+			               	and t1.orderID=t3.tOrderId
+							and  t2.returnFlg=#{returnFlg,jdbcType=VARCHAR} 
+	        				and <![CDATA[t2.earningsTime >=#{startDate}]]>
+	        				and <![CDATA[t2.earningsTime <=#{endDate}]]>
+    </select>
+</mapper>

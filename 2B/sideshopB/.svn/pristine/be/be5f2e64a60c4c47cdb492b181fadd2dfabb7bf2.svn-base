@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title></title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015071601" />
+</head>
+<body>
+	<header>	
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1></h1>
+		<!--<a href="search.html" class="head-right wholesale-search"></a>-->
+	</header>
+	<section class="container proprietary">
+		<div class="month clearfix">
+			<a href="javascript:;" id="self-no"><em class="active">流水￥<i>0.00</i></br><i>0</i>单</em></a>
+			<a href="javascript:;" id="self-settle"><em>结算￥<i>0.00</i></br><i>0</i>单</em></a>
+			<a href="javascript:;" id="self-yes"><em>到账￥<i>0.00</i></br><i>0</i>单</em></a>
+		</div>
+		<div class="detail-settelno" id="settel-no">
+			<ul>
+			</ul>
+		</div>
+		<div class="detail-settelsettel hidden" id="settel-settel">
+			<ul>
+			</ul>
+		</div>
+		<div class="detail-settelyes hidden">
+			<div class="detail-settelyes-detail">
+			</div>
+			<div id="settel-yes">
+				<ul>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js?t=2015071600"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+	<script type="text/javascript" src="../../js/incomes/incomesdaydetail.js?t=2015072300"></script>
+</body>
+</html>

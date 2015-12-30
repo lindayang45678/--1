@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>收益查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>	
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1>收益查询</h1>
+	</header>
+	<section class="wrap">
+		<div class="incomes">
+			<div class="incomes-info">
+				<h2 class="f-14 c-black">平台商品收益</h2>
+				<a href="incomes.html">
+				<div>
+					<div class="incomes-l">
+						<p class="f-16">昨日收入</p>
+						<i>￥</i><em>9,348.80</em>
+						<p>234单</p>
+					</div>
+					<div class="incomes-r">
+						<p class="f-16">累计收入</p>
+						<i>￥</i><em>9,348.80</em>
+						<p>234单</p>
+					</div>
+					<div class="clear"></div>
+				</div>
+				</a>
+			</div>
+			<div class="incomes-info">
+				<h2 class="f-14 c-black">自营商品收益</h2>
+				<a href="incomes.html">
+				<div>
+					<div class="incomes-l">
+						<p class="f-16">昨日收入</p>
+						<i>￥</i><em>9,348.80</em>
+						<p>234单</p>
+					</div>
+					<div class="incomes-r">
+						<p class="f-16">累计收入</p>
+						<i>￥</i><em>9,348.80</em>
+						<p>234单</p>
+					</div>
+					<div class="clear"></div>
+				</div>
+				</a>
+			</div>
+		</div>
+		<p class="incomes-info-bottom">特别声明：若订单产生退货行为，则次订单的分润、返现、补贴、将在每月的结算中扣除！<span class="incomes-rule"><a href="rules.html" >收益规则说明</a></span></p>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/incomes/index.js"></script>
+</html>

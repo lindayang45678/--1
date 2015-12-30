@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>店主收货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="body-white">
+	<header>
+		<a href="shopreceipt.html" class="back"></a>		
+		<h1>店主收货</h1>
+	</header>
+	<section class="wrap letter">
+		<div class="receipt">
+			<div class="warm"><img src="../../images/warm.png" alt=""/></div>
+            <h2 class="f-16 color center">验证失败，不可收货</h2>
+			<div class="receipt-info center">
+				<div>未找到物流单号为<span>12324242248</span>的订单，请核对您的物流单号是否正确，点击按钮重新收货。</div>
+			</div>
+		</div>
+		<a href="custreceipt.html" class="btn-red re-get">重新收货</a>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<!-- <script type="text/javascript" src="../../js/receipt/shopreceiptfail.js"></script>
+ -->
+</html>

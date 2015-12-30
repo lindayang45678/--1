@@ -1,0 +1,56 @@
+$(function() {
+	$("#custreceiptconfirm").css("pointer-events","none");
+	var url = window.location.href;
+	var sincecode = getParamValueByName(url, "sincecode");  //取货码
+	var orderDetail = storage.getItem("custReceiptConfirm");
+	var resultJson = $.parseJSON(orderDetail);
+	resultJson = convertNullToEmpty(resultJson);
+
+	var ret = "";
+	var returnData = resultJson._ReturnData;
+	var providerName = returnData.providername;  //商户
+	var cusname = returnData.cusname;  //取货人
+	var custelno = returnData.custelno;  //电话
+	var payChanel = returnData.paychanel;  //支付方式
+	var actualamount = returnData.actualamount;  //代付款金额
+	var orderTime = returnData.ordertime.split(".")[0];  //下单时间
+
+	ret += '<div class="receipt-info info">';
+	ret += '<div>取货码<i>' + sincecode + '</i></div>';
+	ret += '<div>商户<i>' + providerName + '</i></div>';
+	ret += '<div>取货人<i>' + cusname + '</i></div>';
+	ret += '<div>电话<i>' + custelno + '</i></div>';
+	if(payChanel == paychanelCod) {
+		ret += '<div>付款方式：<i class="color">货到付款</i></div>';
+		ret += '<div>代付款金额：<i>￥' + actualamount + '</i></div>';
+	}
+	ret += '</div>';
+
+	ret += '<div class="receipt-goods">';
+	ret += '<h3><span>' + providerName + '</span><i class="fr">' + orderTime + '</i></h3>';
+	ret += '<ul>';
+	for(var i = 0; i < returnData.qoclist.length; i ++) {
+		var goodsid = returnData.qoclist[i].goodsid;  //商品ID
+		var goodbigpic = returnData.qoclist[i].goodbigpic.split(";")[0];  //商品图片
+		if(typeof(returnData.qoclist[i].tgoodinfopoolid)!="undefined" && returnData.qoclist[i].tgoodinfopoolid!="") {
+			goodsid = returnData.qoclist[i].tgoodinfopoolid;
+		}
+		var goodbigpicUrl = urlImage + "/" + goodsid + "/" + imgw100 + "/" + goodbigpic;  //商品图片地址
+		var goodsname = returnData.qoclist[i].goodsname;  //商品名称
+		var norms = returnData.qoclist[i].norms;  //商品规格
+		var goodsnum = returnData.qoclist[i].goodsnum;  //商品数量
+
+		ret += '<li>';
+		ret += '<img src="' + goodbigpicUrl + '" onerror="productErrImg(this);" />';
+		ret += '<div class="items nobr">';
+		ret += '<h4 class="c-black">' + goodsname + '</h4>';
+		ret += '<p><i><em>' + norms + '</em></i></p>';
+		ret += '<p class="c-black"><i>数量：<em>' + goodsnum + '</em></i></p>';
+		ret += '</div>';
+		ret += '</li>';
+	}
+	ret += '</ul>';
+
+	$(".receipt").append(ret);
+	$("#custreceiptconfirm").css("pointer-events","auto");
+});

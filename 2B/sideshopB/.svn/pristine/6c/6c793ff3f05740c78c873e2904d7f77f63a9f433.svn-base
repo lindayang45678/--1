@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.order.TorderproviderMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Torderprovider">
+        <id column="tOrderProviderId" property="torderproviderid" jdbcType="VARCHAR"/>
+        <result column="orderID" property="orderid" jdbcType="VARCHAR"/>
+        <result column="providerID" property="providerid" jdbcType="INTEGER"/>
+        <result column="providerName" property="providername" jdbcType="VARCHAR"/>
+        <result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL"/>
+        <result column="favorRuleMoney" property="favorrulemoney" jdbcType="DECIMAL"/>
+        <result column="actualAmount" property="actualamount" jdbcType="DECIMAL"/>
+        <result column="orderAmount" property="orderamount" jdbcType="DECIMAL"/>
+        <result column="payoffAmount" property="payoffamount" jdbcType="DECIMAL"/>
+        <result column="goodsTypesCount" property="goodstypescount" jdbcType="INTEGER"/>
+        <result column="isPay" property="ispay" jdbcType="INTEGER"/>
+        <result column="cusTelNo" property="custelno" jdbcType="VARCHAR"/>
+        <result column="cusName" property="cusname" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="mergeState" property="mergestate" jdbcType="INTEGER"/>
+        <result column="requireTime" property="requiretime" jdbcType="TIMESTAMP"/>
+        <result column="isWeekendDeliver" property="isweekenddeliver" jdbcType="INTEGER"/>
+        <result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER"/>
+        <result column="payTime" property="paytime" jdbcType="TIMESTAMP"/>
+        <result column="payFee" property="payfee" jdbcType="DECIMAL"/>
+        <result column="payStage" property="paystage" jdbcType="INTEGER"/>
+        <result column="payType" property="paytype" jdbcType="INTEGER"/>
+        <result column="payChanel" property="paychanel" jdbcType="INTEGER"/>
+        <result column="payHandingCharge" property="payhandingcharge" jdbcType="DECIMAL"/>
+        <result column="billType" property="billtype" jdbcType="INTEGER"/>
+        <result column="billTitle" property="billtitle" jdbcType="VARCHAR"/>
+        <result column="storeProfits" property="storeprofits" jdbcType="DECIMAL"/>
+        <result column="toProviderState" property="toproviderstate" jdbcType="INTEGER"/>
+        <result column="addressProvinceName" property="addressprovincename" jdbcType="VARCHAR"/>
+        <result column="addressProvince" property="addressprovince" jdbcType="VARCHAR"/>
+        <result column="addressCityName" property="addresscityname" jdbcType="VARCHAR"/>
+        <result column="addressCity" property="addresscity" jdbcType="VARCHAR"/>
+        <result column="addressAreaName" property="addressareaname" jdbcType="VARCHAR"/>
+        <result column="addressArea" property="addressarea" jdbcType="VARCHAR"/>
+        <result column="addressFull" property="addressfull" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="INTEGER"/>
+        <result column="ruleID" property="ruleid" jdbcType="INTEGER"/>
+        <result column="ruleName" property="rulename" jdbcType="VARCHAR"/>
+        <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="exportstatus" property="exportstatus" jdbcType="INTEGER"/>
+        <result column="cancelState" property="cancelstate" jdbcType="INTEGER"/>
+        <result column="lastModifyTime" property="lastmodifytime" jdbcType="TIMESTAMP"/>
+        <result column="memberName" property="membername" jdbcType="VARCHAR"/>
+        <result column="custCall" property="custcall" jdbcType="VARCHAR"/>
+        <result column="lockState" property="lockstate" jdbcType="INTEGER"/>
+        <result column="providerRemark" property="providerremark" jdbcType="VARCHAR"/>
+        <result column="providerSettleState" property="providersettlestate" jdbcType="INTEGER"/>
+        <result column="providerSettleMoney" property="providersettlemoney" jdbcType="DECIMAL"/>
+        <result column="shipSettleState" property="shipsettlestate" jdbcType="INTEGER"/>
+        <result column="shipSettleMoney" property="shipsettlemoney" jdbcType="DECIMAL"/>
+        <result column="uploadId" property="uploadid" jdbcType="BIGINT"/>
+        <result column="approveStatue" property="approvestatue" jdbcType="INTEGER"/>
+        <result column="tallorderid" property="tallorderid" jdbcType="INTEGER"/>
+    </resultMap>
+    
+
+    <sql id="Base_Column_List">
+    tOrderProviderId, orderID, providerID, providerName, logiscalFee, favorRuleMoney, 
+    actualAmount, orderAmount, payoffAmount, goodsTypesCount, isPay, cusTelNo, cusName, 
+    state, mergeState, requireTime, isWeekendDeliver, isDeliverToHome, payTime, payFee, 
+    payStage, payType, payChanel, payHandingCharge, billType, billTitle, storeProfits, 
+    toProviderState, addressProvinceName, addressProvince, addressCityName, addressCity, 
+    addressAreaName, addressArea, addressFull, code, source, ruleID, ruleName, orderTime, 
+    remark, exportstatus, cancelState, lastModifyTime, memberName, custCall, lockState, 
+    providerRemark, providerSettleState, providerSettleMoney, shipSettleState, shipSettleMoney,
+    uploadId, approveStatue,tallorderid
+  </sql>
+	
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from torderprovider
+		where tOrderProviderId =
+		#{torderproviderid,jdbcType=VARCHAR}
+	</select>
+	
+    <select id="selectOrderProviderByMap" resultMap="BaseResultMap"
+		parameterType="map">
+		select DISTINCT
+		 tOrderProviderId, orderID, providerID, providerName, logiscalFee, favorRuleMoney, 
+    actualAmount, orderAmount, payoffAmount, goodsTypesCount, isPay, cusTelNo, cusName, 
+    state, mergeState, requireTime, isWeekendDeliver, isDeliverToHome, payTime, payFee, 
+    payStage, payType, payChanel, payHandingCharge, billType, billTitle, storeProfits, 
+    toProviderState, addressProvinceName, addressProvince, addressCityName, addressCity, 
+    addressAreaName, addressArea, addressFull, code, source, ruleID, ruleName, orderTime, 
+    remark, exportstatus, cancelState, lastModifyTime, memberName, custCall, lockState, 
+    providerRemark, providerSettleState, providerSettleMoney, shipSettleState, shipSettleMoney,
+    uploadId, approveStatue,tallorderid
+		from torderprovider t where t.tAllOrderId = #{tallorderid};
+     </select>
+     
+     
+       <!-- 判断订单torder表字段 fav 营销活动是否为空，0标识所有子订单营销活动为空，大于0标识存在不为空的情况-->
+    <select id="checkOrderFavIsNull" parameterType="map"  resultType="java.lang.Integer" >
+		    SELECT 
+		    (case when count(1)=0 then  -99  when count(1)-SUM(ISNULL(a.fav))=0 or  
+		     count(1)-sum(case when 
+		      
+		      <if test="flag != null and flag != '' and flag eq 'torder' ">
+                c.orderID = #{torderid}
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'torderprovider' ">
+			    c.orderProviderID =  #{torderproviderid}
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'torderitems' ">
+			    c.tOrderItemsId =  #{torderitemsid}
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'orderids' ">
+	            c.orderID in (${orderids})
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'orderproviderids' ">
+			    c.orderProviderID  in (${orderproviderids})
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'orderitemsids' ">
+			    c.tOrderItemsId  in (${orderitemsids})
+			  </if>
+		     and a.fav is not null then 1  ELSE 0 END)=0 then 0  else 1  end)	
+		    
+		    from  torder  a,torderprovider b,torderitems  c  
+		    where  a.tOrderId = b.orderID and  b.orderID = c.orderID and a.tOrderId = c.orderID 
+		    and b.tOrderProviderId = c.orderProviderID 
+         
+		  
+		  <if test="tallorderidflag != null and tallorderidflag != '' and tallorderidflag eq 'tallorderid' ">
+		    and c.tallorderid = #{tallorderid}
+		  </if>
+		  <if test="tallorderidflag != null and tallorderidflag != '' and tallorderidflag eq 'tallorderids' ">
+             and c.tallorderid  in  (${tallorderids})
+		  </if>
+		  <if test="cancelstate != null and cancelstate != '' ">
+		    and c.cancelState = #{cancelstate}
+	      </if>
+	      <if test="flag == null or flag eq '' ">
+		    and  1>2
+		  </if>
+	</select>
+    
+</mapper>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <style type="text/css">
+        *{margin:0;padding:0;border:0;}
+        html,body,div{outline:none;}
+        html body{position:relative;width:100%;min-width:320px; margin:0 auto;font:12px/1.5 'Microsoft YaHei', "宋体", "arial", "tahoma", "simsun";background:#f14545;}
+        img{width:100%;height:auto;vertical-align:top;border:0 none;outline:none;}
+        a{outline:0;text-decoration:none;}
+        a:active,a:focus{outline:0;}
+		.photo{position:absolute;left:41.6%;top:5.8%;width:16.8%;}
+		.photo img{width:100%;border:1px solid #fff;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-border-radius:100%;border-radius:100%;}		
+		.detail{position:absolute;width:60%;left:20%;top:15.3%;text-align:center;}
+		.detail p{color:#fff;}
+		.detail p:first-child{font-size:14px;}
+		.detail p:last-child{line-height:16px;}
+		.coupon{position:absolute;left:12%;top:25.26%;width:76%;height:26.1%;}
+		.coupon em{position:absolute;left:50%;top:50%;margin:-56px 0 0 -60px;}
+		.coupon em,.coupon em i{font-size:40px;color:#faeb25;-webkit-text-shadow:1px 1px 2px #160606;text-shadow:1px 1px 2px #160606;-webkit-text-stroke:1px #160606;text-stroke:1px #160606;font-weight:bold;font-style:normal;text-align:center; }
+		.ready{position:absolute;left:15%;top:52.47%;width:70%;height:8%;text-align:center;}
+		.ready span{position:absolute;display:inline-block;width:100%;top:50%;left:0;margin-top:-18px;}
+		.ready span,.ready span i{font-size:13px;color:#fff;font-style:normal;} 
+		.link{position:absolute;top:63.9%;display:inline-block;width:32%;height:7.42%;}
+		.app-link{left:17.47%;}
+		.shop-link{right:17.07%;}
+		#check-link{position:absolute;left:20%;top:72.7%;width:60%;height:4.9%;cursor:pointer;}
+		.today-residual span,#check-link span{position:absolute;left:50%;top:50%;display:inline-block;color:#fff;}
+		#check-link span{margin:-9px 0 0 -36px;}
+		.today-residual span{font-size:15px;margin:-9px 0 0 -94px;}
+		.today-residual span i{font-style:normal;}
+		.today-residual{position:absolute;left:10%;top:77.7%;width:80%;height:5%;}
+		.hidden{display:none;}
+		
+    </style>
+    <title>礼品分享券第二页</title>
+    
+</head>
+
+<body>
+	<header><img src="../images/coupon2-header.jpg" alt=""/></header>
+    <div><img src="../images/coupon2-bg1.jpg" alt=""/></div>
+    <div><img src="../images/coupon2-bg2.jpg" alt=""/></div>
+    <div><img src="../images/coupon2-bg3.jpg" alt=""/></div>
+    <div><img src="../images/coupon2-bg4.jpg" alt=""/></div>
+    <div><img src="../images/coupon2-bg5.jpg" alt=""/></div>
+    <div class="photo"><img src="../images/photo.jpg" alt=""/></div>
+    <div class="detail">
+    	<p>我是<span>XX</span><p>
+        <p>送给你的「身边小店」现金券<br>领取成功啦！</p>
+    </div>
+    <div class="coupon"><em>现金券<br><i>5</i>元</em></div>
+    <div class="ready"><span>已放入账户：<i>1362345678</i><br>一起去逛逛吧！</span></div>
+    <a href="#" class="link app-link"></a><a href="#" class="link shop-link"></a>
+    <div id="check-link"><span>查看活动规则</span></div>
+    <p class="today-residual"><span>今日成就：已获取现金券<i>5</i>元<span></p>
+    
+	<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+   <script type="text/javascript">
+	var checklink=document.getElementById('check-link');
+		$('#check-link').click(function(){
+		 $('#shade').removeClass('hidden');
+		  $('#popup-rule').removeClass('hidden');
+		});
+	  	$('#del').click(function(){
+		   $('#shade').addClass('hidden');
+		  $('#popup-rule').addClass('hidden');
+		  })  
+    </script>
+</body>
+</html>

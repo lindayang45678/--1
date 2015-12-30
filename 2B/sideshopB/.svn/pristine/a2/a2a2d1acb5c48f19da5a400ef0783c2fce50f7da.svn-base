@@ -1,0 +1,27 @@
+package com.lakala.mapper.r.virtualcat;
+
+import com.lakala.base.model.VirtualCate;
+
+import java.util.List;
+import java.util.Map;
+
+
+public interface VirtualCateMapper {
+	
+    VirtualCate selectByPrimaryKey(Integer tvirtualcateid);
+
+    List<VirtualCate> selectByParentId(Map<String, Object> map);
+
+    List<VirtualCate> findAll();
+
+    /**
+     * 根据父ID查询所有子分类
+     */
+    List<VirtualCate> findAllChildByParentId(Map<String, Object> params);
+    
+    /**
+     * 通过实分类获取虚分类 zhiziwei
+     */
+    List<VirtualCate> findVirCatByRealCat(Integer rid);
+    
+}

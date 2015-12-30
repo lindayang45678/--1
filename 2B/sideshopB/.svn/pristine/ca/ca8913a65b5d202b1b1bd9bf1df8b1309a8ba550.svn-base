@@ -1,0 +1,67 @@
+$(function() {
+	//如果用户已经登录，直接跳转到我的小店页面
+	if(storage.getItem(hasLogined) === "1") {
+		window.location.href = "shop.html?t=" + t;
+	}
+
+	$("#btnLogin").on("tap", function() {
+		var mobile = $.trim($("#mobile").val());
+		var pwd = $.trim($("#pwd").val());
+		var terminalCode = ""; //设备代码
+		var terminalType = "1"; //0:其他, 1:安卓, 2:苹果
+		if(mobile == "") {
+			showAlertMsg(msgMobileNotEmpty);
+			return;
+		}
+		if(mobile.length != 11) {
+			showAlertMsg(msgMobileError);
+			return;
+		}
+		if(pwd == "") {
+			showAlertMsg(msgPwdNotEmpty);
+			return;
+		}
+
+		if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			cordova._native.system.deviceInfo(function(res) {
+				platform = res.platform;
+				deviceId = res.deviceId;
+				terminalCode = deviceId;
+				storage.setItem("platform", platform);
+				storage.setItem("deviceId", deviceId);
+			});
+
+			cordova._native.system.remotePushInfo(function(res) {
+				subChannelId = res.subChannelId;
+				objectId = res.objectId;
+				pushToken = res.token;
+				storage.setItem("subChannelId", subChannelId);
+				storage.setItem("objectId", objectId);
+				storage.setItem("pushToken", pushToken);
+			});
+		} else {
+			terminalCode = "BrowserTest";
+			terminalType = "0";
+		}
+
+		if(platform.toLowerCase() === "ios") {
+			terminalType = "2";
+		}
+		var data = {"mobile":mobile, "pwd":pwd, "terminalCode":pushToken, "terminalType":terminalType};
+		var resultJson = ajaxCommon(urlLogin, data);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			var userToken = resultJson._ReturnData.token;
+			var userName = resultJson._ReturnData.userName;
+			var userType = resultJson._ReturnData.userType;
+
+			if(token == "") {
+				storage.setItem("userToken", userToken);
+			}
+			storage.setItem("mobile", mobile);
+			storage.setItem(hasLogined, "1");
+			window.location.href = "shop.html?t=" + t;
+		} else {
+			showAlertMsg(msgLoginError);
+		}
+	});
+});

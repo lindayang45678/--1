@@ -1,0 +1,72 @@
+$(function(){
+	var url = window.location.href;
+	var orderProviderId = getParamValueByName(url, "orderProviderId");
+	var returnFlag = getParamValueByName(url, "returnFlag");
+	var earningsTime = getParamValueByName(url, "earningsTime");
+	var earningsType = getParamValueByName(url, "earningsType");
+	var data = {
+		"earningsTime":earningsTime,
+		"orderProviderId":orderProviderId,
+		"returnFlag":returnFlag,
+		"earningsType":earningsType
+		
+	};
+	var resultJson = ajaxCommon(urlGetOrderDetail, data);
+	resultJson = convertNullToEmpty(resultJson);
+	var payContainer = $(".detail-top");
+	var payContent = "";
+	var goodsContainer = $(".detail-middle");
+	var goodsContent = "";
+	var returnGoodsContent = "";
+	if(resultJson._ReturnCode === returnCodeSuccess){
+		var _returnData = resultJson._ReturnData;
+		//订单信息
+		payContent += "<li><i>订单号：</i><em>" +_returnData.providerOrderId+ "</em></li>";
+		payContent += "<li><i>订单来源：</i><em>" +_returnData.source+ "</em></li>";
+		payContent += "<li><i>下订时间：</i><em>" +_returnData.orderDate+ "</em></li>";
+		payContent += "<li><i>配送方式：</i><em>" +_returnData.isDeliverTohome+ "</em></li>";
+		payContent += "<li><i>付款方式：</i><em>" +_returnData.payMode+ "</em></li><br/>";
+		payContent += "<li><i>订单总额：</i><em>￥" +_returnData.orderAmount+ "</em></li>";
+		payContent += "<li><i>商品金额小计：</i><em>￥" +_returnData.orderProviderAmount+ "</em></li>";
+		payContent += "<li class='color'><i>店铺优惠金额：</i><em>￥" +_returnData.shopCouponValue+ "</em></li>";
+		payContent += "<li class='color'><i>运费：</i><em>￥" +_returnData.freight+ "</em></li><br/>";
+		payContent += "<li class='color'><i>代收金额：</i><em>￥"+_returnData.ownGoodsAccounts+"</em></li>";
+		payContent += "<li class='color'><i>支付手续费率：</i><em>" +_returnData.payRate+ "</em></li>";
+		payContent += "<li class='color'><i>支付收费续：</i><em>￥" +_returnData.payRateAmount+ "</em></li><br/>";
+		payContent += "<li><i>结算状态：</i><em>" +_returnData.payStatus+ "</em></li>";
+		payContent += "<li><i>支付流水号：</i><em>" +_returnData.payId+ "</em></li>";
+		payContent += "<li><i>到账时间：</i><em>" +_returnData.payTime+ "</em></li>";
+		if(_returnData.erroLog != ""){
+			payContent += "<li><i>支付失败，原因：</i><em>" +_returnData.erroLog+ "</em></li>";
+		}
+		payContainer.html("").append(payContent);
+		//购买清单
+		var oditmList = _returnData.oditmList;
+		if(oditmList.length > 0){
+			for(var i = 0;i < oditmList.length; i ++){
+				goodsContent += "<li>";
+				goodsContent += "<div><em>" +oditmList[i].goodName+ "</em></div>";
+				goodsContent += "<div>";
+				goodsContent += "<i>单价：</i><em>" +oditmList[i].goodSalePrice+ "</em>";
+				goodsContent += "<i>数量：</i><em>" +oditmList[i].goodCount+ "</em>";
+				goodsContent += "<i>金额：</i><em>" +oditmList[i].orderPrice+ "</em>";
+				goodsContent += "<i>分润：</i><em>" +oditmList[i].earningsAmount+ "</em>";
+				goodsContent += "<i class='color'>商品流水：</i><em class='color'>" +oditmList[i].duyPay+ "</em>";
+				goodsContent += "</div>";
+				goodsContent += "<div><i>订单状态：</i><em>" +oditmList[i].orderState+ "</em></div>";
+				goodsContent += "<div><i>签收时间：</i><em>" +oditmList[i].receiveDate+ "</em></div>";
+				goodsContent += "<div><i>售后状态：</i><em>" +oditmList[i].invaliState+ "</em></div>";
+				if(_returnData.returnFlg == "1"){
+					goodsContent += "<div><i>发起退货时间：</i><em>" +oditmList[i].returnDate+ "</em></div>";
+					goodsContent += "<div><i>退货完成时间：</i><em>" +oditmList[i].refundTime+ "</em></div>";
+				}
+				goodsContent += "</li>";
+			}
+			goodsContainer.html("").append(goodsContent);
+		}else{
+			//购买清单为空
+		}
+	}else{
+		//接口返回错误
+	}
+})

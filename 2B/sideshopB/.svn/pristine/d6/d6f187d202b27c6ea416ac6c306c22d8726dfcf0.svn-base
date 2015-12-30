@@ -1,0 +1,11 @@
+package com.lakala.mapper.r.goods;
+
+import java.util.List;
+
+import com.lakala.base.model.Realcate;
+
+public interface RealcateMapper {
+    Realcate selectByPrimaryKey(Integer trealcateid);
+
+    List<Realcate> selectAll();
+}

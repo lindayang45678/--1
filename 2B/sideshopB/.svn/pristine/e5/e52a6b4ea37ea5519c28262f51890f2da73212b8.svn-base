@@ -1,0 +1,65 @@
+package com.lakala.util;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class MyUtil {
+	public static String connectwuliu(Integer corpid,String logno) throws IOException{
+		if(corpid == null){
+			return null;
+		}
+		if(logno == null || logno.equals("")){
+			return null;
+		}
+		String pUrl="http://10.1.80.44:8080/logisticsForthwith/logis/sreach/"+corpid+"/"+logno;
+		URL urlObject = new URL(pUrl);
+		HttpURLConnection urlConn = (HttpURLConnection) urlObject.openConnection();
+		//设置连接主机超时（单位：毫秒）
+		urlConn.setConnectTimeout(30000);
+		//设置从主机读取数据超时（单位：毫秒）
+		urlConn.setReadTimeout(30000);
+		urlConn.connect();
+		String line;
+        String lines = "";
+		try{
+			BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(),"utf-8"));//设置编码,否则中文乱码
+			 while ((line = reader.readLine()) != null){
+		            lines += line;
+		        }
+		        reader.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+        urlConn.disconnect();
+        return lines;
+	}
+	public static String cusnamecheck(String cusname){
+		String mobile = "";
+		if(StringUtil.verdict(cusname)){
+			if(cusname.indexOf("(")>-1 && cusname.indexOf(")")>-1){
+				mobile = cusname.substring(cusname.indexOf("(")+1, cusname.indexOf(")"));
+				if(StringUtil.verdict(mobile)){
+					return mobile;
+				}
+			}
+			if(cusname.indexOf("（")>-1 && cusname.indexOf("）")>-1){
+				mobile = cusname.substring(cusname.indexOf("（")+1, cusname.indexOf("）"));
+				if(StringUtil.verdict(mobile)){
+					return mobile;
+				}
+			}
+			if((cusname.indexOf("(") == -1 && cusname.indexOf(")") == -1)||(cusname.indexOf("（") == -1 && cusname.indexOf("）") == -1)){
+				if(cusname.indexOf("1")>-1){
+					mobile = cusname.substring(cusname.indexOf("1"));
+					if(StringUtil.verdict(mobile)){
+						return mobile;
+					}
+				}
+			}
+		}
+		return mobile;
+	}
+}

@@ -1,0 +1,5 @@
+$(function(){
+	clearCart();//清空购物车localStorage
+	storage.removeItem("couponlist");//清空优惠券列表
+	storage.removeItem("promfee");//清空优惠金额
+})

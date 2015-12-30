@@ -1,0 +1,18 @@
+package com.lakala.mapper.w.sdbmediastatistics;
+
+import com.lakala.base.model.SDBMediaStatistics;
+import com.lakala.base.model.Tshopkeeperaddr;
+
+/**
+ * 
+ * @author zjj
+ * @date 2015年3月4日
+ */
+public interface SdbMediaStatisticsMapper {
+	
+	public int updateByPrimaryKeySelective(SDBMediaStatistics sdbMediaStatistics);
+	
+	int insertAddress(Tshopkeeperaddr ska);
+	int updateAddress(Tshopkeeperaddr ska);
+	int deleteAddress(Tshopkeeperaddr ska);
+}

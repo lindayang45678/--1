@@ -1,0 +1,18 @@
+$(function() {	
+	//点击处理售后,弹窗提示	
+	$(".after-sale").on("tap", function() {
+		$(".pop-up-box").show();
+	});
+	$(".pop-up-box .btn-gray").on("tap", function() {
+		$(".pop-up-box").hide();
+	});
+	$(".not-agree").on("tap", function() {
+		$(".not-agree").addClass("on").siblings().removeClass("on");
+		$(".reasons").show().siblings(".msg").hide();
+	});
+	$(".agree").on("tap", function() {
+		$(".agree").addClass("on").siblings().removeClass("on");
+		$(".msg").show().siblings(".reasons").hide();
+	});
+
+});

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单管理-批发订单</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+    <input type="hidden" id="signallorderproviderid" name="signallorderproviderid" value="">
+	<header>
+		<h1>订单管理</h1>
+		<a href="../homepage/index.html" class="back"></a>
+		<a href="orderquery.html" class="head-right"></a>
+	</header>
+	<section class="container wholesaleorders clearfix">
+	  <section class="wrap">
+			<div id="head" class="header">
+			</div>
+			<div id="header-list" class="header-list">
+			</div>
+			<section id="wholesaleorders-scroll" class="wholesaleorders-scroll">
+				<div id="wholesaleorders-container" class="wholesaleorders-container">
+					<div class="scroll-items">
+						
+					</div>
+					<div id="loading">
+						<img class="loading" alt="" src="../../images/loading.png" />
+					</div>
+				</div>
+			</section>
+			<div class="pop-up-box hidden">
+				<div>
+					<p class="f-18 c-gray">该订单是否已全部收货 </p>
+					<input class="btn-gray" type="button" value="取消"/>
+					<input id="confirmsignallbtn" class="btn-red" type="button" value="确认"/>
+				</div>
+			</div>
+		</section>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" id="platJs"></script>
+<script type="text/javascript" src="cordova_plugins.js"></script>
+<script type="text/javascript" src="../../js/orders/wholesaleorders.js"></script>
+</html>

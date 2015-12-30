@@ -1,0 +1,430 @@
+/* 初始化iScroll*/
+var cateScroll;
+function scrollCate() {
+	cateScroll = new iScroll("menu-l",{ hScrollbar: false, vScrollbar: false });
+}
+var goodScroll;
+function scrollGood(){
+	goodScroll = new iScroll("wholesale-r",{ 
+		hScrollbar: false, 
+		vScrollbar: true,
+		onScrollEnd: function(){
+			getGoodsList(virtualcatid);
+		},
+		onScrollMove:function(){
+			
+		}
+	});
+}
+
+//定义购物接收参数
+var goodsSkuO2OList = "";
+var goodList = "";
+var skuIndex = 0;
+var goodIndex = 0;
+var goodName = "";
+var goodBigPic = "";
+var supplierId = "";
+var supplierName = "";
+var distributionflag = "";
+
+/* 根据浏览器的高度计算iScroll的高度*/
+$(function(){
+	$("#menu-l").css("height",windowHeight-62-44);
+	$("#wholesale-r").css("height",windowHeight-62-44);
+	showCart();
+	//clearStorage();
+});
+
+/* 批发进货左侧分类*/
+$(function(){
+	var data = {
+			"psam":psam,
+			"channelid":channelcodePF,
+			"token":userToken,
+			"mobile":mobile
+	};
+	var container = $("#menu-l ul");
+	var content = "";
+	var resultJson = ajaxCommon(urlWholesaleLeft, data);
+	//测试数据
+	//resultJson = {"_ReturnCode":"000000","_ReturnData":[{"child":[{"child":[{"child":null,"virtualCateId":"369","virtualCateDisc":"饮料"},{"child":null,"virtualCateId":"367","virtualCateDisc":" 酒类"}],"virtualCateId":"366","virtualCateDisc":"酒水饮料 "},{"child":[{"child":null,"virtualCateId":"320","virtualCateDisc":"日用小家电"},{"child":null,"virtualCateId":"318","virtualCateDisc":"个护健康"}],"virtualCateId":"317","virtualCateDisc":"生活电器"},{"child":[{"child":null,"virtualCateId":"315","virtualCateDisc":"营养保健 "},{"child":null,"virtualCateId":"309","virtualCateDisc":"零食 "}],"virtualCateId":"308","virtualCateDisc":"休闲食品 "},{"child":[{"child":null,"virtualCateId":"401","virtualCateDisc":"纸"},{"child":null,"virtualCateId":"305","virtualCateDisc":"身体护理"}],"virtualCateId":"304","virtualCateDisc":"洗护日化"},{"child":[{"child":null,"virtualCateId":"297","virtualCateDisc":"食用油"},{"child":null,"virtualCateId":"296","virtualCateDisc":"面"},{"child":null,"virtualCateId":"295","virtualCateDisc":"米"}],"virtualCateId":"294","virtualCateDisc":"粮油调味 "}],"virtualCateId":"39","virtualCateDisc":"全国批发"},{"child":[{"child":[{"child":null,"virtualCateId":"484","virtualCateDisc":"饼干/糕点"},{"child":null,"virtualCateId":"476","virtualCateDisc":"零食"}],"virtualCateId":"454","virtualCateDisc":"食品"}],"virtualCateId":"447","virtualCateDisc":"天津市批发"},{"child":[{"child":[{"child":null,"virtualCateId":"472","virtualCateDisc":"酒"}],"virtualCateId":"463","virtualCateDisc":"酒水饮料"},{"child":[{"child":null,"virtualCateId":"468","virtualCateDisc":"进口食品"}],"virtualCateId":"462","virtualCateDisc":"食品"},{"child":[{"child":null,"virtualCateId":"450","virtualCateDisc":"身体护理"}],"virtualCateId":"435","virtualCateDisc":"洗护日化"},{"child":[{"child":null,"virtualCateId":"438","virtualCateDisc":"米"}],"virtualCateId":"429","virtualCateDisc":"粮油调味"}],"virtualCateId":"426","virtualCateDisc":"河北区批发"},{"child":[{"child":[{"child":null,"virtualCateId":"295","virtualCateDisc":"米"}],"virtualCateId":"605","virtualCateDisc":"粮油调味"}],"virtualCateId":"601","virtualCateDisc":"天津批发"}],"_ReturnMsg":null};
+	//广告分类
+	content += "<li><a href='javascript:;' class='promotion'>活动推荐<i></i></a></li>";
+	if (resultJson._ReturnCode === returnCodeSuccess) {
+		var _returnData = resultJson._ReturnData;
+		if(_returnData.length > 0){
+			for(var i = 0; i< _returnData.length; i ++){
+				var firstCate = _returnData[i];//一级虚拟分类
+				var firstId = firstCate.virtualCateId;//一级虚拟分类ID
+				var firstDisc = firstCate.virtualCateDisc;//一级虚拟分类名称
+				content += "<li>";
+				content += "<a href='javascript:;' catid=" +firstId+ ">" +firstDisc+ "<i></i></a>";
+				content += "<ul class='left-l2 hidden'>";
+				for(var j = 0;j < firstCate.child.length; j ++){
+					var secondCate = (firstCate.child)[j];//二级虚拟分类
+					var secondId = secondCate.virtualCateId;//二级虚拟分类ID
+					var secondDisc = secondCate.virtualCateDisc;//二级虚拟分类名称
+					content += "<li>";
+					content += "<a href='javascript:;' catid=" +secondId+ ">" +secondDisc+ "<i></i></a>";
+					content += "<ul class='left-l3 hidden'>";
+					if(secondCate.child != null){
+						for(var k = 0;k <  secondCate.child.length; k ++){
+							var thirdCate = (secondCate.child)[k];//三级虚拟分类
+							var thirdId = thirdCate.virtualCateId;//三级虚拟分类ID
+							var thirdDisc = thirdCate.virtualCateDisc;//三级虚拟分类名称
+							content += "<li>";
+							content += "<a href='javascript:;' catid=" +thirdId+ ">" +thirdDisc+ "<i></i></a>";
+							content += "<ul class='left-l4 hidden'>";
+							if(thirdCate.child != null){
+								for(var l = 0; l < thirdCate.child.length; l ++){
+									var fourthCate = (thirdCate.child)[l];//四级虚拟分类
+									var fourthId = fourthCate.virtualCateId;//四级虚拟分类ID
+									var fourthDisc = fourthCate.virtualCateDisc;//四级虚拟分类名称
+									content += "<li>";
+									content += "<a href='javascript:;' catid=" +fourthId+ ">" +fourthDisc+ "<i></i></a>";
+									content += "</li>";
+								}
+							}
+							content += "</ul>";
+							content += "</li>";
+						}
+					}
+					content += "</ul>";
+					content += "</li>";
+				}
+				content += "</ul>";
+				content += "</li>";
+				container.html("").append(content);
+			}
+		}else{
+			//无左侧分类
+		}
+	}else{
+		//接口返回错误
+	}
+})
+
+/* 批发进货虚拟分类点击事件*/
+$(function(){
+	scrollCate();
+	$("#menu-l a").live("tap", function() {
+		$("#menu-l").find("a").removeClass("white").find("i").removeClass("sj-redr");//去掉所有选中样式
+		$(this).addClass("white").find("i").addClass("sj-redr");//添加当前选中样式
+		
+		if($(this).siblings("ul").hasClass("hidden")){
+			$(this).siblings("ul").removeClass("hidden");
+			cateScroll.refresh();
+		}else{
+			$(this).siblings("ul").addClass("hidden");
+			$(this).parent().find("ul").addClass("hidden");
+			if($(this).siblings("ul").length != 0){
+				$(this).removeClass("white").find("i").removeClass("sj-redr");//去掉当前选中样式
+			}
+			cateScroll.refresh();
+		}
+		$(this).parent().siblings("li").find("a").siblings("ul").addClass("hidden");//同级隐藏
+		
+		if($(this).hasClass('promotion')){	
+			$('.wholesale-ad').removeClass('hidden');
+			$('.wholesale-goods').addClass('hidden');
+		}else{	
+			$('.wholesale-ad').addClass('hidden');
+			$('.wholesale-goods').removeClass('hidden');
+		}
+	});
+	cateScroll.refresh();
+})
+
+var page = 0;
+var pageSize = 10;
+var hasNextPage = true;//是否有下一页
+var virtualcatid = "";//虚拟分类ID
+
+/* 点击虚拟分类显示相应商品列表*/
+$(function(){
+	$("#menu-l a").live("tap", function() {
+		var virtualCateId = $(this).attr("catid");
+		virtualcatid = virtualCateId;
+		page = 0;
+		$(".wholesale-goods").html("");
+		getGoodsList(virtualcatid);
+		scrollGood();
+	});
+})
+
+/* 批发进货广告*/
+$(function(){
+	var url = urlWholesalePoster+"/"+psam+"/"+channelcodePF;
+	var Container = $(".wholesale-ad");
+	var content = "";
+	var resultJson = ajaxCommon(url,"","GET");
+	//测试数据
+	resultJson = {"_ReturnMsg":"SUCCESS","_ReturnCode":"000000","_ReturnData":[{"advertList":[{"type":1,"data":null,"url":null,"sort":1,"starttime":null,"endtime":null,"goodInfoId":163,"goodskuinfoid":1403,"posteritemid":null,"promotionsid":null,"isnationwide":null,"imagepath":"07da7f4b-7618-4c4c-9a8b-aa231bb22b97.jpg","posterid":176,"valueName":"快书包&莲子 南通手工蓝印花布叶底藏花书包","tabid":null,"postername":"323"}],"netChannelId":"30"}]};
+	if (resultJson._ReturnCode === returnCodeSuccess) {
+		if(resultJson._ReturnData.length > 0){
+			var advertList = resultJson._ReturnData[0].advertList;
+			if(advertList.length > 0){
+				advertList = sortGoodsAndAdvert(advertList);//广告排序
+				for(var i = 0; i < advertList.length; i ++){
+					var url = "";
+					var type = advertList[i].type;
+					if(type === 1){
+						url = "prodetail.html?goodsid=" +advertList[i].goodInfoId + "";//链接到商品
+					}else if(type === 2){
+						url = "#";//链接到活动
+					}else if(type === 3){
+						url = $.trim(advertList[i].url);//链接到自定义URL
+					}
+					content += "<li>";
+					content += "<a href='" +url+ "'>";
+					content += "<img src='" +urlAdvert+"/" +advertList[i].imagepath+ "' onerror='adErrImg(this);'/>";
+					content += "</a>";
+					content += "</li>";
+				}
+				Container.html("").append(content);
+			}else{
+				//次频道下无广告
+			}
+		}
+	}else{
+		//接口返回错误
+	}
+})
+
+/* 获取批发进货商品列表*/
+function getGoodsList(virtualcatid){
+	var container = $(".wholesale-goods");
+	var content = "";
+	setTimeout(function () {
+		if(hasNextPage){
+			page ++;
+			console.log("page: "+page);
+			var data = {
+					"psam":psam,
+					"channelid":channelcodePF,
+					"virtualcatid":virtualcatid,
+					"searchparm":"",
+					"page":page,
+					"pageSize":pageSize
+			};
+			var resultJson = ajaxCommon(urlWholesaleList, data);
+			resultJson = convertNullToEmpty(resultJson);
+			//测试数据
+			//resultJson = {"_ReturnCode":"000000","_ReturnData":[{"id":"5672","goodbigpic":"4c677e89-bef5-45be-bdc3-98baee3297b7.jpg;a57d77cc-12fc-4afb-9267-b8640404e60c.jpg;bbfe6a7a-81e6-4360-86ed-f0d8c128572b.jpg;b25178e9-91e5-4faa-bc07-0dee6a798d81.jpg;d734b227-7917-4c53-8edd-ca995a900a47.jpg;1c6421e1-be70-45ac-887f-89b580b7e16f.jpg;87f36513-31e0-4bc1-8391-84e5c5f2597e.jpg;3e834f08-bdfd-42b5-b41a-e3164ced1c51.jpg","onsaletime":null,"soldstore":31,"store":396,"goodname":"测试批发商品 联想 乐檬 K316G 典雅黄 移动4G手机 双卡双待","sort":1001,"goodintroduce":"乐檬K3，真的好一点！1月14日10:30新年第二波抢购限量开启！联通4G版同步上市！买乐檬K3，畅享7天无理由免费上门换新至尊服务！","isforeigngoods":0,"tempstoregoodsflag":380,"downsaletime":null,"marketprice":"99.900","clientservicetel":null,"clientservicephone":null,"tgoodinfoid":"15251","saleprice_o2o":"0.0","tgoodskuinfoid":"25637","promotionPrice":null},{"id":"5608","goodbigpic":"e072dd54e442dc89e3012ec5faa10d1f.jpg;d3171fcedaf42c18034d767e9d054f32.jpg;6706689e7dafbc8577b8305ab9342f09.jpg;0e9728fc1c2e7515e1ddf0930df705f6.jpg","onsaletime":null,"soldstore":130,"store":891,"goodname":"中宁枸杞礼盒【精品】500g/盒","sort":1000,"goodintroduce":"特级枸杞约30小袋约500克品质保证精美包装枸杞是一种名贵中药，营养十分丰富，并有很高的药物价值，保质期12个月新疆青海西藏不配送","isforeigngoods":0,"tempstoregoodsflag":380,"downsaletime":null,"marketprice":"148.000","clientservicetel":"4006870003","clientservicephone":"","tgoodinfoid":"10642","saleprice_o2o":"139.0","tgoodskuinfoid":"21938","promotionPrice":null}],"_ReturnMsg":null};
+			if (resultJson._ReturnCode === returnCodeSuccess) {
+				goodList = resultJson._ReturnData.list;
+				if(goodList.length > 0){
+					goodList = sortGoodsAndAdvert(goodList);//商品排序
+					for(var i = 0; i < goodList.length; i ++){
+						content += "<li class='clearfix'>";
+						content += "<a href='prodetail.html?goodsid=" +goodList[i].tgoodinfoid+ "'>";
+						content += "<i class='box-picture'>";
+						content += 	"<img src='" +urlImage+ "/" +goodList[i].tgoodinfoid+ "/" +imgw100+ "/" +goodList[i].goodbigpic.split(";")[0]+ "' onerror='adErrImg(this);'/><i></i>";
+						content += "</i>";
+						content += "</a>";
+						content += "<i class='box-detail'>";
+						content += "<a href='prodetail.html'><i class='detail-head'>" +goodList[i].goodname+ "</i>";
+						content += "<i class='sale-price'>¥" +goodList[i].saleprice_o2o+ "</i>";
+						content += "<del class='market-price'>¥" +goodList[i].marketprice+ "</del></a>";
+						content += "<i class='add-cart' goodsid='" +goodList[i].tgoodinfoid+ "' goodIndex="+i+">加入购物车</i>";
+						content += "</i>";
+						content += "</li>";
+					}
+					container.append(content);
+					goodScroll.refresh();
+				}else{
+					hasNextPage = false;
+				}
+			}
+		}
+	},1000);
+}
+
+/* 点击加入购物车显示选择sku*/
+$(function(){
+	$('.add-cart').live('tap',function(){
+		goodIndex = $(this).attr("goodIndex");
+		var goodsid = $(this).attr("goodsid");
+		var data = {
+				"psam":psam,
+				"channelid":channelcodePF,
+				"goodsid":goodsid
+		};
+		var resultJson = ajaxCommon(urlWholesaleDetail, data);
+		resultJson = convertNullToEmpty(resultJson);
+		if (resultJson._ReturnCode === returnCodeSuccess) {
+			var _returnData = resultJson._ReturnData;
+			
+			/* 传递给购物车参数*/
+			var goods = _returnData.goods;//商品详情
+			supplierId = goods.supplierid;
+			supplierName = goods.suppliername;
+			distributionflag  = goods.distributionflag;
+			/* 传递给购物车参数*/
+			
+			goodsSkuO2OList = _returnData.goodsSkuO2OList;//skuList
+			//sku信息
+			var skuContent = "";//规格
+			var storeContent = "";
+			if(goodsSkuO2OList.length > 1){
+				skuContent += "<div class='sku-detail'>";
+				for(var i = 0 ;i < goodsSkuO2OList.length; i ++){
+					skuContent += "<em store='" +goodsSkuO2OList[i].store+ "'>" +goodsSkuO2OList[i].skuFrontDisNameStr+ "</em>";
+					storeContent += "<div class='store-wrap'>";
+					storeContent += "<div class='sku-a'>";
+					storeContent += "<i class='stock'>库存：<em>" +goodsSkuO2OList[i].store+ "</em>件</i>";
+					storeContent += "<i class='sku-solded'>已售：<em>" +goodsSkuO2OList[i].soldStore+ "</em></i>";
+					storeContent += "</div>";
+					storeContent += "<div class='sku-a'>";
+					storeContent += "<i class='sku-sale'>拉卡拉价：<em class='color'>￥" +goodsSkuO2OList[i].salePrice+ "</em></i>";
+					storeContent +=	"<i class='sku-market'>批发市场价：<em>￥" +goodsSkuO2OList[i].marketPrice+ "</em></i>";
+					storeContent += "</div>";
+					storeContent += "</div>";
+				}
+				skuContent += "</div>";
+				$(".sku-wrap").html("").append(skuContent).after(storeContent);
+				$('#sku').removeClass('hidden');
+				$('.masker').removeClass('hidden');
+			}else{
+				//如果只有一个sku,直接添加到购物车
+				addCart();
+			}
+			
+			//点击sku显示相应的库存和价格
+			var sku = $(".sku-detail em");
+			var store_price = $(".store-wrap");
+			sku.eq("0").addClass("sku-red");//默认sku第一项被选中
+			store_price.addClass("hidden").eq("0").removeClass("hidden");//默认第一个sku的售价和库存被显示
+			$(".sku-b input").attr("store",sku.eq("0").attr("store"));//默认为选择商品数量添加库存属性
+			if(sku.eq("0").attr("store") === "0"){
+				$(".sku-sure").addClass("add-cart-gray");//如果库存为0，加入购物车按钮不可用
+			}
+			//点击sku显示相应的库存、价格、库存
+			sku.each(function(index) {
+				$(this).on("tap",function(){
+					store_price.addClass("hidden").eq(index).removeClass("hidden");
+					$(".sku-b input").attr("value","1");
+					$(".sku-b input").attr("store",$(this).attr("store"));
+					if($(this).attr("store") === "0"){
+						$(".sku-sure").addClass("add-cart-gray");//如果库存为0，加入购物车按钮不可用
+					}else{
+						$(".sku-sure").removeClass("add-cart-gray");
+					}
+					skuIndex = index;
+				});
+			});
+		}else{
+			//接口返回错误
+		}
+	});
+})
+
+/* 选择sku事件*/  /*增加数量有问题*/
+$(function(){
+	$(".sku-sure").live("tap",function(){
+		addCart();//添加到购物车
+		$("#sku").addClass("hidden");
+		$(".masker").addClass("hidden");
+	})
+	/* 点击sku取消或加入购物车按钮*/
+	$(".sku-cancel").live("tap",function(){
+		$("#sku").addClass("hidden");
+		$(".masker").addClass("hidden");	
+	});
+	/* 点击sku中的属性进行选择*/
+	$(".sku-detail em").live("tap",function(){
+		$(this).siblings().removeClass("sku-red");
+		$(this).addClass("sku-red");	
+	});
+	/* 点击sku进行加减数量*/
+	$(".sku-plus").on("tap",function(){
+		var n=parseInt($(this).prev().attr("value"));
+		if((n+1) > $(this).prev().attr("store")){
+			showAlertMsg(msgFailProductStore);//库存不足提示
+		}else{
+			$(this).prev().attr("value",n+1);
+		}		
+	});
+	$(".sku-minus").on("tap",function(){
+		var n=parseInt($(this).next().attr("value"));
+		if(n>1){
+			$(this).next().attr("value",n-1);
+		}		
+	});
+})
+
+/* 添加到购物车*/
+function addCart(){
+	var goodsId = goodsSkuO2OList[skuIndex].tgoodInfoId;
+	var goodName = goodList[goodIndex].goodname;
+	var goodBigPic = ((goodList[goodIndex].goodbigpic).split(";"))[0];
+	var o2oId = goodsSkuO2OList[skuIndex].o2oId;
+	var marketPrice = goodsSkuO2OList[skuIndex].marketPrice;
+	var salePrice = goodsSkuO2OList[skuIndex].salePrice;
+	var skuFrontDisNameStr = goodsSkuO2OList[skuIndex].skuFrontDisNameStr;
+	var tGoodSkuInfoId = goodsSkuO2OList[skuIndex].tgoodSkuInfoId;
+	var goodscount = $("input[type=text]").val() || "1";
+	goodscount = uniqueStorage(goodsId,tGoodSkuInfoId,goodscount);//统一sku商品数量做累加
+	var key = "";
+	key = productPrefix+goodsId+"_"+tGoodSkuInfoId;
+	var value = {
+			"goodsId":goodsId,
+			"goodName":goodName,
+			"goodBigPic":goodBigPic,
+			"supplierId":supplierId,
+			"supplierName":supplierName,
+			"o2oId":o2oId,
+			"marketPrice":marketPrice,
+			"salePrice":salePrice,
+			"skuFrontDisNameStr":skuFrontDisNameStr,
+			"tGoodSkuInfoId":tGoodSkuInfoId,
+			"goodscount":goodscount,
+			"channelcode":channelcodePF,
+			"distributionflag":distributionflag
+	};
+	console.log(value);
+	storage.setItem(key, JSON.stringify(value));
+	showCart();
+}
+
+/* 更新批发进货首页底部/验证优惠券*/
+function showCart(){
+	$(".goodscart").html(getGoodsCount());
+	$(".goodscart-total").html("共计" +getGoodsCount()+ "件");
+	var couponlist = [];
+	var items = [];
+	for(var i = 0; i < storage.length; i ++){
+		var key = storage.key(i);
+		if(key.indexOf(productPrefix) >= 0){
+			var proVal = JSON.parse(storage.getItem(key));
+			var item = {
+				"skuo2oid":	proVal.o2oId,
+				"skuid": proVal.tGoodSkuInfoId,
+				"goodsname": proVal.goodName,
+				"goodssaleprice": proVal.salePrice,
+				"goodscount": proVal.goodscount,
+				"channel": proVal.channelcode
+			}
+			items.push(item);
+		}
+	}
+	
+	var data = {
+			"token":userToken,
+		    "mobile":mobile,
+		    "pasmid":psam,
+		    "source":sourceSbApp2B,
+		    "custelno":mobile,
+		    "wholesale":"2B",
+		    "couponlist":couponlist,
+		    "items":items
+	}
+	var resultJson = ajaxCommon(urlCheckCoupon, data);
+	if (resultJson._ReturnCode === returnCodeSuccess) {
+		var goodstotal = resultJson._ReturnData.coupondata.goodstotal;
+		$(".goodscart-price").html("￥"+goodstotal);
+	}else{
+		//接口返回错误
+	}
+}

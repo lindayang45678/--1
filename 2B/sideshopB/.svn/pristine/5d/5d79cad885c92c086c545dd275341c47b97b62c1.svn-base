@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lakala.mapper.r.user.TShopUpdateMapper">
+  
+  <resultMap id="TstoreApproveResultMap" type="com.lakala.module.user.vo.TstoreApprove" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="net_no" property="netno" jdbcType="VARCHAR" />
+    <result column="phone_no" property="phoneno" jdbcType="VARCHAR" />
+    <result column="electron_no" property="electronno" jdbcType="VARCHAR" />
+    <result column="shopkeeper" property="shopkeeper" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="apply_date" property="applydate" jdbcType="VARCHAR" />
+    <result column="approve_state" property="approvestate" jdbcType="INTEGER" />
+    <result column="approve_date" property="approvedate" jdbcType="VARCHAR" />
+    <result column="approver" property="approver" jdbcType="VARCHAR" />
+    <result column="psam" property="psam" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgid" jdbcType="INTEGER"/>
+    <result column="id_no" property="id_no" jdbcType="VARCHAR" />
+    <result column="idimage_positive" property="idimage_positive" jdbcType="VARCHAR" />
+    <result column="idimage_negative" property="idimage_negative" jdbcType="VARCHAR" />
+    <result column="name" property="shopname" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="community" property="community" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR"/>
+    <result column="businessLicence" property="businessLicence" jdbcType="VARCHAR"/>
+  </resultMap>
+
+	<!-- 录入小店更新信息 -->
+  <insert id="shopUpdateInfo" parameterType="com.lakala.module.user.vo.TstoreApprove">
+  	insert into tstore_approve (net_no, phone_no, electron_no, shopkeeper, state, approve_state, org_id, id_no, idimage_positive, idimage_negative, name, district, community, address, longitude, latitude, businessLicence) 
+  		value (#{netno, jdbcType=VARCHAR},
+  			#{phoneno, jdbcType=VARCHAR}, 
+  			#{electronno, jdbcType=VARCHAR},
+  			#{shopkeeper, jdbcType=VARCHAR}, 
+  			#{state, jdbcType=VARCHAR}, 
+  			#{approvestate, jdbcType=VARCHAR}, 
+  			#{orgid, jdbcType=VARCHAR},
+  			#{id_no, jdbcType=VARCHAR}, 
+  			#{idimage_positive, jdbcType=VARCHAR},
+  			#{idimage_negative, jdbcType=VARCHAR},
+  			#{shopname, jdbcType=VARCHAR}, 
+  			#{district, jdbcType=VARCHAR},
+  			#{community, jdbcType=VARCHAR},
+  			#{address, jdbcType=VARCHAR}, 
+  			#{longitude, jdbcType=VARCHAR},
+  			#{latitude, jdbcType=VARCHAR},
+  			#{businessLicence, jdbcType=VARCHAR}
+  			)
+  </insert>
+  
+  <!-- 查询小店更新所需的网点信息 -->
+  <select id="selectNetInfo" resultMap="TstoreApproveResultMap" parameterType="java.lang.String">
+  	select ec_net_no as electron_no, net_no, orgid as org_id from sdb_media_statistics where mobile = #{mobile, jdbcType=VARCHAR}
+  </select>
+  
+    <!-- 查询小店是否已存在 -->
+  <select id="checkShopExists" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	select count(mobile) from sdb_media_statistics where terminalType = 3 and mobile = #{mobile, jdbcType=VARCHAR}
+  </select>
+ 
+ 
+    <!-- 查询小店类型是否是标准店 -->
+  <select id="checkShopExistsInTmemberb" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	select count(membername) from tmemberb where membername = #{mobile, jdbcType=VARCHAR}
+  </select>
+  
+  
+   <!-- 查询小店类型是否是标准店 -->
+  <select id="checkShopType" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	select bizType from tmemberb where membername = #{mobile, jdbcType=VARCHAR}
+  </select>
+  
+  
+  <!-- 根据手机号查询小店信息 -->
+  <select id="getShopInfo" resultMap="TstoreApproveResultMap" parameterType="java.lang.String">
+  	select net_no, phone_no, electron_no, shopkeeper, state, approve_state, org_id, id_no, idimage_positive, idimage_negative, name, district, community, address, longitude, latitude, businessLicence
+  	 from tstore_approve where phone_no = #{mobile, jdbcType=VARCHAR} and id=79
+  </select>
+</mapper>

@@ -1,0 +1,194 @@
+package com.lakala.model.profit;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * 
+ * @author zhaoqiugen
+ *
+ */
+public class TorderearningsProvider {
+	private Long id;
+
+	private String orderproviderid;
+
+	private String settlementid;
+
+	private String orderid;
+
+	private Integer source;
+
+	private String netno;
+
+	private String pasmno;
+
+	private BigDecimal divideprofit;
+
+	private Integer returnflg;
+
+	private Integer issettlement;
+
+	private Date ordertime;
+
+	private Date earningstime;
+
+	private Date updatetime;
+
+	private Date createtime;
+	/** 支付方式 */
+	private String payMode;
+
+	/** 支付费率 */
+	private BigDecimal payRate;
+	/** 二级订单金额 */
+	private BigDecimal orderAmount;
+
+	/** 二级订单结算金额 */
+	private BigDecimal settleAmount;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getOrderproviderid() {
+		return orderproviderid;
+	}
+
+	public void setOrderproviderid(String orderproviderid) {
+		this.orderproviderid = orderproviderid;
+	}
+
+	public String getSettlementid() {
+		return settlementid;
+	}
+
+	public void setSettlementid(String settlementid) {
+		this.settlementid = settlementid;
+	}
+
+	public String getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
+	}
+
+	public Integer getSource() {
+		return source;
+	}
+
+	public void setSource(Integer source) {
+		this.source = source;
+	}
+
+	public String getNetno() {
+		return netno;
+	}
+
+	public void setNetno(String netno) {
+		this.netno = netno;
+	}
+
+	public String getPasmno() {
+		return pasmno;
+	}
+
+	public void setPasmno(String pasmno) {
+		this.pasmno = pasmno;
+	}
+
+	public BigDecimal getDivideprofit() {
+		return divideprofit;
+	}
+
+	public void setDivideprofit(BigDecimal divideprofit) {
+		this.divideprofit = divideprofit;
+	}
+
+	public Integer getReturnflg() {
+		return returnflg;
+	}
+
+	public void setReturnflg(Integer returnflg) {
+		this.returnflg = returnflg;
+	}
+
+	public Integer getIssettlement() {
+		return issettlement;
+	}
+
+	public void setIssettlement(Integer issettlement) {
+		this.issettlement = issettlement;
+	}
+
+	public Date getOrdertime() {
+		return ordertime;
+	}
+
+	public void setOrdertime(Date ordertime) {
+		this.ordertime = ordertime;
+	}
+
+	public Date getEarningstime() {
+		return earningstime;
+	}
+
+	public void setEarningstime(Date earningstime) {
+		this.earningstime = earningstime;
+	}
+
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	public String getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(String payMode) {
+		this.payMode = payMode;
+	}
+
+	public BigDecimal getPayRate() {
+		return payRate;
+	}
+
+	public void setPayRate(BigDecimal payRate) {
+		this.payRate = payRate;
+	}
+
+	public BigDecimal getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(BigDecimal orderAmount) {
+		this.orderAmount = orderAmount;
+	}
+
+	public BigDecimal getSettleAmount() {
+		return settleAmount;
+	}
+
+	public void setSettleAmount(BigDecimal settleAmount) {
+		this.settleAmount = settleAmount;
+	}
+
+}

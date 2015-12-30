@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>添加商品</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<link rel="stylesheet" href="../../css/master.css"/>
+</head>
+
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1);" class="back"></a>
+  		<h1>添加商品</h1>
+  		<a href="javascript:void(0);" class="head-right head-search"></a>
+  		<a href="addgoods1.html" class="head-right head-pluse"></a>
+	</header>
+	<section class="container addgoods">
+        <section class="addgoods-main clearfix">
+        		<section class="add-menus">
+            		<div id="menu-left">
+                    	<ul class="add-menu1">
+                			<li><a href="#" class="promotion">小店近期批发<i></i></a></li>
+                    		<li><a href="#">全国批发<i></i></a></li>
+                    		<li><a href="#">福建省批发<i></i></a></li>
+                    		<li>
+                    			<a href="#" class="bgwhite">河北省批发<i class="red-icon"></i></a>
+                        		<ul class="add-menu2 hidden">
+                        			<li>
+                            			<a href="#">生鲜蔬菜<i></i></a>
+                                		<ul class="add-menu3 hidden">
+                                			<li>
+                                    			<a href="#">苹果<i></i></a>
+                                        		<ul class="add-menu4 hidden">
+                                        	 		<li><a href="#">红富士<i></i></a></li>
+                                             		<li><a href="#">香蕉苹果<i></i></a></li>
+                                             		<li><a href="#">青苹果<i></i></a></li>
+                                        		</ul>
+                                    		</li>
+                                    		<li>
+                                    			<a href="#">香梨<i></i></a>
+                                    		</li>
+                                    		<li>
+                                    			<a href="#">香蕉<i></i></a>
+                                    		</li><li>
+                                    			<a href="#">木瓜<i></i></a>
+                                    		</li>
+                                		</ul>
+                            		</li>
+                            		<li>
+                            			<a href="#">酒水饮料<i></i></a>
+                            		</li>
+                            		<li>
+                            			<a href="#">烟草<i></i></a>
+                            		</li>
+                        		</ul>
+                    		</li>
+                		</ul>
+                    </div>
+            	</section>
+            	<section class="add-content">
+        			<ul class="content1">
+                    	<li>
+            				<dl>
+                				<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                    			<dd>
+                    				<h3>标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
+                    			</dd>
+                			</dl>
+                			<a href="addgoods1.html" class="added">上架到小店</a>
+            			</li>
+                    	<li>
+            				<dl>
+                				<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                    			<dd>
+                    				<h3>标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
+                    			</dd>
+                			</dl>
+                			<a href="addgoods1.html" class="added">上架到小店</a>
+            			</li>
+                    	<li>
+            				<dl>
+                				<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                    			<dd>
+                    				<h3>标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
+                    			</dd>
+                			</dl>
+                			<a href="addgoods1.html" class="added">上架到小店</a>
+            			</li>
+                        <li>
+            				<dl>
+                				<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                    			<dd>
+                    				<h3>标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
+                    			</dd>
+                			</dl>
+                			<a href="addgoods1.html" class="added">上架到小店</a>
+            			</li>
+                      </ul>
+        		</section>
+        </section>
+        <!-- <section class="addgoods-shade"></section> -->
+     </section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+	<script type="text/javascript" src="../../js/shops/addgoods.js"></script>
+</body>
+</html>

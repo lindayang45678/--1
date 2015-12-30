@@ -1,0 +1,33 @@
+$(function() {
+	loadJs();
+})
+
+$(function() {
+	$("#btnQuit").on("tap", function() {
+		var data = {"mobile":mobile};
+		var resultJson = ajaxCommon(urlLogout, data);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			//清除所有localStorage里的信息
+			clearStorage();
+			window.location.href = "../accounts/login.html?t=" + t;
+		} else {
+			//@TODO 如果接口有错改如何处理？
+			//清除所有localStorage里的信息
+			clearStorage();
+			window.location.href = "../accounts/login.html?t=" + t;
+		}
+	});
+})
+
+//设置保存key-value，供客户端调用
+$(function() {
+	$(".setting-choose a").on("tap", function() {
+		$(this).parent().toggleClass("on");
+		var key = $(this).attr("id");
+		if($(this).parent().hasClass("on")) {
+			cordova._native.saveInfo.set(key, "on");
+		} else {
+			cordova._native.saveInfo.set(key, "off");
+		}
+	});
+})

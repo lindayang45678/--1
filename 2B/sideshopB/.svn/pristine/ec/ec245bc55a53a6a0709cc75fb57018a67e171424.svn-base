@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单管理-售后</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+	<header>
+		<h1>订单管理</h1>
+		<a href="../homepage/index.html" class="back"></a>
+		<a href="orderquery.html" class="head-right"></a>
+	</header>
+	<section class="container aftersale">
+		<div id="head" class="header">
+		</div>
+		<div id="header-list" class="header-list">
+		</div>
+		<p class="tips f-14">以下是本店自营商品的销售订单，请尽快处理。</p>
+		<section id="aftersaleorders-scroll" class="wholesaleorders-scroll">
+			<div id="aftersaleorders-container" class="wholesaleorders-container">
+				<div id="scroll-items">	
+				</div>
+				<div id="loading">
+					<img class="loading" alt="" src="../../images/loading.png" />
+				</div>
+			</div>
+		</section>
+		<div class="pop-up-box hidden">
+			<div class="after-sale-infor">
+				<h3>您是否同意该售后申请？</h3>
+				<div class="types">
+					<span class="not-agree" isagree="fasle">不同意</span>
+					<span class="agree on" isagree="true">同意</span>
+				</div>
+				<div class="msg">
+					<p>您将同意该售后申请，请确认是否收到顾客的退货？</p>
+					<p>如已收到，请点击确认按钮；</p>
+					<div class="description">
+						<h4>说明：</h4>
+						<p>1、在线支付的订单：系统将在3-7个工作日内，自动给顾客支付的银行卡退款！</p>
+						<p>2、在线支付的订单：如该订单的款项已打给您，那下个结算 日将扣除该售后订单退款款项；</p>
+						<p>3、货到付款订单，需要您退款给顾客；</p>
+					</div>
+				</div>
+				<div class="reasons hidden">
+					<p>您不同意该售后申请，请输入理由：</p>
+					<textarea></textarea>
+				</div>
+				<a class="btn-red" href="#">确认</a>
+				<a class="btn-gray" href="#">稍后处理</a>
+			</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/orders/aftersale.js"></script>
+</html>

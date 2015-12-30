@@ -1,0 +1,10 @@
+package com.lakala.mapper.w.order;
+
+import com.lakala.base.model.Torder;
+
+
+public interface TorderMapper {
+
+    void updateTorder(Torder order);
+
+}

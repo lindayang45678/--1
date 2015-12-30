@@ -1,0 +1,20 @@
+// JavaScript Document
+$(function(){
+	//是否营业和收货方式选择	
+	$("#on-off").on("tap",function(){
+		$(this).toggleClass("turn-on");
+		if($(this).hasClass("turn-on")){
+			$("#on-off1").val("营业中");
+		}else{
+			$("#on-off1").val("打烊了");
+			}
+		})
+	$("#receipt").on("tap",function(){
+		$(this).toggleClass("turn-on");
+		if($(this).hasClass("turn-on")){
+			$("#receipt-2").val("到店自提、送货上门");
+			}else{
+				$("#receipt-2").val("到店自提");
+				}
+		})
+	})

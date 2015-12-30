@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单管理-售后</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+	<header>
+		<h1>订单管理</h1>
+		<a href="../homepage/index.html" class="back">返回</a>
+		<a href="orderquery.html" class="head-right">订单搜索</a>
+	</header>
+	<section class="container retailorders aftersale">
+		<div class="header">
+			<a href="wholesaleorders.html" class="new-tbl-cell f-16"><span>批发订单</span></a>
+			<a href="retailorders.html" class="new-tbl-cell f-16"><span class="active">零售订单</span></a>
+			<a href="ownership.html" class="new-tbl-cell f-16"><span class="delivery">需店主送货<em>48</em></span></a>
+		</div>
+		<div id="header-list" class="header-list">
+			<div id="header-list-slide" class="header-list-slide">
+				<ul>
+					<li><a href="#" class="c-gray f-12"><span>待发货<em>(230)</em></span></a></li>
+					<li><a href="#" class="c-gray f-12"><span>已发货<em>(23004)</em></span></a></li>
+					<li><a href="#" class="c-gray f-12"><span>已签收<em>(2304)</em></span></a></li>
+					<li><a href="#" class="c-gray f-12 active"><span>售后<em>(12)</em></span></a></li>
+				</ul>
+			</div>
+		</div>
+		<p class="tips f-14">以下是本店自营商品的销售订单，请尽快处理。</p>
+		<section class="orders-items clearfix">
+			<div class="order-number f-14 bt bb"><div class="down"><span class="nobr"><em class="color">[待审核]</em>售后申单号：92934934</span></div></div>
+			<section class="orders-content">		
+				<div class="consignee-infor bb">
+					<div>订单号：<span>123456789123456789</span></div>
+					<div>提交时间：<span>2014-12-23  12:12:12</span></div>
+					<div>售后类型：<span>退款</span></div>
+					<div>售后状态：<span>待审核</span></div>
+					<div>售后商品：</div>
+					<a class="btn-red after-sale" href="javascript:void(0);">处理售后</a>	
+				</div>
+				<div class="commodity-infor">
+					<dl class="bb">
+						<dt class="commodity-content">
+							<strong><em class="color">【生鲜】</em>信息水果</strong>
+							<span>颜色：红色</span>
+							<span>尺码：XL</span><br/>
+							<span>数量：x1</span><br/>
+						</dt>
+						<dd><img src="../../images/goods-img.jpg"></dd>
+					</dl>
+					<dl class="bb">
+						<dt class="commodity-content">
+							<strong><em class="color">【生鲜】</em>信息水果</strong>
+							<span>颜色：红色</span>
+							<span>尺码：XL</span><br/>
+							<span>数量：x1</span><br/>
+						</dt>
+						<dd><img src="../../images/goods-img.jpg"></dd>
+					</dl>
+				</div>
+				<div class="order-infor bb">
+					<dl>
+						<dt>下订时间：</dt>
+						<dd>2014-12-12  12:12:12</dd>
+						<dt>订单金额：</dt>
+						<dd>￥90.00 <span class="freight">运费：<em> ￥12.00</em></span></dd>
+						<dt>付款方式：</dt>
+						<dd>货到付款</dd>
+						<dt>付款状态：</dt>
+						<dd>已付款</dd>
+						<dt>订单状态：</dt>
+						<dd>已发货</dd>
+					</dl>
+				</div>
+			</section>
+		</section>
+		<section class="orders-items clearfix">
+			<div class="order-number f-14 bt bb"><div class="right"><span class="nobr"><em class="color">[待审核未通过]</em>售后申请号：92934934</span></div></div>
+			<section class="orders-content hidden">		
+				<div class="consignee-infor bb">
+					<div>订单号：<span>123456789123456789</span></div>
+					<div>提交时间：<span>2014-12-23  12:12:12</span></div>
+					<div>售后类型：<span>退款</span></div>
+					<div>售后状态：<span>待审核</span></div>
+					<div>售后商品：</div>
+					<a class="btn-red after-sale" href="javascript:void(0);">处理售后</a>
+				</div>
+				<div class="commodity-infor">
+					<dl class="bb">
+						<dt class="commodity-content">
+							<strong><em class="color">【生鲜】</em>信息水果</strong>
+							<span>颜色：红色</span>
+							<span>尺码：XL</span><br/>
+							<span>数量：x1</span><br/>
+						</dt>
+						<dd><img src="../../images/goods-img.jpg"></dd>
+					</dl>
+					<dl class="bb">
+						<dt class="commodity-content">
+							<strong><em class="color">【生鲜】</em>信息水果</strong>
+							<span>颜色：红色</span>
+							<span>尺码：XL</span><br/>
+							<span>数量：x1</span><br/>
+						</dt>
+						<dd><img src="../../images/goods-img.jpg"></dd>
+					</dl>
+				</div>
+				<div class="order-infor bb">
+					<dl>
+						<dt>下订时间：</dt>
+						<dd>2014-12-12  12:12:12</dd>
+						<dt>订单金额：</dt>
+						<dd>￥90.00 <span class="freight">运费：<em> ￥12.00</em></span></dd>
+						<dt>付款方式：</dt>
+						<dd>货到付款</dd>
+						<dt>付款状态：</dt>
+						<dd>已付款</dd>
+						<dt>订单状态：</dt>
+						<dd>已发货</dd>
+					</dl>
+				</div>
+			</section>
+		</section>
+		<section class="orders-items clearfix">
+			<div class="order-number f-14 bt bb"><div class="right"><span class="nobr"><em class="color">[待退款]</em>售后申请号：92934934</span></div></div>
+			<section class="orders-content hidden">		
+				<div class="consignee-infor bb">
+					<div>订单号：<span>123456789123456789</span></div>
+					<div>提交时间：<span>2014-12-23  12:12:12</span></div>
+					<div>售后类型：<span>退款</span></div>
+					<div>售后状态：<span>待审核</span></div>
+					<div>售后商品：</div>
+					<a class="btn-red after-sale" href="javascript:void(0);">处理售后</a>
+				</div>
+				<div class="commodity-infor">
+					<dl class="bb">
+						<dt class="commodity-content">
+							<strong><em class="color">【生鲜】</em>信息水果</strong>
+							<span>颜色：红色</span>
+							<span>尺码：XL</span><br/>
+							<span>数量：x1</span><br/>
+						</dt>
+						<dd><img src="../../images/goods-img.jpg"></dd>
+					</dl>
+					<dl class="bb">
+						<dt class="commodity-content">
+							<strong><em class="color">【生鲜】</em>信息水果</strong>
+							<span>颜色：红色</span>
+							<span>尺码：XL</span><br/>
+							<span>数量：x1</span><br/>
+						</dt>
+						<dd><img src="../../images/goods-img.jpg"></dd>
+					</dl>
+				</div>
+				<div class="order-infor bb">
+					<dl>
+						<dt>下订时间：</dt>
+						<dd>2014-12-12  12:12:12</dd>
+						<dt>订单金额：</dt>
+						<dd>￥90.00 <span class="freight">运费：<em> ￥12.00</em></span></dd>
+						<dt>付款方式：</dt>
+						<dd>货到付款</dd>
+						<dt>付款状态：</dt>
+						<dd>已付款</dd>
+						<dt>订单状态：</dt>
+						<dd>已发货</dd>
+					</dl>
+				</div>
+			</section>
+		</section>
+		<div class="pop-up-box hidden">
+			<div class="after-sale-infor">
+				<h3>您是否同意该售后申请？</h3>
+				<div class="types">
+					<span class="not-agree">不同意</span>
+					<span class="agree on">同意</span>
+				</div>
+				<div class="msg">
+					<p>您将同意该售后申请，请确认是否收到顾客的退货？</p>
+					<p>如已收到，请点击确认按钮；</p>
+					<div class="description">
+						<h4>说明：</h4>
+						<p>1、在线支付的订单：系统将在3-7个工作日内，自动给顾客支付的银行卡退款！</p>
+						<p>2、在线支付的订单：如该订单的款项已打给您，那下个结算 日将扣除该售后订单退款款项；</p>
+						<p>3、货到付款订单，需要您退款给顾客；</p>
+					</div>
+				</div>
+				<div class="reasons hidden">
+					<p>您不同意该售后申请，请输入理由：</p>
+					<textarea></textarea>
+				</div>
+				<input class="btn-red" type="button" value="确认"/>
+				<input class="btn-gray" type="button" value="稍后处理"/>
+			</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/orders/orders.js"></script>
+</html>

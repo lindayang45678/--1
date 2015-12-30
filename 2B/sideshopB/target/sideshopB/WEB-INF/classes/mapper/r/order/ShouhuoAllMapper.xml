@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.order.ShouhuoAllMapper">
+	<resultMap id="BaseResultMap" type="com.lakala.base.model.Torderitems">
+		<result column="tOrderItemsId" property="torderitemsid" jdbcType="INTEGER" />
+		<result column="logisticsId" property="logisticsid" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="goodscount" property="goodscount" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="selectorderid" resultType="java.lang.String" parameterType="map">
+		SELECT 
+		  p.`orderID`
+		FROM
+		  torderprovider p 
+		WHERE p.`tOrderProviderId` = #{orderproviderid,jdbcType=VARCHAR}   
+	</select>
+  	<select id="selectorderitems" resultMap="BaseResultMap" parameterType="map">
+		SELECT 
+		  i.`tOrderItemsId`,
+		  i.`logisticsId`,
+		  i.`goodsCount` 
+		FROM
+		  torderitems i 
+		WHERE i.`orderProviderID` = #{orderproviderid,jdbcType=VARCHAR}   
+		  AND i.`state` !=#{state,jdbcType=INTEGER}   
+		  AND i.`logisticsId` IS NOT NULL    
+	</select>
+	<select id="selectlogids" resultMap="BaseResultMap" parameterType="map">
+		SELECT 
+		  l.`logisticsId`,
+  		  i.`state` 
+		FROM
+		  tlogisticsinfo l,
+		  torderitems i 
+		WHERE l.`logisticsId` = i.`logisticsId` 
+		  AND l.`logisticsId` IN
+			<foreach item="item" index="index" collection="logisticsids" 
+                     open="(" separator="," close=")">
+                    #{item}
+            </foreach>
+		  AND l.`receivertime` IS NULL 
+		GROUP BY l.`logisticsId`
+		HAVING i.`state` = #{state,jdbcType=INTEGER}  
+  			AND COUNT(DISTINCT (i.`state`)) = 1  
+	</select>
+</mapper>

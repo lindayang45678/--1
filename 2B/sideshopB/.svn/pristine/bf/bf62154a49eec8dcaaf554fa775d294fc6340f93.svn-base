@@ -1,0 +1,45 @@
+package com.lakala.module.user.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+
+
+/**
+ * 用户登录输入
+ * @author ph.li
+ *
+ */
+public class UserRegisterInput extends ObjectInput{
+
+	/** 用户密码 */
+	private String pwd;
+	
+	private String newpwd;
+	
+	private String verificationCode;
+	
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+	public String getNewpwd() {
+		return newpwd;
+	}
+
+	public void setNewpwd(String newpwd) {
+		this.newpwd = newpwd;
+	}
+	
+}

@@ -1,0 +1,14 @@
+package com.lakala.util;
+
+public class ConstantsUtil {
+	private String callbackurl;
+
+	public String getCallbackurl() {
+		return callbackurl;
+	}
+
+	public void setCallbackurl(String callbackurl) {
+		this.callbackurl = callbackurl;
+	}
+	
+}

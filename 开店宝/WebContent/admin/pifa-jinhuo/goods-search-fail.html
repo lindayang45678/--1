@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>批发进货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />	
+	<!-- <link rel="stylesheet" href="../../css/zTreeStyle.css" /> -->
+	<link rel="stylesheet" href="../../css/master.css" />
+	<link rel="stylesheet" href="../../css/admin.css" />
+
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html" class="active">批发进货</a>
+			<a href="../order-query/order-query.html">订单查询</a>
+			<a href="../benefit-query/order-income.html">收益查询</a>
+			<a href="../sales-manage/sales-list.html">销售员管理</a>
+			<a href="../tools/index.html">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+		<aside>
+				<div id="tree-menu">
+					<ul id="treeDemo" class="ztree"></ul>
+				</div>
+			<menu>
+				<a href="../pifa-jinhuo/goods-search.html" id="pfjh-spss">商品搜索</a>
+				<a href="javascript:;">返回商城首页</a>
+			</menu>
+		</aside>
+		<section class="main">
+			<div class="pfjh-fail">
+				<p>很抱歉，未找到搜索的商品，请确认商品名称是否正确！</p>
+				<a href='javascript:;' class="btn-blue">重新查询</a>
+			</div>	
+		</section>	
+	</section>
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/jquery.ztree.core-3.5.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript" src="../../js/library/jquery.slides.min.js"></script>
+	<script type="text/javascript" src="../../js/library/jquery.touch.slider.min.js"></script>
+	<script type="text/javascript" src="../../js/library/setting.js"></script>
+	<script type="text/javascript" src="../../js/library/common.js"></script>
+	<script type="text/javascript">
+		(function() {
+			$.fn.bigAdSlider = function() {
+				var iWidth, iHeight;
+
+				var winWidth = $(window).width();
+				switch(winWidth) {
+					case w1280:
+						iWidth = 943;
+						iHeight = 350;
+						break;
+					case w1024:
+						iWidth = 754;
+						iHeight = 334;
+						break;
+					case w800:
+						iWidth = 589;
+						iHeight = 261;
+						break;
+				}
+				this.height(iHeight);
+				this.find("img").height(iHeight);
+				touchSliderImgPlay(this);
+			};
+
+			$.fn.fullScreenSlider = function() {
+				var iWidth, iHeight;
+
+				var winWidth = $(window).width();
+				switch(winWidth) {
+					case w1280:
+						iWidth = 943;
+						iHeight = 720;
+						break;
+					case w1024:
+						iWidth = 754;
+						iHeight = 690;
+						break;
+					case w800:
+						iWidth = 589;
+						iHeight = 538;
+						break;
+				}
+				slideImgPlay(this, iWidth, iHeight, true, false, false);
+				$(".slidesjs-container").width(iWidth);
+				$(".slidesjs-control").width(iWidth);
+			};
+		})(jQuery);
+
+		$(function() {
+			$(".page-scroller").fullScreenSlider();
+			$(".banner").bigAdSlider();
+		});
+			var setting = {
+			view: {
+				showIcon: showIconForTree,
+				showLine: false
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			}
+		};
+
+		var zNodes =[
+			{ id:1, pId:0, name:"思明区批发",open:true}, //open:true
+			{ id:11, pId:1, name:"食品酒水"},
+			{ id:111, pId:11, name:"水果"},
+
+			{ id:1111, pId:111, name:"平果"},
+			{ id:1112, pId:111, name:"伊丽莎白瓜"},
+
+			{ id:112, pId:11, name:"饮料"},
+			{ id:113, pId:11, name:"零食"},
+			{ id:12, pId:1, name:"日用化妆"},
+			{ id:121, pId:12, name:"节点121"},
+			{ id:122, pId:12, name:"节点122"},
+			{ id:123, pId:12, name:"节点123"},
+			{ id:124, pId:12, name:"节点124"},
+			{ id:13, pId:1, name:"男女服饰", isParent:true},
+
+			{ id:2, pId:0, name:"厦门批发"},
+			{ id:21, pId:2, name:"父节点21 ", open:true},
+			{ id:211, pId:21, name:"叶子节点"},
+			{ id:212, pId:21, name:"叶子节点"},
+			{ id:213, pId:21, name:"叶子节点"},
+			{ id:214, pId:21, name:"叶子节点"},
+			{ id:22, pId:2, name:"父节点22"},
+			{ id:221, pId:22, name:"叶子节点"},
+			{ id:222, pId:22, name:"叶子节点"},
+			{ id:223, pId:22, name:"叶子节点"},
+			{ id:224, pId:22, name:"叶子节点"},
+			{ id:23, pId:2, name:"父节点23"},
+			{ id:231, pId:23, name:"叶子节点"},
+			{ id:232, pId:23, name:"叶子节点232"},
+			{ id:233, pId:23, name:"叶子节点233"},
+			{ id:234, pId:23, name:"叶子节点234"},
+
+			{ id:3, pId:0, name:"福建批发", isParent:true}
+		];
+
+		// $(document).ready(function(){
+		// })
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		});
+		function showIconForTree(treeId, treeNode) {
+        return false;
+    };
+	</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+// JavaScript Document
+$(function(){
+	 	$(".add-service").on('tap',function(){
+		 $(".add-del").removeClass('hidden');
+		 });
+	
+});

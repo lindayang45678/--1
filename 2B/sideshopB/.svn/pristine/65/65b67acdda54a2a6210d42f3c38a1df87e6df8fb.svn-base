@@ -1,0 +1,64 @@
+$(function(){
+	$(".add-service").on('tap',function(){
+		var addcontent='';
+		addcontent+='<div class="add-del">';
+		addcontent+='<a href="javascript:;" class="del-image"></a>';
+		addcontent+='<div class="shopedit-2item del">';
+		addcontent+='<div class="editline-n">'
+		addcontent+='<span class="left1">配送客服:</span>';
+		addcontent+='<div class="leftborder">';
+		addcontent+='<div contenteditable="true" class="max-1">张伟</div>';
+		addcontent+='<a href="javascript:;" class="edit"></a>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='<div class="editline-n">';
+		addcontent+='<span class="left1">客服电话:</span>';
+		addcontent+='<div class="leftborder">';
+		addcontent+='<div contenteditable="true" class="max-1">15010897819</div>';
+		addcontent+='<a href="#" class="edit"></a>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		$(this).siblings(".pright-per7").before(addcontent);
+	});
+	$('.del-image').live('tap',function(){
+		$(this).parent('.add-del').remove();
+	});
+});	
+$(function(){	
+	//接口test
+	var id=$('#shop');
+	var shopName=$('#shopname').val();
+	var weChat=$('#wechat').val();
+	var shopGg=$('#xd-announce').val();
+	var pskfName=$('#service-name1').val();
+	var pskfPhone=$.trim($('#service-phone1').val());
+	if(pskfPhone == "") {
+		showAlertMsg(msgMobileNotEmpty);
+		return;
+	}
+	if(pskfPhone.length != 11) {
+		showAlertMsg(msgMobileError);
+		return;
+	}
+	var shopAdress=$('#shopadress').val();
+	var shopperName=$('#shopper-name').val();
+	var shopperPhone=$.trim($('#shopper-phone').val());
+	if(shopperPhone == "") {
+		showAlertMsg(msgMobileNotEmpty);
+		return;
+	}
+	if(shopperPhone.length != 11) {
+		showAlertMsg(msgMobileError);
+		return;
+	}
+	var data={'id':id,'shopname':shopName,'shoppername':shopperName,'phone':shopperPhone,'shopAddress':shopAdress,'weixin_no':weChat,'announcement':shopGg,"dispatcherlist":[{'name':pskfName,'phone':pskfPhone},{}]};
+	var resultJson = ajaxCommon(urlEditshop, data);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		window.location.href="editshop.html?t="+t;
+	}else{
+		
+	}
+	
+});

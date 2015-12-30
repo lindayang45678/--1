@@ -1,0 +1,4 @@
+#\u6d4b\u8bd5\u5730\u5740
+emal.wx.service=http://10.1.80.50:7070/emall_weixin_service/client/setWxCouponAuth
+favcode.beijing=BXJQ_2015-03-30_c5z
+favcode.quanguo=BXJQ_2015-03-27_5b8

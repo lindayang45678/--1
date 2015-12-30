@@ -1,0 +1,15 @@
+package com.lakala.module.profit.controller;
+
+/**
+ * 收益模块常量
+ * 
+ * @author zhaoqiugen
+ *
+ */
+public class ProfitConstant {
+
+	/** 商品自营平台标识  自营*/ 
+	public static final String EARNINGS_TYPE_SELF = "452";
+	/** 商品自营平台标识  平台*/ 
+	public static final String EARNINGS_TYPE_TERRACE = "'453";
+}

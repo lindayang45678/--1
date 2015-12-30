@@ -1,0 +1,205 @@
+package com.lakala.module.order.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.model.Torder;
+import com.lakala.model.order.OrderInfo;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.service.OrderService;
+import com.lakala.module.order.vo.OrderDetailInput;
+import com.lakala.module.order.vo.OrderDetailOutput;
+import com.lakala.module.order.vo.OrderInfoOutput;
+import com.lakala.module.order.vo.OrderMultQueryInput;
+import com.lakala.util.ReturnMsg;
+
+
+@Service("OrderServiceBean")
+public class OrderServiceImpl implements OrderService {
+	
+	Logger logger = Logger.getLogger(OrderServiceImpl.class);
+	
+	@Autowired
+    private  com.lakala.mapper.r.order.TorderMapper torderMapper_R;
+
+
+	@Override
+	public Torder loadOrderByKey(String orderId) throws LakalaException{
+		//判断orderId合法性
+		if(orderId == null || orderId.equalsIgnoreCase("")) return null;
+		Torder order = null;
+		try{
+			order = torderMapper_R.selectByPrimaryKey(orderId);
+		}catch(Exception e){
+			throw new LakalaException(e.getMessage());
+		}
+		return order;
+	}
+
+	@Override
+	public List<Torder> listOrderByKey(String key) throws LakalaException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	@Override
+	public ObjectOutput orderMultiquery(OrderMultQueryInput orderinput) throws LakalaException {
+		
+		ObjectOutput data = new ObjectOutput();
+		if(orderinput == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		
+		List<String> idslist = new ArrayList(); //订单id List
+		List list = new ArrayList();   //包括订单总数和订单id List
+		Integer total = 0;
+		Map<String, Object> map = new HashMap();
+		OrderInfoOutput info = new OrderInfoOutput();
+		
+        String[] stateattr = {};
+        String[] sourceattr = {};
+		String[] ispayattr = {};
+		String[] paychannelattr = {};
+        String state = orderinput.getState();
+        String source = orderinput.getSource();
+        String ispay = orderinput.getIspay();
+		String paychannel = orderinput.getPaychannel();
+		String torderid = orderinput.getTorderid();
+		String starttime = orderinput.getStarttime();
+		String endtime = orderinput.getEndtime();
+		String custelno = orderinput.getCustelno();
+		String mobile = orderinput.getMobile();
+		Integer page = orderinput.getPage()==null?1:orderinput.getPage();
+		Integer rows = orderinput.getPageSize()==null?10:orderinput.getPageSize();
+		
+        Integer start = (page - 1) * rows;
+        map.put("start", start);
+        map.put("rows", rows);
+		
+		//待发货显示已支付的，或者货到付款的
+		map.put("ispayfornodeliver", "true");
+		map.put("cancelstate", 136);
+
+        if (!StringUtils.isEmpty(state)) {
+            state = orderinput.getState();
+            if (state.startsWith(",")) {
+                stateattr = state.substring(1).split(",");
+            } else {
+                stateattr = state.split(",");
+            }
+            map.put("stateids", stateattr);
+        }
+
+        if (!StringUtils.isEmpty(source)) {
+            if (source.startsWith(",")) {
+                sourceattr = source.substring(1).split(",");
+            } else {
+                sourceattr = source.split(",");
+            }
+            map.put("sourceids", sourceattr);
+        }
+        
+        if (!StringUtils.isEmpty(ispay)) {
+			if (ispay.startsWith(",")) {
+				ispayattr = ispay.substring(1).split(",");
+			} else {
+				ispayattr = ispay.split(",");
+			}
+			map.put("ispays", ispayattr);
+		}
+		if (!StringUtils.isEmpty(paychannel)) {
+			if (paychannel.startsWith(",")) {
+				paychannelattr = paychannel.substring(1).split(",");
+			} else {
+				paychannelattr = paychannel.split(",");
+			}
+			map.put("paychannels", paychannelattr);
+		}
+
+        if (!StringUtils.isEmpty(torderid)) {
+        	map.put("torderid", torderid);
+        }
+
+        if (!StringUtils.isEmpty(starttime)) {
+        	map.put("starttime", starttime);
+        }
+
+
+        if (!StringUtils.isEmpty(orderinput.getEndtime())) {
+        	map.put("endtime", endtime);
+        }
+
+        if (!StringUtils.isEmpty(custelno)) {
+        	map.put("custelno", custelno);
+        }
+        
+        if (!StringUtils.isEmpty(mobile)) {
+        	map.put("mobile", mobile);
+        }
+        
+        try{
+        	list = torderMapper_R.queryCommonOrderByMap(map);
+            total = torderMapper_R.countCommonOrderByMap(map);
+            info.setOrderidlist(list);
+            info.setTotal(total);
+            data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+    		data.set_ReturnData(info);
+    		data.set_ReturnMsg(ReturnMsg.CODE_SUCCESS);
+		}catch(Exception e){
+			throw new LakalaException(e.getMessage());
+		}
+        
+		return data;
+	}
+	
+	
+
+	@Override
+	public List<String> queryCommonOrderByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return torderMapper_R.queryCommonOrderByMap(map);
+	}
+
+	@Override
+	public Integer countCommonOrderByMap(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return torderMapper_R.countCommonOrderByMap(map);
+	}
+
+	@Override
+	public ObjectOutput orderView(OrderDetailInput orderdetailinput)
+			throws LakalaException {
+		// TODO Auto-generated method stub
+		ObjectOutput data = new ObjectOutput();
+		if(orderdetailinput == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		
+		OrderDetailOutput info = new OrderDetailOutput();
+		try{
+			OrderInfo orderinfo = torderMapper_R.viewOrderByMap(orderdetailinput);
+			info.setOrderinfo(orderinfo);
+		}catch(Exception e){
+			throw new LakalaException(e.getMessage());
+		}
+		
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(info);
+		return data;
+	}
+
+	
+}

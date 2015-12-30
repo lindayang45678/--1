@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.virtualcat.VirtualCateMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.VirtualCate">
+        <id column="tVirtualCateId" property="tvirtualcateid" jdbcType="INTEGER"/>
+        <result column="virtualCateDisc" property="virtualcatedisc" jdbcType="VARCHAR"/>
+        <result column="fatherVirtualCateId" property="fathervirtualcateid" jdbcType="INTEGER"/>
+        <result column="virtualCateStatus" property="virtualcatestatus" jdbcType="INTEGER"/>
+        <result column="virtualCateIcon" property="virtualcateicon" jdbcType="VARCHAR"/>
+        <result column="createuser" property="createuser" jdbcType="INTEGER"/>
+        <result column="createdate" property="createdate" jdbcType="TIMESTAMP"/>
+        <result column="Channelid" property="channelid" jdbcType="INTEGER"/>
+        <result column="Channelname" property="channelname" jdbcType="VARCHAR"/>
+        <result column="frequencyid" property="frequencyid" jdbcType="INTEGER"/>
+        <result column="frequencyname" property="frequencyname" jdbcType="VARCHAR"/>
+        <result column="Sort" property="sort" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="BaseResultMapMongo" type="com.lakala.model.virtualcate.VirtualCateMongo">
+        <id column="tVirtualCateId" property="virtualCateId" jdbcType="INTEGER"/>
+        <result column="virtualCateDisc" property="virtualCateDisc" jdbcType="VARCHAR"/>
+        <result column="fatherVirtualCateId" property="fathervirtualcateid" jdbcType="INTEGER"/>
+        <result column="Sort" property="sort" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    tVirtualCateId, virtualCateDisc, fatherVirtualCateId, virtualCateStatus, virtualCateIcon, 
+    createuser, createdate, Channelid, Channelname, frequencyid, frequencyname, Sort
+  </sql>
+    <sql id="Base_Mongo_Column_List">
+        tVirtualCateId, virtualCateDisc, fatherVirtualCateId, Sort
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        where tVirtualCateId = #{tvirtualcateid,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectByPrimaryKeyFor2C" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        where frequencyid = 42 and tVirtualCateId = #{tvirtualcateid,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByParentId" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        where fathervirtualcateid = #{parentid,jdbcType=INTEGER} order by sort
+    </select>
+    
+    <!-- 过滤掉没有商品的分类 zhiziwei -->
+    <select id="selectHasGoodsSubVcsd" resultMap="BaseResultMap">
+       SELECT DISTINCT
+			v.tVirtualCateId
+		FROM
+			tgoodsinfo p,
+			tcategory_relation r,
+			tvirtualcate v
+		WHERE
+			p.tRealCateId = r.rid
+		AND r.vid = v.tVirtualCateId
+		AND p.deflag = 455 
+		AND v.tVirtualCateId in
+		<foreach collection="list" index="index" item="fid" open="(" close=")" separator="," >
+			#{fid.tvirtualcateid, jdbcType=INTEGER}
+		</foreach>
+    </select>
+
+	<!-- 获取所有2C使用的营销分类 -->
+    <select id="findAll4C" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        where virtualCateStatus = 1 and frequencyid = 44 order by sort
+    </select>
+    
+	<!-- 获取所有2B使用的营销分类 -->
+    <select id="findAll4B" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        where virtualCateStatus = 1 and frequencyid = 44 order by sort
+    </select>
+
+    <select id="findAllChildByParentId" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tvirtualcate
+        WHERE fatherVirtualCateId=#{parentId}
+    </select>
+
+    <!-- 通过实分类获取虚分类 zhiziwei -->
+    <select id="findVirCatByRealCat" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    	select tVirtualCateId, fatherVirtualCateId, virtualCateDisc
+    	from tvirtualcate 
+    	where tVirtualCateId in (select DISTINCT vid tVirtualCateId from tcategory_relation where rid = #{rid, jdbcType=INTEGER})
+    	and frequencyid = 42 
+    </select>
+    
+    <!-- 查询有产品库商品的2B或2C(取决于传入的参数)下的营销分类，并且过滤掉没有关联C端虚分类的 zhiziwei -->
+    <select id="selectVcsForHasGoodsPool" resultType="java.lang.Integer">
+    	SELECT DISTINCT
+			v.tVirtualCateId
+		FROM
+			tgoodsinfopool p,
+			tcategory_relation r,
+			tvirtualcate v
+		WHERE
+			p.tRealCateId = r.rid
+		AND r.vid = v.tVirtualCateId
+		AND v.tVirtualCateId in
+		<foreach collection="vcs" index="index" item="fid" open="(" close=")" separator="," >
+			#{fid.tvirtualcateid, jdbcType=INTEGER}
+		</foreach>
+		AND
+		<foreach collection="region" index="index" item="item" open="(" close=")" separator="OR" >
+			p.distributionregion like #{item, jdbcType=VARCHAR}
+		</foreach>
+		AND p.tRealCateId in
+		 (select DISTINCT rid from tcategory_relation t1, tvirtualcate t2 where t1.vid = t2.tVirtualCateId and t2.frequencyid = 42)
+    </select>
+    
+    <!-- 查询有产品库商品的2B或2C(取决于传入的参数)下的营销分类, 并且过滤掉没有关联C端虚分类的  zhiziwei -->
+    <select id="selectVcsByRcs" resultType="java.lang.Integer">
+    	SELECT DISTINCT
+			v.tVirtualCateId
+		FROM
+			tcategory_relation r,
+			tvirtualcate v
+		WHERE
+			r.vid = v.tVirtualCateId
+		AND v.tVirtualCateId in
+		<foreach collection="list" index="index" item="fid" open="(" close=")" separator="," >
+			#{fid.tvirtualcateid, jdbcType=INTEGER}
+		</foreach>
+		AND r.rid in
+		 (select DISTINCT rid from tcategory_relation t1, tvirtualcate t2 where t1.vid = t2.tVirtualCateId and t2.frequencyid = 42)
+    
+    </select>
+    
+    <!-- 查询指定店主的自营商品关联的2B下的营销分类 zhiziwei -->
+    <select id="selectVcsByGoods" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    	SELECT DISTINCT
+			v.tVirtualCateId
+		FROM
+			tgoodsinfo g,
+			tcategory_relation r,
+			tvirtualcate v
+		WHERE
+			g.tRealCateId = r.rid
+		AND r.vid = v.tVirtualCateId
+		AND v.frequencyid = 44
+		AND g.deflag = 455 
+		AND g.supplierId = #{sid, jdbcType=INTEGER}
+    </select>
+
+    <select id="findByIds" resultMap="BaseResultMapMongo">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        tvirtualcate
+        where
+        tVirtualCateId in
+        <foreach item="item" index="index" collection="ids" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

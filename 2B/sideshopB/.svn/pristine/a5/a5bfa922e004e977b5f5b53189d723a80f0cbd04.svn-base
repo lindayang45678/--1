@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>升级身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1>升级身边小店</h1>
+	</header>
+	<section class="container shopupdate f-12">
+		<h2 class="f-14 center sb color"><span><i class="fill"></i>很抱歉，审核不通过！姓名与身份证不匹配！</span></h2>
+		<h2 class="f-14 center cg color hidden"><span><i></i>恭喜您，修改提交成功，等待审核！</span></h2>
+		<div class="shop-info">
+			<div><span>店主姓名<input type="text" id="shopkeeper" /></span></div>
+			<div><span>店主手机<input type="tel" id="phoneno" /></span></div>
+			<div><span>身份证号<input type="text" id="id_no" /></span></div>
+			<div class="id-card"><span>身份证照片<img id="zm" class="zm" src="../../images/ico-idcard-p.png" /><i>+</i><img id="fm" class="fm" src="../../images/ico-idcard-r.png" disabled="disabled" /></span></div>
+			<div><span>小店名称<input type="text" id="shopname"/></span></div>
+			<div class="shop-address"><span>小店地址<em></em><input type="text" id="address" /></span></div>
+			<div class="licence"><span>营业执照<img id="licence" src="../../images/ico-licence.png" /></span></div>
+			<a href="javascript:;" class="btn-red xg" >修改</a>
+			<a href="javascript:;" class="btn-red submit hidden" >提交</a>
+		</div>
+		<div class="disabled"></div>
+	</section>
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" id="platJs"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+<script type="text/javascript" src="../../js/homepage/upgradefailed.js"></script>
+</body>
+</html>

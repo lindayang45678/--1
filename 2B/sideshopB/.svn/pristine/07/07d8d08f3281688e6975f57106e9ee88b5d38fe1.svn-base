@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.user.TverificationcodeMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.user.Tverificationcode" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="psam" property="psam" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+ 
+  <insert id="insert" parameterType="com.lakala.model.user.Tverificationcode" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID() 
+    </selectKey>
+    insert into tverificationcode (psam, mobile, source, 
+      code, createtime,state)
+    values (#{psam,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{source,jdbcType=INTEGER}, 
+      #{code,jdbcType=INTEGER},now(),0)
+  </insert>
+  <update id="update"  parameterType="com.lakala.model.user.Tverificationcode">
+  update tverificationcode set state = 1 where psam = #{psam,jdbcType=VARCHAR} and mobile = #{mobile,jdbcType=VARCHAR}
+  and source = #{source,jdbcType=INTEGER}
+  </update>
+</mapper>

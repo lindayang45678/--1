@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.profit.TearningsdayAppMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.profit.TearningsdayApp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="settlementId" property="settlementid" jdbcType="VARCHAR" />
+    <result column="earningsDate" property="earningsdate" jdbcType="TIMESTAMP" />
+    <result column="netNo" property="netno" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="BIGINT" />
+    <result column="pasmProvince" property="pasmprovince" jdbcType="VARCHAR" />
+    <result column="terrace0rderNum" property="terrace0rdernum" jdbcType="BIGINT" />
+    <result column="terraceAmount" property="terraceamount" jdbcType="DECIMAL" />
+    <result column="self0rderNum" property="self0rdernum" jdbcType="BIGINT" />
+    <result column="selfAmount" property="selfamount" jdbcType="DECIMAL" />
+    <result column="isSettlement" property="issettlement" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="pasmNo" property="pasmno" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, settlementId, earningsDate, netNo, tel, pasmProvince, terrace0rderNum, terraceAmount, 
+    self0rderNum, selfAmount, isSettlement, level, pasmNo, updateTime, createTime, settleAmount,
+     settle0rderNum,flowAmount
+  </sql>
+  
+<!--   根据店主手机号查询 收益 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tearningsday_app
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+<!--    根据店主手机号查询 统计收益 -->
+  <select id="selectByNetNoSum" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select sum(terrace0rderNum) as terrace0rderNum,
+    			sum(terraceAmount) as terraceAmount,
+    			sum(self0rderNum) as self0rderNum,
+    			sum(selfAmount) as selfAmount
+    from tearningsday_app
+    where netNo = #{ecNetNo,jdbcType=INTEGER}
+    			<if test="executetimeStart != null">
+					and <![CDATA[ earningsDate >= #{executetimeStart}]]>
+				</if>
+				<if test="executetimeEnd != null">
+					and <![CDATA[ earningsDate  <= #{executetimeEnd}]]>
+				</if>
+  </select>
+    <select id="selectByNetNo" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    	<include refid="Base_Column_List" />
+    from tearningsday_app
+    where netNo = #{ecNetNo,jdbcType=VARCHAR}
+                    and level=1
+    			<if test="executetimeStart != null">
+					and <![CDATA[ earningsDate >= #{executetimeStart}]]>
+				</if>
+				<if test="executetimeEnd != null">
+					and <![CDATA[ earningsDate  <= #{executetimeEnd}]]>
+				</if>
+  </select>
+  <select id="selectByNetNoList" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    	<include refid="Base_Column_List" />
+    from tearningsday_app
+    where netNo = #{ecNetNo,jdbcType=VARCHAR}
+    				and level=1
+					<if test="executetimeStart != null">
+					and <![CDATA[ earningsDate >= #{executetimeStart}]]>
+					</if>
+				<if test="executetimeEnd != null">
+					and <![CDATA[ earningsDate  < #{executetimeEnd}]]>
+				</if>
+  </select>
+  <!--    根据网点  按月统计收益 -->
+  <select id="selectMonthData" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	SELECT
+		sum(selfAmount) AS selfAmount,
+		sum(flowAmount) AS 	flowAmount,
+		sum(self0rderNum) AS self0rderNum,
+		sum(settleAmount) AS settleAmount,
+		sum(settle0rderNum) AS settle0rderNum,
+		SUBSTRING(earningsDate,-19, 7)  AS settlementid,
+		isSettlement
+	FROM
+		tearningsday_app
+    where netNo = #{ecNetNo,jdbcType=INTEGER}
+     			  and level=1
+    			<if test="executetimeStart != null">
+					and <![CDATA[ earningsDate >= #{executetimeStart}]]>
+				</if>
+				<if test="executetimeEnd != null">
+					and <![CDATA[ earningsDate  <= #{executetimeEnd}]]>
+				</if>
+				group by SUBSTRING(earningsDate,-19, 7), isSettlement
+  </select>
+    <!--    根据店主手机号查询 统计收益 -->
+  <select id="selectAddUp" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	SELECT
+		sum(settle0rderNum) AS settle0rderNum,
+		sum(settleAmount) AS settleAmount
+	FROM
+		tearningsday_app
+    where netNo = #{ecNetNo,jdbcType=INTEGER}
+                   and level=1
+    			<if test="executetimeStart != null">
+					and <![CDATA[ earningsDate >= #{executetimeStart}]]>
+				</if>
+				<if test="executetimeEnd != null">
+					and <![CDATA[ earningsDate  <= #{executetimeEnd}]]>
+				</if>
+  </select>
+</mapper>

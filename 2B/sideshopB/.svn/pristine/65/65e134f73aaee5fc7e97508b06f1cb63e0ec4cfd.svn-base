@@ -1,0 +1,38 @@
+//店铺信息列表
+$(function getShopList(){
+	var container = $(".items ul");
+	var content ="";
+		var data = {
+				"psam":psam,
+				"page": 1,
+				"pageSize": 10
+			};
+			var resultJson = ajaxCommon(urlCustomerList, data);
+			
+			resultJson = convertNullToEmpty(resultJson);
+			
+			resultJson = {"_ReturnData":{"customerlist":[{"id":"1","customerName":"龙飞","nickName":"龙飞","phone":"18612189264","icon":"../../images/product4.jpg","shopmobile":"18612189254"},
+			                              {"id":"1","customerName":"龙飞1","nickName":"龙飞1","phone":"18612189264","icon":"../../images/product4.jpg","shopmobile":"18612189254"}]},
+					"_ReturnCode":"000000",
+					"_ReturnMsg":"SUCCESS"
+					};
+			
+			if(resultJson._ReturnCode === returnCodeSuccess){
+				var _ReturnData = resultJson._ReturnData;
+				var	list = _ReturnData.customerlist;
+				if (list.length > 0) {
+					for (var i = 0; i < list.length; i++) {
+						content +="<li class='f-18'>";
+						content +="<img alt='头像' src=" + list[i].icon + ">";
+						content +="<h4>"+list[i].customerName+"("+list[i].shopmobile+")";
+						content +="<p class='f-16 c-gray nobr'>"+list[i].nickName;
+						content +="</p>";
+						content +="</h4>";
+						content +="</li>";
+					};
+					container.html("").append(content);
+				}
+			} else {
+				showAlertMsg(resultJson._ReturnMsg);
+			}
+		});

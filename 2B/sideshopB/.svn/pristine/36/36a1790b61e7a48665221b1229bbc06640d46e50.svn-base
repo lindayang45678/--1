@@ -1,0 +1,14 @@
+package com.lakala.module.profit.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+
+
+/**
+ * 用户进入收益首页查询输入
+ * @author pengyunle
+ *
+ */
+public class ProfitHomeInput extends ObjectInput{
+	
+}

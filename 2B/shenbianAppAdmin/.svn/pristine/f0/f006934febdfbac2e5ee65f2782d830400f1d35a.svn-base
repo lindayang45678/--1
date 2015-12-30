@@ -1,0 +1,8 @@
+$(function() {
+	$(".incomes tr").each(function(index){
+		$(this).find("input[type='button']").on("tap",function(){
+			$(this).toggleClass("selected");
+			$(this).siblings().removeClass("selected");
+		});
+	});
+})

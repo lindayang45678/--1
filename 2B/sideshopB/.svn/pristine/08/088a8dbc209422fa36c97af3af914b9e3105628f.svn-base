@@ -1,0 +1,47 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.module.comm.ObjectInput;
+/**
+ * 店主收货输入参数
+ * @author ls
+ *
+ */
+public class ShouhuoInput extends ObjectInput{
+	private String logno;
+	private Integer state = 102;
+	private String data;
+	private Integer flag = 0;
+	
+	public Integer getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Integer flag) {
+		this.flag = flag;
+	}
+
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	public String getLogno() {
+		return logno;
+	}
+
+	public void setLogno(String logno) {
+		this.logno = logno;
+	}
+
+}

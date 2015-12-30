@@ -1,0 +1,61 @@
+$(function() {
+	var url = window.location.href;
+	var shopId = getParamValueByName(url, "shopId");
+	var psam = getParamValueByName(url, "psam");
+	var netNo = getParamValueByName(url, "netNo");
+	storage.setItem("shopId", shopId);  //小店ID存放到storage中
+	storage.setItem("psam", psam);  //PSAM存放到storage中
+	storage.setItem("netNo", netNo);  //网点编号存放到storage中
+
+	autoScreen();
+	shipAddress(shopId);
+});
+
+/**
+ * 身边小店page自适应
+ */
+function autoScreen() {
+	var wrapWidth = windowWidth - 26;
+	var wrapHeight = windowHeight - 88;
+	var cellWidth = wrapWidth / 2;
+	var cellHeight = wrapHeight / 4;
+	$("#sbxd a").width(cellWidth + "px").height(cellHeight*2 + "px");
+	$("#sbxd a s").width(cellWidth + "px").height(cellHeight*2 + "px");
+	$("#sycx a").width(cellWidth + "px").height((cellHeight-3) + "px");
+	$("#sycx a s").width(cellWidth + "px").height((cellHeight-3) + "px");
+	$("#ddgl a").width(cellWidth + "px").height((cellHeight-3) + "px");
+	$("#pfjh a").width(cellWidth + "px").height(cellHeight + "px");
+	$("#wylq a").width(cellWidth + "px").height(cellHeight + "px");
+	$("#qhsh a").width(cellWidth + "px").height(cellHeight + "px");
+	$("#khgl a").width(cellWidth + "px").height(cellHeight + "px");
+	$("#khgl a s").width(cellWidth + "px").height(cellHeight + "px");
+	$("td span").width(cellWidth + "px");
+}
+
+/**
+ * 获取默认收货地址
+ * @param shopId
+ */
+function shipAddress(shopId){
+	var data = {"id":shopId};
+	var resultJson = ajaxCommon(urlShopInfo, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		$("#shopname").html("").html(_ReturnData.shopname);
+		var shipaddress = {
+			    "shipname": _ReturnData.shoppername,
+			    "shipmobile": _ReturnData.phone,
+			    "shipprovinceid": _ReturnData.provinceCode,
+			    "shipprovince": _ReturnData.province,
+			    "shipcityid": _ReturnData.cityCode,
+			    "shipcity": _ReturnData.city,
+			    "shipareaid": _ReturnData.cityareaCode,
+			    "shiparea": _ReturnData.cityarea,
+			    "shipaddr": _ReturnData.address
+			};
+		storage.setItem("shipaddress",JSON.stringify(shipaddress));
+	}else{
+		//接口返回错误
+	}
+}

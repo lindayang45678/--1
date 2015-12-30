@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.profit.TorderearningsProviderMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.profit.TorderearningsProvider" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="orderProviderID" property="orderproviderid" jdbcType="VARCHAR" />
+    <result column="settlementId" property="settlementid" jdbcType="VARCHAR" />
+    <result column="orderID" property="orderid" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="netNo" property="netno" jdbcType="VARCHAR" />
+    <result column="pasmNo" property="pasmno" jdbcType="VARCHAR" />
+    <result column="divideProfit" property="divideprofit" jdbcType="DECIMAL" />
+    <result column="returnFlg" property="returnflg" jdbcType="INTEGER" />
+    <result column="isSettlement" property="issettlement" jdbcType="INTEGER" />
+    <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+    <result column="earningsTime" property="earningstime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, orderProviderID, settlementId, orderID, source, netNo, pasmNo, divideProfit, 
+    returnFlg, isSettlement, orderTime, earningsTime, updateTime, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from torderearnings_provider
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  
+    <select id="selectOrderEarings" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+        t1.orderProviderID, t1.orderID, t1.divideProfit, 
+        t1.returnFlg, t1.earningsTime, t3.nameCN as  payMode,
+        t2.payrate as payRate,  t1.orderAmount , t1.settleAmount, t1.freight,t1.couponValue
+    from torderearnings_provider t1, torder t2  left join  tdictionary  t3 on t2.payChanel = t3.dictionayId
+    where t1. orderID= t2.tOrderId
+    			<if test="executetimeStart != null">
+					and <![CDATA[ t1.earningsTime >= #{startTime}]]>
+				</if>
+				<if test="executetimeEnd != null">
+					and <![CDATA[t1. earningsTime  <= #{endTime}]]>
+				</if>
+				<if test="orderProviderId != null">
+					and t1. orderProviderID  = #{orderProviderId}
+				</if>
+				<if test="orderSource != null">
+					and t1. source  = #{orderSource}
+				</if>
+				<if test="isAfterSale != null">
+					and t1. returnFlg  = #{isAfterSale}
+				</if>
+				<if test="selfFlg != null">
+					and t1. selfFlg  = #{selfFlg}
+				</if>
+				<if test="terraceFlg != null">
+					and t1. terraceFlg  = #{terraceFlg}
+				</if>
+					and t1. netNo  = #{ecNetNo}
+				<if test="pageStart != null">	
+					limit #{pageStart}, #{pageSize}
+				</if>
+  </select>
+
+</mapper>

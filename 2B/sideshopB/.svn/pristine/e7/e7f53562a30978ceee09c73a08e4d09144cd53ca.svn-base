@@ -1,0 +1,15 @@
+package com.lakala.mapper.r.news;
+
+import java.util.List;
+
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.news.vo.NewsItemOutput;
+import com.lakala.module.news.vo.NewsOutput;
+
+public interface NewsMapper {
+	
+	public List<NewsItemOutput> getInfo(int newsid);
+	
+	public NewsOutput getConsultInfo(int itemsid);
+
+}

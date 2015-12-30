@@ -1,0 +1,213 @@
+var earningsType = "";
+var ownSettleDate = "";
+var terraceSettleDateS = "";
+var terraceSettleDateE = "";
+
+/* 流水iScroll*/
+var settleNoScroll;
+function scrollSettleNo(){
+	settleNoScroll = new iScroll("settel-no",{ 
+		hScrollbar: false, 
+		vScrollbar: false,
+		onScrollEnd: function(){
+			incomesSearch(settleNo);
+		},
+	});
+}
+
+/* 到账iScroll*/
+var settleYesScroll;
+function scrollSettleYes(){
+	settleYesScroll = new iScroll("settel-yes",{ 
+		hScrollbar: false, 
+		vScrollbar: false,
+		onScrollEnd: function(){
+			incomesSearch(settleYes);
+		},
+	});
+}
+
+/* 初始化iScroll*/
+$(function(){
+	scrollSettleNo();
+	scrollSettleYes();
+})
+
+/* 根据浏览器计算iSroll高度*/
+$(function(){
+	$("#settel-no").height(windowHeight - $("header").height() - $(".order-incomes").height());
+	$("#settel-yes").height(windowHeight - $("header").height() - $(".order-incomes").height() - $(".detail-self-detail").height());
+})
+
+/* 分润/到账切换*/
+$(".month a").on("tap", function(){
+	$(".month a").removeClass("active");
+	$(this).addClass("active");
+	$(".wrap").addClass("hidden");
+	if($(this).attr("id") == "detail-settelyes"){
+		$(".detail-settelyes").removeClass("hidden");
+		page = 0;
+		hasNextPage = true;
+		$("#settel-yes ul").html("");
+		incomesSearch(settleYes);
+		incomesSettelYes();
+	}else{
+		$(".detail-settelno").removeClass("hidden");
+		page = 0;
+		hasNextPage = true;
+		$("#settel-no ul").html("");
+		incomesSearch(settleNo);
+	}
+})
+
+/* 单个订单周期收益*/
+$(function() {
+	var url = window.location.href;
+	earningsType = getParamValueByName(url, "type");//收益类型
+	var ownTodayEarnings = getParamValueByName(url, "ownTodayEarnings");//自营今日流水
+	var ownTodayOrderNum = getParamValueByName(url, "ownTodayOrderNum");//自营今日订单
+	var ownSettleAmont = getParamValueByName(url, "ownSettleAmont");//自营今日到账
+	var ownSettleNum = getParamValueByName(url, "ownSettleNum");//自营结算单数
+	ownSettleDate = getParamValueByName(url, "ownSettleDate");//自营结算今日日期
+	
+	var terraceEarnings = getParamValueByName(url, "terraceEarnings");//平台本月分润
+	var terraceOrderNum = getParamValueByName(url, "terraceOrderNum");//平台本月订单
+	var terraceSettleAmont = getParamValueByName(url, "terraceSettleAmont");//平台本月到账
+	var terraceSettleNum = getParamValueByName(url, "terraceSettleNum");//平台结算单数
+	terraceSettleDateS = getParamValueByName(url, "terraceSettleDateS");//平台结算周期开始
+	terraceSettleDateE = getParamValueByName(url, "terraceSettleDateE");//平台结算周期结束
+	
+	if(earningsType == "self"){
+		earningsType = selfGoods;
+		$("h1").html(formatData(ownSettleDate));
+		$("title").html(formatData(ownSettleDate));
+		$("#detail-settelno").html("流水￥" +ownTodayEarnings+ "<br/>" +ownTodayOrderNum+ "单");
+		$("#detail-settelyes").html("到账￥" +ownSettleAmont+ "<br/>" +ownSettleNum+ "单");
+	}else{
+		earningsType = platGoods;
+		$("h1").html(formatData(terraceSettleDateS) + "-" + formatData(terraceSettleDateE));
+		$("title").html(formatData(terraceSettleDateS) + "-" + formatData(terraceSettleDateE));
+		$("#detail-settelno").html("分润￥" +terraceEarnings+ "<br/>" +terraceOrderNum+ "单");
+		$("#detail-settelyes").html("到账￥" +terraceSettleAmont+ "<br/>" +terraceSettleNum+ "单");
+	}
+	
+	//页面加载显示流水
+	incomesSearch(settleNo);
+})
+
+var page = 0;
+var hasNextPage = true;//是否有下一页
+var pageSize = 10;
+/* 收益流水查询*/
+function incomesSearch(settelFlag){
+	var startTime = terraceSettleDateS;
+	var endTime = terraceSettleDateE;
+	if(earningsType == selfGoods){
+		startTime = ownSettleDate;
+		endTime = ownSettleDate;
+	}
+	var content = "";
+	setTimeout(function(){
+		if(hasNextPage){
+			page ++;
+			console.log("page:" +page);
+			var data = {
+					"mobile":mobile,
+					"isSettle":settelFlag,
+					"startTime":startTime,
+					"endTime":endTime,
+					"earningsType":earningsType,
+					"ecNetNo":netNo,
+					"page":page,
+					"pageSize":pageSize
+			}
+			var resultJson = ajaxCommon(urlQueryEarningsOrder, data);
+			resultJson = convertNullToEmpty(resultJson);
+			if(resultJson._ReturnCode === returnCodeSuccess){
+				var _returnData = resultJson._ReturnData;
+				console.log(_returnData.length);
+				if(_returnData.length > 0){
+					for(var i = 0; i< _returnData.length; i ++){
+						content += "<li>";
+						var url = "details.html?earningsTime=" +_returnData[i].earningsDate +"&orderProviderId=" +_returnData[i].providerOrderId+ "&returnFlag=" +_returnData[i].returnFlg+ "&earningsType=" +earningsType;
+						content += "<a href='" +url+ "'>";
+						content += "<div>";
+					    content += "<div>" +formatData(_returnData[i].earningsDate)+ "</div>";
+						content += "<div><i>订单号：</i><em class='incomes-order'>" +_returnData[i].providerOrderId+ "</em><em class='incomes-status'>" +_returnData[i].afterState+ "</em></div>";
+						if(earningsType == selfGoods){
+							content += "<div><i>付款方式：</i><em>" +_returnData[i].payMode+ "</em></div>";
+							content += "<div><i>结算金额：</i><em>" +_returnData[i].settlementAmount+ "</em></div>";
+						}else{
+							content += "<div><i>商品金额小计：</i><em>￥" +_returnData[i].orderAmount+ "</em></div>";
+							content += "<div><i>商品分润：</i><em>" +_returnData[i].earningsAmount+ "</em></div>";
+						}
+						content += "</div>";
+						content += "</a>";
+						content += "</li>";
+					}
+					if(settelFlag == settleNo){
+						$("#settel-no ul").append(content);
+						settleNoScroll.refresh();
+					}else{
+						$("#settel-yes ul").append(content);
+						settleYesScroll.refresh();
+					}
+				}else{
+					if(page == 1){
+						//暂无收益
+						if(earningsType == selfGoods){
+							$("#settel-no ul").html("<li class='message'>" +msgNoSelfEarnings+ "</li>");
+							$("#settel-yes ul").html("<div class='message'>" +msgNoSelfEarnings+ "</li>");
+						}else{
+							$("#settel-no ul").html("<li class='message'>" +msgNoPlatEarnings+ "</li>");
+							$("#settel-yes ul").html("<li class='message'>" +msgNoPlatEarnings+ "</li>");
+						}
+					}else{
+						hasNextPage = false;
+					}
+				}
+			}else{
+				//接口返回错误
+			}
+		}
+	},400);
+}
+
+/* 到账收益*/
+function incomesSettelYes(){
+	var startTime = terraceSettleDateS;
+	var endTime = terraceSettleDateE;
+	if(earningsType == selfGoods){
+		startTime = ownSettleDate;
+		endTime = ownSettleDate;
+	}
+	var container = $(".detail-settelyes-detail");
+	var content = "";
+	var data = {
+		    "mobile":mobile,
+		    "startTime":startTime,
+		    "endtTime":endTime,
+		    "earningsType":earningsType,
+		    "ecNetNo":netNo
+	};
+	var resultJson = ajaxCommon(urlGetOwnSettleInfo, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess){
+		if(resultJson._ReturnData != ""){
+			var _returnData = resultJson._ReturnData[0];
+			content += "<p>结算金额：<em>￥" +_returnData.settleAmount+ "</em></p>";
+			content += "<p>结算状态：<em>" +_returnData.payStatus+ "</em></p>";
+			content += "<p>支付说明：<em>" +_returnData.payRank+ "</em></p>";
+			content += "<p>支付流水号：<em>" +_returnData.payId+ "</em></p>";
+			content += "<p>到账时间：<em>" +_returnData.payTime+ "</em></p>";
+			if(_returnData.erroLog != ""){
+				content += "<p>支付失败原因：<em>" +_returnData.erroLog+ "</em></p>";
+			}
+			container.html("").append(content);
+		}else{
+			container.html("<div class='message'>" +resultJson._ReturnMsg+ "</div>");
+		}
+	}else{
+		//接口返回错误
+	}
+}

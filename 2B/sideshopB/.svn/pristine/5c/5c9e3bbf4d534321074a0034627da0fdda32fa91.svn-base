@@ -1,0 +1,28 @@
+$(function(){
+	$(".add-service").on('tap',function(){
+		var addcontent='';
+		addcontent+='<div class="add-del">';
+		addcontent+='<a href="#" class="del-image"></a>';
+		addcontent+='<div class="shopedit-2item del">';
+		addcontent+='<div class="editline-n">'
+		addcontent+='<span class="left1">配送客服:</span>';
+		addcontent+='<div class="leftborder">';
+		addcontent+='<div contenteditable="true" class="max-1">张伟</div>';
+		addcontent+='<a href="#" class="edit"></a>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='<div class="editline-n">';
+		addcontent+='<span class="left1">客服电话:</span>';
+		addcontent+='<div class="leftborder">';
+		addcontent+='<div contenteditable="true" class="max-1">15010897819</div>';
+		addcontent+='<a href="#" class="edit"></a>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		$(".add-del").after(addcontent);
+	});
+	$('.del-image').on('tap',function(){
+		$('.add-del').addClass('hidden');
+	});	
+});

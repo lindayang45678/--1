@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>发票信息</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="fill.html" class="x-close">x</a>
+		<h1>发票信息</h1>
+	</header>
+	<section class="container invoice-wrap">
+		<section class="container-wrap invoice-page">
+			<div class="invoice-choose clearfix">
+				<h4 class="f-14">是否需要发票</h4>
+				<div class="fr" id="invoice-slide">
+					<a id="isbill" href="javascript:;"></a>
+				</div>
+			</div>
+			<section class="f-14">
+				<h3>发票抬头</h3>
+				<div id="personal_"  class="personal"><span id="personal" class="paytype-status-off">个人</span><i class="ok"></i></div>
+				<div id="company_" class="company"><span id="company" class="paytype-status-off ok">公司</span><i></i></div>
+				<textarea id="billtitle" placeholder="请输入公司名称"></textarea>								
+			</section>
+			 <div class="confirm-invoice"><a href="javascript:;" class="b-violet btn-red">确认保存</a></div>
+		 </section>	
+	</section>	
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/wholesale/invoice.js"></script>
+</html>

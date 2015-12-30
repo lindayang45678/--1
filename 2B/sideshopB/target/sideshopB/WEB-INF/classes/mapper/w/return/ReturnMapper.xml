@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.returnw.ReturnMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Return">
+        <id column="tReturnId" property="treturnid" jdbcType="INTEGER"/>
+        <result column="orderID" property="orderid" jdbcType="VARCHAR"/>
+        <result column="ReturnType" property="returntype" jdbcType="INTEGER"/>
+        <result column="ReturnTypeName" property="returntypename" jdbcType="VARCHAR"/>
+        <result column="providerID" property="providerid" jdbcType="INTEGER"/>
+        <result column="returnTime" property="returntime" jdbcType="TIMESTAMP"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="deliveryTypeName" property="deliverytypename" jdbcType="VARCHAR"/>
+        <result column="deliveryFee" property="deliveryfee" jdbcType="DECIMAL"/>
+        <result column="postCode" property="postcode" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="telNo" property="telno" jdbcType="VARCHAR"/>
+        <result column="mobileNo" property="mobileno" jdbcType="VARCHAR"/>
+        <result column="userName" property="username" jdbcType="VARCHAR"/>
+        <result column="orderAmount" property="orderamount" jdbcType="DECIMAL"/>
+        <result column="otherFee" property="otherfee" jdbcType="DECIMAL"/>
+        <result column="favorFee" property="favorfee" jdbcType="DECIMAL"/>
+        <result column="currency" property="currency" jdbcType="VARCHAR"/>
+        <result column="retrurnFrom" property="retrurnfrom" jdbcType="VARCHAR"/>
+        <result column="handlingCharge" property="handlingcharge" jdbcType="DECIMAL"/>
+        <result column="isSupportValue" property="issupportvalue" jdbcType="CHAR"/>
+        <result column="supportValue" property="supportvalue" jdbcType="DECIMAL"/>
+        <result column="waybillId" property="waybillid" jdbcType="VARCHAR"/>
+        <result column="courierCompanyName" property="couriercompanyname" jdbcType="VARCHAR"/>
+        <result column="returnFreight" property="returnfreight" jdbcType="DECIMAL"/>
+        <result column="freight" property="freight" jdbcType="DECIMAL"/>
+        <result column="productPackaging" property="productpackaging" jdbcType="VARCHAR"/>
+        <result column="productAppearance" property="productappearance" jdbcType="VARCHAR"/>
+        <result column="productFunction" property="productfunction" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="beartype" property="beartype" jdbcType="VARCHAR"/>
+        <result column="receipttime" property="receipttime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <insert id="insertSelective" parameterType="com.lakala.base.model.Return" useGeneratedKeys="true"
+            keyProperty="treturnid">
+        insert into treturn
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="treturnid != null">
+                tReturnId,
+            </if>
+            <if test="orderid != null">
+                orderID,
+            </if>
+            <if test="returntype != null">
+                ReturnType,
+            </if>
+            <if test="returntypename != null">
+                ReturnTypeName,
+            </if>
+            <if test="providerid != null">
+                providerID,
+            </if>
+            <if test="returntime != null">
+                returnTime,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="deliverytypename != null">
+                deliveryTypeName,
+            </if>
+            <if test="deliveryfee != null">
+                deliveryFee,
+            </if>
+            <if test="postcode != null">
+                postCode,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="telno != null">
+                telNo,
+            </if>
+            <if test="mobileno != null">
+                mobileNo,
+            </if>
+            <if test="username != null">
+                userName,
+            </if>
+            <if test="orderamount != null">
+                orderAmount,
+            </if>
+            <if test="otherfee != null">
+                otherFee,
+            </if>
+            <if test="favorfee != null">
+                favorFee,
+            </if>
+            <if test="currency != null">
+                currency,
+            </if>
+            <if test="retrurnfrom != null">
+                retrurnFrom,
+            </if>
+            <if test="handlingcharge != null">
+                handlingCharge,
+            </if>
+            <if test="issupportvalue != null">
+                isSupportValue,
+            </if>
+            <if test="supportvalue != null">
+                supportValue,
+            </if>
+            <if test="waybillid != null">
+                waybillId,
+            </if>
+            <if test="couriercompanyname != null">
+                courierCompanyName,
+            </if>
+            <if test="returnfreight != null">
+                returnFreight,
+            </if>
+            <if test="freight != null">
+                freight,
+            </if>
+            <if test="productpackaging != null">
+                productPackaging,
+            </if>
+            <if test="productappearance != null">
+                productAppearance,
+            </if>
+            <if test="productfunction != null">
+                productFunction,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="beartype != null">
+                beartype,
+            </if>
+            <if test="receipttime != null">
+                receipttime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="treturnid != null">
+                #{treturnid,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=VARCHAR},
+            </if>
+            <if test="returntype != null">
+                #{returntype,jdbcType=INTEGER},
+            </if>
+            <if test="returntypename != null">
+                #{returntypename,jdbcType=VARCHAR},
+            </if>
+            <if test="providerid != null">
+                #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="returntime != null">
+                #{returntime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliverytypename != null">
+                #{deliverytypename,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryfee != null">
+                #{deliveryfee,jdbcType=DECIMAL},
+            </if>
+            <if test="postcode != null">
+                #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="telno != null">
+                #{telno,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileno != null">
+                #{mobileno,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="orderamount != null">
+                #{orderamount,jdbcType=DECIMAL},
+            </if>
+            <if test="otherfee != null">
+                #{otherfee,jdbcType=DECIMAL},
+            </if>
+            <if test="favorfee != null">
+                #{favorfee,jdbcType=DECIMAL},
+            </if>
+            <if test="currency != null">
+                #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="retrurnfrom != null">
+                #{retrurnfrom,jdbcType=VARCHAR},
+            </if>
+            <if test="handlingcharge != null">
+                #{handlingcharge,jdbcType=DECIMAL},
+            </if>
+            <if test="issupportvalue != null">
+                #{issupportvalue,jdbcType=CHAR},
+            </if>
+            <if test="supportvalue != null">
+                #{supportvalue,jdbcType=DECIMAL},
+            </if>
+            <if test="waybillid != null">
+                #{waybillid,jdbcType=VARCHAR},
+            </if>
+            <if test="couriercompanyname != null">
+                #{couriercompanyname,jdbcType=VARCHAR},
+            </if>
+            <if test="returnfreight != null">
+                #{returnfreight,jdbcType=DECIMAL},
+            </if>
+            <if test="freight != null">
+                #{freight,jdbcType=DECIMAL},
+            </if>
+            <if test="productpackaging != null">
+                #{productpackaging,jdbcType=VARCHAR},
+            </if>
+            <if test="productappearance != null">
+                #{productappearance,jdbcType=VARCHAR},
+            </if>
+            <if test="productfunction != null">
+                #{productfunction,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="beartype != null">
+                #{beartype,jdbcType=VARCHAR},
+            </if>
+            <if test="receipttime != null">
+                #{receipttime,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.lakala.base.model.Return">
+        update treturn
+        <set>
+            <if test="orderid != null">
+                orderID = #{orderid,jdbcType=VARCHAR},
+            </if>
+            <if test="returntype != null">
+                ReturnType = #{returntype,jdbcType=INTEGER},
+            </if>
+            <if test="returntypename != null">
+                ReturnTypeName = #{returntypename,jdbcType=VARCHAR},
+            </if>
+            <if test="providerid != null">
+                providerID = #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="returntime != null">
+                returnTime = #{returntime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliverytypename != null">
+                deliveryTypeName = #{deliverytypename,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryfee != null">
+                deliveryFee = #{deliveryfee,jdbcType=DECIMAL},
+            </if>
+            <if test="postcode != null">
+                postCode = #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="telno != null">
+                telNo = #{telno,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileno != null">
+                mobileNo = #{mobileno,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                userName = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="orderamount != null">
+                orderAmount = #{orderamount,jdbcType=DECIMAL},
+            </if>
+            <if test="otherfee != null">
+                otherFee = #{otherfee,jdbcType=DECIMAL},
+            </if>
+            <if test="favorfee != null">
+                favorFee = #{favorfee,jdbcType=DECIMAL},
+            </if>
+            <if test="currency != null">
+                currency = #{currency,jdbcType=VARCHAR},
+            </if>
+            <if test="retrurnfrom != null">
+                retrurnFrom = #{retrurnfrom,jdbcType=VARCHAR},
+            </if>
+            <if test="handlingcharge != null">
+                handlingCharge = #{handlingcharge,jdbcType=DECIMAL},
+            </if>
+            <if test="issupportvalue != null">
+                isSupportValue = #{issupportvalue,jdbcType=CHAR},
+            </if>
+            <if test="supportvalue != null">
+                supportValue = #{supportvalue,jdbcType=DECIMAL},
+            </if>
+            <if test="waybillid != null">
+                waybillId = #{waybillid,jdbcType=VARCHAR},
+            </if>
+            <if test="couriercompanyname != null">
+                courierCompanyName = #{couriercompanyname,jdbcType=VARCHAR},
+            </if>
+            <if test="returnfreight != null">
+                returnFreight = #{returnfreight,jdbcType=DECIMAL},
+            </if>
+            <if test="freight != null">
+                freight = #{freight,jdbcType=DECIMAL},
+            </if>
+            <if test="productpackaging != null">
+                productPackaging = #{productpackaging,jdbcType=VARCHAR},
+            </if>
+            <if test="productappearance != null">
+                productAppearance = #{productappearance,jdbcType=VARCHAR},
+            </if>
+            <if test="productfunction != null">
+                productFunction = #{productfunction,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="beartype != null">
+                beartype = #{beartype,jdbcType=VARCHAR},
+            </if>
+            <if test="receipttime != null">
+                receipttime = #{receipttime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where tReturnId = #{treturnid,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,28 @@
+package com.lakala.mapper.r.profit;
+
+import java.util.HashMap;
+
+import com.lakala.model.profit.TearningsdayApp;
+
+/**
+ * 
+ * @author zhaoqiugen
+ *
+ */
+public interface TearningsdayAppMapper {
+	TearningsdayApp selectByPrimaryKey(Integer id);
+
+	/**
+	 * 根据店主手机号查询 收益
+	 * 
+	 * @param map
+	 */
+	TearningsdayApp selectByTel(HashMap<String, Object> map);
+	
+	/**
+	 * 根据店主手机号查询 统计收益
+	 * 
+	 * @param map
+	 */
+	TearningsdayApp selectByTelSum(HashMap<String, Object> map);
+}

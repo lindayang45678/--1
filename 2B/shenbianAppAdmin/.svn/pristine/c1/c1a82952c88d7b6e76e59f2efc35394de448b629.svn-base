@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>收益查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>	
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1>收益查询</h1>
+		<a href="rules.html" class="head-right">收益规则说明</a>
+	</header>
+	<section class="container">
+		<div class="order-incomes">
+			<ul>
+				<li>
+					<div class="order-incomes-title">
+						<span>2014年7月21日-8月20日</span>
+						<em class="color">未结算</em>
+					</div>
+					<div class="order-incomes-item">
+						<div><span>本店总收益</span><span>￥300.00</span><span>1900单</span></div>
+						<div class="add">=</div>
+						<div><span>平台商品分润</span><span>￥200.00</span><span>100单</span></div>
+						<div class="add">+</div>
+						<div><span>自营商品结算</span><span>￥200.00</span><span>100单</span></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="incomes-detail-title">
+			<ul>
+				<li><a href="javascript:;" class="active">平台商品分润</a></li>
+				<li><a href="javascript:;">自营商品结算</a></li>
+				<li><a href="search.html">订单收益查询</a></li>
+			</ul>
+		</div>
+		<div class="wrap detail-plat">
+			<ul>
+				<li>
+					<a href="details.html">
+					<div>
+						<p class="color">10月25日</p>
+						<div><i>支付号：</i><em>234234234234</em></div>
+						<div><i>订单来源：</i><em>销售员</em></div>
+						<div><i>总主收益：</i><em>-111.00</em></div>
+						<div><i>店主收益</i><em>-55.00</em></div>
+						<div><i>是销售员收益：</i><em>-55.00</em></div>
+						
+						<p><i>大订单号：</i><em>234234234234</em></p>
+						<div><i>订单来源：</i><em>销售员</em></div>
+						<div><i>总主收益：</i><em>-111.00</em></div>
+						<div><i>店主收益</i><em>-55.00</em></div>
+						<div><i>是销售员收益：</i><em>-55.00</em></div>
+					</div>
+					</a>
+				</li>
+				<li>
+					<a href="details.html">
+					<div>
+						<p class="color">10月25日</p>
+						<div><i>支付号：</i><em>234234234234</em></div>
+						<div><i>订单来源：</i><em>销售员</em></div>
+						<div><i>总主收益：</i><em>-111.00</em></div>
+						<div><i>店主收益</i><em>-55.00</em></div>
+						<div><i>是销售员收益：</i><em>-55.00</em></div>
+						
+						<p><i>大订单号：</i><em>234234234234</em></p>
+						<div><i>订单来源：</i><em>销售员</em></div>
+						<div><i>总主收益：</i><em>-111.00</em></div>
+						<div><i>店主收益</i><em>-55.00</em></div>
+						<div><i>是销售员收益：</i><em>-55.00</em></div>
+					</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="wrap detail-self hidden">
+			<ul>
+				<li>
+					<p class="color">2014-07-25</p>
+					<div class="detail-self-item">
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+					<div class="detail-self-item">	
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+					<div class="detail-self-item">	
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+				</li>
+				<li>
+					<p class="color">2014-07-25</p>
+					<div class="detail-self-item">
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+					<div class="detail-self-item">	
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+					<div class="detail-self-item">	
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+				</li>
+				<li>
+					<p class="color">2014-07-25</p>
+					<div class="detail-self-item">
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+					<div class="detail-self-item">	
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+					<div class="detail-self-item">	
+						<div><i>订单号：</i><em>034352552</em></div>
+						<div><i>付款方式：</i><em>微信支付</em></div>
+						<div><i>订单金额：</i><em>￥100.00</em></div>
+						<div><i>支付费率：</i><em>10%</em></div>
+						<div><i>结算金额：</i><em>￥90.00</em><em>（100-100*10%）</em></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/incomes/incomes.js"></script>
+</html>

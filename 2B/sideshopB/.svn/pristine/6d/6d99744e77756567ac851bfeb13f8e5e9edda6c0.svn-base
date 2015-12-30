@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.sdbmediastatistics.SdbMediaStatisticsMapper">
+     <resultMap id="BaseResultMap" type="com.lakala.base.model.SDBMediaStatistics" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="prov_no" property="provNo" jdbcType="VARCHAR" />
+    <result column="prov" property="prov" jdbcType="VARCHAR" />
+    <result column="city_no" property="cityNo" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="city_area_no" property="cityAreaNo" jdbcType="VARCHAR" />
+    <result column="city_area" property="cityArea" jdbcType="VARCHAR" />
+    <result column="vdc_no" property="vdcNo" jdbcType="VARCHAR" />
+    <result column="vdc" property="vdc" jdbcType="VARCHAR" />
+    <result column="cop_no" property="copNo" jdbcType="VARCHAR" />
+    <result column="cop" property="cop" jdbcType="VARCHAR" />
+    <result column="net_type" property="netType" jdbcType="VARCHAR" />
+    <result column="net_typestr" property="netTypestr" jdbcType="VARCHAR" />
+    <result column="net_no" property="netNo" jdbcType="VARCHAR" />
+    <result column="net_name" property="netName" jdbcType="VARCHAR" />
+    <result column="net_sname" property="netSname" jdbcType="VARCHAR" />
+    <result column="term_isshangcheng" property="termIsshangcheng" jdbcType="CHAR" />
+    <result column="term_isshangchengstr" property="termIsshangchengstr" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="statestr" property="statestr" jdbcType="VARCHAR" />
+    <result column="open_date" property="openDate" jdbcType="TIMESTAMP" />
+    <result column="close_date" property="closeDate" jdbcType="TIMESTAMP" />
+    <result column="term_yetai" property="termYetai" jdbcType="VARCHAR" />
+    <result column="term_yetaistr" property="termYetaistr" jdbcType="VARCHAR" />
+    <result column="term_brand" property="termBrand" jdbcType="VARCHAR" />
+    <result column="term_brandstr" property="termBrandstr" jdbcType="VARCHAR" />
+    <result column="term_fbtype" property="termFbtype" jdbcType="VARCHAR" />
+    <result column="term_fbtypestr" property="termFbtypestr" jdbcType="VARCHAR" />
+    <result column="psam" property="psam" jdbcType="VARCHAR" />
+    <result column="machine_kind" property="machineKind" jdbcType="VARCHAR" />
+    <result column="machine_kindstr" property="machineKindstr" jdbcType="VARCHAR" />
+    <result column="dev_state" property="devState" jdbcType="VARCHAR" />
+    <result column="dev_statestr" property="devStatestr" jdbcType="VARCHAR" />
+    <result column="dev_open_date" property="devOpenDate" jdbcType="TIMESTAMP" />
+    <result column="dev_close_date" property="devCloseDate" jdbcType="TIMESTAMP" />
+    <result column="profit_type" property="profitType" jdbcType="VARCHAR" />
+    <result column="is_profit" property="isProfit" jdbcType="VARCHAR" />
+    <result column="contact_name_1" property="contactName1" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="term_lxrtel" property="termLxrtel" jdbcType="VARCHAR" />
+    <result column="addr" property="addr" jdbcType="VARCHAR" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="account_bank" property="accountBank" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+    <result column="account_type" property="accountType" jdbcType="VARCHAR" />
+    <result column="account_typestr" property="accountTypestr" jdbcType="VARCHAR" />
+    <result column="first_open_date" property="firstOpenDate" jdbcType="VARCHAR" />
+    <result column="is_fr" property="isFr" jdbcType="VARCHAR" />
+    <result column="fr_type_code" property="frTypeCode" jdbcType="VARCHAR" />
+    <result column="fr_type" property="frType" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="wh_mobile" property="whMobile" jdbcType="VARCHAR" />
+    <result column="is_onehour" property="isOnehour" jdbcType="INTEGER" />
+    <result column="is_doorstep" property="isDoorstep" jdbcType="INTEGER" />
+    <result column="is_pickup" property="isPickup" jdbcType="INTEGER" />
+    <result column="net_custom_name" property="netCustomName" jdbcType="VARCHAR" />
+    <result column="is_homepay" property="ishomepay" jdbcType="INTEGER" />
+    <result column="maxgathering" property="maxgathering" jdbcType="DECIMAL" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="announcement" property="announcement" jdbcType="VARCHAR" />
+    <result column="weixin_no" property="weixin_no" jdbcType="VARCHAR" />
+  </resultMap>
+    
+    <select id="selectSdbMediaStatisticsByPsam" resultType="map"
+            parameterType="string">
+        select
+        term_fbtype,city_area_no,city,prov,city_area
+        from sdb_media_statistics
+        where psam = #{psam,jdbcType=VARCHAR} ORDER BY id DESC LIMIT 1
+    </select>
+    
+     <sql id="Base_Column_List" >
+    id, prov_no, prov, city_no, city, city_area_no, city_area, vdc_no, vdc, cop_no, cop, 
+    net_type, net_typestr, net_no, net_name,net_sname, term_isshangcheng, term_isshangchengstr, 
+    type, state, statestr, open_date, close_date, term_yetai, term_yetaistr, term_brand, 
+    term_brandstr, term_fbtype, term_fbtypestr, psam, machine_kind, machine_kindstr, 
+    dev_state, dev_statestr, dev_open_date, dev_close_date, profit_type, is_profit, contact_name_1, 
+    mobile, term_lxrtel, addr, updatetime, account_bank, account_name, account_no, account_type, 
+    account_typestr, first_open_date, is_fr, fr_type_code, fr_type, name, wh_mobile, 
+    is_onehour, is_doorstep, is_pickup, net_custom_name,longitude , latitude
+  </sql>
+  
+  <sql id="Base_column_with_shopservice">
+  	
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sdb_media_statistics
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+    <select id="selectByPsam" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    net_type,net_typestr,net_no,net_sname,psam,contact_name_1,mobile,addr, term_fbtype, prov_no, prov, city_no, city, city_area_no, city_area,
+    is_homepay
+    from sdb_media_statistics
+    where psam = #{_parameter}
+  </select>
+  
+  <select id="getTermFbTypeByPSAM" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select term_fbtype 
+      from sdb_media_statistics 
+      where psam = #{_parameter}
+  </select>
+  
+</mapper>

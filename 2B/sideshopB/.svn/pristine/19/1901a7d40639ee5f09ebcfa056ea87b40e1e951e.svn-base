@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>编辑小店信息</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015070708" />
+</head>
+
+<body class="x-hidden">
+	<header>
+		<a href="index.html" class="back"></a>
+  		<h1>编辑小店信息</h1>
+        <a href="javascript:;" class="head-right">保存</a>
+	</header>
+    <section class="container editshop1">
+    	<div class="edit-bgborder edit-part1">
+        	<ul>
+            	<li>
+                	<em>小店名称</em><div id="shopname" contenteditable="false"></div>
+                </li>
+                <li>
+                	<em>店主姓名</em><div id="shopper-name"></div>
+                </li>
+                <li>
+                	<em>店主手机</em><input id="shopper-phone" type="tel" value="" readonly/>
+                </li>
+                <li>
+                	<em>店铺地址</em><div id="shopadress" class="max-2line"></div>                
+                </li>
+            </ul>
+        </div>
+        <div class="edit-bgborder edit-part2">
+        	<ul>
+            	<li>
+                	<a href="shophours.html">
+                    	<em>营业时间</em><div><time id="businesshours"></time></div>
+                    </a>
+                </li>
+                <li>
+                    <em>营业状态</em><div><span id="on-off" class="item-right turn-on"><i></i></span><input type="text" id="on-off1" class="item-left" value="营业中" readonly/></div>
+                </li>
+                <li>
+                    <em>配送方式</em><div><span id="receipt" class="item-right turn-on"><i></i></span><input type="text" id="receipt-2" class="item-left" value="到店自提、送货上门" readonly/></div>
+                </li>
+                <li>
+                    <em>支付方式</em><div><span id="isHomepay" class="item-right turn-on"><i></i></span><input type="text" id="isHomepay1" class="item-left" value="货到付款、在线支付" readonly/></div>
+                </li>
+                <li>
+                    <a href="shopfreight.html">
+                    	<em>运费设置</em><div><span id="freightsetting"></span></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="edit-bgborder edit-part3">
+        	<ul>
+            	<li>
+                	<em>配送员</em><div id="service-name1" contenteditable="true"></div>
+                </li>
+                <li>
+                	<em>联系手机</em><div id="service-phone1" contenteditable="true"></div>
+                </li>
+            </ul>
+        </div>
+        <!-- 
+        <div class="edit-bgborder upload-icon"><a href="#"><i><img src="../../images/upload-icon.png" alt=""/></i>上传小店招牌</a></div>
+        <div class="shop-logoimg"><img src="../../images/shop-logo.jpg" alt=""/></div>
+         -->
+    </section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js?t=2015071001"></script>
+	<script type="text/javascript" src="../../js/common/common.js?t=2015071000"></script>
+	<script type="text/javascript" src="../../js/shops/editshop1.js?t=2015071705"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+$(function(){
+	var url = window.location.href;
+	var type = getParamValueByName(url, "type");
+	if(type === "self"){
+		$("title").html("自营商品结算");
+		$("h1").html("自营商品结算");
+	}else{
+		$("title").html("平台商品结算");
+		$("h1").html("平台商品结算");
+	}
+})

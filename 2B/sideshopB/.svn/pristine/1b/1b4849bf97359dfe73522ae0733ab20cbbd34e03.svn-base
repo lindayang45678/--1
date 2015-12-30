@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+	<header>
+		<h1>订单查询</h1>
+		<a href="javascript:window.history.go(-1);" class="back">返回</a>
+	</header>
+	<section class="container orderquery">
+		<section class="wrap">
+			<dl>
+				<dt class="letter-spacing">手机号：</dt>
+				<dd><input type="tel" id="mobile" maxlength="11"/></dd>
+				<dt>下单时间：</dt>
+				<dd class="order-time">
+					<input type="date" id="starttime"/>&nbsp;&nbsp;到&nbsp;&nbsp;<input type="date" id="endtime"/>
+				</dd>
+				<dt>订单类型：</dt>
+				<dd id="channelcode"><span class="btn-red" data-item="0">批发订单</span><span data-item="1">零售订单</span></dd>
+				<dt>订单状态：</dt>
+				<dd id="state"><span class="btn-red" data-item="0">全部</span><span data-item="1">待发货</span><span data-item="2">已发货</span><span data-item="3">部分签收</span><span data-item="4">已签收</span></dd>
+				<dt>订单来源：</dt>
+				<dd id="ordersrc"><span class="btn-red" data-item="0">全部</span><span data-item="1">店主</span><span data-item="2">销售员</span></dd>
+				<dt>来源渠道：</dt>
+				<dd id="source"><span class="btn-red" data-item="0">全部</span><span data-item="1">开店宝</span><span data-item="2">收款宝</span><span data-item="3">wap商城</span><span data-item="4">身边app</span></dd>
+				<dt>配送方式：</dt>
+				<dd id="devicetype"><span class="btn-red" data-item="0">全部</span><span data-item="1">送货上门</span><span data-item="2">到店自提</span></dd>
+				<dt>付款方式：</dt>
+				<dd id="paychannel"><span class="btn-red" data-item="0">全部</span><span data-item="1">拉卡拉</span><span data-item="2">微信支付</span><span data-item="3">支付宝</span><span data-item="4">贷到付款</span></dd>
+				<dt>付款状态：</dt>
+				<dd id="ispay"><span class="btn-red" data-item="0">全部</span><span data-item="1">已付款</span><span data-item="2">未付款</span></dd>
+			</dl>
+			<a href="querysucceed.html" class="btn-red">查询</a>
+		</section>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/orders/orderquery.js"></script>
+</html>

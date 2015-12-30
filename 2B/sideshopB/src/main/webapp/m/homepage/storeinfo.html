@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>更新店铺信息</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015080300" />
+</head>
+<body>
+	<header>
+		<a href="setting.html" class="back"></a>				
+		<h1>更新店铺信息</h1>
+	</header>
+	<section class="container">
+		<div class="shopopen storeinfo">
+			<ul>
+				<li class="ml10"><span>店主姓名</span><input type="text" name="shopername" id="shopername" /></li>
+				<li class="ml10"><span>店铺名称</span><input type="text" name="shoptitle" id="shoptitle" /></li>
+				<li class="ml10">
+					<span>店铺地址</span>
+					<!-- <input type="text" id="shopadd" /> -->
+					<div id="address" class="line">
+						<select id="provinceid" disabled="disabled"></select>
+						<select id="cityid" disabled="disabled"></select>
+						<select id="areaid"></select>
+					</div>
+				</li>
+				<li class="ml10"><span>详细地址</span><input type="text" name="shopaddress" id="shopaddress" /></li>
+			</ul>
+			<div class="wrap" style="margin-top:20px;">
+				<a href="javascript:;" id="goin-shop" class="btn-red goin-shop">保&nbsp;&nbsp;存</a>
+			</div>
+		</div>
+	</section>
+	<!-- <div class="register-pop-ok hidden" id="register-already">
+		<div>
+			<p>恭喜您，开通成功！<br/>关注微信公众号【拉卡拉小店】领取优惠券！</p>
+			<a class="btn-red" href="login.html">登&nbsp;录</a>
+		</div>
+	</div> -->
+	
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/homepage/storeinfo.js?t=2015080300"></script>
+</body>
+</html>

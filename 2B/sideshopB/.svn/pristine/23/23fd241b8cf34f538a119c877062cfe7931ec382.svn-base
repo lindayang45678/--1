@@ -1,0 +1,145 @@
+package com.lakala.module.profit.controller;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.model.profit.Torder;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.profit.service.ProfitService;
+import com.lakala.module.profit.vo.OrderCycleProfitInput;
+import com.lakala.module.profit.vo.OrderCycleProfitOutput;
+import com.lakala.module.profit.vo.OrderEarningsDetailInput;
+import com.lakala.module.profit.vo.OrderEarningsDetailOutput;
+import com.lakala.module.profit.vo.OrderEarningsInput;
+import com.lakala.module.profit.vo.OrderEarningsOutput;
+import com.lakala.module.profit.vo.ProfitHomeInput;
+import com.lakala.module.profit.vo.ProfitHomeOutput;
+import com.lakala.util.DateUtils;
+import com.lakala.util.ReturnMsg;
+
+/**
+ * 用户收益
+ * 
+ * @author pengyunle
+ *
+ */
+@Controller
+@RequestMapping("/profit")
+public class ProfitController {
+
+	Logger logger = Logger.getLogger(ProfitController.class);
+
+	@Autowired
+	private ProfitService profitService;
+
+	/**
+	 * 收益首页查询
+	 * 
+	 * @param profit
+	 *            进入收益首页查询输入
+	 * @see ProfitHomeInput
+	 * @return 收益输出
+	 * @throws ParseException
+	 * @see ProfitInfoOutput
+	 */
+	@RequestMapping(value = "/toProfitHome")
+	public @ResponseBody ObjectOutput<ProfitHomeOutput> toProfitHome(ProfitHomeInput profit) throws ParseException, LakalaException {
+		return profitService.earningsTotal(profit);
+	}
+
+	/**
+	 * 订单周期收益
+	 * 
+	 * @param ocProfit
+	 *            订单周期收益查询输入
+	 * @see OrderCycleProfitInput
+	 * @return 订单周期收益查询输出
+	 * @throws ParseException
+	 * @see OrderCycleProfitOutput
+	 */
+	@RequestMapping(value = "/getEarningsOrderList")
+	public @ResponseBody ObjectOutput<List<OrderCycleProfitOutput>> getEarningsOrderList(OrderCycleProfitInput ocProfit)
+			throws ParseException, LakalaException {
+		return profitService.getCycleEarningsList(ocProfit);
+
+	}
+
+	/**
+	 * 订单周期收益
+	 * 
+	 * @param ocProfit
+	 *            订单周期收益查询输入
+	 * @see OrderCycleProfitInput
+	 * @return 订单周期收益查询输出
+	 * @throws ParseException
+	 * @see OrderCycleProfitOutput
+	 */
+	@RequestMapping(value = "/getEarningsOrderData")
+	public @ResponseBody ObjectOutput<OrderCycleProfitOutput> getEarningsOrderData(OrderCycleProfitInput ocProfit)
+			throws ParseException, LakalaException {
+
+		// TODO
+		ocProfit.setSettlementId("2014122120150120");
+		return profitService.getCycleEarningsData(ocProfit);
+
+	}
+
+	/**
+	 * 收益查询
+	 * 
+	 * @param odEarnings收益查询输入
+	 *            周期订单收益详细列表：①：开始日期 ②结束日期 ③电话号④收益类型 (自营-452，平台-453)
+	 *            查询订单收益：①：开始日期 ②结束日期 ③电话号④收益类型 (自营-452，平台-453)⑤二级订单号 ⑥是否售后 ⑦电话号
+	 *            ⑧订单来源(93:手机商城;94:微信商城;95:开店宝;96:PC商城;334:收款宝;357:wap商城;97:其他)
+	 * @see OrderEarningsInput
+	 * @return 收益输出
+	 * @throws ParseException
+	 * @see OrderEarningsOutput
+	 */
+	@RequestMapping(value = "/getEarningsData")
+	public @ResponseBody ObjectOutput<List<OrderEarningsOutput>> getEarningsData(OrderEarningsInput odEarnings) throws ParseException,
+			LakalaException {
+		// TODO
+		odEarnings.setMobile("13716198076");
+		return profitService.earningsQuery(odEarnings);
+	}
+
+	/**
+	 * 订单收益详情页
+	 * 
+	 * @param opDetail
+	 *            订单收益详情页查询输入
+	 * @see OrderEarningsDetailInput
+	 * @return 订单收益详情页查询输出
+	 * @throws ParseException
+	 * @see Torder
+	 */
+	@RequestMapping(value = "/getOrderDetail")
+	public @ResponseBody ObjectOutput<OrderEarningsDetailOutput> getOrderDetail(OrderEarningsDetailInput opDetail) {
+
+		ObjectOutput<OrderEarningsDetailOutput> info = null;
+		try {
+			// 测试数据
+			opDetail.setOrderProviderId("150306150056797000011439");
+			opDetail.setEarningsDate("2015-03-06");
+			opDetail.setReturnFlg(0);
+			
+			info = profitService.getOrderDetail(opDetail);
+		} catch (Exception e) {
+			logger.error(e);
+			info = new ObjectOutput<OrderEarningsDetailOutput>();
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		return info;
+	}
+}

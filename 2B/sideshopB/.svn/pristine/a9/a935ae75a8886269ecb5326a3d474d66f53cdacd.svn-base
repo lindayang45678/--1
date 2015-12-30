@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.approval.ApprovalMapper" >
+  
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Approval" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="wtmcode" property="wtmCode" jdbcType="VARCHAR" />
+    <result column="userid" property="userId" jdbcType="VARCHAR" />
+    <result column="docentry" property="docentry" jdbcType="VARCHAR" />
+    <result column="objtype" property="objType" jdbcType="VARCHAR" />
+    <result column="approvaluserid" property="approvalUserId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="createdate" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="updatedate" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="sortid" property="sortId" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="ownerremark" property="ownerRemark" jdbcType="LONGVARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="LONGVARCHAR" />
+    
+    <!--审批模版的名称-->
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    
+    <result column="userRealname" property="userName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    id, wtmcode, userid, docentry, objtype, approvaluserid, status, createdate, updatedate, 
+    sortid, url
+  </sql>
+  <sql id="Blob_Column_List" >
+    ownerremark, remarks
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tapproval
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <!-- 根据审批对象ID获取审批数据，按sortid升序排序 zhiziwei -->
+  <select id="getAppListByDocentry" resultMap="BaseResultMap">
+  		select 
+  		<include refid="Base_Column_List" />
+  		,
+  		<include refid="Blob_Column_List" />
+  		from tapproval
+  		where docentry = #{docentry,jdbcType=VARCHAR} 
+  		  and objtype = '272' 
+  		  and (isreturn is NULL or isreturn = 0) 
+  		order by sortid 
+  </select>
+</mapper>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>营业时间</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="x-hidden">
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back"></a>
+  		<h1>营业时间</h1>
+	</header>
+    <section class="container editshop1">
+    	<div class="edit-bgborder edit-part1 times">
+        	<ul>
+            	<li>
+                	<em>营业开始时间</em><div><input type="time" class="text-right" value="9:00" name=""/></div>
+                </li>
+                <li>
+                	<em>营业结束时间</em><div><input type="time" class="text-right" value="22:00" name=""/></div>
+                </li>
+            </ul>
+        </div>
+        <div class="wrap"><a href="#" class="btn-red">保存</a></div>
+    </section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+</html>

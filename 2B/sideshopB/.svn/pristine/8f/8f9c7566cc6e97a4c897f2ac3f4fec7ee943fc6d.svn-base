@@ -1,0 +1,31 @@
+//切换个人和公司选项
+$(".personal").on("tap", function() {
+	$(".invoice-company").removeClass("invoice-ok");
+	$(this).addClass("invoice-ok");
+	$(".invoice-title").addClass("hidden");
+
+});
+$(".invoice-company").on("tap", function() {
+	$(".personal").removeClass("invoice-ok");
+	$(this).addClass("invoice-ok");
+	$(".invoice-title").removeClass("hidden");
+});
+
+$(function() {
+	var billtype = billtypeNone;
+	var billtypeIndex = 0;
+	$(".invoice-sure").on("tap", function() {
+		$(".invoice-index em").each(function(index) {
+			if ($(this).hasClass("invoice-ok")) {
+				billtypeIndex = index;
+			}
+		});
+		if (billtypeIndex === 0) {
+			billtype = billtypePersonal;
+		} else {
+			billtype = billtypeBusiness;
+		}
+		storage.setItem("billtype", billtype);
+		storage.setItem("billtitle", $.trim($("input[type=text]").val()));
+	});
+})

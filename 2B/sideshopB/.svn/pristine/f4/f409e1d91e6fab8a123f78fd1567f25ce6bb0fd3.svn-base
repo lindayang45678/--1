@@ -1,0 +1,118 @@
+$(function() {
+	var url = window.location.href;
+	var newsId = getParamValueByName(url, "newsId");
+
+	if(storage.getItem(hasLogined)==null || storage.getItem(hasLogined)=="" || storage.getItem(hasLogined)=="0") {
+		//没有登录时，跳转到登录页面
+		window.location.href = "../accounts/login.html?refer=" + url + "&t=" + t;
+	}
+	var idsArray = $.parseJSON(getNewsIds(newsId)).idsKey;
+	if(idsArray.length == 0) {
+		$(".notice-wrap").hide();
+		$(".none-notices").removeClass("hidden");
+	} else {
+		//获取消息通知列表
+		getNewsInfoById(idsArray);
+	}
+})
+
+function getNewsIds(newsId) {
+	var idsArray = $.parseJSON(storage.getItem("newsIds"));
+	if(idsArray == null) {
+		idsArray = {"idsKey": []};
+	}
+
+	if(newsId != "") {
+		if(idsArray.idsKey.length >= newsCount) {
+			//删除最早的一条通知
+			idsArray.idsKey.shift();
+		}
+		//消息ID去重
+		idsArray.idsKey.push(newsId);
+		idsArray.idsKey = uniqueArray(idsArray.idsKey);
+		storage.setItem("newsIds", JSON.stringify(idsArray));
+	}
+
+	return JSON.stringify(idsArray);
+}
+
+function getNewsInfoById(idsArray) {
+	var result = "";
+
+	for(var i = idsArray.length-1; i >= 0; i --) {
+		var data = {"newsId":idsArray[i], "terminalCode":pushToken};
+		var resultJson = ajaxCommon(urlGetNewsInfo, data);
+		resultJson = convertNullToEmpty(resultJson);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			var _ReturnData = resultJson._ReturnData;
+			if(_ReturnData.length > 0) {
+				var newsDateTime = _ReturnData[0].date;
+				var content = "";  //消息内容
+				var type = "";  //0:商品详情 1：商品列表  2：外链  3：专题列表  4：咨询
+				var itemsid = "";  //子节点id
+				var childtitle = "";  //子消息标题
+				var picture = "";  //消息图片
+				var url = "";  //消息链接到的url
+
+				result += "<div class='notice-wrap'>";
+				result += "<h4><span>" + newsDateTime + "</span></h4>";
+				result += "<div class='products'>";
+				for(var j = 0; j < _ReturnData.length; j ++) {
+					content = _ReturnData[j].content;
+					type = _ReturnData[j].type;
+					itemsid = _ReturnData[j].itemsid;
+					childtitle = _ReturnData[j].childtitle;
+					picture = _ReturnData[j].picture;
+					url = getUrlByType(itemsid, type, content);
+					//处理咨询类型
+					if(type == "4") {
+						storage.setItem(itemsid + "", JSON.stringify(_ReturnData[j]));
+					}
+					
+					if(j == 0) {
+						result += "<a class='top' href='" + url + "'>";
+						result += "<img src='" + picture + "'/>";
+						result += "<em>" + childtitle + "</em>";
+						result += "</a>";
+						result += "<ul class='items'>";
+					} else if(j == _ReturnData.length) {
+						result += "</ul>";
+					} else {
+						result += "<li class='clearfix'>";
+						result += "<a href='" + url + "'>";
+						result += "<em>" + childtitle + "</em>";
+						result += "<img src='" + picture + "' />";
+						result += "</a>";
+						result += "</li>";
+					}
+				}
+				result += "</div>";
+				result += "</div>";
+			} else {
+				//$(".notice-wrap").hide();
+				//showAlertMsg(msgNewsInfoFail);
+				$(".none-notices").removeClass("hidden");
+			}
+		} else {
+			//$(".notice-wrap").hide();
+			//showAlertMsg(msgNewsInfoFail);
+			$(".none-notices").removeClass("hidden");
+		}
+	}
+
+	$(".notice-main").html(result);
+}
+
+function getUrlByType(itemsid, type, content) {
+	//0:商品详情  1：商品列表  2：外链  3：专题列表  4：咨询
+	var url = "";
+	if(type == "0") {
+		url = "../wholesale/prodetail.html?goodsid=" + content + "&t=" + t;
+	} else if(type == "4") {
+		url = "details.html?itemsid=" + itemsid + "&t=" + t;
+	} else {
+		url = content;
+	}
+
+	return url;
+}

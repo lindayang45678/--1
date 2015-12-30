@@ -1,0 +1,47 @@
+package com.lakala.module.news.service.impl;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.news.NewsMapper;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.news.service.NewsService;
+import com.lakala.module.news.vo.NewsItemOutput;
+import com.lakala.module.news.vo.NewsOutput;
+
+@Service("NewsServiceBean")
+public class NewsServiceImp implements NewsService {
+	
+	private static Logger logger = Logger.getLogger(NewsServiceImp.class);
+	
+	@Autowired
+	private NewsMapper  newsmapper_R;
+
+	@Override
+	public ObjectOutput<List<NewsOutput>> getInfo(Integer newsid)
+			throws LakalaException {
+		ObjectOutput<List<NewsOutput>> data = new ObjectOutput<List<NewsOutput>>(); 
+		
+		List<NewsOutput> list = newsmapper_R.getInfo(newsid);
+		
+		data.set_ReturnData(list);
+		
+		return data;
+	}
+
+	@Override
+	public ObjectOutput<List<NewsItemOutput>> getConsultInfo(Integer itemsid)
+			throws LakalaException {
+		ObjectOutput<List<NewsItemOutput>> data = new ObjectOutput<List<NewsItemOutput>>();
+		
+		List<NewsItemOutput> ouputList = newsmapper_R.getConsultInfo(itemsid);
+		data.set_ReturnData(ouputList);
+		return data;
+	}
+
+
+}

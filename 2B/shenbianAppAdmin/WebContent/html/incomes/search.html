@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>收益查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>	
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1>收益查询</h1>
+	</header>
+	<section class="wrap">
+		<div class="incomes">
+			<table>
+			<tr>
+				<td><label>订单号：</label></td>
+				<td><input type="text"/></td>
+			</tr>
+			<tr>
+				<td><label>订单时间：</label></td>
+				<td class="order-time">
+					<input type="date"/>
+					<i>到</i>
+					<input type="date"/>
+				</td>
+			</tr>
+			<tr>
+				<td><label>收益类型：</label></td>
+				<td>
+					<div class="button">平台商品收益</div>
+					<div class="button">自营商品收益</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label>订单来源：</label></td>
+				<td>
+					<div class="button active">全部</div>
+					<div class="button">开店宝</div>
+					<div class="button">收款宝</div>
+					<div class="button">wap商城</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label>是否售后：</label></td>
+				<td>
+					<div class="button">是</div>
+					<div class="button">否</div>
+				</td>
+			</tr>
+			</table>
+			<a href="searchresult.html" class="btn-red">查询</a>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/incomes/search.js"></script>
+</html>

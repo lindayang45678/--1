@@ -1,0 +1,71 @@
+package com.lakala.module.approval.service.impl;
+
+import com.lakala.base.model.Approval;
+import com.lakala.exception.LakalaException;
+import com.lakala.module.approval.service.ApprovalService;
+import com.lakala.module.sreturn.model.Constant;
+import org.apache.log4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * Created by HOT.LIU on 2015/3/6.
+ */
+@Service
+public class ApprovalServiceImpl implements ApprovalService, ApplicationContextAware {
+    Logger logger = Logger.getLogger(ApprovalServiceImpl.class);
+    
+    @Autowired
+    private com.lakala.mapper.w.approval.ApprovalMapper approvalMapper_W;
+
+    @Autowired
+    private com.lakala.mapper.w.approval.ApprovalDefinitionsMapper approvalDefinitionsMapper_W;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
+    }
+
+    @Override
+    public Long insertSelective(Approval record) throws LakalaException {
+        if (record.getUserId() == null || record.getObjType() == null || record.getDocentry() == null)
+            throw new RuntimeException("审批参数不能为空!");
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("userid", record.getUserId());
+        params.put("objtype", record.getObjType());
+        params.put("docentry", record.getDocentry());
+        try {
+            List<HashMap<String, Object>> list = this.approvalDefinitionsMapper_W.findApprovalDefinitions(params);
+
+            if (list.size() == 0) {
+                logger.info(record.getDocentry() + " ; 请添加审批模板并配置申请人、审批人!");
+                throw new IndexOutOfBoundsException("请添加审批模板并配置申请人、审批人!");
+            }
+
+            if (list.size() == 1) {
+                HashMap<String, Object> map = list.get(0);
+                String active = String.valueOf(map.get("active"));
+
+                //模板被禁用
+                if (Constant.NOT_ATREE_N.equals(active)) {
+                    logger.info(record.getDocentry() + " ; 审批模板被禁用!");
+                    throw new LakalaException("审批模板被禁用!");
+                }
+            }
+
+            record.setWtmCode(list.get(0).get("wtmcode").toString());
+            record.setApprovalUserId(list.get(0).get("approvaluserid").toString());
+            record.setSortId(list.get(0).get("sortid").toString());
+            return this.approvalMapper_W.insert(record);
+        } catch (Exception e) {
+            throw new LakalaException(e);
+        }
+    }
+}

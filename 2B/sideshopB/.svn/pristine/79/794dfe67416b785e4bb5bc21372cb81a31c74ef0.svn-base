@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>关于身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+
+<body>
+	<header>		
+		<h1>关于身边小店</h1>
+		<a href="setting.html" class="back"></a>
+	</header>
+    <section class="wrap aboutus-logo">
+    	<div><img src="../../images/sogologo.png" alt=""/></div>
+        <span>身边小店－V<em id="appVersion"></em></span>
+    </section>
+    <section class="lakala-logo"><img src="../../images/lakal-logo.png" alt=""/>
+    	<p class="c-gray">Copyright&copy;2015 拉卡拉电子商务有限公司 版权所有</p>
+    </section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" id="platJs"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+	<script type="text/javascript" src="../../js/homepage/setting.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			//放到5月份上线--暂时手动修改版本号
+			loadJs();
+			setTimeout(getAppVersion, 400);
+		});
+
+		function getAppVersion() {
+			var appVersion = "";
+			if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+				cordova._native.nativeinfo.get(function(info) {
+					//获取客户端版本信息
+					appVersion = info.app.ShortVersion;
+					$("#appVersion").text(appVersion);
+				});
+			}
+			if(appVersion == "") {
+				//如果未获取到版本号，写死版本号为V0.0.1
+				$("#appVersion").text(version);
+			}
+		}
+	</script>
+</body>
+</html>

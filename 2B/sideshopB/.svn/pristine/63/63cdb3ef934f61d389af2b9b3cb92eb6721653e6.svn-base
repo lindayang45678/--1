@@ -1,0 +1,61 @@
+$(function(){
+	var data = {"mobile":mobile,"ecNetNo":netNo};
+	var resultJson = ajaxCommon(urlToProfitHome, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess){
+		var ownTodayEarnings = resultJson._ReturnData.ownTodayEarnings;//自营今日流水
+		var ownSettleAmont = resultJson._ReturnData.ownSettleAmont;//自营今日到账
+		var ownAddEarnings = resultJson._ReturnData.ownAddEarnings;//自营累计流水
+		var ownTotalSettleAmont = resultJson._ReturnData.ownTotalSettleAmont;//自营累计到账
+		
+		var ownTodayOrderNum = resultJson._ReturnData.ownTodayOrderNum;//自营今日订单
+		var ownSettleNum = resultJson._ReturnData.ownSettleNum;//自营结算单数
+		var ownSettleDate = resultJson._ReturnData.ownSettleDate;//自营结算今日日期
+		
+		var terraceEarnings = resultJson._ReturnData.terraceEarnings;//平台本月分润
+		var terraceSettleAmont = resultJson._ReturnData.terraceSettleAmont;//平台本月到账
+		var terraceAddEarnings = resultJson._ReturnData.terraceAddEarnings;//平台累计分润
+		var terraceTotalSettleAmont = resultJson._ReturnData.terraceTotalSettleAmont;;//平台累计到账
+		
+		var terraceOrderNum = resultJson._ReturnData.terraceOrderNum;//平台本月订单
+		var terraceSettleNum = resultJson._ReturnData.terraceSettleNum;//平台结算单数
+		var terraceSettleDateS = resultJson._ReturnData.terraceSettleDateS;//平台结算周期开始
+		var terraceSettleDateE = resultJson._ReturnData.terraceSettleDateE;//平台结算周期结束
+		
+		$(".incomes-l:eq(0)").find("em").html(ownTodayEarnings);//自营今日流水
+		$(".incomes-r:eq(0)").find("em").html(ownSettleAmont);//自营今日到账
+		$(".incomes-bottom:eq(0)").find("em:eq(0)").html(ownAddEarnings);//自营累计流水
+		$(".incomes-bottom:eq(0)").find("em:eq(1)").html(ownTotalSettleAmont);//自营累计到账
+		
+		
+		$(".incomes-l:eq(1)").find("em").html(terraceEarnings);//平台本月分润
+		$(".incomes-r:eq(1)").find("em").html(terraceSettleAmont);//平台本月到账
+		$(".incomes-bottom:eq(1)").find("em:eq(0)").html(terraceAddEarnings);//平台累计分润
+		$(".incomes-bottom:eq(1)").find("em:eq(1)").html(terraceTotalSettleAmont);//平台累计到账
+		
+		var urlSelf = "incomesmonth.html?";
+		urlSelf += "type=self";
+		urlSelf += "&ownTodayEarnings=" +ownTodayEarnings;
+		urlSelf += "&ownTodayOrderNum=" +ownTodayOrderNum;
+		urlSelf += "&ownSettleAmont=" +ownSettleAmont;
+		urlSelf += "&ownSettleNum=" +ownSettleNum;
+		urlSelf += "&ownSettleDate=" + getLocalTime(new Date()).split(" ")[0];
+		$("#self-yes").attr("href",urlSelf + "&settel=yes");
+		$("#self-no").attr("href",urlSelf + "&settel=no");
+		
+		var urlPlat = "incomesmonth.html?";
+		urlPlat += "type=plat";
+		urlPlat += "&terraceEarnings=" +terraceEarnings;
+		urlPlat += "&terraceOrderNum=" +terraceOrderNum;
+		urlPlat += "&terraceSettleAmont=" +terraceSettleAmont;
+		urlPlat += "&terraceSettleNum=" +terraceSettleNum;
+		urlPlat += "&terraceSettleDateS=" +terraceSettleDateS;
+		urlPlat += "&terraceSettleDateE=" +terraceSettleDateE;
+		$("#plat-yes").attr("href",urlPlat + "&settel=yes");
+		$("#plat-no").attr("href",urlPlat + "&settel=no");
+		
+		session.removeItem("settel");
+	}else{
+		//接口返回错误
+	}
+})

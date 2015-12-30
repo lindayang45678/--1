@@ -1,0 +1,47 @@
+package com.lakala.module.user.service;
+
+import java.util.Map;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.vo.ShopInfoInput;
+
+
+/**
+ * 店铺信息
+ * @author zjj
+ * @date 2015年2月28日
+ */
+
+public interface ShopInfoService {
+
+	/**
+	 * 根据店铺主键查询店铺信息
+	 * @return
+	 */
+	public ObjectOutput findShopInfoByPK(ShopInfoInput input) throws LakalaException;
+	
+	/**
+	 * 编辑店铺信息
+	 * @param input
+	 * @return
+	 * @throws LakalaException
+	 */
+	public ObjectOutput editShopInfo(ShopInfoInput input) throws LakalaException;
+	
+	/**
+	 * 根据店主信息查询店铺信息集合
+	 * @param input
+	 * @return
+	 * @throws LakalaException
+	 */
+	public ObjectOutput findShopListByShoperTel(ShopInfoInput input) throws LakalaException;
+	
+	/**
+	 * 上传门店信息
+	 * @param input
+	 * @return
+	 * @throws LakalaException
+	 */
+	public ObjectOutput uploadImg(ShopInfoInput input) throws LakalaException;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>现金券-未使用</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="coupon">
+	<header>
+		<a href="../homepage/index.html" class="back">返回</a>				
+		<h1>我要领券</h1>
+		<a href="rules.html" class="head-right">现金券规则</a>
+	</header>
+	<section class="container clearfix">
+		<section class="wrap unused">
+			<div class="coupon-top clearfix">
+				<a href="#" class="btn-red receive">我要领券</a>
+			</div>
+			<div class="header clearfix">
+				<a class="active" href="javascript:void(0);">未使用现金券 </a>
+				<a href="used.html">已使用现金券</a>
+				<a href="expired.html">已过期现金券</a>
+			</div>
+			<div class="coupon-list">				
+				<a href="details.html">
+					<dl class="clearfix">
+						<dt>
+							<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+							<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+						</dt>
+						<dd class="fl c-white coupon1"><strong>100</strong><span>满100元可用</span></dd>
+					</dl>
+				</a>  
+			</div>
+			<div class="coupon-list">				
+				<a href="details.html">
+					<dl class="clearfix">
+						<dt>
+							<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+							<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+						</dt>
+						<dd class="fl c-white coupon2"><strong>5</strong><span>满100元可用</span></dd>
+					</dl>
+				</a>  
+			</div>
+			<div class="coupon-list">				
+				<a href="details.html">
+					<dl class="clearfix">
+						<dt>
+							<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+							<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+						</dt>
+						<dd class="fl c-white coupon3"><strong>10</strong><span>满100元可用</span></dd>
+					</dl>
+				</a>  
+			</div>
+			<div class="coupon-list">				
+				<a href="details.html">
+					<dl class="clearfix">
+						<dt>
+							<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+							<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+						</dt>
+						<dd class="fl c-white coupon4"><strong>50</strong><span>满100元可用</span></dd>
+					</dl>
+				</a>  
+			</div>
+		</section>
+	</section>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+</body>
+</html>

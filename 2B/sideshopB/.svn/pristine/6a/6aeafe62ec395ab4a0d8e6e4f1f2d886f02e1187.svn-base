@@ -1,0 +1,8 @@
+#mongo.left=http://localhost:8081/lakala-core/sideb/goods/left
+#mongo.list=http://localhost:8081/lakala-core/sideb/goods/list
+#mongo.detail=http://localhost:8081/lakala-core/sideb/goods/detail
+#mongo.count=http://localhost:8081/lakala-core/sideb/goods/count
+mongo.left=http://10.5.12.203:8085/sideb/goods/left
+mongo.list=http://10.5.12.203:8085/sideb/goods/list
+mongo.detail=http://10.5.12.203:8085/sideb/goods/detail
+mongo.count=http://10.5.12.203:8085/sideb/goods/count

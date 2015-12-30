@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goods.TdiscountMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.module.goods.vo.Tdiscount" >
+    <id column="tDiscountId" property="tdiscountid" jdbcType="INTEGER" />
+    <result column="comany" property="comany" jdbcType="REAL" />
+    <result column="agent" property="agent" jdbcType="REAL" />
+    <result column="store" property="store" jdbcType="REAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    tDiscountId, comany, agent, store
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tdiscount
+    where tDiscountId = #{tdiscountid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectTdiscount" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tdiscount limit 1
+  </select>
+  
+</mapper>

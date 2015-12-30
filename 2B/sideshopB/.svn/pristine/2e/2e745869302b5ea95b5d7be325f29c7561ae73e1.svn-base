@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.order.QuhuoMapper">
+	<resultMap id="BaseResultMap" type="com.lakala.model.QuhuoOutputSql">
+		<result column="orderID" property="orderid" jdbcType="VARCHAR" />
+	    <result column="tOrderItemsId" property="orderitemsid" jdbcType="INTEGER" />
+		<result column="orderProviderID" property="orderproviderid" jdbcType="VARCHAR" />
+		<result column="cusName" property="cusname" jdbcType="VARCHAR" />
+		<result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="returnState" property="returnstate" jdbcType="INTEGER" />
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+		<result column="goodsID" property="goodsid" jdbcType="INTEGER" />
+		<result column="goodsName" property="goodsname" jdbcType="VARCHAR" />
+		<result column="goodsCount" property="goodsnum" jdbcType="INTEGER" />
+		<result column="norms" property="norms" jdbcType="VARCHAR" />
+		<result column="logisticsId" property="logid" jdbcType="INTEGER" />
+		<result column="goodBigPic" property="goodbigpic" jdbcType="VARCHAR" />
+		<result column="providerName" property="providername" jdbcType="VARCHAR" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="tAllOrderId" property="allorderid" jdbcType="INTEGER" />
+		<result column="platorself" property="platorself" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="getQuhuoInfo" resultMap="BaseResultMap" parameterType="com.lakala.module.order.vo.QuhuoInput">
+		SELECT
+		  <choose>
+            <when test="orderitemsidflag == 1">
+                i.`tOrderItemsId`,
+                i.`orderProviderID`,
+                i.`orderID`,
+                p.`payChanel`,
+                i.`logisticsId`,
+                p.`state`,
+  				i.`tAllOrderId`,
+  				i.`platorself`
+            </when>
+            <otherwise>
+                i.`orderProviderID`,
+			    i.`cusName`,
+			    i.`cusTelNo`,
+			    p.`state`,
+			    i.`returnState`,
+			    p.`payChanel`,
+			    p.`actualAmount`,
+			    i.`goodsID`,
+			    i.`goodsName`,
+			    i.`goodsCount`,
+			    i.`norms`,
+			    g.`goodBigPic`,
+			    i.`providerName`,
+  				i.`orderTime` 
+            </otherwise>
+         </choose>
+		FROM
+		  torderitems i 
+		  INNER JOIN torderprovider p 
+		    ON i.`orderProviderID` = p.`tOrderProviderId` 
+		  LEFT JOIN tgoodsinfo g 
+		    ON i.`goodsID` = g.`tGoodInfoId`
+		WHERE i.`ecnetno` = #{netno,jdbcType=VARCHAR} 
+		  AND i.`sinceCode` = #{sincecode,jdbcType=INTEGER}
+		  AND i.`cancelState` = #{cancelstate,jdbcType=INTEGER} 
+	</select>
+	<select id="getItemidCountByOrderid" resultType="int" parameterType="map">
+		SELECT 
+		  COUNT(i.`tOrderItemsId`)
+		FROM
+		  torderitems i 
+		WHERE i.`orderID` = #{orderid,jdbcType=INTEGER}
+	</select>
+</mapper>

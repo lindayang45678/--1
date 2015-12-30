@@ -1,0 +1,20 @@
+$(function() {
+	$('#shopreceipt').on("tap", function() {		
+		var verificationCode = $('.receipt input').val();//店主快递单号
+		var data = {"mobile":mobile,"logno":verificationCode};
+		var resultJson = ajaxCommon(urlreceipt, data);
+		//var resultJson = {"_ReturnCode":"000000","_ReturnData":{"shouhuoList":[{"torderproviderid":"150130180026845000011434","sopglist":[{"goodsname":"测试生鲜半成品","goodsnum":"3","norms":"骷髅","actualnum":null,"orderitemid":"1533117"}],"providername":"测试供应商_海燕","providerstate":102},{"torderproviderid":"150129152352592000011434","sopglist":[{"goodsname":"测试生鲜运费","goodsnum":"2","norms":"咖啡色","actualnum":null,"orderitemid":"1532954"}],"providername":"测试供应商_海燕","providerstate":102}],"custelno":"15010108727","cusname":"戚明明","logno":"11161220","channelcode":"25","deliverycom":'顺丰快递'},"_ReturnMsg":null};
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			resultJson = JSON.stringify(resultJson);
+			storage.setItem("shopReceiptQuery",resultJson);
+			window.location.href = "shopreceiptinfo.html?logno="+ verificationCode +"&t=" + t;	
+		}
+		else {
+			if(resultJson._ReturnMsg == 'b') {
+				showAlertMsg("已收货，不能重复收货！");
+				return;
+			}
+			window.location.href = "shopreceiptfail.html?logno="+ verificationCode +"&t=" + t;
+		}	
+	});	
+});

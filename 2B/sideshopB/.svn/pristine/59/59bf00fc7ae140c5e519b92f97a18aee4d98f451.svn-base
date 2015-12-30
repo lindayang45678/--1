@@ -1,0 +1,232 @@
+package com.lakala.module.order.service.impl;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import w.com.lakala.order.model.Tallorder;
+
+import com.alibaba.fastjson.JSON;
+import com.lakala.exception.LakalaException;
+import com.lakala.model.BillInfo;
+import com.lakala.model.ReturnBillInfo;
+import com.lakala.model.pay.PayRequestInfo;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.service.NoPayOrder2PayService;
+import com.lakala.module.order.vo.ToPayInput;
+import com.lakala.module.user.service.UserService;
+import com.lakala.module.user.vo.UserInfoOutput;
+import com.lakala.module.user.vo.UserLoginInput;
+import com.lakala.util.Constants;
+import com.lakala.util.ConstantsUtil;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.http.HttpSend;
+@Service
+public class NoPayOrder2PayServiceImpl implements NoPayOrder2PayService {
+	@Autowired
+	private com.lakala.mapper.r.pay.PayRequestInfoMapper payRequestInfoMapper_r;
+	@Autowired
+	private com.lakala.mapper.w.pay.PayRequestInfoMapper payRequestInfoMapper_w;
+	@Autowired
+	private ConstantsUtil constantsUtil;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private com.lakala.mapper.r.order.TallorderMapper tallorderMapper_r;
+	@Autowired
+	private com.lakala.mapper.r.order.TorderitemsMapper torderitemsMapper_r;
+	@Autowired
+	private com.lakala.service.PayLakalaService payLakalaServiceIntranet;
+	@Autowired
+	private com.lakala.service.PayLakalaService payLakalaServiceExtranet;
+	@Override
+	public ObjectOutput<Map<String, Object>> topayhandle(ToPayInput tpi) {
+		//拉卡拉钱包,快捷,刷卡不查库不用判定来源,都是一样的。
+		if(tpi.getPaychanel() == Constants.TORDER_PAYCHANNEL_LKL){
+			tpi.setPaychanelstr(Constants.WAP);
+			return topayspecific(tpi);
+		}
+		if(tpi.getPaychanel() == Constants.TORDER_PAYCHANNEL_LKL_CARD){
+			tpi.setPaychanelstr(Constants.LKL_CARD);
+			return topayspecific(tpi);
+		}
+		if(tpi.getSource().equals(Constants.B2APP_B)){//来源是2B
+			switch (tpi.getPaychanel()) {
+				//支付方式是支付宝
+				case Constants.TORDER_PAYCHANNEL_ZFB:
+					tpi.setPaychanelstr(Constants.APP_ALI);
+					break;
+				//支付方式是微信
+				case Constants.TORDER_PAYCHANNEL_WX:
+					tpi.setPaychanelstr(Constants.APP_WX_B);
+					break;
+			}
+			return selectpayrequestinfo(tpi);
+		}
+		if(tpi.getSource().equals(Constants.B2WEIXIN)){//来源是微信
+			switch (tpi.getPaychanel()) {
+				//支付方式是微信
+				case Constants.TORDER_PAYCHANNEL_WX:
+					tpi.setPaychanelstr(Constants.WX);
+					break;
+			}
+			return selectpayrequestinfo(tpi);
+		}
+		return null;
+	}
+	public ObjectOutput<Map<String, Object>> topayspecific(ToPayInput tpi){
+		ObjectOutput<Map<String, Object>> out = new ObjectOutput<Map<String, Object>>();
+		Map<String, Object> outmap = new HashMap<String,Object>();
+		Map<String, String> params = getMap(Integer.parseInt(tpi.getTallorderid()));
+		params.put("orderid", tpi.getTallorderid());
+		if(tpi.getPaychanel() == Constants.TORDER_PAYCHANNEL_LKL){
+			ReturnBillInfo rbi = payLakala(params, tpi);
+			outmap.put("payurl", rbi.getPayurl());
+			out.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			out.set_ReturnData(outmap);
+			return out;
+		}
+		
+		if(tpi.getPaychanel() == Constants.TORDER_PAYCHANNEL_LKL_CARD){
+			ReturnBillInfo rbi = payLakala(params, tpi);			
+			Map<String,Object> resultmap = new HashMap<String,Object>();
+			resultmap.put("authtoken",rbi.getParams().get("AuthToken").toString());
+			resultmap.put("transname",rbi.getParams().get("TransName").toString());
+			UserLoginInput user = new UserLoginInput();
+			user.setMobile(tpi.getMobile());
+			try {
+				UserInfoOutput	userInfoOut = userService.getPassword(user).get_ReturnData();
+				if(userInfoOut != null){
+					resultmap.put("password",userInfoOut.getPwd());
+				}
+			} catch (LakalaException e) {
+				resultmap.put("massage","支付调用失败！");
+			}
+			outmap.put("payurl", JSON.toJSONString(resultmap));
+			out.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			out.set_ReturnData(outmap);
+			return out;
+		}
+
+		
+		if(tpi.getSource().equals(Constants.B2APP_B)){//来源是2B
+			ReturnBillInfo rbi = payLakalaOut(params, tpi);
+			String payurl = "";
+			switch (tpi.getPaychanel()) {
+				//支付方式是支付宝
+				case Constants.TORDER_PAYCHANNEL_ZFB:
+					payurl = rbi.getParams().get("payInfo").toString();
+					break;
+				//支付方式是微信
+				case Constants.TORDER_PAYCHANNEL_WX:
+					Map<String,Object> resultmap = new HashMap<String,Object>();
+					resultmap.put("appid",rbi.getParams().get("appid").toString());
+					resultmap.put("noncestr",rbi.getParams().get("noncestr").toString());
+					resultmap.put("package",rbi.getParams().get("package").toString());
+					resultmap.put("partnerid",rbi.getParams().get("partnerid").toString());
+					resultmap.put("prepayid",rbi.getParams().get("prepayid").toString());
+					resultmap.put("sign",rbi.getParams().get("sign").toString());
+					resultmap.put("timestamp",rbi.getParams().get("timestamp").toString());
+					payurl = JSON.toJSONString(resultmap);
+					break;
+			}
+			handlewx(tpi,payurl);
+			outmap.put("payurl", payurl);
+			out.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			out.set_ReturnData(outmap);
+			return out;
+		}
+		if(tpi.getSource().equals(Constants.B2WEIXIN)){
+			switch (tpi.getPaychanel()) {
+				//支付方式是微信
+				case Constants.TORDER_PAYCHANNEL_WX:
+					String payurl = getCode(params);
+					handlewx(tpi, payurl);
+					outmap.put("payurl", payurl);
+					out.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+					out.set_ReturnData(outmap);
+					return out;
+			}
+		}
+		return out;
+	}
+	public ObjectOutput<Map<String, Object>> selectpayrequestinfo(ToPayInput tpi){
+		//查询tpayrequestinfo表里有无记录
+		List<PayRequestInfo> payrinfolist = payRequestInfoMapper_r.findPayRequestInfo(tpi);
+		if(payrinfolist.size() > 0){
+			ObjectOutput<Map<String, Object>> out = new ObjectOutput<Map<String, Object>>();
+			Map<String, Object> outmap = new HashMap<String,Object>();
+			PayRequestInfo payRequestInfo = payrinfolist.get(0);
+			outmap.put("payurl", payRequestInfo.getPaydata());
+			out.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			out.set_ReturnData(outmap);
+			return out;
+		}else{
+			return topayspecific(tpi);
+		}
+	}
+	public void handlewx(ToPayInput tpi,String url){
+		if(url!=null){
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("tAllOrderId", tpi.getTallorderid());
+			map.put("paytoken", url);				
+			map.put("source", tpi.getSource());
+			map.put("paytype", tpi.getPaychanelstr());
+			insertpayrequestinfo(map);
+		}
+	}
+	public String getCode(Map<String, String> params) {
+		try {
+			String url=constantsUtil.getWxcallbackurl();
+			params.put("redirect_succ_uri", "2B_M_URL_SUCCESS");//成功跳转页面
+			params.put("redirect_fail_uri", "2B_M_URL_FAIL");//失败跳转页面
+			String code = HttpSend.post(url, params);			
+			return code;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public Map<String,String> getMap(int tallorderid){
+		Map<String,String> params = new HashMap<String,String>();
+		//根据tallorderid查询总金额
+		Tallorder tallorder = tallorderMapper_r.selectByPrimaryKey(tallorderid);
+		if(tallorder != null){
+			params.put("total", tallorder.getAlltotal().toString());
+		}
+		//根据tallorderid查询商品名称串
+		String goodsnames = torderitemsMapper_r.selectgoodsnames(tallorderid);
+		params.put("goodsnames", goodsnames);
+		//用于拉卡拉支付-账单号
+		params.put("paybillno", tallorder.getPaybillno());
+		return params;
+	}
+	public ReturnBillInfo payLakala(Map<String,String> params,ToPayInput tpi){
+		//构造参数
+		BillInfo billInfo = new BillInfo();
+		billInfo.setLoginname(tpi.getMobile());
+		billInfo.setSource(Integer.parseInt(tpi.getSource()));
+		billInfo.setPaytype(tpi.getPaychanelstr());
+		billInfo.setOrderID(params.get("orderid"));
+		billInfo.setAmount(new BigDecimal(params.get("total")));
+		billInfo.setGoodsname(params.get("goodsnames"));
+		billInfo.setBillno(params.get("paybillno"));
+		billInfo.setCallbackurl(constantsUtil.getCallbackurl()+tpi.getSource());
+		return payLakalaServiceIntranet.payLakala(billInfo);
+	}
+	public ReturnBillInfo payLakalaOut(Map<String,String> params,ToPayInput tpi){
+		BillInfo billInfo = new BillInfo();
+		billInfo.setOrderID(params.get("orderid"));
+		billInfo.setAmount(new BigDecimal(params.get("total")));
+		billInfo.setPaytype(tpi.getPaychanelstr());
+		billInfo.setGoodsname(params.get("goodsnames"));
+		return payLakalaServiceExtranet.payLakala(billInfo);
+	}
+	public void insertpayrequestinfo(Map<String,Object> map){
+		payRequestInfoMapper_w.insertpayrequestinfo(map);
+	}
+}

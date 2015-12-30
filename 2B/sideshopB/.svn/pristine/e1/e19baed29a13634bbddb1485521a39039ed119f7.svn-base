@@ -1,0 +1,47 @@
+//获取小店信息
+$(function(){
+		var businessStartTimes;
+		var businessEndTimes;
+		if($.trim(businessStartTime).length >0){
+			businessStartTimes = businessStartTime;
+		}else{
+			businessStartTimes = "09:00";
+		}
+		if($.trim(businessEndTime).length >0){
+			businessEndTimes = businessEndTime;
+		}else{
+			businessEndTimes = "22:00";
+		}
+		
+		if(parseInt(businessStartTimes.split(":")[0]) <10 && $.trim(businessStartTimes).length <2){
+			businessStartTimes = businessStartTimes.replace(businessStartTimes.split(":")[0],"0"+businessStartTimes.split(":")[0]);
+		}
+		if(parseInt(businessEndTimes.split(":")[0]) <10 && $.trim(businessEndTimes).length <2){
+			businessEndTimes = businessEndTimes.replace(businessEndTimes.split(":")[0],"0"+businessEndTimes.split(":")[0]);
+		}
+		$("#starttime").val(businessStartTimes);
+		$("#endtime").val(businessEndTimes);
+	
+	
+	$(".btn-red").on("touchend",function(e){
+		var businessStartTimes = $.trim($("#starttime").val());
+		var businessEndTimes = $.trim($("#endtime").val());
+		var bST = parseInt(businessStartTimes.split(":")[0])*60+parseInt(businessStartTimes.split(":")[0]);
+		var bET = parseInt(businessEndTimes.split(":")[0])*60+parseInt(businessEndTimes.split(":")[0]);
+		
+		if(bST >=bET){//单笔满免金额不能小于起送金额
+			showAlertMsg(msgStartEndTimeError);
+			return false;
+		}
+		var reg = /^([01]\d|2[01234]):([0-5]\d|59)$/;
+		if(!reg.test(businessStartTimes) || !reg.test(businessEndTimes)){//判断时间格式
+			showAlertMsg(msgStartEndFormatError);
+			return false;
+		}
+		e.preventDefault();
+		storage.setItem("businessStartTime",businessStartTimes);
+		storage.setItem("businessEndTime",businessEndTimes);
+		window.location.href = "editshop1.html?preSaveData=1&&t="+t;
+		//window.location.href = encodeURI("editshop1.html?preSaveData=1&&t="+t);
+	});
+})

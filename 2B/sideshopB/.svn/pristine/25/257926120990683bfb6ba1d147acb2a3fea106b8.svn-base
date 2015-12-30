@@ -1,0 +1,223 @@
+$(function(){	
+	$('.first').delegate('li','tap',function() {
+		$('.third').hide('slow');
+		$('.fourth').hide('slow');
+		$('.fifth').hide('slow');
+		$('.second').show('slow');
+		$('.second').find('li').removeClass('color');
+		$('.second').find('li:first-child').addClass('color');
+		$('.first').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid =$(this).attr("virtualid");
+		secondVirtualfun(virtualid);
+	});
+	$('.second').delegate("li",'tap',function() {
+		$('.fourth').hide('slow');
+		$('.fifth').hide('slow');
+		$('.third').show('slow');
+		$('.third').find('li').removeClass('color');
+		$('.third').find('li:first-child').addClass('color');
+		$('.second').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid =$(this).attr("virtualid");
+		thirdVirtualfun(virtualid);
+	});
+	$('.third').delegate("li",'tap',function() {
+		$('.fourth').show('slow');
+		$('.fifth').hide('slow');
+		$('.fourth').find('li').removeClass('color');
+		$('.fourth').find('li:first-child').addClass('color');
+		$('.third').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid =$(this).attr("virtualid");
+		fourtVirtualfun(virtualid);
+	});
+	$('.fourth').delegate("li",'tap',function() {
+		$('.fifth').show('slow');
+		$('.fifth').find('li').removeClass('color');
+		$('.fifth').find('li:first-child').addClass('color');
+		$('.fourth').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid = $(this).attr("virtualid");
+		fifthVirtualfun(virtualid);
+	});
+	$('.fifth').delegate("li",'tap',function(){
+		$('.fifth').find('li').removeClass('color');
+		$(this).addClass('color');
+	});
+	$(".first ul li").first().addClass("color");
+	
+})
+
+//获取2C使用的所有虚分类（即营销分类）
+var firstvirtual = $(".first ul");
+var secondvirtual = $(".second ul");
+var thirdvirtual = $(".third ul");
+var fourthvirtual = $(".fourth ul");
+var fifthvirtual = $(".fifth ul");
+var secondret = "";
+var thirdret = "";
+var fourthret = "";
+var fifthret = "";
+var data = {};
+var resultJson = ajaxCommon(urlgoodsqueryvirtualcat, data);
+/*resultJson = {
+    "_ReturnMsg": "SUCCESS",
+    "_ReturnCode": "000000",
+    "_ReturnData": [
+        {
+            "tVirtualCateId": 562,
+            "virtualCateDisc": "生鲜",
+            "fatherVirtualCateId": 0
+        },
+        {
+            "tVirtualCateId": 563,
+            "virtualCateDisc": "蔬菜水果",
+            "fatherVirtualCateId": 562
+        },
+        {
+            "tVirtualCateId": 564,
+            "virtualCateDisc": "蔬菜",
+            "fatherVirtualCateId": 563
+        },
+        {
+            "tVirtualCateId": 570,
+            "virtualCateDisc": "半成肉品",
+            "fatherVirtualCateId": 569
+        },
+        {
+            "tVirtualCateId": 572,
+            "virtualCateDisc": "猪肉",
+            "fatherVirtualCateId": 565
+        },
+        {
+            "tVirtualCateId": 577,
+            "virtualCateDisc": "鱼",
+            "fatherVirtualCateId": 566
+        },
+        {
+            "tVirtualCateId": 583,
+            "virtualCateDisc": "鸡蛋",
+            "fatherVirtualCateId": 567
+        },
+        {
+            "tVirtualCateId": 587,
+            "virtualCateDisc": "水饺",
+            "fatherVirtualCateId": 568
+        },
+        {
+            "tVirtualCateId": 604,
+            "virtualCateDisc": "头发护理",
+            "fatherVirtualCateId": 435
+        },
+        {
+            "tVirtualCateId": 605,
+            "virtualCateDisc": "粮油调味",
+            "fatherVirtualCateId": 601
+        },
+        {
+            "tVirtualCateId": 606,
+            "virtualCateDisc": "APP商品虚分类",
+            "fatherVirtualCateId": 0
+        },
+        {
+            "tVirtualCateId": 508,
+            "virtualCateDisc": "每周一团1",
+            "fatherVirtualCateId": 0
+        },
+        {
+            "tVirtualCateId": 509,
+            "virtualCateDisc": "疯狂抢购",
+            "fatherVirtualCateId": 0
+        },
+        {
+            "tVirtualCateId": 565,
+            "virtualCateDisc": "精品肉类",
+            "fatherVirtualCateId": 562
+        },
+        {
+            "tVirtualCateId": 571,
+            "virtualCateDisc": "水果",
+            "fatherVirtualCateId": 563
+        },
+        {
+            "tVirtualCateId": 573,
+            "virtualCateDisc": "牛肉",
+            "fatherVirtualCateId": 565
+        },
+        {
+            "tVirtualCateId": 578,
+            "virtualCateDisc": "虾",
+            "fatherVirtualCateId": 566
+        },
+        {
+            "tVirtualCateId": 616,
+            "virtualCateDisc": "白菜",
+            "fatherVirtualCateId": 564
+        }
+    ]
+}*/
+resultJson = convertNullToEmpty(resultJson);
+if(resultJson._ReturnCode === returnCodeSuccess) {
+	var virtualclass = resultJson._ReturnData;
+	if(virtualclass.length > 0) {
+		//一级分类
+		firstret ="";
+		for(var i = 0; i < virtualclass.length; i++){
+			if(virtualclass[i].fatherVirtualCateId == 0){
+				firstret += "<li virtualid='" + virtualclass[i].tVirtualCateId + "'>" + virtualclass[i].virtualCateDisc + "</li>"	
+			}
+		}
+		firstvirtual.append(firstret);
+	}
+	//二级分类
+	function secondVirtualfun (virtualid) {
+		secondvirtual.html("");
+		secondret = "";
+		for(var j = 0; j < virtualclass.length; j++) {
+			if(virtualid == virtualclass[j].fatherVirtualCateId) {
+				secondret += "<li virtualid='" + virtualclass[j].tVirtualCateId + "'>"+ virtualclass[j].virtualCateDisc + "</li>";
+			}
+		}
+		secondvirtual.html("").append(secondret);
+	}
+	//三级分类
+	function thirdVirtualfun (virtualid) {
+		thirdvirtual.html("");
+		thirdret = "";
+		for(var k = 0; k < virtualclass.length; k++) {
+			if(virtualid == virtualclass[k].fatherVirtualCateId) {
+				thirdret += "<li virtualid='" + virtualclass[k].tVirtualCateId + "'>"+ virtualclass[k].virtualCateDisc + "</li>";
+			}
+		}
+		thirdvirtual.html("").append(thirdret);
+	}
+	//四级分类
+	function fourtVirtualfun (virtualid){
+		fourthvirtual.html("");
+		fourthret = "";
+		for(var l = 0; l < virtualclass.length; l++){
+			if(virtualid == virtualclass[l].fatherVirtualCateId){
+				fourthret += "<li virtualid='" + virtualclass[l].tVirtualCateId+"'>" + virtualclass[l].virtualCateDisc + "</li>";
+			}	
+		}
+		fourthvirtual.append(fourthret);
+	}	
+}
+//五级分类
+
+function fifthVirtualfun (virtualid) {
+	var data = {"tVirtualCateId":virtualid};
+	var resultJson = ajaxCommon(urlgoodsqueryrealcatbyvirtualcat, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if (resultJson._ReturnCode === returnCodeSuccess) {
+		fifthvirtual.html("");
+		fifthret = "";
+		for(var m = 0; m < resultJson._ReturnData.length; m++) {
+			fifthret += "<li virtualid='" + resultJson._ReturnData[m].tRealCateId + "'>" + resultJson._ReturnData[m].realCateDisc + "</li>";
+		}
+		fifthvirtual.append(fifthret);
+	} else {
+		showAlertMsg(resultJson._ReturnMsg);
+	}
+}	

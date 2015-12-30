@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>添加销售员成功</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css"/>
+	<link rel="stylesheet" href="../../css/admin.css"/>
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html">批发进货</a>
+			<a href="../order-query/order-query.html">订单查询</a>
+			<a href="../benefit-query/order-income.html">收益查询</a>
+			<a href="../sales-manage/sales-list.html" class="active">销售员管理</a>
+			<a href="../tools/index.html">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+			<menu>
+				<a href="../sales-manage/sales-list.html">销售员列表</a>
+				<a href="../sales-manage/add-sales.html" class="active">添加销售员</a>
+				<a href="../sales-manage/set-sales-revenue.html">销售员收益分成</a>
+				<a href="../tools/index.html">返回店主工具</a>
+				<a href="#">返回商城首页</a>
+			</menu>
+			<section class="main">
+				<div class="title">
+					<h2>填写销售员信息</h2>
+				</div>
+				<div class="add-sales">
+					<dl>
+						<dt><input type="button" value="有收款宝加盟" class="wb"/><input type="button" value="购买收款宝加盟"/></dt>
+					</dl>
+					<p class="add-sales-result">恭喜您，您又多了一名得力助手！</p>
+					<a href="../sales-manage/sales-list.html" class="btn-white back-sales-list">返回销售员列表</a><a href="../sales-manage/sales-information.html" class="btn-blue sales-detail-query">查看销售员详情</a>
+					<ul>
+						<li>买家规则帮助<a href="../sales-manage/add-sales-agreement.html">查看店员协议&gt;&gt;</a></li>
+						<li>1、如何领用和赚取淘金币？
+						</li>
+						<li>1）PC签到赚取，每天打开淘宝首页或者淘金币频道都可以签到赚淘金币，首日可领5个，连续第二天可领10个，第三天15个，最多每天可获得30个淘金币。
+						</li>
+						<li>2）无线签到赚取，进入淘宝手机或pad客户端，点击“领金币”，可每日获取金币奖励，首日可领5个，连续第二天可领10个，第三天15个，最多每天可获得30个淘金币。
+						</li>
+						<li>3）购物领金币，购物领金币与VIP会员等级解绑，全网会员购物领金币每天最多可领取50淘金币。详细规则可点击
+						</li>
+					</ul>
+					<div class="foot-line"></div>
+				</div>
+			</section>
+	</section>
+
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myscroll = new iScroll("sales-list",{hScrollbar:false, vScrollbar:true, fixedScrollbar:true, hideScrollbar:true});
+		});
+	</script>
+</body>
+</html>

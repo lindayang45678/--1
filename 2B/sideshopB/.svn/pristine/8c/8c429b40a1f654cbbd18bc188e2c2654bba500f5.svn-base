@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goods.TgoodskuinfoMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Tgoodskuinfo">
+        <id column="tGoodSkuInfoId" property="tgoodskuinfoid" jdbcType="INTEGER"/>
+        <result column="tGoodInfoId" property="tgoodinfoid" jdbcType="INTEGER"/>
+        <result column="outerId" property="outerid" jdbcType="VARCHAR"/>
+        <result column="tRealCateId" property="trealcateid" jdbcType="INTEGER"/>
+        <result column="tRealCateDisc" property="trealcatedisc" jdbcType="VARCHAR"/>
+        <result column="tRealCateTreeDisc" property="trealcatetreedisc" jdbcType="VARCHAR"/>
+        <result column="supplierId" property="supplierid" jdbcType="INTEGER"/>
+        <result column="supplierName" property="suppliername" jdbcType="VARCHAR"/>
+        <result column="supplierGoodId" property="suppliergoodid" jdbcType="VARCHAR"/>
+        <result column="tBrandId" property="tbrandid" jdbcType="INTEGER"/>
+        <result column="brandName" property="brandname" jdbcType="VARCHAR"/>
+        <result column="goodName" property="goodname" jdbcType="VARCHAR"/>
+        <result column="goodBarCode" property="goodbarcode" jdbcType="VARCHAR"/>
+        <result column="goodAdWord" property="goodadword" jdbcType="VARCHAR"/>
+        <result column="goodIntroduce" property="goodintroduce" jdbcType="VARCHAR"/>
+        <result column="packageList" property="packagelist" jdbcType="VARCHAR"/>
+        <result column="isPayAfterArrival" property="ispayafterarrival" jdbcType="INTEGER"/>
+        <result column="isNoReasonReturn" property="isnoreasonreturn" jdbcType="INTEGER"/>
+        <result column="iscontractmachine" property="iscontractmachine" jdbcType="INTEGER"/>
+        <result column="isExpressToHome" property="isexpresstohome" jdbcType="INTEGER"/>
+        <result column="distributionFlag" property="distributionflag" jdbcType="INTEGER"/>
+        <result column="expDate" property="expdate" jdbcType="INTEGER"/>
+        <result column="producingArea" property="producingarea" jdbcType="VARCHAR"/>
+        <result column="measureUnits" property="measureunits" jdbcType="VARCHAR"/>
+        <result column="weight" property="weight" jdbcType="DECIMAL"/>
+        <result column="volume" property="volume" jdbcType="DECIMAL"/>
+        <result column="length" property="length" jdbcType="DECIMAL"/>
+        <result column="width" property="width" jdbcType="DECIMAL"/>
+        <result column="height" property="height" jdbcType="DECIMAL"/>
+        <result column="carton" property="carton" jdbcType="INTEGER"/>
+        <result column="cartonUnit" property="cartonunit" jdbcType="VARCHAR"/>
+        <result column="isForeigngoods" property="isforeigngoods" jdbcType="INTEGER"/>
+        <result column="storageCondition" property="storagecondition" jdbcType="INTEGER"/>
+        <result column="distributionCondition" property="distributioncondition" jdbcType="INTEGER"/>
+        <result column="goodType" property="goodtype" jdbcType="INTEGER"/>
+        <result column="balanceWay" property="balanceway" jdbcType="INTEGER"/>
+        <result column="oneSelfCat" property="oneselfcat" jdbcType="VARCHAR"/>
+        <result column="saleDate" property="saledate" jdbcType="TIMESTAMP"/>
+        <result column="notSaleDate" property="notsaledate" jdbcType="TIMESTAMP"/>
+        <result column="skuIdStr" property="skuidstr" jdbcType="VARCHAR"/>
+        <result column="skuFrontDisNameStr" property="skufrontdisnamestr" jdbcType="VARCHAR"/>
+        <result column="skuStock" property="skustock" jdbcType="DECIMAL"/>
+        <result column="soldSkuStock" property="soldSkuStock" jdbcType="DECIMAL"/>
+        <result column="purchasePrice" property="purchaseprice" jdbcType="DECIMAL"/>
+        <result column="balancePrice" property="balanceprice" jdbcType="DECIMAL"/>
+        <result column="marketPrice" property="marketprice" jdbcType="DECIMAL"/>
+        <result column="cheapestSalePrice" property="cheapestsaleprice" jdbcType="DECIMAL"/>
+        <result column="salePrice" property="saleprice" jdbcType="DECIMAL"/>
+        <result column="deductPercent" property="deductpercent" jdbcType="DECIMAL"/>
+        <result column="distributeProfitBase" property="distributeprofitbase" jdbcType="DECIMAL"/>
+        <result column="distributeProfitSum" property="distributeprofitsum" jdbcType="DECIMAL"/>
+        <result column="distributeProfitPctID" property="distributeprofitpctid" jdbcType="DECIMAL"/>
+        <result column="merchantDistrProfitSum" property="merchantdistrprofitsum" jdbcType="DECIMAL"/>
+        <result column="grossProfit" property="grossprofit" jdbcType="DECIMAL"/>
+        <result column="retrunCash" property="retruncash" jdbcType="DECIMAL"/>
+        <result column="subsidy" property="subsidy" jdbcType="DECIMAL"/>
+        <result column="goodStatus" property="goodstatus" jdbcType="INTEGER"/>
+        <result column="auditer" property="auditer" jdbcType="VARCHAR"/>
+        <result column="notReviewReas" property="notreviewreas" jdbcType="VARCHAR"/>
+        <result column="createdDate" property="createddate" jdbcType="TIMESTAMP"/>
+        <result column="auditeDate" property="auditedate" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdateDate" property="lastupdatedate" jdbcType="TIMESTAMP"/>
+        <result column="tempStoreGoodsFlag" property="tempstoregoodsflag" jdbcType="INTEGER"/>
+        <result column="platorself" property="platorself" jdbcType="INTEGER"/>
+        <result column="onsaleTime" property="onsaletime" jdbcType="DATE"/>
+        <result column="downsaleTime" property="downsaletime" jdbcType="DATE"/>
+        <result column="goodsStatus" property="goodsstatus" jdbcType="INTEGER"/>
+   		<result column="tGoodInfoPoolId" property="tgoodinfopoolid" jdbcType="INTEGER" />
+   		<result column="isfreshfood" property="isfreshfood" jdbcType="INTEGER" />
+
+        <result column="goodDisc" property="gooddisc" jdbcType="LONGVARCHAR"/>
+        <result column="goodBigPic" property="goodbigpic" jdbcType="LONGVARCHAR"/>
+        <result column="goodSmallPic" property="goodsmallpic" jdbcType="LONGVARCHAR"/>
+        <result column="distributionregion" property="distributionregion" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.lakala.model.ProductDetailedInformation">
+        <result column="salePrice" property="saleprice_o2o" jdbcType="VARCHAR"/>
+        <result column="tGoodSkuInfoId" property="tgoodskuinfoid" jdbcType="VARCHAR"/>
+        <result column="tGoodInfoId" property="tgoodinfoid" jdbcType="VARCHAR"/>
+        <result column="goodName" property="goodname" jdbcType="VARCHAR"/>
+        <result column="marketPrice" property="marketprice" jdbcType="VARCHAR"/>
+        <result column="goodBigPic" property="goodbigpic" jdbcType="VARCHAR"/>
+        <result column="salePrice" property="promotionPrice" jdbcType="DECIMAL"/>
+        <result column="goodIntroduce" property="goodintroduce" jdbcType="VARCHAR"/>
+        <result column="skuStock" property="store" jdbcType="DECIMAL"/>
+        <result column="soldSkuStock" property="soldstore" jdbcType="DECIMAL"/>
+        <result column="isForeigngoods" property="isforeigngoods" jdbcType="INTEGER"/>
+        <result column="tempStoreGoodsFlag" property="tempstoregoodsflag" jdbcType="INTEGER"/>
+        <result column="onsaleTime" property="onsaletime" jdbcType="DATE"/>
+        <result column="downsaleTime" property="downsaletime" jdbcType="DATE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    tGoodSkuInfoId, tGoodInfoId, outerId, tRealCateId, tRealCateDisc, tRealCateTreeDisc, 
+    supplierId, supplierName, supplierGoodId, tBrandId, brandName, goodName, goodBarCode, 
+    goodAdWord, goodIntroduce, packageList, isPayAfterArrival, isNoReasonReturn, iscontractmachine, 
+    isExpressToHome, distributionFlag, expDate, producingArea, measureUnits, weight, 
+    volume, length, width, height, carton, cartonUnit, isForeigngoods, storageCondition, 
+    distributionCondition, goodType, balanceWay, oneSelfCat, saleDate, notSaleDate, skuIdStr, 
+    skuFrontDisNameStr, skuStock, soldSkuStock, purchasePrice, balancePrice, marketPrice, 
+    cheapestSalePrice, salePrice, deductPercent, distributeProfitBase, distributeProfitSum, 
+    distributeProfitPctID, merchantDistrProfitSum, grossProfit, retrunCash, subsidy, 
+    goodStatus, auditer, notReviewReas, createdDate, auditeDate, lastUpdateDate, tempStoreGoodsFlag, 
+    platorself, onsaleTime, downsaleTime, goodsStatus, ifnull(tGoodInfoPoolId,0) tGoodInfoPoolId, ifnull(isfreshfood,0) isfreshfood
+  </sql>
+    <sql id="Blob_Column_List">
+    goodDisc, goodBigPic, goodSmallPic, distributionregion
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from tgoodskuinfo
+        where tGoodSkuInfoId = #{tgoodskuinfoid,jdbcType=INTEGER}
+    </select>
+
+    <select id="getSoldoutList" parameterType="map" resultMap="BaseResultMap2">
+        SELECT
+        '' AS id,
+        t.salePrice AS saleprice_o2o,
+        t.tGoodSkuInfoId AS tgoodskuinfoid,
+        t.tGoodInfoId AS tgoodinfoid,
+        t.goodName as goodname,
+        t.marketPrice as marketprice,
+        t.goodBigPic as goodbigpic,
+        t.salePrice as promotionPrice,
+        t.goodIntroduce as goodintroduce,
+        t.skuStock as store,
+        t.soldSkuStock as soldstore,
+        t.isForeigngoods as isforeigngoods,
+        t.tempStoreGoodsFlag as tempstoregoodsflag,
+        t.onsaleTime as onsaletime,
+        t.downsaleTime as downsaletime
+        FROM
+        tgoodskuinfo t
+        WHERE t.platorself = 452 and t.goodsStatus = 209
+        and t.supplierName = #{psamCode,jdbcType=VARCHAR}
+        <if test="searchparm != null and searchparm != ''">
+            and t.goodName = #{searchparm,jdbcType=VARCHAR}
+        </if>
+        order by t.downsaleTime desc limit #{page},#{rows}
+    </select>
+
+  
+  <select id="selectSKUByGoodsId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      select 
+      <include refid="Base_Column_List" />
+      ,
+      <include refid="Blob_Column_List" />
+      from tgoodskuinfo
+      where tGoodInfoId = #{tgoodinfoid,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="getSoldoutListByPsamAndVirtualcatid" parameterType="map" resultMap="BaseResultMap2">
+        SELECT
+        '' AS id,
+        t.salePrice AS saleprice_o2o,
+        t.tGoodSkuInfoId AS tgoodskuinfoid,
+        t.tGoodInfoId AS tgoodinfoid,
+        t.goodName as goodname,
+        t.marketPrice as marketprice,
+        t.goodBigPic as goodbigpic,
+        t.salePrice as promotionPrice,
+        t.goodIntroduce as goodintroduce,
+        t.skuStock as store,
+        t.soldSkuStock as soldstore,
+        t.isForeigngoods as isforeigngoods,
+        t.tempStoreGoodsFlag as tempstoregoodsflag,
+        t.onsaleTime as onsaletime,
+        t.downsaleTime as downsaletime,
+        IFNULL(t.tGoodInfoPoolId,0) as tGoodInfoPoolId,IFNULL(t.isfreshfood,0) as isfreshfood
+        FROM
+        tgoodskuinfo t
+        WHERE t.platorself = 452 and t.goodsStatus = 209
+        and t.deviceno = #{psamCode,jdbcType=VARCHAR}
+        <if test="searchparm != null and searchparm != ''">
+            and t.goodName = #{searchparm,jdbcType=VARCHAR}
+        </if>
+        <if test="virtualcatid != null and virtualcatid != '' and virtualcatid != 'all'">
+            and t.virtualCateIds like   CONCAT('%','${virtualcatid}','%')
+        </if>
+        GROUP BY t.tGoodSkuInfoId 
+        order by t.downsaleTime desc 
+    </select>
+  
+	<!-- 查询指定店主的商品信息（一键上传的商品） zhiziwei-->
+	<select id="selectShopperGoods" resultMap="BaseResultMap" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from tgoodskuinfo
+	    where supplierId = #{supplierId,jdbcType=INTEGER} 
+	    and tGoodInfoPoolId = #{tGoodInfoPoolId,jdbcType=VARCHAR} 
+	    and platorself = 452
+	</select>
+	
+	
+	<select id="getSoldListByPsamAndVirtualcatid" parameterType="map" resultMap="BaseResultMap2">
+        SELECT
+        '' AS id,
+        t.salePrice AS saleprice_o2o,
+        t.tGoodSkuInfoId AS tgoodskuinfoid,
+        t.tGoodInfoId AS tgoodinfoid,
+        t.goodName as goodname,
+        t.marketPrice as marketprice,
+        t.goodBigPic as goodbigpic,
+        t.salePrice as promotionPrice,
+        t.goodIntroduce as goodintroduce,
+        t.skuStock as store,
+        t.soldSkuStock as soldstore,
+        t.isForeigngoods as isforeigngoods,
+        t.tempStoreGoodsFlag as tempstoregoodsflag,t.goodsStatus,
+        t.onsaleTime as onsaletime,
+        t.downsaleTime as downsaletime,
+        IFNULL(t.tGoodInfoPoolId,0) as tGoodInfoPoolId,IFNULL(t.isfreshfood,0) as isfreshfood
+        FROM
+        tgoodskuinfo t
+        WHERE t.platorself = 452 
+       <!--  and t.goodsStatus = 208 -->
+        and t.deviceno = #{psamCode,jdbcType=VARCHAR}
+        <if test="searchparm != null and searchparm != ''">
+            and t.goodName = #{searchparm,jdbcType=VARCHAR}
+        </if>
+        
+        order by t.lastUpdateDate desc  LIMIT 30
+    </select>
+    
+    
+    
+    <select id="selectSaleGoodsByMap" parameterType="map" resultType="java.util.HashMap">
+    
+    SELECT t.tGoodInfoId,t.tGoodSkuInfoId,t.tGoodInfoPoolId,t.deviceno,t.goodsStatus 
+     FROM tgoodskuinfo t where t.tGoodInfoPoolId = #{goodinfopoolid} and t.deviceno = #{psam}   limit 1
+    
+    </select>
+    
+</mapper>

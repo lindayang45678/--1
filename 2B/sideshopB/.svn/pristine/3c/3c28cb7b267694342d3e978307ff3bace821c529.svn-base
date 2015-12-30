@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.provider.TgoodsproviderMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Tgoodsprovider" >
+    <id column="tGoodsProviderId" property="tgoodsproviderid" jdbcType="INTEGER" />
+    <result column="serialNumber" property="serialnumber" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="shortName" property="shortname" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="kind" property="kind" jdbcType="INTEGER" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <result column="bankAccount" property="bankaccount" jdbcType="VARCHAR" />
+    <result column="accountName" property="accountname" jdbcType="VARCHAR" />
+    <result column="bankName" property="bankname" jdbcType="VARCHAR" />
+    <result column="bankNo" property="bankno" jdbcType="VARCHAR" />
+    <result column="bcpName" property="bcpname" jdbcType="VARCHAR" />
+    <result column="bcpOffice" property="bcpoffice" jdbcType="VARCHAR" />
+    <result column="bcpTel" property="bcptel" jdbcType="VARCHAR" />
+    <result column="bcpPhone" property="bcpphone" jdbcType="VARCHAR" />
+    <result column="bcpEmail" property="bcpemail" jdbcType="VARCHAR" />
+    <result column="bcpQQ" property="bcpqq" jdbcType="VARCHAR" />
+    <result column="billReceiveEmail" property="billreceiveemail" jdbcType="VARCHAR" />
+    <result column="settleAccountCycle" property="settleaccountcycle" jdbcType="INTEGER" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="fcpName" property="fcpname" jdbcType="VARCHAR" />
+    <result column="fcpTel" property="fcptel" jdbcType="VARCHAR" />
+    <result column="fcpPhone" property="fcpphone" jdbcType="VARCHAR" />
+    <result column="fcpemail" property="fcpemail" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="clientservice" property="clientservice" jdbcType="VARCHAR" />
+    <result column="clientserviceemail" property="clientserviceemail" jdbcType="VARCHAR" />
+    <result column="clientServicePhone" property="clientservicephone" jdbcType="VARCHAR" />
+    <result column="clientServiceTel" property="clientservicetel" jdbcType="VARCHAR" />
+    <result column="contractStatus" property="contractstatus" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createDate" property="createdate" jdbcType="DATE" />
+    <result column="createPersonName" property="createpersonname" jdbcType="VARCHAR" />
+    <result column="legalperson" property="legalperson" jdbcType="VARCHAR" />
+    <result column="companytype" property="companytype" jdbcType="INTEGER" />
+    <result column="registerprovince" property="registerprovince" jdbcType="INTEGER" />
+    <result column="registercity" property="registercity" jdbcType="INTEGER" />
+    <result column="registercounty" property="registercounty" jdbcType="INTEGER" />
+    <result column="returnaddress" property="returnaddress" jdbcType="VARCHAR" />
+    <result column="returnprovince" property="returnprovince" jdbcType="INTEGER" />
+    <result column="returncity" property="returncity" jdbcType="INTEGER" />
+    <result column="returncounty" property="returncounty" jdbcType="INTEGER" />
+    <result column="registrationnumber" property="registrationnumber" jdbcType="VARCHAR" />
+    <result column="Registeredcapital" property="registeredcapital" jdbcType="DECIMAL" />
+    <result column="paiclupcapital" property="paiclupcapital" jdbcType="DECIMAL" />
+    <result column="taxnumber" property="taxnumber" jdbcType="VARCHAR" />
+    <result column="organizationcode" property="organizationcode" jdbcType="VARCHAR" />
+    <result column="annualsales" property="annualsales" jdbcType="DECIMAL" />
+    <result column="operatingperiodfrom" property="operatingperiodfrom" jdbcType="TIMESTAMP" />
+    <result column="operatingperiodto" property="operatingperiodto" jdbcType="TIMESTAMP" />
+    
+    <result column="businesslicense" property="businesslicense" jdbcType="VARCHAR" />
+    <result column="taxregistration" property="taxregistration" jdbcType="VARCHAR" />
+    <result column="organizationcertificate" property="organizationcertificate" jdbcType="VARCHAR" />
+    <result column="accountpermits" property="accountpermits" jdbcType="VARCHAR" />
+    <result column="qualificationcertificate" property="qualificationcertificate" jdbcType="VARCHAR" />
+    
+    <result column="investmentManager" property="investmentmanager" jdbcType="VARCHAR" />
+	<result column="cnapsno" property="cnapsno" jdbcType="VARCHAR" />
+    <result column="areacode" property="areacode" jdbcType="VARCHAR" />
+    <result column="voutype" property="voutype" jdbcType="VARCHAR" />
+    
+    <result column="property" property="property" jdbcType="INTEGER" />
+    <result column="damagerate" property="damagerate" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lakala.base.model.TgoodsproviderWithBLOBs" extends="BaseResultMap" >
+    <result column="businessscope" property="businessscope" jdbcType="LONGVARCHAR" />
+    <result column="companyprofiles" property="companyprofiles" jdbcType="LONGVARCHAR" />
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+   <resultMap id="goodsproviderResultMap" type="com.lakala.base.model.Tgoodsprovider" >
+    <id column="tGoodsProviderId" property="tgoodsproviderid" jdbcType="INTEGER" />
+    <result column="serialNumber" property="serialnumber" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="legalperson" property="legalperson" jdbcType="VARCHAR" />
+    <result column="createDate" property="createdate" jdbcType="DATE" />
+    <result column="createPersonName" property="createpersonname" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="statusname" property="statusname" jdbcType="VARCHAR" />
+    <result column="contractStatus" property="contractstatus" jdbcType="INTEGER" /> 
+    <result column="contractStatusname" property="contractstatusname" jdbcType="VARCHAR" />    
+  </resultMap>
+  
+  <resultMap id="goodsProvider" type="com.lakala.base.model.TgoodsproviderWithBLOBs" extends="ResultMapWithBLOBs" >
+    <result column="registerprovinceName" property="registerprovinceName" jdbcType="VARCHAR" />
+    <result column="registercityName" property="registercityName" jdbcType="VARCHAR" />
+    <result column="registercountyName" property="registercountyName" jdbcType="VARCHAR" />    
+    <result column="returnprovinceName" property="returnprovinceName" jdbcType="VARCHAR" />
+    <result column="returncityName" property="returncityName" jdbcType="VARCHAR" />
+    <result column="returncountyName" property="returncountyName" jdbcType="VARCHAR" />
+    <result column="typename" property="typename" jdbcType="VARCHAR" />
+    <result column="kindname" property="kindname" jdbcType="VARCHAR" />
+    <result column="gradename" property="gradename" jdbcType="VARCHAR" />
+    <result column="propertyname" property="propertyname" jdbcType="VARCHAR" />
+    <result column="companytypename" property="companytypename" jdbcType="VARCHAR" />
+  </resultMap>
+   
+  
+  
+  <sql id="Base_Column_List" >
+    tGoodsProviderId, serialNumber, name, shortName, type, kind, grade, bankAccount, investmentManager,
+    accountName, bankName,bankNo, bcpName, bcpOffice, bcpTel,bcpPhone, bcpEmail, bcpQQ, billReceiveEmail, 
+    settleAccountCycle, fax, fcpName, fcpTel,fcpPhone, fcpemail, address, qq, postcode, tel, clientservice, 
+    clientserviceemail, clientServiceTel,clientServicePhone, contractStatus, status, createDate, createPersonName, 
+    legalperson, companytype, registerprovince, registercity, registercounty, returnaddress, 
+    returnprovince, returncity, returncounty, registrationnumber, Registeredcapital, 
+    paiclupcapital, taxnumber, organizationcode, annualsales, operatingperiodfrom, operatingperiodto,
+    cnapsno,areacode,voutype,property,damagerate,
+    businesslicense,taxregistration,organizationcertificate,accountpermits,qualificationcertificate
+  </sql>
+  <sql id="Blob_Column_List" >
+    businessscope, companyprofiles, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="goodsProvider" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    ,
+		(select name from tregion t where t.code=gp.registerprovince) as registerprovinceName,
+		(select name from tregion t where t.code=gp.registercity) as registercityName,
+		(select name from tregion t where t.code=gp.registercounty) as registercountyName,		   
+		(select name from tregion t where t.code=gp.returnprovince) as returnprovinceName,
+		(select name from tregion t where t.code=gp.returncity) as returncityName,
+		(select name from tregion t where t.code=gp.returncounty) as returncountyName,
+		( select td1.nameCN from tdictionary as td1 where gp.status=td1.dictionayId ) as statusname, 
+     	( select td2.nameCN from tdictionary as td2 where gp.type=td2.dictionayId )  as typename,
+     	( select td3.nameCN from tdictionary as td3 where gp.kind=td3.dictionayId ) as kindname, 
+     	( select td4.nameCN from tdictionary as td4 where gp.grade=td4.dictionayId )  as gradename,
+     	( select td6.nameCN from tdictionary as td6 where gp.property=td6.dictionayId )  as propertyname,
+     	( select td5.nameCN from tdictionary as td5 where gp.companytype=td5.dictionayId )  as companytypename
+     	
+    from tgoodsprovider as gp
+    where tGoodsProviderId = #{tgoodsproviderid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByTel" resultMap="goodsProvider" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    ,
+		(select name from tregion t where t.code=gp.registerprovince) as registerprovinceName,
+		(select name from tregion t where t.code=gp.registercity) as registercityName,
+		(select name from tregion t where t.code=gp.registercounty) as registercountyName,		   
+		(select name from tregion t where t.code=gp.returnprovince) as returnprovinceName,
+		(select name from tregion t where t.code=gp.returncity) as returncityName,
+		(select name from tregion t where t.code=gp.returncounty) as returncountyName,
+		( select td1.nameCN from tdictionary as td1 where gp.status=td1.dictionayId ) as statusname, 
+     	( select td2.nameCN from tdictionary as td2 where gp.type=td2.dictionayId )  as typename,
+     	( select td3.nameCN from tdictionary as td3 where gp.kind=td3.dictionayId ) as kindname, 
+     	( select td4.nameCN from tdictionary as td4 where gp.grade=td4.dictionayId )  as gradename,
+     	( select td6.nameCN from tdictionary as td6 where gp.property=td6.dictionayId )  as propertyname,
+     	( select td5.nameCN from tdictionary as td5 where gp.companytype=td5.dictionayId )  as companytypename
+     	
+    from tgoodsprovider as gp
+    where tel = #{tel,jdbcType=VARCHAR}
+  </select>
+</mapper>

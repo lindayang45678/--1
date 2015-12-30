@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>非批发进货商品</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<link rel="stylesheet" href="../../css/master.css"/>
+</head>
+
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back"></a>
+  		<h1>添加商品</h1>
+        <a href="#" class="head-right">保存</a>
+	</header>
+    <section class="container">
+    	<div class="nonstock-part1">
+        	<ul>
+            	<li>
+                	<a href=""><img src="../../images/pluse-image.png" alt=""/></a>
+                </li>
+                <li>
+                	<img src="../../images/nonstock-topimg.png" alt=""/><a href="#"></a>
+                </li>
+               <li>
+                	<img src="../../images/nonstock-topimg.png" alt=""/><a href="#"></a>
+                </li>
+                <li>
+                	<img src="../../images/nonstock-topimg.png" alt=""/><a href="#"></a>
+                </li>
+            </ul>
+        </div>
+        <div class="nonstock-part2 shopedit-3item">
+        	<div class="editline-n">
+            	<span class="left1">名称:</span>
+                <div class="leftborder">
+                    <div contenteditable="true" class="max-3"></div>
+                	<a href="#" class="edit"></a>
+                </div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">商品描述：</span>
+                <div class="leftborder">
+                	<div contenteditable="true" class="max-n"></div>
+                	<a href="#" class="edit"></a>
+                </div>
+            </div>
+            <div class="edit-line1">
+            	<span>分类</span>
+                <a href="selectsorts.html" class="leftborder choi-sort">选择分类</a>
+            </div>
+        </div>
+        <div class="nonstock-part3 clearfix">
+        	<div class="item clearfix">
+            	<div class="half">
+                	<span>颜色：</span>
+                    <div><em>黑色</em><ul><li>红色</li><li>蓝色</li></ul></div>
+                </div>
+                <div class="half">
+                	<span>尺码：</span>
+                    <div><em>32码</em><ul><li>31码</li><li>32码</li></ul></div>
+                </div>
+            </div>
+            <div class="item clearfix">
+            	<div class="half"><span>销售价：</span><input type="number" value="9999.99"/>元</div>
+                <div class="half"><span>市场价：</span><input type="number" value="33"/>元</div>
+            </div>
+            <div class="item clearfix">
+            	<div class="half"><span>库存：</span><input type="number" value="9999.99"/></div>
+                <div class="half"><em class="add">添加规格</em></div>
+            </div>
+        </div>
+        <div class="nonstock-part3 clearfix">
+        	<div class="item clearfix">
+            	<div class="half">
+                	<span>颜色：</span>
+                    <div><em>黑色</em><ul><li>红色</li><li>蓝色</li></ul></div>
+                </div>
+                <div class="half">
+                	<span>尺码：</span>
+                    <div><em>32码</em><ul><li>31码</li><li>32码</li></ul></div>
+                </div>
+            </div>
+            <div class="item clearfix">
+            	<div class="half"><span>销售价：</span><input type="number" value="13"/>元</div>
+                <div class="half"><span>市场价：</span><input type="number" value="3388.99"/>元</div>
+            </div>
+            <div class="item clearfix">
+            	<div class="half"><span>库存：</span><input type="number" value="9999.99"/></div>
+                <div class="half"><em class="del">删除规格</em></div>
+            </div>
+        </div>
+        <div class="nonstock-part4">
+        	<h3>本店支持的支付方式：</h3>
+            <ul>
+            	<li>
+            	<input type="checkbox" id="dx1" name="pay-online" checked="checked"/>
+				<label for="dx1"></label>
+                <span>在线支付</span>
+                </li>
+                <li>
+            	<input type="checkbox" id="dx2" name="cod"/>
+				<label for="dx2"></label>
+                <span>货到付款</span>
+                </li>
+            </ul>
+            <h3>本店支持的配送方式：</h3>
+            <ul>
+            	<li>
+            	<input type="checkbox" id="dx3" name="get-self"/>
+				<label for="dx3"></label>
+                <span>到店自提</span>
+                </li>
+                <li>
+            	<input type="checkbox" id="dx4" name="sent-door" checked="checked"/>
+				<label for="dx4"></label>
+                <span>送货上门<br/>商品金额X元内可收Y元送货费</span>
+                </li>
+            </ul>
+         </div>
+    </section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/shops/addgoods1.js"></script>
+</html>

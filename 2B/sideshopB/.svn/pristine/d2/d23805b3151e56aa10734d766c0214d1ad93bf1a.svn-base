@@ -1,0 +1,81 @@
+package com.lakala.module.order.service.impl;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.base.model.Torderitems;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.service.ShouhuoAllService;
+import com.lakala.module.order.vo.ShouhuoAllInput;
+import com.lakala.util.Constants;
+import com.lakala.util.ReturnMsg;
+/**
+ * 全部收货接口实现
+ * @author ls
+ *
+ */
+@Service
+public class ShouhuoAllServiceImpl implements ShouhuoAllService {
+	@Autowired
+	private com.lakala.mapper.w.order.ShouhuoAllMapper shouhuoAllMapper_w;
+	@Autowired
+	private com.lakala.mapper.r.order.ShouhuoAllMapper shouhuoAllMapper_r;
+	@Override
+	public ObjectOutput<String> updateshall(ShouhuoAllInput sai) {
+		ObjectOutput<String> data = new ObjectOutput<String>();
+		if(sai == null || sai.getOrderid() == null || sai.getOrderid().equals("")){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		//--order表state=104;orderprovider表state=104;orderitems表不是104的置为104,logisticitem表同上;tlogisticsinfo表state=104以及签收时间
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("orderid", sai.getOrderid());
+		map.put("state", Constants.TORDER_STATE_YQS);
+		//order表state=104
+		shouhuoAllMapper_w.updateorderstate(map);
+		//orderprovider表state=104
+		shouhuoAllMapper_w.updateproviderstate(map);
+		//查询订单子表(主要是用于更新物流主表tlogisticinfo表state和签收时间)
+		List<Torderitems> itemlist = shouhuoAllMapper_r.selectorderitems(map);
+		//for循环更新子订单state=104===(也可以直接更新order是指定id的子订单state)
+		if(itemlist != null && itemlist.size() > 0){
+			for(Torderitems item : itemlist){
+				Map<String,Object> itemmap = new HashMap<String,Object>();
+				itemmap.put("itemid", item.getTorderitemsid());
+				itemmap.put("state", Constants.TORDER_STATE_YQS);
+				shouhuoAllMapper_w.updateitemstate(itemmap);
+				shouhuoAllMapper_w.updatelogisticitemstate(itemmap);
+			}
+			Set<Integer> set = new HashSet<Integer>();
+			for(Torderitems item : itemlist){
+				if(item.getLogisticsid() != null){
+					set.add(item.getLogisticsid());
+				}
+			}
+			List<Torderitems> tlist = null;
+			Map<String,Object> logidmap = new HashMap<String,Object>();
+			logidmap.put("logisticsids", set);
+			if(set.size() > 0){
+				tlist = shouhuoAllMapper_r.selectlogids(logidmap);
+			}
+			if(tlist != null && tlist.size() > 0){
+				for(Torderitems item : tlist){
+					Map<String,Object> logmap = new HashMap<String,Object>();
+					logmap.put("logisticsid", item.getLogisticsid());
+					logmap.put("state", Constants.TORDER_STATE_YQS);
+					shouhuoAllMapper_w.updatelogisticinfostate(logmap);
+				}
+			}
+		}
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		return data;
+	}
+	
+}

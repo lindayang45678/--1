@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>顾客取货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>	
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1>顾客取货</h1>
+	</header>
+	<section class="container">
+		<div class="wrap">
+			<div class="receipt">
+				<h2 class="f-16 color center">很抱歉，取货失败！</h2>
+				<div class="receipt-info center">
+					<div>未找到和取货验证码匹配的订单号，请核对您的快递单号和取货验证码，重新取货！</div>
+				</div>
+			</div>
+			<a href="#" class="btn-red">继续取货</a>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/receipt/receipt.js"></script>
+</html>

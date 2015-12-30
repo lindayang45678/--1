@@ -1,0 +1,390 @@
+/**
+ * 得到指定sUrl中sName对应的value值
+ * @param url
+ * @param paraName
+ * @return
+ */
+function getParamValueByName(sUrl, sName) {
+	if(sUrl == "" || sUrl == null) {
+		return "";
+	}
+	if(sUrl.indexOf("?") < 0) {
+		return "";
+	} else {
+		sUrl = sUrl.substr(sUrl.indexOf("?")+1, sUrl.length);
+		var arrayUrl = sUrl.split("&");
+		for(var i = 0; i < arrayUrl.length; i ++) {
+			var arrayParam = arrayUrl[i].split("=");
+			if(arrayParam[0] == sName) {
+				return unescape(arrayParam[1]);
+			}
+		}
+	}
+	return "";
+}
+
+/**
+ * 数组去重复
+ * @param arr
+ * @return
+ */
+function uniqueArray(arr) {
+	var ret = [];
+	var hash = {};
+	for(var i=0; i<arr.length; i++) {
+		var item = arr[i];
+	    var key = typeof(item) + item;
+	    if(hash[key] !== 1) {
+	    	ret.push(item);
+	    	hash[key] = 1;
+	    }
+	}
+	return ret;
+}
+
+/**
+ * 商品列表中去除相同goodsId的商品
+ * @param arr
+ * @return
+ */
+function uniqueProd(arr,flag) {
+	var arrPrd = arr.concat();
+	//先商品发布顺序排序，再去掉goodsId重复的商品
+	for(var i = 0 ; i < arrPrd.length-1; i ++){
+		for(var j = 0; j < arrPrd.length-1-i; j ++){
+			var temp;
+			var prevOrder = "";
+			var nextOrder = "";
+			prevOrder = arrPrd[j].l;
+			nextOrder = arrPrd[j+1].l;
+			if(prevOrder < nextOrder){
+				temp = arrPrd[j+1];
+				arrPrd[j+1] = arrPrd[j];
+				arrPrd[j] = temp;
+			}
+		}
+	}
+	
+	var ret = [];
+	var hash = {};
+	for(var k=0; k<arrPrd.length; k++) {
+		var item = "";
+		if(flag == "search"){
+			item = arrPrd[k].product.k.tgoodinfoid;
+		}else{
+			item = arrPrd[k].k.tgoodinfoid;
+		}
+	    var key = typeof(item) + item;
+	    if(hash[key] !== 1) {
+	    	if(flag == "search"){
+	    		if(typeof(arrPrd[k].product.k.id) != "undefined"){
+	    			ret.push(arrPrd[k]);
+	    		}
+	    	}else{
+	    		if(typeof(arrPrd[k].k.id) != "undefined"){
+	    			ret.push(arrPrd[k]);
+	    		}
+	    	}
+	    	hash[key] = 1;
+	    }
+	}
+	return ret;
+}
+
+/**
+ * 获取时间戳
+ * @return
+ */
+function getTimeStamp() {
+	var nowDate = new Date();
+	var t = nowDate.getTime();
+	return t;
+}
+
+/**
+ * 计算倒计时--还剩xx天xx时xx分xx秒
+ * @param startTime
+ * @param dayShow
+ * @param hourShow
+ * @param minuteShow
+ * @param secondShow
+ */
+function countdown(startTime, dayShow, hourShow, minuteShow, secondShow) {
+	startTime = new Date(Date.parse(startTime.replace(/\-/g, "\/")));
+	var nowTime = sysDate;
+	if(typeof(nowTime)=="undefined" || nowTime=="") {
+		nowTime = new Date();
+	} else {
+		nowTime = new Date(Date.parse(nowTime.replace(/\-/g, "\/")));
+	}
+	var intDiff = parseInt((startTime.getTime() - nowTime.getTime()) / 1000);
+	if(nowTime < startTime) {
+		window.setInterval(function() {
+			var day = 0, hour = 0, minute = 0, second = 0;
+			if(intDiff > 0) {
+				day = Math.floor(intDiff / (60 * 60 * 24));
+				hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+				minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+				second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+			}
+			if (minute <= 9) minute = '0' + minute;
+			if (second <= 9) second = '0' + second;
+			$(dayShow).html(day);
+			$(hourShow).html(hour);
+			$(minuteShow).html(minute);
+			$(secondShow).html(second);
+			intDiff --;
+		}, 1000);
+		return "1";
+	} else {
+		return "0";
+	}
+}
+
+/**
+ * 获取省市区名称
+ *  @param proviceCode
+ *  @param cityCode
+ *  @param areaCode
+ */
+function getAreaRegion(proviceCode,cityCode,areaCode,areaAddress,area){
+	var areaRegionJsonRoot = "../../json/area_region.json";
+	var address = "";
+	$.ajax({
+        type: "GET",
+        async: false,
+        url: areaRegionJsonRoot,
+        dataType: "json",
+        cache: false,
+        success: function(result) {
+        	for(var index in result){
+    			if(proviceCode == result[index].code){
+    				address += result[index].name;
+    			}
+    			if(cityCode == result[index].code){
+    				address += result[index].name;
+    			}
+    			if(areaCode == result[index].code){
+    				address += result[index].name;
+    			}
+    		}
+    		address += areaAddress;
+    		$(area).html(address);
+        }
+    });
+}
+
+/**
+ * 根据父Code和当前Code得到城市列表
+ * @param citySelectId
+ * @param parentCode
+ * @param currCode
+ */
+function getCityNameByCode(citySelectId, parentCode, currCode) {
+	$.ajax({
+        type: "GET",
+        async: false,
+        url: "../../json/area_region.json",
+        dataType: "json",
+        cache: false,
+        success: function(json) {
+        	var cityLength = json.length;
+    		var ret = '';
+    		for(var i = 0; i< cityLength; i ++) {
+    			if(json[i].parent == parentCode) {
+    				ret += '<option value="' + json[i].code + '"';
+    				if(json[i].code == currCode) {
+    					ret += ' selected="true"';
+    				}
+    				ret += '>';
+    				ret += json[i].name;
+    				ret += '</option>';
+    			}
+    		}
+    		$("#" + citySelectId).html(ret);
+        }
+    });
+}
+
+/**
+ * 输出通用【确定】信息
+ * @param msg
+ */
+function showConfirmMsg(msg) {
+	$(".mask").remove();
+	var sContent = '<div class="mask">';
+	sContent += '<div class="popup-msg"><p>';
+	sContent += msg;
+	sContent += '</p>';
+	sContent += '<a href="javascript:;" id="popup-confirm">确定</a>';
+	sContent += '</div></div>';
+	$('.container').append(sContent);
+	$('.mask').show();
+	$('.mask').live('click',function() {
+		if(!preventRealClick()) {return;}
+		$(this).hide();
+	});
+	$('#popup-confirm').live('click',function() {
+		$('.mask').click();
+	});
+}
+
+/**
+ * 输出通用【确定】信息--点击确定后，返回上一页
+ * @param msg
+ */
+function showBackToPrevMsg(msg) {
+	$(".mask").remove();
+	var sContent = '<div class="mask">';
+	sContent += '<div class="popup-msg"><p>';
+	sContent += msg;
+	sContent += '</p>';
+	sContent += '<a href="javascript:;" id="popup-back">确定</a>';
+	sContent += '</div></div>';
+	$('.container').append(sContent);
+	$('.mask').show();
+	$('#popup-back').live('click',function() {
+		window.history.back();
+	});
+}
+
+/**
+ * 显示loading图标
+ */
+function showLoading() {
+	$("#loading").width(windowWidth + "px").height(windowHeight + "px");
+	$("#loading").show();
+}
+
+/**
+ * 隐藏loading图标
+ */
+function hideLoading() {
+	$("#loading").hide();
+}
+
+/**
+ * 清除所有localStorage里的信息
+ */
+function clearStorage() {
+	storage.clear();
+}
+
+/**
+ * 商品图像加载出错时的处理
+ * @param img
+ * <img width="32" height="32" src="1.jpg" onerror="productErrImg(this)" />
+ */
+function productErrImg(img) {
+    img.src = "../../images/product_default.jpg";
+    img.onerror = null;
+}
+
+/**
+ * 广告图像加载出错时的处理
+ * @param img
+ * <img width="32" height="32" src="1.jpg" onerror="adErrImg(this)" />
+ */
+function adErrImg(img) {
+    img.src = "../../images/ad_default.jpg";
+    img.onerror = null;
+}
+
+/**
+ * 防止2次点击
+ * @returns {Boolean}
+ */
+function preventRealClick() {
+	if (ghostClickTime1 == null) {
+		ghostClickTime1 = new Date().getTime();
+    } else {
+        var ghostClickTime2 = new Date().getTime();
+        if(ghostClickTime2 - ghostClickTime1 < ghostClickTimeout) {
+        	ghostClickTime1 = ghostClickTime2;
+            return false;
+        } else {
+        	ghostClickTime1 = ghostClickTime2;
+        }
+    }
+	return true;
+}
+
+/**
+ * 根据设备加载js
+ */
+function loadJs(){
+	var u = navigator.userAgent, app = navigator.appVersion;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+    if(isAndroid){
+        $("#platJs").attr("src","../../js/lib/cordova-android.js");
+    }else{
+    	$("#platJs").attr("src","../../js/lib/cordova-ios.js");
+    }
+
+    document.addEventListener('deviceready', function(){
+        console.log('loading complete');
+    }, false);
+}
+
+/**
+ * ajax请求方法
+ * @param url
+ * @param data
+ * @param type
+ * @param async
+ * @param cache
+ * @param dataType
+ */
+function ajaxCommon(url,data,type,async,cache,dataType){
+	var resultJson;
+	if(!data) data = {};
+	if(!type) type = "POST";
+	if(!async) async = false;
+	if(!cache) cache = false;
+	if(!dataType) dataType = "json";
+	$.ajax({
+        type: type,
+        url: url,
+        data: data,
+        dataType: dataType,
+        async: async,
+        cache: cache,
+        beforeSend: function(){
+        	
+        },
+        success: function(result) {
+        	resultJson = result;
+        },
+        error: function(){
+        	alert('resultJson Error');
+        },
+        complete: function(){
+        	
+        }
+	});
+	return resultJson;
+}
+
+/**
+ * 输出通用Alert信息
+ * @param msg
+ */
+function showAlertMsg(msg) {
+	$("#popup-simple").remove();
+	var sContent = '<section id="popup-simple">';
+	sContent += '<div><p>';
+	sContent += msg;
+	sContent += '</p></div>';
+	sContent += '</section>';
+	$("body").append(sContent);
+
+	$("#popup-simple").show();
+	$("#popup-simple").on("tap", function() {
+		$(this).hide();
+	});
+	setTimeout(function() {
+		$("#popup-simple").hide();
+	}, 3000);
+}

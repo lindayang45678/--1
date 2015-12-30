@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>顾客取货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="body-white">
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back"></a>		
+		<h1>顾客取货</h1>
+	</header>
+	<section class="wrap letter">
+		<div class="receipt">
+			<h2 class="f-18 center c-black">验证通过，可以取货！</h2>
+			<div class="receipt-info">
+				<div><i>快递单号：</i><em>080928342309823</em></div>
+				<div><i>收货人姓名：</i><em>巫龙飞</em></div>
+				<div><i>收货人手机：</i><em>13522323232</em></div>
+				<div><i>付款方式：</i><em>货到付款</em></div>
+				<div><i>代付款金额：</i><em>￥100.00</em><em class="color">（需让顾客付款）</em></div>
+			</div>
+			<div class="receipt-info">
+				<div><i>本订单，可获取的商品有：</i></div>
+				<div><i>订单号：</i><em>23987987298634234</em></div>
+			</div>
+			<div class="receipt-info">
+				<ul>
+					<li>
+						<em>雅诗兰黛沐浴乳</em>
+						<p>
+							<i>颜色：</i><em>红色</em>
+							<i>尺码：</i><em>34码</em>
+						</p>
+						<p><i>数量：</i><em>1</em></p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<a href="#" class="btn-red" id="custreceiptconfirm">确认取货</a>
+		<a href="#" class="btn-gray reject" id="custreceiptreject">顾客拒收</a>
+		<div class="pop-up-box hidden">
+			<div>
+				<p class="f-18 c-gray">是否确认拒收 </p>
+				<input class="btn-gray" type="button" value="取&nbsp;消&nbsp;" id="custRejectCancel"/>
+				<input class="btn-red" type="button" value="确&nbsp;认 &nbsp;" id="custRejectConfirm"/>
+			</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<!--<script type="text/javascript" src="../../js/receipt/custreceiptinfo.js"></script>
+-->
+</html>

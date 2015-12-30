@@ -1,0 +1,14 @@
+package com.lakala.module.order.service;
+
+public interface QuhuoCommonService {
+
+	int getProviderState(String torderproviderid);
+
+	void updateOrderState(String orderId, int orderstate, int paychannel);
+
+	int getOrderState(String orderId);
+
+	void updateOrderProviderState(String torderproviderid, int providerstate,
+			int paychannel);
+
+}

@@ -1,0 +1,195 @@
+package com.lakala.util;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class SendMessageUtil {
+	
+	private static ExecutorService threadPool = Executors.newCachedThreadPool();
+	public static String sendSms(String mobile,String message) throws IOException {
+		String pUrl="http://10.1.80.44:8080/sms/authcode";
+		URL urlObject = new URL(pUrl);
+		HttpURLConnection urlConn = (HttpURLConnection) urlObject.openConnection();
+	    urlConn.setDoInput(true);
+	    urlConn.setDoOutput(true);
+	    urlConn.setRequestMethod("POST");
+	    urlConn.connect();
+	    BufferedWriter ou = new BufferedWriter(new OutputStreamWriter(urlConn.getOutputStream()));
+	    ou.write("m="+mobile+"&c="+message);
+	    ou.flush();
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(),"utf-8"));//设置编码,否则中文乱码
+        String line;
+        String lines = "";
+        while ((line = reader.readLine()) != null){
+            lines += line;
+        }
+        reader.close();
+        // 断开连接
+        return lines;
+	}
+	public static void sendmsg(String type,String mobile,Long ordercount,Long goodscount){
+		//发送给店主
+		String message = "恭喜您订购成功！您在拉卡拉社区商城的"+ordercount+"个订单，"+goodscount+"件商品会尽快配送到您的收货地址，请您耐心等待！关注微信号拉卡拉身边小店惊喜不断！";
+		if(type.equals("kddd")){
+			String kdddmobile = cusnamecheck(mobile);
+			if(!kdddmobile.equals("")){
+				try {
+					SendMessageUtil.sendSms(kdddmobile, message);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}else{
+			if(!mobile.equals("")){
+				try {
+					SendMessageUtil.sendSms(mobile, message);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
+	    //店主微信
+		public static String sendGoodDeliveringForSaler(String mobile, String title, String deliverName, String orderName, String reMark, String urlparam) throws IOException {
+			String pUrl="http://10.1.80.44:8080/weixinSendMessage/send/2";
+			URL urlObject = new URL(pUrl);
+			HttpURLConnection urlConn = (HttpURLConnection) urlObject.openConnection();
+		    urlConn.setDoInput(true);
+		    urlConn.setDoOutput(true);
+		    urlConn.setRequestMethod("POST");
+		    urlConn.connect();
+		    BufferedWriter ou = new BufferedWriter(new OutputStreamWriter(urlConn.getOutputStream()));
+		    ou.write("mobile="+mobile+"&title="+title+"&deliverName="+deliverName+"&orderName="+orderName+"&reMark="+reMark+"&urlparam="+urlparam); 
+		    ou.flush();
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(),"utf-8"));//设置编码,否则中文乱码
+	        String line;
+	        String lines = "";
+	        while ((line = reader.readLine()) != null){
+	            lines += line;
+	        }
+	        reader.close();
+	        // 断开连接
+	        return lines;
+		}
+		// 店主微信
+		public static String sendGoodDeliveringForCustomer(String mobile, String title, String deliverName, String orderName, String reMark, String urlparam) throws IOException {
+			String pUrl="http://10.1.80.44:8080/weixinSendMessage/send/3";
+			URL urlObject = new URL(pUrl);
+			HttpURLConnection urlConn = (HttpURLConnection) urlObject.openConnection();
+		    urlConn.setDoInput(true);
+		    urlConn.setDoOutput(true);
+		    urlConn.setRequestMethod("POST");
+		    urlConn.connect();
+		    BufferedWriter ou = new BufferedWriter(new OutputStreamWriter(urlConn.getOutputStream()));
+		    ou.write("mobile="+mobile+"&title="+title+"&deliverName="+deliverName+"&orderName="+orderName+"&reMark="+reMark+"&urlparam="+urlparam); 
+		    ou.flush();
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(),"utf-8"));//设置编码,否则中文乱码
+	        String line;
+	        String lines = "";
+	        while ((line = reader.readLine()) != null){
+	            lines += line;
+	        }
+	        reader.close();
+	        // 断开连接
+	        return lines;
+		}
+	
+	/**
+	 * 判定订单cusname()括号中的手机号
+	 * @param cusname
+	 * @return
+	 */
+	public static String cusnamecheck(String cusname){
+		String mobile = "";
+		if(StringUtil.verdict(cusname)){
+			if(cusname.indexOf("(")>-1 && cusname.indexOf(")")>-1){
+				mobile = cusname.substring(cusname.indexOf("(")+1, cusname.indexOf(")"));
+				if(StringUtil.verdict(mobile)){
+					return mobile;
+				}
+			}
+			if(cusname.indexOf("（")>-1 && cusname.indexOf("）")>-1){
+				mobile = cusname.substring(cusname.indexOf("（")+1, cusname.indexOf("）"));
+				if(StringUtil.verdict(mobile)){
+					return mobile;
+				}
+			}
+			if((cusname.indexOf("(") == -1 && cusname.indexOf(")") == -1)||(cusname.indexOf("（") == -1 && cusname.indexOf("）") == -1)){
+				if(cusname.indexOf("1")>-1){
+					mobile = cusname.substring(cusname.indexOf("1"));
+					if(StringUtil.verdict(mobile)){
+						return mobile;
+					}
+				}
+			}
+		}
+		return mobile;
+	}
+	
+	
+	//店主微信  多线程
+	public static String sendGoodDeliveringForSalerCallable(final String mobile, final String title, final String deliverName, final String orderName, final String reMark, final String urlparam) {
+	
+		String ret = "";
+		if(threadPool==null){
+			threadPool = Executors.newCachedThreadPool();
+		}
+		
+        Future<String> future = threadPool.submit(new Callable<String>() {  
+            public String call() throws Exception {  
+            	return sendGoodDeliveringForSaler(mobile,title,deliverName,orderName,reMark,urlparam);
+            }  
+        });
+		return ret;  
+    }
+	
+	
+	
+	
+	//顾客微信  多线程
+	public static String sendGoodDeliveringForCustomerCallable(final String mobile, final String title, final String deliverName, final String orderName, final String reMark, final String urlparam) {
+	
+		String ret = "";
+		
+		if(threadPool==null){
+			threadPool = Executors.newCachedThreadPool();
+		}
+		
+        Future<String> future = threadPool.submit(new Callable<String>() {  
+            public String call() throws Exception {  
+            	return sendGoodDeliveringForCustomer(mobile,title,deliverName,orderName,reMark,urlparam);
+            }  
+        });
+		return ret;  
+    }
+	
+	
+	//发货短信  多线程
+	public static String sendSmsCallable(final String mobile,final String message) throws IOException{
+		
+			String ret = "";
+			if(threadPool==null){
+				threadPool = Executors.newCachedThreadPool();
+			}
+			
+	        threadPool.submit(new Callable<String>() {  
+	            public String call() throws Exception {  
+	            	return sendSms(mobile,message);
+	            }  
+	        });
+			return ret;  
+	 }
+	
+}

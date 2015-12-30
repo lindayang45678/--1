@@ -1,0 +1,252 @@
+package com.lakala.module.user.service.impl;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.castor.core.util.Base64Encoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+//import sun.misc.BASE64Decoder;
+
+
+
+
+
+import com.lakala.exception.LakalaException;
+import com.lakala.fileupload.bean.FileItem;
+import com.lakala.fileupload.enums.TargetTypeEnum;
+import com.lakala.fileupload.handler.MultipartHttpFileTransfer;
+import com.lakala.mapper.r.user.TShopUpdateMapper;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.ShopUpdateInfoService;
+import com.lakala.module.user.vo.TstoreApprove;
+import com.lakala.util.Base64;
+import com.lakala.util.ImgTokenUtil;
+import com.lakala.util.ReturnMsg;
+
+/**
+ * 店铺信息升级
+ * @author yangjunguo
+ * @date 2015年5月21日
+ */
+@Component
+public class ShopUpdateInfoServiceImpl implements ShopUpdateInfoService{ 
+	
+	private static Logger logger = Logger.getLogger(ShopUpdateInfoServiceImpl.class);
+	
+	@Autowired
+	private MultipartHttpFileTransfer transfer;
+	@Autowired
+	private TShopUpdateMapper tShopUpdateInfoMapper_r;
+	
+
+	@Override
+	public ObjectOutput<TstoreApprove> shopUpdateInfo(HttpServletRequest request, TstoreApprove input)
+			throws LakalaException {
+		ObjectOutput<TstoreApprove> info = new ObjectOutput<TstoreApprove>();
+			List<TstoreApprove> list = tShopUpdateInfoMapper_r.selectNetInfo(input.getPhoneno());
+			if(list != null && list.size() > 0){
+				TstoreApprove store = list.get(0);
+				input.setNetno(store.getNetno());
+				input.setElectronno(store.getElectronno());
+				input.setOrgid(store.getOrgid());
+				input.setPsam(store.getPsam());
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				input.setApplydate(format.format(new Date()));
+				input.setState(455);
+				input.setApprovestate(163);
+			
+				//正则校对修改时，提交上来的图片数据是否是URL
+				Pattern pattern = Pattern.compile("https?://\\S+?");
+				//如果提交的身份证正反面和营业执照是url地址，查询一次对象实体
+				TstoreApprove s = null;
+				if(input.getIdimage_positive().indexOf("?") >= 0 || input.getIdimage_negative().indexOf("?") >= 0 || (null != input.getBusinessLicence() && input.getBusinessLicence().indexOf("?") >= 0) ){
+					s = tShopUpdateInfoMapper_r.getShopInfo(input.getPhoneno());
+				}
+				//解析身份证图片正面
+				Matcher mpositive = pattern.matcher(input.getIdimage_positive()); 
+				if(!mpositive.find()){//如果提交的是base64位图片数据
+					if(input.getIdimage_positive().indexOf(",") >= 0){
+						input.setIdimage_positive(input.getIdimage_positive().split(",")[1]);
+					}
+					byte[] positive = Base64.decode(input.getIdimage_positive());
+					
+					/** wujx 2015-6-15图片操作升级改造 */
+					FileItem item = transfer.transferToFtp(positive, input.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false);
+					input.setIdimage_positive(item.getFileName());
+				}else{//如果提交的是URL图片路径，进行文件匹配
+					if(s != null){
+						if(input.getIdimage_positive().indexOf("?") >= 0){
+							input.setIdimage_positive(input.getIdimage_positive().split("\\?")[0]);
+						}
+						/** wujx 2015-6-15图片操作升级改造 */
+						String url = transfer.getServerUrl(s.getIdimage_positive(), s.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false);
+						//String url = ImageUtil.getImgUrl(6, s.getPhoneno(), s.getIdimage_positive(), "mainImg", true, request, false);
+						if(url != null && url.equals(input.getIdimage_positive())){
+							input.setIdimage_positive(s.getIdimage_positive());
+						}else{
+							info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+							info.set_ReturnMsg("身份证正面与上次提交的不匹配，请重新上传图片。");
+							return info;
+						}
+					}
+				}
+				
+				//解析身份证图片反面
+				Matcher mnegative = pattern.matcher(input.getIdimage_negative()); 
+				if(!mnegative.find()){//如果提交的是base64位图片数据
+					if(input.getIdimage_negative().indexOf(",") >= 0){
+						input.setIdimage_negative(input.getIdimage_negative().split(",")[1]);
+					}
+					byte[] negative = Base64.decode(input.getIdimage_negative());
+					/** wujx 2015-6-15图片操作升级改造 */
+					FileItem item = transfer.transferToFtp(negative, input.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false);
+					input.setIdimage_negative(item.getFileName());
+				}else{//如果提交的是URL图片路径，进行文件匹配
+					if(s != null){
+						if(input.getIdimage_negative().indexOf("?") >= 0){
+							input.setIdimage_negative(input.getIdimage_negative().split("\\?")[0]);
+						}
+						/** wujx 2015-6-15图片操作升级改造 */
+						String url = transfer.getServerUrl(s.getIdimage_negative(), s.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false);
+						if(url != null && url.equals(input.getIdimage_negative())){
+							input.setIdimage_negative(s.getIdimage_negative());
+						}else{
+							info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+							info.set_ReturnMsg("身份证反面与上次提交的不匹配，请重新上传图片。");
+							return info;
+						}
+					}
+				}
+				
+				if(null != input.getBusinessLicence() && !"".equals(input.getBusinessLicence())){
+					//解析营业执照
+					//保存成功，根据图片名移动营业执照
+					try{
+						Matcher mlicense = pattern.matcher(input.getBusinessLicence()); 
+						if(!mlicense.find()){//如果提交的是base64位图片数据
+							if(input.getBusinessLicence().indexOf(",") >= 0){
+								input.setBusinessLicence(input.getBusinessLicence().split(",")[1]);
+							}
+							byte[] license = Base64.decode(input.getBusinessLicence());
+							/** wujx 2015-6-15图片操作升级改造 */
+							FileItem item = transfer.transferToFtp(license, input.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false);
+							input.setBusinessLicence(item.getFileName());
+						}else{//如果提交的是URL图片路径，进行文件匹配
+							if(s != null){
+								if(input.getBusinessLicence().indexOf("?") >= 0){
+									input.setBusinessLicence(input.getBusinessLicence().split("\\?")[0]);
+								}
+								/** wujx 2015-6-15图片操作升级改造 */
+								String url = transfer.getServerUrl(s.getBusinessLicence(), s.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false);
+								if(url != null && url.equals(input.getBusinessLicence())){
+									input.setBusinessLicence(s.getBusinessLicence());
+								}else{
+									info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+									info.set_ReturnMsg("营业执照与上次提交的不匹配，请重新上传图片。");
+									return info;
+								}
+							}
+						}
+					}catch(Exception e){
+						input.setBusinessLicence(null);
+					}
+				}
+				
+				tShopUpdateInfoMapper_r.shopUpdateInfo(input);
+				info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+				info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+				info.set_ReturnData(input);
+			}else{
+				info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				info.set_ReturnMsg(ReturnMsg.MSG_ORDERCANCE_000002);
+			}
+		
+		
+		return info;
+	}
+	
+	
+
+
+	/**
+	 * 检测小店是否注册存在，返回true表示未注册
+	 * @return
+	 */
+	@Override
+	public int checkShopExists(TstoreApprove input) throws LakalaException {
+		return tShopUpdateInfoMapper_r.checkShopExists(input.getPhoneno());
+	}
+
+
+	/**
+	 * 检测小店是否已经是标准店，可升级为旗舰店
+	 * @return
+	 */
+	@Override
+	public int checkShopType(TstoreApprove input) throws LakalaException {
+		return tShopUpdateInfoMapper_r.checkShopType(input.getPhoneno());
+	}
+
+
+	@Override
+	public int checkShopExistsInTmemberb(TstoreApprove input)
+			throws LakalaException {
+		return tShopUpdateInfoMapper_r.checkShopExistsInTmemberb(input.getPhoneno());
+	}
+
+
+
+
+	@Override
+	public TstoreApprove getShopInfo(HttpServletRequest request, String mobile) throws LakalaException {
+			TstoreApprove s = tShopUpdateInfoMapper_r.getShopInfo(mobile);
+			if(s != null){
+				String pramas = "?t=" + ImgTokenUtil.getToken(s.getPhoneno()) + "&m=" + s.getPhoneno();
+				/** wujx 2015-6-15图片操作升级改造 */
+				if(null != s.getIdimage_positive() && !"".equals(s.getIdimage_positive())){
+					s.setIdimage_positive(transfer.getServerUrl(s.getIdimage_positive(), s.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false)+pramas);
+				}
+				if(null != s.getIdimage_negative() && !"".equals(s.getIdimage_negative())){
+					s.setIdimage_negative(transfer.getServerUrl(s.getIdimage_negative(), s.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false)+pramas);
+				}
+				if(null != s.getBusinessLicence() && !"".equals(s.getBusinessLicence())){
+					s.setBusinessLicence(transfer.getServerUrl(s.getBusinessLicence(), s.getPhoneno(), TargetTypeEnum.IMAGE_TARGETTYPE_USER, false)+pramas);
+				}
+				return s;
+			}
+		return null;
+	}
+	
+	public static void main(String[] args){
+//		try {
+//			FileInputStream fis = new FileInputStream("");
+//			byte[] b  = new byte[fis.available()];
+//			fis.read(b, 0, fis.available());
+//			Base64Encoder decoder = new Base64Encoder();
+//			System.out.println(decoder.encode(b));
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		
+		String url ="http://10.5.16.78:8080/lakala-file/postimg/user/13233445566/mainImg/42491055-a219-4428-a26f-294e22a5043d.jpg?t=iLBKWMwmrHaCqyzem6lhJTUGvPyAUj55rzrAQvBDNwk=&m=13233445566";
+		Pattern pattern = Pattern.compile("https?://\\S+?");
+		System.out.println(pattern.matcher(url).find()); 
+	}
+	
+}

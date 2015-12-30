@@ -1,0 +1,217 @@
+package com.lakala.model;
+
+/**
+ * 店主收货查询数据
+ * @author ls
+ *
+ */
+public class ShouhuoOutputSql {
+	
+	private String cusname;
+	private String custelno;
+	private String deliverycom;
+	private String logno;
+	private String state;
+	private String channelcode;
+	private String torderproviderid;
+	private String providername; 
+	private String goodsname;
+	private String norms;
+	private String goodsnum;
+	private String orderitemid;
+	private Integer logid;
+	private String orderid;
+	private Integer providerstate;
+	private String actualnum;
+	
+	
+	
+	
+	public Integer getProviderstate() {
+		return providerstate;
+	}
+
+
+	public void setProviderstate(Integer providerstate) {
+		this.providerstate = providerstate;
+	}
+
+
+	
+
+
+	public String getActualnum() {
+		return actualnum;
+	}
+
+
+	public void setActualnum(String actualnum) {
+		this.actualnum = actualnum;
+	}
+
+
+	public String getOrderid() {
+		return orderid;
+	}
+
+
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
+	}
+
+
+	public Integer getLogid() {
+		return logid;
+	}
+
+
+	public void setLogid(Integer logid) {
+		this.logid = logid;
+	}
+
+
+	public String getOrderitemid() {
+		return orderitemid;
+	}
+
+
+	public void setOrderitemid(String orderitemid) {
+		this.orderitemid = orderitemid;
+	}
+
+
+	public String getTorderproviderid() {
+		return torderproviderid;
+	}
+
+
+	public void setTorderproviderid(String torderproviderid) {
+		this.torderproviderid = torderproviderid;
+	}
+
+
+	public String getProvidername() {
+		return providername;
+	}
+
+
+	public void setProvidername(String providername) {
+		this.providername = providername;
+	}
+
+
+	public String getGoodsname() {
+		return goodsname;
+	}
+
+
+	public void setGoodsname(String goodsname) {
+		this.goodsname = goodsname;
+	}
+
+
+	public String getNorms() {
+		return norms;
+	}
+
+
+	public void setNorms(String norms) {
+		this.norms = norms;
+	}
+
+
+	public String getGoodsnum() {
+		return goodsnum;
+	}
+
+
+	public void setGoodsnum(String goodsnum) {
+		this.goodsnum = goodsnum;
+	}
+
+
+	public String getCusname() {
+		return cusname;
+	}
+
+
+	public void setCusname(String cusname) {
+		this.cusname = cusname;
+	}
+
+
+	public String getCustelno() {
+		return custelno;
+	}
+
+
+	public void setCustelno(String custelno) {
+		this.custelno = custelno;
+	}
+
+
+	public String getDeliverycom() {
+		return deliverycom;
+	}
+
+
+	public void setDeliverycom(String deliverycom) {
+		this.deliverycom = deliverycom;
+	}
+
+
+	public String getLogno() {
+		return logno;
+	}
+
+
+	public void setLogno(String logno) {
+		this.logno = logno;
+	}
+
+
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+
+	public String getChannelcode() {
+		return channelcode;
+	}
+
+
+	public void setChannelcode(String channelcode) {
+		this.channelcode = channelcode;
+	}
+	
+	public static void main(String[] args) {
+		String[] arr = {"AA","AA","AB","BB","CC","CC","CD","DD","DD","EE","HH","NN","NN","XX"};
+		java.util.Set<String> set = new java.util.HashSet<String>();
+		for(int i = 0; i < arr.length; i++){
+			set.add(arr[i]);
+		}
+		
+			for(String str : set){
+//				for(总的){
+//					总的的p = str;
+//				}
+				System.out.println(str);
+			}
+		
+//		System.out.println(set.size());
+//		String[] strarr = new String[set.size()];
+//		int i = -1;
+//		for(String str : set){
+//			strarr[++i] = str;
+//		}
+//		java.util.Arrays.sort(strarr); //set集合是无序的，用冒泡排序
+//		System.out.println(java.util.Arrays.toString(strarr)); //输出字符串格式数组的值
+	}
+	
+	
+}

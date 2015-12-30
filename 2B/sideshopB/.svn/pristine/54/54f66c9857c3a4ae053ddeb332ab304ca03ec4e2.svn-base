@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>我要领券</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+	<style type="text/css">
+	
+/**
+ *
+ * Pull down styles
+ *
+ */
+/* #pullDown, #pullUp {
+	background:#fff;
+	height:40px;
+	line-height:40px;
+	padding:5px 10px;
+	border-bottom:1px solid #ccc;
+	font-weight:bold;
+	font-size:14px;
+	color:#888;
+}
+#pullDown .pullDownIcon, #pullUp .pullUpIcon  {
+	display:block; float:left;
+	width:40px; height:40px;
+	background:url(../../images/loading.png) 0 0 no-repeat;
+	-webkit-background-size:40px 80px; background-size:40px 80px;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:250ms;	
+}
+#pullDown .pullDownIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+#pullUp .pullUpIcon  {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullDown.flip .pullDownIcon {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullUp.flip .pullUpIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+} */
+
+/* #pullDown.loading .pullDownIcon, #pullUp.loading .pullUpIcon {
+	background-position:0 100%;
+	-webkit-transform:rotate(0deg) translateZ(0);
+	-webkit-transition-duration:0ms;
+
+	-webkit-animation-name:loading;
+	-webkit-animation-duration:2s;
+	-webkit-animation-iteration-count:infinite;
+	-webkit-animation-timing-function:linear;
+} */
+
+/* @-webkit-keyframes loading {
+	from { -webkit-transform:rotate(0deg) translateZ(0); }
+	to { -webkit-transform:rotate(360deg) translateZ(0); }
+}
+ */	
+	
+	
+	</style>
+</head>
+<body class="coupon">
+	<header>
+		<a href="../homepage/index.html" class="back">返回</a>				
+		<h1>我要领券</h1>
+	</header>
+	<section class="container unuse clearfix">
+		<section class="wrap">
+			<div class="coupon-top clearfix">
+				<a href="rules.html" class="rules">现金券规则</a>
+				<a href="mycoupons.html" class="btn-red receive">立刻领券</a>
+			</div>
+			<div class="header clearfix">
+				<a class="active" href="javascript:void(0);">未使用现金券 </a>
+				<a href="used.html">已使用现金券</a>
+				<a href="expired.html">已过期现金券</a>
+			</div>
+			<section id="coupon-scroll" class="coupon-scroll">
+				<div id="coupon-container" class="coupon-container">
+					<ul class="coupon-items">
+						<li class="coupon-list">				
+							<a href="details.html">
+								<dl class="clearfix">
+									<dt>
+										<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+										<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+									</dt>
+									<dd class="fl c-white coupon1"><strong>100</strong><span>满100元可用</span></dd>
+								</dl>
+							</a>  
+						</li>
+						<li class="coupon-list">				
+							<a href="details.html">
+								<dl class="clearfix">
+									<dt>
+										<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+										<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+									</dt>
+									<dd class="fl c-white coupon2"><strong>5</strong><span>满100元可用</span></dd>
+								</dl>
+							</a>  
+						</li>
+						<li class="coupon-list">				
+							<a href="details.html">
+								<dl class="clearfix">
+									<dt>
+										<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+										<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+									</dt>
+									<dd class="fl c-white coupon3"><strong>10</strong><span>满100元可用</span></dd>
+								</dl>
+							</a>  
+						</li>
+						<li class="coupon-list">				
+							<a href="details.html">
+								<dl class="clearfix">
+									<dt>
+										<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+										<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+									</dt>
+									<dd class="fl c-white coupon4"><strong>50</strong><span>满100元可用</span></dd>
+								</dl>
+							</a>  
+						</li>
+						<li class="coupon-list">				
+							<a href="details.html">
+								<dl class="clearfix">
+									<dt>
+										<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+										<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+									</dt>
+									<dd class="fl c-white coupon1"><strong>100</strong><span>满100元可用</span></dd>
+								</dl>
+							</a>  
+						</li>
+						<li class="coupon-list">				
+							<a href="details.html">
+								<dl class="clearfix">
+									<dt>
+										<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+										<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+									</dt>
+									<dd class="fl c-white coupon2"><strong>5</strong><span>满100元可用</span></dd>
+								</dl>
+							</a>  
+						</li>
+						<li class="coupon-list">				
+							<a href="details.html">
+								<dl class="clearfix">
+									<dt>
+										<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+										<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+									</dt>
+									<dd class="fl c-white coupon3"><strong>10</strong><span>满100元可用</span></dd>
+								</dl>
+							</a>  
+						</li>
+						<li class="coupon-list">				
+							<a href="details.html">
+								<dl class="clearfix">
+									<dt>
+										<p>券&nbsp;&nbsp;号:1236425855212364258552</p>
+										<p><span>已&nbsp;&nbsp;用：3次</span><span>剩&nbsp;&nbsp;余：9次</span></p>
+									</dt>
+									<dd class="fl c-white coupon4"><strong>50</strong><span>满100元可用</span></dd>
+								</dl>
+							</a>  
+						</li>
+					</ul>
+					<div id="loading">
+					<!-- 如果需要上拉刷新就把这里显示，不要注释 -->
+						<span id ="loading" class="pullUpIcon"></span>
+						<img class="loading" alt="" src="../../images/loading.png" />
+					</div>
+				</div>
+			</section>
+		</section>
+	</section>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/coupons/unused.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+$(function(){	
+	$('.first').find('li').on('tap',function(){
+		$('.second').show();
+		if($(this).hasClass('color')){
+			$(this).removeClass('color');
+		}else{
+			$(this).addClass('color');
+		}
+		
+	});
+	$('.second').find('li').on('tap',function(){
+		$('.third').show();
+		
+	});
+	$('.third').find('li').on('tap',function(){
+		$('.fourth').show();
+		
+	});
+	
+	
+})

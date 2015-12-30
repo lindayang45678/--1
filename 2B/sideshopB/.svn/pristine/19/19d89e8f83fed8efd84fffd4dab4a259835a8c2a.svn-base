@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.profit.TorderMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.profit.Torder" >
+    <id column="tOrderId" property="torderid" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="isGroupPurchase" property="isgrouppurchase" jdbcType="INTEGER" />
+    <result column="orderType" property="ordertype" jdbcType="INTEGER" />
+    <result column="goodsTypeCount" property="goodstypecount" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="payableAmount" property="payableamount" jdbcType="DECIMAL" />
+    <result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+    <result column="coupons" property="coupons" jdbcType="VARCHAR" />
+    <result column="couponsValue" property="couponsvalue" jdbcType="DECIMAL" />
+    <result column="ruleID" property="ruleid" jdbcType="INTEGER" />
+    <result column="ruleName" property="rulename" jdbcType="VARCHAR" />
+    <result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+    <result column="cusName" property="cusname" jdbcType="VARCHAR" />
+    <result column="siteNo" property="siteno" jdbcType="VARCHAR" />
+    <result column="deviceNo" property="deviceno" jdbcType="VARCHAR" />
+    <result column="favorRuleMoney" property="favorrulemoney" jdbcType="DECIMAL" />
+    <result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL" />
+    <result column="storeProfits" property="storeprofits" jdbcType="DECIMAL" />
+    <result column="billType" property="billtype" jdbcType="INTEGER" />
+    <result column="billTitle" property="billtitle" jdbcType="VARCHAR" />
+    <result column="isPay" property="ispay" jdbcType="INTEGER" />
+    <result column="payTime" property="paytime" jdbcType="TIMESTAMP" />
+    <result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+    <result column="payType" property="paytype" jdbcType="INTEGER" />
+    <result column="payStage" property="paystage" jdbcType="INTEGER" />
+    <result column="payFee" property="payfee" jdbcType="DECIMAL" />
+    <result column="payHandlingCharge" property="payhandlingcharge" jdbcType="DECIMAL" />
+    <result column="bankID" property="bankid" jdbcType="VARCHAR" />
+    <result column="bankName" property="bankname" jdbcType="VARCHAR" />
+    <result column="addressProvinceName" property="addressprovincename" jdbcType="VARCHAR" />
+    <result column="addressProvince" property="addressprovince" jdbcType="VARCHAR" />
+    <result column="addressCityName" property="addresscityname" jdbcType="VARCHAR" />
+    <result column="addressCity" property="addresscity" jdbcType="VARCHAR" />
+    <result column="addressAreaName" property="addressareaname" jdbcType="VARCHAR" />
+    <result column="addressArea" property="addressarea" jdbcType="VARCHAR" />
+    <result column="addressFull" property="addressfull" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+    <result column="isWeekendDeliver" property="isweekenddeliver" jdbcType="INTEGER" />
+    <result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER" />
+    <result column="requireTime" property="requiretime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="favorAllMoney" property="favorallmoney" jdbcType="DECIMAL" />
+    <result column="cancelState" property="cancelstate" jdbcType="INTEGER" />
+    <result column="lastModifyTime" property="lastmodifytime" jdbcType="TIMESTAMP" />
+    <result column="memberName" property="membername" jdbcType="VARCHAR" />
+    <result column="custCall" property="custcall" jdbcType="VARCHAR" />
+    <result column="lockState" property="lockstate" jdbcType="INTEGER" />
+    <result column="providerSettleState" property="providersettlestate" jdbcType="INTEGER" />
+    <result column="providerSettleMoney" property="providersettlemoney" jdbcType="DECIMAL" />
+    <result column="shipSettleState" property="shipsettlestate" jdbcType="INTEGER" />
+    <result column="shipSettleMoney" property="shipsettlemoney" jdbcType="DECIMAL" />
+    <result column="phoneMemberName" property="phonemembername" jdbcType="VARCHAR" />
+    <result column="phoneMemberIdCard" property="phonememberidcard" jdbcType="VARCHAR" />
+    <result column="isCheckAccount" property="ischeckaccount" jdbcType="INTEGER" />
+    <result column="termfbtype" property="termfbtype" jdbcType="VARCHAR" />
+    <result column="termfbtypestr" property="termfbtypestr" jdbcType="VARCHAR" />
+    <result column="skbsalemobile" property="skbsalemobile" jdbcType="INTEGER" />
+    <result column="fr_ratio" property="frRatio" jdbcType="DECIMAL" />
+    <result column="re_ratio" property="reRatio" jdbcType="DECIMAL" />
+    <result column="sb_ratio" property="sbRatio" jdbcType="DECIMAL" />
+    <result column="divideProfit" property="divideprofit" jdbcType="DECIMAL" />
+    <result column="returnAmount" property="returnamount" jdbcType="DECIMAL" />
+    <result column="subsidyAmount" property="subsidyamount" jdbcType="DECIMAL" />
+    <result column="skbsalemobilename" property="skbsalemobilename" jdbcType="VARCHAR"/>      
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lakala.model.profit.Torder" extends="BaseResultMap" >
+    <result column="fav" property="fav" jdbcType="LONGVARCHAR" />
+  </resultMap>
+	  
+    <select id="selectByOrderProviderId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+           select
+       t1.tOrderId, t1.tel,t1.orderTime, t1.isDeliverToHome ,t2.nameCN as  isdelivertohomeStr,
+        t1.cusTelNo,t1.cusName,t1.addressFull,t1.source, t3.providerID as  providerId , t3.providerName,
+        t4.nameCN as  sourceStr
+        from torder  t1 left join  tdictionary  t2 on t2.dictionayId = t1.isDeliverToHome 
+       									left join  tdictionary  t4 on t4.dictionayId = t1.source ,
+                   torderprovider t3
+        where  t3.tOrderProviderId = #{orderProviderId,jdbcType=VARCHAR} 
+                      and t3.orderID=t1.tOrderId
+    </select>
+</mapper>

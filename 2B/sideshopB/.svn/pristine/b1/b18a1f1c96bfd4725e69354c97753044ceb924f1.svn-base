@@ -1,0 +1,282 @@
+$(function() {
+	var data = {};	//请求优惠券入口的数据    
+	var couponlist=new Array();//请求的优惠券列表
+	var resultJson = {};//请求验证结果
+	var items = new Array();//去请求的商品列表
+	for(var i = 0; i < storage.length; i ++){
+		var key = storage.key(i);
+		if(key.indexOf(productPrefix) >= 0){
+			var proVal = JSON.parse(storage.getItem(key));
+			var item = {
+				"skuo2oid":	proVal.o2oId,
+				"skuid": proVal.tGoodSkuInfoId,
+				"goodsname": proVal.goodName,
+				"goodssaleprice": proVal.salePrice,
+				"goodscount": proVal.goodscount,
+				"channel": proVal.channelcode
+			}
+			items.push(item);
+		}
+	};
+	//现金卷请求数据函数
+	function ajaxcoupon() {
+		var data = {
+				"token":userToken,
+			    "mobile":mobile,
+			    "pasmid":psam,
+			    "source":sourceSbApp2B,
+			    "custelno":mobile,
+			    "wholesale":"2B",
+			    "couponlist":couponlist,
+			    "items":items
+		}
+		//假数据用于测试
+		/*data = {
+			    "token": "sdsad",
+			    "mobile": "18888888888",
+			    "pasmid": "CBC8D8A800000001",
+			    "source": "95",
+			    "custelno": "15601223576",
+			    "wholesale": "2B",
+			    "couponlist": couponlist,
+			    "items": [
+			        {
+			            "skuo2oid": "11212",
+			            "skuid": "154",
+			            "goodsname": "ceshi",
+			            "goodssaleprice": "99",
+			            "goodscount": "2",
+			            "channel": "25"
+			        }
+			    ]
+			};*/
+		resultJson = ajaxCommon(urlCouponTest, data);
+	//选择验证现金券函数
+	};
+	ajaxcoupon();//初始化得到参数
+	listCont();//初始化获得页面
+	//加载到页面现金卷列表函数
+	function listCont() {
+		//假数据
+		//resultJson = {"_ReturnCode":"000000","_ReturnData":{"flag":null,"retcode":"0000","wholesale":"2B","couponlist":[{"count":"1","batchCode":"XJQ_2015-03-12_s36","couponCode":"X7R73HR","isValidate":1,"remark":"有效","couponPrice":10,"ttlCouponPrice":10},{"count":"4","batchCode":"XJQ_2015-03-12_s36","couponCode":"H3SNAJC","isValidate":1,"remark":"有效","couponPrice":10,"ttlCouponPrice":40}],"coupondata":{"total":"228.00","goodstotal":"278.00","couponuse":"0","promfee":"50.0000","pasmid":null,"items":[{"channel":"27","isgift":"0","parentid":"0","goodssaleprice":"139","goodsname":"中宁枸杞礼盒【精品】500g/盒","goodscount":"2","skuo2oid":"5608","goodtotalprice":"278.0000","goodsactualprice":"278.0000","skuid":"21938"}],"logisfee":"0.00","couponvalue":"50.00","actualtotal":"228.00","coupon":null},"retmeg":"促销验证成功","tcouponlist":[{"favcode":"XJQ_2015-03-12_s36","favorablecode":"Q9LWBWQF","cost":"10","usenum":"10","usednum":"0","ordermount":"100"},{"favcode":"XJQ_2015-03-12_s36","favorablecode":"SKQI5T9","cost":"10","usenum":"10","usednum":"0","ordermount":"100"}]},"_ReturnMsg":"验证通过"};		
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			var resultListData = resultJson._ReturnData;
+			var usable = resultListData.tcouponlist.length || 0;//可用的现金卷数目
+			//筛选出可用优惠券的列表
+			var ret='';
+			ret+= '<div class="fill-coupon-tab"><span class="select-coupon-tab"><em class="tab-red">选择可用现金券<i class="color">('+ usable +')</i></em></span>';
+			ret+= '<span class="hand-coupon-tab"><em>手动输入现金券号</em></span>';
+			ret+= '</div>';
+			ret+= '<ul class="select-coupon">';
+			for (var i = 0;i < resultListData.tcouponlist.length;i++) {
+				var tcouponList = resultListData.tcouponlist[i];
+				var favcode = tcouponList.favcode;
+				var favcode1stChar = favcode.charAt(0);
+				ret+= '<li class="clearfix coupon-off">';
+				//ret+= '<div class="fl">全国批发券<i class="favorablecode">DB3242</i><br/>剩余<i class="coupon-surplus">100</i>次已用12次 </div><div class="fr">抵扣100元 <br/>满100元可用</div><div class="coupon-change"><i class="coupon-minus">&minus;</i><input type="tel" value="99" readonly="readonly"/><i class="coupon-plus">+</i></div>';
+				if(favcode1stChar == "Q") {	
+					ret+= '<div class="fl QGPF">' + QGPF_Coupon + '<i class="favorablecode">'+ tcouponList.favorablecode +'</i><br/>剩余<i class="coupon-surplus">'+ tcouponList.usenum +'</i>次已用'+ tcouponList.usednum +'次 </div>';
+				} else if(favcode1stChar == "B") {	
+					ret+= '<div class="fl BDPF">' + BDPF_Coupon + '<i class="favorablecode">'+ tcouponList.favorablecode +'</i><br/>剩余<i class="coupon-surplus">'+ tcouponList.usenum +'</i>次已用'+ tcouponList.usednum +'次 </div>';
+				} else {	
+					ret+= '<div class="fl"><i class="favorablecode">'+ tcouponList.favorablecode +'</i><br/>剩余<i class="coupon-surplus">'+ tcouponList.usenum +'</i>次已用'+ tcouponList.usednum +'次 </div>';
+				}
+				ret+= '<div class="fr">抵扣'+ tcouponList.cost +'元 <br/>满'+ tcouponList.ordermount +'元可用</div>';
+				ret+= '<div class="coupon-change"><i class="coupon-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="coupon-plus">+</i></div>';
+				ret+= '</li>';	
+			}
+			ret+= '</ul>';
+			ret+= '<div class="fill-coupon-use hidden">';
+			ret+= '<div class="coupon-use-text">现金卷号：</div><input type="text" placeholder="请输入"/><div class="coupon-use-x hidden">&nbsp;</div>';
+			ret+= '</div>';
+			ret+= '<div class="wrap">';
+			ret+= '<p class="f-16 color test-ok hidden">验证通过可抵扣<i>20.00</i>元</p>';
+			ret+= '<p class="f-16 color test-fail hidden">验证失败，请确认输入券号是否有效</p>';
+			ret+= '<p class="f-16 color test-used hidden">很抱歉，该卷号已使用!</p>';
+			ret+= '<p class="coupon-pa">最大可用100元全国批发券，10元本地批发券；</p>';
+			ret+= '<a href="javascript:;" class="btn-red coupon-sure">使用</a>';
+			ret+= '<a href="javascript:;" class="btn-red coupon-test-btn hidden">验证</a>';
+			ret+= '<a href="javascript:;" class="btn-red coupon-finish-btn hidden">完成</a>';
+			ret+= '<a href="javascript:;" class="btn-red coupon-cancel-btn hidden">取消</a>';
+			ret+= '</div>';
+			$('.fill-coupon').html('').append(ret);
+		} else {
+			showAlertMsg(resultJson._ReturnMsg);
+			setTimeout(function(){window.location.href = "fill.html?t=" + t;},1000);
+		}
+	}
+	//选择验证现金卷时候
+	$('.coupon-sure').on('tap',function(){
+		couponlist = [];//先清空列表项
+		$('.coupon-on').each(function(i){
+			var json = {"couponCode": $(this).find('.favorablecode').text(),"count": $(this).find('input').val()};
+			couponlist.push(json);
+		});
+		if (couponlist.length < 1) {showAlertMsg("您未选择现金券，请选择！");return;}
+		ajaxcoupon();
+		//console.log(couponlist);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			if(resultJson._ReturnData.retcode == 0000) {
+				var price =resultJson._ReturnData.coupondata.promfee;
+				var usedlist =resultJson._ReturnData.couponlist;
+				storage.setItem("couponvalue", price);//传给fill页面数据抵扣价格
+				storage.setItem("couponlist", usedlist);//传给fill页面数据
+				window.location.href = "fill.html?t=" + t;	
+			} else{
+				$('.masker').removeClass('hidden');
+				$('.popup').removeClass('hidden');
+				var msn = parseInt(resultJson._ReturnData.coupondata.couponuse);
+				var output;
+				switch (msn)
+				{	case 1:
+					output = "抱歉，您购物车中的商品不能使用该现金券";
+					break;
+					case 2:
+					output = "抱歉，您选择的现金券总面值超出最大可用范围";
+					break;
+					case 3:
+					output = "抱歉，该现金券已被使用";
+					break;
+					case 4:
+					output = "抱歉，您的终端未绑定该现金券，不能使用";
+					break;
+					case 5:
+					output = "抱歉，该现金券不存在";
+					break;
+					default:output = "验证失败";
+				}
+				$('.popup p').html(output);
+			}	
+		}
+		else {
+			showAlertMsg(resultJson._ReturnMsg);
+		}		
+	});
+	//手动输入点击验证时候
+	$('.coupon-test-btn').on('tap',function(event){
+		couponlist = [];//先清空列表项
+		var json = {"couponCode": $('.fill-coupon-use input').val(),"count":1};
+		couponlist.push(json);
+		//console.log(couponlist);
+		ajaxcoupon();
+		//假数据
+		//resultJson = {"_ReturnCode":"000000","_ReturnData":{"flag":null,"retcode":"0000","wholesale":"2B","couponlist":[{"count":"1","batchCode":"XJQ_2015-03-12_s36","couponCode":"X7R73HR","isValidate":1,"remark":"有效","couponPrice":10,"ttlCouponPrice":10},{"count":"4","batchCode":"XJQ_2015-03-12_s36","couponCode":"H3SNAJC","isValidate":1,"remark":"有效","couponPrice":10,"ttlCouponPrice":40}],"coupondata":{"total":"228.00","goodstotal":"278.00","couponuse":"0","promfee":"50.0000","pasmid":null,"items":[{"channel":"27","isgift":"0","parentid":"0","goodssaleprice":"139","goodsname":"中宁枸杞礼盒【精品】500g/盒","goodscount":"2","skuo2oid":"5608","goodtotalprice":"278.0000","goodsactualprice":"278.0000","skuid":"21938"}],"logisfee":"0.00","couponvalue":"50.00","actualtotal":"228.00","coupon":null},"retmeg":"促销验证成功","tcouponList":[{"favcode":"XJQ_2015-03-12_s36","favorablecode":"9LWBWQF","cost":"10","usenum":"10","usednum":"0","ordermount":"100"},{"favcode":"XJQ_2015-03-12_s36","favorablecode":"SKQI5T9","cost":"10","usenum":"10","usednum":"0","ordermount":"100"}]},"_ReturnMsg":"验证通过"};
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			if(resultJson._ReturnData.retcode == 0000) {
+				var price = resultJson._ReturnData.coupondata.promfee;
+				var usedlist = resultJson._ReturnData.couponlist;
+				$('.fill-coupon .wrap a').addClass('hidden');
+				$('.fill-coupon .wrap p').addClass('hidden');
+				$('.test-ok').removeClass('hidden');
+				$('.test-ok i').html(price);
+				$('.coupon-finish-btn').removeClass('hidden');
+				$('.coupon-finish-btn').on('tap',function(){
+					storage.setItem("couponvalue", price);//传给fill页面数据抵扣价格
+					storage.setItem("couponlist", usedlist);//传给fill页面数据抵扣价格
+					window.location.href = "fill.html?t=" + t;
+				});	
+			} else {
+				$('.fill-coupon .wrap a').addClass('hidden');
+				$('.fill-coupon .wrap p').addClass('hidden');
+				$('.test-fail').removeClass('hidden');
+				var msn = parseInt(resultJson._ReturnData.coupondata.couponuse);
+				var output;
+				switch (msn)
+				{	case 1:
+					output = "抱歉，您购物车中的商品不能使用该现金券";
+					break;
+					case 2:
+					output = "抱歉，您选择的现金券总面值超出最大可用范围";
+					break;
+					case 3:
+					output = "抱歉，该现金券已被使用";
+					break;
+					case 4:
+					output = "抱歉，您的终端未绑定该现金券，不能使用";
+					break;
+					case 5:
+					output = "抱歉，该现金券不存在";
+					break;
+					default:output = "验证失败";
+				}
+				
+				$('.test-fail').html(output);
+				$('.coupon-cancel-btn').removeClass('hidden');
+				$('.coupon-cancel-btn').on('tap',function(){
+					$('.fill-coupon-use input').val('');
+					$('.coupon-use-x').addClass('hidden');
+					$('.fill-coupon .wrap p').addClass('hidden');
+					$('.fill-coupon .wrap a').addClass('hidden');
+					$('.fill-coupon .wrap .coupon-test-btn').removeClass('hidden');	
+				});	
+			}
+			$('.coupon-use-x').removeClass('hidden');
+		}
+		else {
+			showAlertMsg(resultJson._ReturnMsg);
+		}			
+	});
+	//点击弹窗确定隐藏弹窗
+	$('.popup-btn').on('tap',function(){
+		$('.masker').addClass('hidden');
+		$('.popup').addClass('hidden');
+	});
+	//点击手动和选择现金券进行切换
+	$('.select-coupon-tab').on('tap',function(){
+		$(this).find('em').addClass('tab-red');	
+		$('.hand-coupon-tab em').removeClass('tab-red');	
+		$('.fill-coupon .wrap p').addClass('hidden');
+		$('.fill-coupon .wrap a').addClass('hidden');
+		$('.coupon-pa').removeClass('hidden');
+		$('.coupon-sure').removeClass('hidden');
+		$('.fill-coupon-use').addClass('hidden');
+		$('.select-coupon').removeClass('hidden');				
+	});
+	$('.hand-coupon-tab').on('tap',function(){
+		$(this).find('em').addClass('tab-red');	
+		$('.select-coupon-tab em').removeClass('tab-red');	
+		$('.fill-coupon .wrap p').addClass('hidden');
+		$('.fill-coupon .wrap a').addClass('hidden');
+		$('.coupon-test-btn').removeClass('hidden');
+		$('.fill-coupon-use').removeClass('hidden');
+		$('.select-coupon').addClass('hidden');
+	});
+	//选择优惠券
+	$('.coupon-off').on('tap',function(){
+		if($(this).hasClass('coupon-on')) {	
+			$(this).removeClass('coupon-on');
+		}else {	
+			$(this).addClass('coupon-on');
+		}
+	});
+	//优惠券加减号
+	$('.coupon-change').on('tap',function(event){
+		event.stopPropagation();		
+	});
+	$('.coupon-plus').on('tap',function(){
+		var n=parseInt($(this).prev().attr('value'));
+		var surplus=$(this).parent().siblings().find('.coupon-surplus').html(); 
+		if(n<surplus)
+		{$(this).prev().attr('value',n+1);}	
+	});
+	$('.coupon-minus').on('tap',function(){
+		var n=parseInt($(this).next().attr('value'));
+		if(n>1){$(this).next().attr('value',n-1);}		
+	});
+	//手动输入优惠券点击叉的时候清除
+	$('.coupon-use-x').on('tap',function(event){
+		$('.fill-coupon-use input').val('');
+		$(this).addClass('hidden');
+		$('.fill-coupon .wrap p').addClass('hidden');
+		$('.fill-coupon .wrap a').addClass('hidden');
+		$('.fill-coupon .wrap .coupon-test-btn').removeClass('hidden');
+	});
+});
+
+
+
+
+
+
+
+

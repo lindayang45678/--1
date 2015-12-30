@@ -1,0 +1,922 @@
+package com.lakala.module.order.service.impl;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import w.com.lakala.order.model.CouList;
+import w.com.lakala.order.model.GoodsW;
+import w.com.lakala.order.model.Goodsaddorder;
+import w.com.lakala.order.model.OrderInfoW;
+import w.com.lakala.order.model.OrderReturnaddorder;
+import w.com.lakala.order.model.RetStatusaddorder;
+
+import com.lakala.base.model.TfavorableruleCouponBatch;
+import com.lakala.base.model.Tgoodskuinfo;
+import com.lakala.base.model.Tshopkeeperaddr;
+import com.lakala.model.BillInfo;
+import com.lakala.model.ReturnBillInfo;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.vo.TgoodsPublishKdbSkuO2o;
+import com.lakala.module.order.model.AddOrderInput;
+import com.lakala.module.order.model.CartStoreR;
+import com.lakala.module.order.model.CheckCoupGoodsReturn;
+import com.lakala.module.order.model.CheckCoupProReturn;
+import com.lakala.module.order.model.CheckCouponGoodslist;
+import com.lakala.module.order.model.CheckCouponInfo;
+import com.lakala.module.order.model.CheckCouponReturn;
+import com.lakala.module.order.model.Coupons;
+import com.lakala.module.order.model.GoodsR;
+import com.lakala.module.order.model.RetStatusR;
+import com.lakala.module.order.model.ShopCommAddrInput;
+import com.lakala.module.order.model.StoreReturnR;
+import com.lakala.module.order.model.TCoupon;
+import com.lakala.module.order.service.GenerateOrderService;
+import com.lakala.promotion.vo.CouponBean;
+import com.lakala.promotion.vo.GoodsVO;
+import com.lakala.promotion.vo.PlaceOrderVO;
+import com.lakala.service.PayLakalaService;
+import com.lakala.util.ReturnMsg;
+import com.lakala.base.model.SDBMediaStatistics;
+/**
+ * 物流服务接口的实现
+ * @author ls
+ */
+@Service
+public class GenerateOrderServiceImpl implements GenerateOrderService {
+	Logger logger = Logger.getLogger(GenerateOrderServiceImpl.class);
+	
+	@Autowired
+	private com.lakala.mapper.r.sdbmediastatistics.SdbMediaStatisticsMapper sdbMediaStatisticsMapperR;
+	
+	@Autowired
+	private com.lakala.mapper.r.coupon.TCouponMapper tCouponMapperR;
+	
+	@Autowired
+	private com.lakala.service.Redis redis;
+	
+	@Autowired
+	private com.lakala.mapper.r.goodspublishkdbskuo2o.TgoodsPublishKdbSkuO2oMapper tgoodsPublishKdbSkuO2oMapperR;
+	
+	@Autowired
+	private com.lakala.promotion.remote.OrderRemote OrderRemote;
+	
+	@Autowired
+	private com.lakala.mapper.r.coupon.TfavorableruleCouponBatchMapper tfavorableruleCouponBatchMapperR;
+	
+	@Autowired
+	private com.lakala.mapper.r.goods.TgoodskuinfoMapper tgoodskuinfoMapperR;
+	
+	@Autowired
+	private PayLakalaService payLakalaService;
+	
+	@Autowired
+	private w.com.lakala.order.service.OrderDubboService orderDubboServiceImplW;
+	
+	@Override
+	public ObjectOutput<CheckCouponReturn> checkcoupon(CheckCouponInfo cou) {
+		ObjectOutput<CheckCouponReturn> data = new ObjectOutput<CheckCouponReturn>();
+
+
+		//9000--psam号或手机号不能为空!
+		//9001--某个优惠券不可用
+		String borc = cou.getWholesale();
+		String retcode = "";
+		String retmeg = "";
+		String remark = "";
+		String bdflag = "0";//优惠券绑定标志
+		String syflag = "0";//优惠券使用标志
+		String result = "";
+		String tel = "";
+		PlaceOrderVO pvo = new PlaceOrderVO();
+		List<Coupons> errorlist = new ArrayList<Coupons>();
+		
+		logger.info("checkcoupon tel==================== >> " + tel);
+		logger.info("checkcoupon 2c or 2b ================== >> " + borc);
+		logger.info("checkcoupon --传来的 -- psam ======================= >> " + cou.getPasmid());
+		SDBMediaStatistics sdb = null;
+		try{
+			 sdb = this.getSdbMediaStatisticsByPsam(cou.getPasmid());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		System.out.println("11111111111111111111111");
+		if("2B".equals(borc) || "2b".equals(borc)){
+			tel = sdb.getMobile();
+		}else{
+			tel = cou.getCustelno();
+		}
+		
+		if(cou.getCouponlist() != null && cou.getCouponlist().size() > 0){
+			
+			List<Map> couponlist = cou.getCouponlist();
+			Map<String, String> map = null;
+			TCoupon tc = null;
+			CouponBean cb = null;
+			List<CouponBean> cblist = new ArrayList<CouponBean>();
+			if(couponlist != null){
+				for(Map cs : couponlist){
+					
+					tc = new TCoupon();
+					map = new HashMap<String, String>();
+					map.put("coupon", String.valueOf(cs.get("couponCode")));
+					map.put("num", String.valueOf(cs.get("count")));
+					map.put("tel", tel);
+					map.put("psam", cou.getPasmid());
+					
+					if("2B".equalsIgnoreCase(borc)){
+						tc = this.tCouponMapperR.selectUseCouponByMapWithPsam(map);
+						
+					}else{
+						tc = this.tCouponMapperR.selectUseCouponByMap(map);
+						
+					}
+					
+					 if(tc ==  null){
+						 Coupons cs1 = new Coupons();
+						 cs1.setCouponCode(String.valueOf(cs.get("couponCode")));
+							cs1.setRemark("此优惠券不存在！");
+							cs1.setIsValidate(0);
+							errorlist.add(cs1);
+							bdflag = "1";
+							syflag = "5";
+							break;
+					 }
+					 logger.info("checkcoupon --tcoupon -- psam ======================= >> " + tc.getDeviceno());
+					 if("2B".equalsIgnoreCase(borc)){
+						 if(tel.equalsIgnoreCase(tc.getTel()) && null != tc.getDeviceno()){
+							
+						 }else{
+							 Coupons cs1 = new Coupons();
+							 cs1.setCouponCode(String.valueOf(cs.get("couponCode")));
+							 cs1.setRemark("您的手机号未绑定该优惠券，不能使用！");
+								cs1.setIsValidate(0);
+								errorlist.add(cs1);
+								bdflag = "1";
+								syflag = "4";
+								break;
+						 }
+					 }else{
+						 if( tel.equalsIgnoreCase(tc.getTel()) && null == tc.getDeviceno()){
+							 
+						 }else{
+							 Coupons cs1 = new Coupons();
+							 cs1.setCouponCode(String.valueOf(cs.get("couponCode")));
+							 cs1.setRemark("您的手机号未绑定该优惠券，不能使用！");
+								cs1.setIsValidate(0);
+								errorlist.add(cs1);
+								bdflag = "1";
+								syflag = "4";
+								break;
+						 }
+						 
+					 }
+					 
+					  cb = new CouponBean();
+					  cb.setCouponCode(String.valueOf(cs.get("couponCode")));
+					  cb.setCount(Integer.parseInt(String.valueOf(cs.get("count"))));
+					  cblist.add(cb);
+				}
+				if(!bdflag.equals("1")){
+					 pvo.couponList = cblist;
+				}
+				
+			}
+		}
+
+		//pvo.code = cou.getCoupon();
+		pvo.pasmId = cou.getPasmid();
+		
+
+		List<Map> rList = cou.getItems();
+
+		if (rList == null || rList.size() == 0) {
+			CheckCouponReturn ct = new CheckCouponReturn();
+			ct.setRetcode("0000");
+			ct.setRetmeg("");
+			ct.setFlag("0");
+			CheckCoupProReturn court = new CheckCoupProReturn();
+			court.setCoupon("");
+			court.setCouponvalue("0.00");
+			court.setLogisfee("0.00");
+			court.setPromfee("0.00");
+			court.setGoodstotal("0.00");// 纯商品价格
+			court.setTotal("0.00");// 不包含运费的总金额
+			court.setActualtotal(String.valueOf("0.00"));// 最终刷卡金额
+			court.setCouponuse("2");
+			List<CheckCoupGoodsReturn> items = new ArrayList<CheckCoupGoodsReturn>();
+			ct.setTcouponlist(new ArrayList<TCoupon>());
+			ct.setCoupondata(court);
+			ct.setCouponlist(new ArrayList<Coupons>());
+			data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			data.set_ReturnMsg("验证通过");
+			data.set_ReturnData(ct);
+			return data;
+		} else {
+			for (Map ca : rList) {
+				BigDecimal price;
+				TgoodsPublishKdbSkuO2o o2oInfo;
+				// 查价格
+				try {
+					price = redis.operatePriceAndStore(pvo.pasmId,
+							String.valueOf(ca.get("channel")), Long.parseLong(String.valueOf(ca.get("skuo2oid"))),
+							Long.parseLong(String.valueOf(ca.get("skuid"))),Long.parseLong(String.valueOf(ca.get("goodscount"))),-1,sdb.getTermFbtype(),Long.parseLong(sdb.getCityAreaNo()));
+					if (price.toString().equals("-1")) {
+						o2oInfo = tgoodsPublishKdbSkuO2oMapperR
+								.selectsaleo2oinfo(Integer.parseInt(String.valueOf(ca.get("skuo2oid"))));
+						if(o2oInfo != null && o2oInfo.getSaleprice() != null){
+							price = new BigDecimal(o2oInfo.getSaleprice());
+						}
+						logger.info("db price  = " + price);
+					}
+					pvo.addGoods(new GoodsVO(Long.parseLong(String.valueOf(ca.get("skuid"))), String.valueOf(ca.get("goodsname")), price,
+							Integer.parseInt(String.valueOf(ca.get("goodscount"))), new BigDecimal("0.00"), String.valueOf(ca.get("channel")),String.valueOf(ca.get("skuo2oid"))));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			// 调用促销模块
+			if(pvo.goodsList!= null && pvo.goodsList.size() > 0){
+				pvo = (PlaceOrderVO) OrderRemote.executeByChannel("kdb", pvo);
+			}
+			
+			List<TCoupon> tclist = new ArrayList<TCoupon>();
+			if("2B".equals(borc) || "2b".equals(borc)){
+				tclist = this.getTcouponListByPsam(sdb.getMobile());
+			}
+			
+			List<TCoupon> newtclist = new ArrayList<TCoupon>();
+			List<TCoupon> newtclist2 = new ArrayList<TCoupon>();
+			List<Long> pcidlist = pvo.batchidList;
+			logger.info("tclist =========================== >> " + tclist);
+			logger.info("pcidlist ========================= >> " + pcidlist);
+			if(tclist != null && tclist.size() > 0 && pcidlist != null && pcidlist.size() > 0){
+				
+				for(TCoupon co : tclist){
+					for(Long pcid : pcidlist){
+						logger.info("batchid ====================== >> " + pcid);
+						if(co.getBatchtickeid().equals(pcid)){
+							newtclist.add(co);
+						}
+					}
+				}
+				if(newtclist != null && newtclist.size() > 0){
+					List<TfavorableruleCouponBatch> balist = this.tfavorableruleCouponBatchMapperR.selectBybatchidList(pcidlist);
+					if(balist != null &&  balist.size() > 0){
+						for(TCoupon co : newtclist){
+							for(TfavorableruleCouponBatch pcid : balist){
+								if(co.getBatchtickeid().equals(pcid.getBatchid())){
+									co.setOrdermount(pcid.getOrderamount().setScale(2, BigDecimal.ROUND_HALF_UP));
+									newtclist2.add(co);
+								}
+							}
+						}
+					}
+				}
+				
+			}
+			
+			int i = 0;
+			CheckCouponReturn ct = new CheckCouponReturn();
+			CheckCoupProReturn court = new CheckCoupProReturn();
+			if(bdflag.equals("1")){
+				//优惠券与手机号不绑定
+				ct.setRetcode("9000");
+				ct.setRetmeg("优惠券无效");
+			}else{
+				if(pvo.useCoupon != null && pvo.useCoupon.equals("0")){
+					ct.setRetcode("0000");
+					ct.setRetmeg("促销验证成功");
+				}else{
+					ct.setRetcode("9000");
+					ct.setRetmeg("优惠券无效");
+				}
+			}
+			
+			
+			court.setCoupon(pvo.code);
+			court.setCouponvalue(String.valueOf(pvo.couponPrice.setScale(2, BigDecimal.ROUND_HALF_UP)));
+			court.setLogisfee(String.valueOf(pvo.freight.setScale(2, BigDecimal.ROUND_HALF_UP)));
+			
+			BigDecimal allfav = pvo.favAmount.add(pvo.couponPrice);
+			
+			if(allfav.compareTo(pvo.goodsTotal.add(pvo.freight)) >0){
+				allfav = pvo.goodsTotal.add(pvo.freight);
+			}
+			court.setPromfee(String.valueOf(allfav));
+			court.setGoodstotal(String.valueOf(pvo.goodsTotal.setScale(2,   BigDecimal.ROUND_HALF_UP)));// 纯商品价格
+			court.setTotal(String.valueOf(pvo.totalAmount.setScale(2, BigDecimal.ROUND_HALF_UP)));//最终刷卡金额
+			court.setActualtotal(String.valueOf(pvo.totalAmount.setScale(2,   BigDecimal.ROUND_HALF_UP)));// 最终刷卡金额
+			if(syflag.equals("4")){
+				court.setCouponuse("4");
+			}else if(syflag.equals("5")){
+				court.setCouponuse("5");
+			}else{
+				court.setCouponuse(pvo.useCoupon);
+			}
+			logger.info("syflag        ================= >> " + syflag);
+			logger.info("pvo.useCoupon ================= >> " + pvo.useCoupon);
+			List<CheckCoupGoodsReturn> items = new ArrayList<CheckCoupGoodsReturn>();
+			CheckCoupGoodsReturn goodsw;
+			for (GoodsVO gsvo : pvo.goodsList) {
+				goodsw = new CheckCoupGoodsReturn();
+				goodsw.setSkuid(String.valueOf(gsvo.id));
+				goodsw.setSkuo2oid(gsvo.skuo2oId);
+				goodsw.setGoodsname(gsvo.name);
+				goodsw.setGoodscount(String.valueOf(gsvo.num));
+				goodsw.setGoodssaleprice(String.valueOf(gsvo.price));
+				goodsw.setGoodsactualprice(String.valueOf(gsvo.actualPrice));
+				goodsw.setGoodtotalprice(String.valueOf(gsvo.totalPrice));
+				goodsw.setChannel(gsvo.channelId);
+				if (gsvo.flag == false) {
+					goodsw.setIsgift("0");
+				} else {
+					goodsw.setIsgift("1");
+				}
+				goodsw.setParentid(String.valueOf(gsvo.parentId));
+				items.add(goodsw);
+			}
+			court.setItems(items);
+			
+			if(pvo.couponList != null && pvo.couponList.size() > 0){
+				List<Coupons> clist = new ArrayList<Coupons>();
+				Coupons cps = null;
+				for(CouponBean cp : pvo.couponList){
+					cps = new Coupons();
+					cps.setBatchCode(cp.getBatchCode());
+					cps.setCount(String.valueOf(cp.getCount()));
+					cps.setCouponCode(cp.getCouponCode());
+					cps.setCouponPrice(cp.getCouponPrice());
+					cps.setIsValidate(cp.getIsValidate());
+					cps.setRemark(cp.getRemark());
+					cps.setTtlCouponPrice(cp.getTtlCouponPrice());
+					clist.add(cps);
+				}
+				ct.setCouponlist(clist);
+			}else{
+				ct.setCouponlist(errorlist);
+			}
+			ct.setCoupondata(court);
+			ct.setTcouponlist(newtclist2);
+			ct.setWholesale(cou.getWholesale());
+			data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			data.set_ReturnMsg("验证通过");
+			data.set_ReturnData(ct);
+			return data;
+		}
+
+	
+	}
+	@Override
+	public SDBMediaStatistics getSdbMediaStatisticsByPsam(String psam) {
+		com.lakala.base.model.SDBMediaStatistics sdb = this.sdbMediaStatisticsMapperR.selectSdbMediaStatisticsByAPPPsam(psam);
+		return sdb;
+	}
+	
+	public List<TCoupon> getTcouponListByPsam(String tel) {
+		// TODO Auto-generated method stub
+		logger.info("getTcouponListByPsam psam =============== >> " + tel);
+		List<TCoupon> tlist = this.tCouponMapperR.getTcouponListByPsam(tel);
+		if(tlist != null && tlist.size() > 0){
+			for(TCoupon tc : tlist){
+				//优惠券号，截取“_”后的部分，传给前端
+				String ss = tc.getFavorablecode();
+				/*String code = "";
+				if(ss.length() <=7){
+					code = ss;
+				}else{
+					code = ss.substring(ss.length()-7, ss.length());
+				}*/
+				tc.setFavorablecode(ss);
+				int n = tc.getUsenum() - tc.getUsednum();
+				double mo = tc.getCost();
+				BigDecimal   b   =   new   BigDecimal(mo);  
+				double   f1   =   b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+				tc.setCost(f1);
+				tc.setUsenum(n);
+			}
+		}
+		
+		return tlist;
+	}
+	@Override
+	public ObjectOutput getshopcommaddr(ShopCommAddrInput ei) {
+		
+		ObjectOutput data = new ObjectOutput();
+		if(ei == null || ei.getNetno() == null || ei.getNetno().equals("")){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		 Map<String, Object> params = new HashMap<String, Object>();
+	     params.put("netno", ei.getNetno());
+		List<Tshopkeeperaddr> tshopkeeperaddrList = sdbMediaStatisticsMapperR.findShopkeeperAddrByNetNo(params);
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnMsg("验证通过");
+		data.set_ReturnData(tshopkeeperaddrList);
+		return data;
+	}
+	@Override
+	public ObjectOutput addorder(AddOrderInput in) {
+		
+		ObjectOutput data = new ObjectOutput();
+		if(in == null ){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		OrderInfoW order = null;
+		try{
+			order = changeOrderInfoW(in);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		List<GoodsW> goodsList = order.getItems();
+		if(order.getDeviceno() == null || order.getDeviceno().trim().equals("")){
+			
+			OrderReturnaddorder or = new OrderReturnaddorder();
+			
+			RetStatusaddorder rs = new RetStatusaddorder();
+			rs.setRetCode("9000");
+			rs.setErrMsg("终端编号（PSAM）不能为空！");
+			or.setRetStatus(rs);
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("终端编号（PSAM）不能为空！");
+			data.set_ReturnData(or);
+			return data;
+			
+		}
+		SDBMediaStatistics sdb = this.getSdbMediaStatisticsByPsam(order.getDeviceno());
+		List<GoodsR> goodsListR = new ArrayList<GoodsR>();
+		GoodsR gr;
+		for(GoodsW gw: goodsList){
+			gr = new GoodsR();
+			gr.setSkuid(gw.getSkuid());
+			gr.setSkuo2oid(gw.getSkuo2oid());
+			gr.setGoodscount(gw.getGoodscount());
+			gr.setChannelcode(gw.getChannelcode());
+		//	logger.info("gw.getSkuid() = " + gw.getSkuid() + "; gw.getSkuo2oid() =" + gw.getSkuo2oid());
+			goodsListR.add(gr);
+		}
+		StoreReturnR st = this.selectcartstore(Integer.parseInt(order.getSource()),goodsListR);
+		RetStatusR rt = st.getRetStatus();
+		RetStatusR prt;
+		String retCode = rt.getRetCode();
+		
+		if(retCode.trim().equals("0001") || retCode.trim().equals("9000")){
+			
+			OrderReturnaddorder or = new OrderReturnaddorder();
+			
+			RetStatusaddorder rs = new RetStatusaddorder();
+			rs.setRetCode("9000");
+			rs.setErrMsg("该商品不存在或库存不足");
+			or.setRetStatus(rs);
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("该商品不存在或库存不足！");
+			data.set_ReturnData(or);
+			return data;
+		}else{
+			prt = new RetStatusR();
+			List<GoodsR> rList = st.getItems();
+			
+			PlaceOrderVO pvo = new PlaceOrderVO();
+			
+			//pvo.code = order.getCoupons();
+			pvo.pasmId = order.getDeviceno();
+			
+			for(GoodsR ca : rList){
+				BigDecimal price;
+				//查价格
+				try{
+					 price = redis.operatePriceAndStore(pvo.pasmId,ca.getChannelcode(),Long.parseLong(ca.getSkuo2oid())
+							,Long.parseLong(ca.getSkuid()),Long.parseLong(ca.getGoodscount()),-1,sdb.getTermFbtype(),Long.parseLong(sdb.getCityAreaNo()));
+					if(price.toString().equals("-1")){
+						
+						price = new BigDecimal(ca.getSaleprice());
+					}
+				}catch(Exception e){
+					price = new BigDecimal(ca.getSaleprice());
+				}
+				
+				pvo.addGoods(new GoodsVO(Long.parseLong(ca.getSkuid()), ca.getGoodsname(),
+						price, Integer.parseInt(ca.getGoodscount()),
+						new BigDecimal("0.00"),ca.getChannelcode(),ca.getSkuo2oid()));
+			}
+			
+			if(order.getCoulist() != null && order.getCoulist().size() > 0){
+				List<String> coucodelist = new ArrayList<String>();
+				
+				List<CouList> couponlist = order.getCoulist();
+				CouponBean cb = null;
+				List<CouponBean> cblist = new ArrayList<CouponBean>();
+				if(couponlist != null){
+					for(CouList cs : couponlist){
+						  cb = new CouponBean();
+						  cb.setCouponCode(cs.getCouponCode());
+						  cb.setCount(Integer.parseInt(cs.getCount()));
+						  cblist.add(cb);
+						  pvo.couponList = cblist;
+					}
+				}
+				
+			}
+		
+			//调用促销模块
+			logger.info("---------------OrderRemote start -------------------" + System.currentTimeMillis());
+			PlaceOrderVO vo = new PlaceOrderVO();
+			if(pvo.goodsList!= null && pvo.goodsList.size() > 0){
+				 vo = (PlaceOrderVO) OrderRemote.executeByChannel("kdb", pvo);
+			}
+			logger.info("---------------OrderRemote end -------------------" + System.currentTimeMillis());
+			
+			int i = 0;
+			CheckCouponReturn ct = new CheckCouponReturn();
+			List<CouponBean> cblist1 = vo.couponList;
+			if(cblist1 != null && cblist1.size() >0){
+				for(CouponBean cb : cblist1){
+					if(cb.getIsValidate() == 0){
+						i = 1;
+						break;
+					}
+				}
+			}
+			if(i == 1){
+				OrderReturnaddorder or = new OrderReturnaddorder();
+				
+				RetStatusaddorder rs = new RetStatusaddorder();
+				rs.setRetCode("9000");
+				rs.setErrMsg("优惠券不可用");
+				or.setRetStatus(rs);
+				data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				data.set_ReturnMsg("优惠券不可用！");
+				data.set_ReturnData(or);
+				return data;
+			}
+			
+			if(vo.useCoupon != null && vo.useCoupon.equals("0")){
+			
+			}else{
+				if(vo.couponList!= null && vo.couponList.size() >0){
+					OrderReturnaddorder or = new OrderReturnaddorder();
+					
+					RetStatusaddorder rs = new RetStatusaddorder();
+					rs.setRetCode("9000");
+					rs.setErrMsg("优惠券不可用");
+					or.setRetStatus(rs);
+					data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+					data.set_ReturnMsg("优惠券不可用！");
+					data.set_ReturnData(or);
+					return data;
+				}
+				
+			}
+			
+			BigDecimal allfav = vo.favAmount.add(vo.couponPrice);
+			BigDecimal zzsk = vo.totalAmount;//最终刷卡金额
+			if(zzsk.compareTo(new BigDecimal("0")) <=0){
+				allfav  = vo.goodsTotal.add(vo.freight);
+			}
+			
+			order.setGoodsTotal(vo.goodsTotal.setScale(2,   BigDecimal.ROUND_HALF_UP));//纯商品金额
+		//	logger.info("促销：vo.goodsTotal ================>>" + vo.goodsTotal);
+			order.setFavAmount(vo.favAmount.setScale(2,   BigDecimal.ROUND_HALF_UP));//活动优惠金额
+		//	logger.info("促销：vo.favAmount ============= >> " + vo.favAmount);
+			order.setCouponPrice(vo.couponPrice.setScale(2,   BigDecimal.ROUND_HALF_UP));//优惠券金额
+		//	logger.info("促销：vo.couponPrice ============ >> " + vo.couponPrice);
+			order.setTotal(vo.totalAmount.setScale(2,   BigDecimal.ROUND_HALF_UP));//最终刷卡金额
+		//	logger.info("促销：vo.totalAmount =========== >> " + vo.totalAmount);
+			order.setJson(vo.json);
+			order.setActivityType(String.valueOf(vo.activityType));
+			order.setActivityName(vo.promotionName);
+			order.setIsUseCoupon(vo.useCoupon);
+			order.setLogisfee(vo.freight.setScale(2,   BigDecimal.ROUND_HALF_UP));
+			BigDecimal allmo = vo.total.add(vo.freight).subtract(vo.couponPrice);
+			//判断最终刷卡金额，如果 <= 0。则置为已支付
+			if(vo.totalAmount.compareTo(new BigDecimal("0.00")) == -1 || vo.totalAmount.compareTo(new BigDecimal("0.00")) == 0){
+			//	logger.info("=============yes=================");
+				order.setIspay("150");
+			}else{
+			//	logger.info("=============no=================");
+				order.setIspay("149");
+			}
+			List<GoodsVO> gvoList = vo.goodsList;
+			GoodsW goodsw;
+			List<GoodsW> newGoodsWList = new ArrayList<GoodsW>();
+				for(GoodsVO gsvo : gvoList){
+						goodsw = new GoodsW();
+						goodsw.setSkuid(String.valueOf(gsvo.id));
+						goodsw.setSkuo2oid(gsvo.skuo2oId);
+						goodsw.setActivityId(String.valueOf(gsvo.activityId));
+						goodsw.setActivityName(gsvo.promotionName);
+						goodsw.setType(String.valueOf(gsvo.type));
+						goodsw.setJson(gsvo.json);
+						goodsw.setGoodsname(gsvo.name);
+						goodsw.setGoodscount(String.valueOf(gsvo.num));
+						goodsw.setGoodssaleprice(gsvo.price.setScale(2,   BigDecimal.ROUND_HALF_UP));
+						goodsw.setActualPrice(gsvo.actualPrice.setScale(2,   BigDecimal.ROUND_HALF_UP));
+						goodsw.setFavAmount(gsvo.favAmount.setScale(2,   BigDecimal.ROUND_HALF_UP));
+						goodsw.setChannelcode(gsvo.channelId);
+						goodsw.setCouponAmount(gsvo.couponAmount.setScale(2,   BigDecimal.ROUND_HALF_UP));
+					//	logger.info("gsvo.couponAmount ============== >> " + gsvo.couponAmount);
+						if(gsvo.flag == false){
+							goodsw.setFlag("false");
+						}else{
+							goodsw.setFlag("true");
+						}
+						goodsw.setParentId(String.valueOf(gsvo.parentId));
+						for(GoodsW gw:order.getItems()){
+							if(gw.getSkuo2oid().equals(goodsw.getSkuo2oid())){
+
+								goodsw.setIs3h(gw.getIs3h());
+							}
+						}
+						newGoodsWList.add(goodsw);
+				}
+			order.setItems(newGoodsWList);
+			w.com.lakala.order.model.OrderReturn ot = this.orderDubboServiceImplW.insertOrder(order);
+			
+			String rtflag = ot.getRtflag();
+			if(rtflag.equals("0001") || rtflag.equals("9000")){
+				
+				OrderReturnaddorder or = new OrderReturnaddorder();
+				
+				RetStatusaddorder rs = new RetStatusaddorder();
+				rs.setRetCode("9000");
+				rs.setErrMsg("该商品不存在或库存不足");
+				or.setRetStatus(rs);
+				data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				data.set_ReturnMsg("该商品不存在或库存不足！");
+				data.set_ReturnData(or);
+				return data;
+				
+				
+			}else{
+				
+				//获取账单号
+				BillInfo billinfo = new BillInfo();
+				String source = order.getSource();
+				ReturnBillInfo bill = null;
+				if(source != null && "334".equals(source)){
+					
+				}else{
+					
+					billinfo.setOrderID(String.valueOf(ot.getTallorderid()));
+					
+				//	logger.info("生成账单号时，最终支付金额：vo.totalAmount ============》》 " + vo.totalAmount );
+			         billinfo.setAmount(vo.totalAmount);
+			         billinfo.setPaytype("KDB");
+			         
+			         if(order.getIspay().equals("149")){
+				         logger.info("tallorderid ============== >> " + ot.getTallorderid());
+					//	 bill = payLakalaService.payLakala(billinfo);
+					//	 this.orderDubboServiceImplW.updateBillNo2TallOrder(ot.getTallorderid(), bill.getResbillno());
+						 this.orderDubboServiceImplW.updateBillNo2TallOrder(ot.getTallorderid(), "1234567890");
+			         }
+				}
+				OrderReturnaddorder or = new OrderReturnaddorder();
+				
+				
+				or.setTallorderid(String.valueOf(ot.getTallorderid()));
+				or.setTorderid(ot.getOrderid());
+				or.setSource(order.getSource());
+				or.setCoupons(order.getCoupons());
+				or.setCustelno(order.getCustelno());
+				or.setCusname(order.getCusname());
+				or.setPhonename(order.getPhonename());
+				or.setPhoneidcard(order.getPhoneidcard());
+				or.setDeviceno(order.getDeviceno());
+				or.setUserid(order.getUserid()); 
+				or.setLogisfee(order.getLogisfee().setScale(2,   BigDecimal.ROUND_HALF_UP));
+				or.setBilltype(order.getBilltype());
+				or.setBilltitle(order.getBilltitle());
+				or.setIspay(order.getIspay());
+				or.setPaychanel(order.getPaychanel());
+				or.setPaytype(order.getPaytype());
+				or.setPaystage(order.getPaystage());
+				or.setBankid(order.getBankid());
+				or.setProvinceid(order.getProvinceid());
+				or.setCityid(order.getCityid());
+				or.setAreaid(order.getAreaid());
+				or.setAddressfull(order.getAddressfull());
+				or.setCode(order.getCode());
+				or.setWeekdevice(order.getWeekdevice());
+				or.setDevicetype(order.getDevicetype());
+				or.setRequiretime(order.getRequiretime());
+				if(source != null && "334".equals(source)){
+					
+				}else{
+					if(order.getIspay().equals("149")){
+						//or.setBillno(bill.getResbillno());//调用支付接口，获取账单号
+						or.setBillno("1234567890");
+					}
+				}
+				
+				or.setRemark(order.getRemark());
+				or.setGoodsTotal(order.getGoodsTotal().setScale(2,   BigDecimal.ROUND_HALF_UP));
+				or.setFavAmount(allfav.setScale(2,   BigDecimal.ROUND_HALF_UP));
+				or.setTotal(vo.totalAmount.setScale(2,   BigDecimal.ROUND_HALF_UP));
+				//logger.info("返回值：纯商品价格  order.getGoodsTotal()=========== 》》 " + order.getGoodsTotal());
+				//logger.info("返回值：总的优惠金额  fav =========== 》》 " + allfav);
+				//logger.info("返回值：最终刷卡金额  vo.totalAmount ===========　》》" + vo.totalAmount);
+				//logger.info("返回值：支付状态 order.getIspay()  ===========　》》　" + order.getIspay());
+				//logger.info("返回值： 运费： vo.freight      =============》》" + vo.freight);
+				List<Goodsaddorder> newgoodsList = new ArrayList<Goodsaddorder>();
+				
+				Goodsaddorder ng = new Goodsaddorder();
+				for(GoodsW gosw : newGoodsWList){
+					
+					ng.setTorderid(ot.getOrderid());
+					ng.setSkuid(gosw.getSkuid());
+					ng.setSkuo2oid(gosw.getSkuo2oid());
+					ng.setGoodsname(gosw.getGoodsname());
+					ng.setGoodssaleprice(gosw.getGoodssaleprice().setScale(2,   BigDecimal.ROUND_HALF_UP));
+					ng.setGoodscount(gosw.getGoodscount());
+					ng.setFlag(gosw.getFlag());
+					ng.setParentId(gosw.getParentId());
+					ng.setChannelcode(gosw.getChannelcode());
+					newgoodsList.add(ng);
+				}
+				
+				or.setItems(newgoodsList);
+				
+				RetStatusaddorder rtt = new RetStatusaddorder();
+				rtt.setRetCode("0000");
+				rtt.setErrMsg("下单成功");
+				or.setRetStatus(rtt);
+				data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+				data.set_ReturnMsg("订单生成成功！");
+				data.set_ReturnData(or);
+				return data;
+			}
+		}
+	
+	}
+	
+	public StoreReturnR selectcartstore(int source, List<GoodsR> goodsList) {
+
+		String goodsname = "";
+
+		String retCode = "0000";
+
+		String errMsg = "购买成功";
+
+		int skuid = 0;
+
+		int o2oid = 0;
+
+		List<GoodsR> skuList = new ArrayList<GoodsR>();
+
+		GoodsR ca;
+		// 订单来源 93:手机商城;94:微信商城;95:开店宝;96:PC商城;334:收款宝;97:其他;357:WAP商城
+		if (source == 95 || source == 357 || source == 334) {
+			for (GoodsR gs : goodsList) {
+
+				int skuo2oid = Integer.parseInt(gs.getSkuo2oid());
+				BigDecimal num = new BigDecimal(gs.getGoodscount());
+
+				TgoodsPublishKdbSkuO2o o2oInfo = tgoodsPublishKdbSkuO2oMapperR
+						.selectsaleo2oinfo(skuo2oid);
+
+				Tgoodskuinfo sku = this.tgoodskuinfoMapperR.selectByPrimaryKey(o2oInfo.getSkuid());
+
+				ca = new GoodsR();
+				ca.setGoodsname(sku.getGoodname());
+				ca.setGoodscount(gs.getGoodscount());
+				ca.setSkuid(gs.getSkuid());
+				ca.setSkuo2oid(gs.getSkuo2oid());
+				ca.setSaleprice(o2oInfo.getSaleprice());
+				ca.setChannelcode(gs.getChannelcode());
+				skuList.add(ca);
+				logger.info("sku.getSkustock() =========== >> " + sku.getSkustock());
+				logger.info("gs.getGoodscount() =========== >> " + gs.getGoodscount());
+				if(null != sku.getTempstoregoodsflag() && 378 != sku.getTempstoregoodsflag()){
+					if (sku.getSkustock().compareTo(num) < 0) {
+						goodsname = sku.getGoodname();
+						skuid = o2oInfo.getSkuid();
+						o2oid = skuo2oid;
+						retCode = "0001";
+						errMsg = "库存不足";
+						CartStoreR cr = new CartStoreR();
+						cr.setSkuid(skuid);
+						cr.setSkuo2oid(o2oid);
+						cr.setGoodsname(goodsname);
+						RetStatusR re = new RetStatusR();
+						re.setRetCode(retCode);
+						re.setErrMsg(errMsg);
+						re.setGoodsname(goodsname);
+						re.setSkuid(skuid);
+						StoreReturnR st = new StoreReturnR();
+						st.setRetStatus(re);
+						st.setItems(skuList);
+
+						return st;
+					}
+				}
+				
+			}
+		}
+
+		CartStoreR cr = new CartStoreR();
+		cr.setSkuid(skuid);
+		cr.setSkuo2oid(o2oid);
+		cr.setGoodsname(goodsname);
+		RetStatusR re = new RetStatusR();
+		re.setRetCode(retCode);
+		re.setErrMsg(errMsg);
+		re.setGoodsname(goodsname);
+		re.setSkuid(skuid);
+		StoreReturnR st = new StoreReturnR();
+		st.setRetStatus(re);
+		st.setItems(skuList);
+
+		return st;
+	}
+	
+	
+	@Override
+	public OrderInfoW changeOrderInfoW(AddOrderInput in) {
+		
+		OrderInfoW order = new OrderInfoW();
+		order.setSource(in.getSource());
+		order.setCoupons(in.getCoupons());
+		order.setCustelno(in.getCustelno());
+		order.setCusname(in.getCusname());
+		order.setPhonename(in.getPhonename());
+		order.setPhoneidcard(in.getPhoneidcard());
+		order.setDeviceno(in.getDeviceno());
+		order.setUserid(in.getUserid());
+		order.setBilltype(in.getBilltype());
+		order.setBilltitle(in.getBilltitle());
+		order.setIspay(in.getIspay());
+		order.setPaychanel(in.getPaychanel());
+		order.setPaytype(in.getPaytype());
+		order.setPaystage(in.getPaystage());
+		order.setBankid(in.getBankid());
+		order.setProvinceid(in.getProvinceid());
+		order.setCityid(in.getCityid());
+		order.setAreaid(in.getAreaid());
+		order.setAddressfull(in.getAddressfull());
+		order.setCode(in.getCode());
+		order.setWeekdevice(in.getWeekdevice());
+		order.setDevicetype(in.getDevicetype());
+		order.setRequiretime(in.getRequiretime());
+		order.setReturnmoney(in.getReturnmoney());
+		order.setRemark(in.getRemark());
+		order.setPaytoken(in.getPaytoken());
+		order.setCustomer(in.getCustomer());
+		order.setMembername(in.getMembername());
+		
+		List<Map> clist = in.getCoulist();
+		
+		if(clist != null && clist.size() > 0){
+			List<CouList> coulist = new ArrayList<CouList>();
+			CouList cou ;
+			for(Map co : clist){
+				cou = new CouList();
+				cou.setCouponCode(String.valueOf(co.get("couponCode")==null ? "": co.get("couponCode")));
+				cou.setCount(String.valueOf(co.get("count") == null ? "" :co.get("count")));
+				coulist.add(cou);
+			}
+			order.setCoulist(coulist);
+		}
+		
+		List<Map> items = in.getItems();
+		if(items != null && items.size() > 0){
+			List<GoodsW> goodslist = new ArrayList<GoodsW>();
+			GoodsW gw ;
+			for(Map good : items){
+				gw = new GoodsW();
+				gw.setSkuo2oid(String.valueOf(good.get("skuo2oid")==null?"":good.get("skuo2oid")));
+				gw.setSkuid(String.valueOf(good.get("skuid")==null?"":good.get("skuid")));
+				gw.setGoodscount(String.valueOf(good.get("goodscount")==null?"":good.get("goodscount")));
+				gw.setChannel(String.valueOf(good.get("channel")==null?"":good.get("channel")));
+				gw.setChannelcode(String.valueOf(good.get("channelcode")==null?"":good.get("channelcode")));
+				gw.setIs3h(Integer.parseInt(String.valueOf(good.get("is3h")==null?"0":good.get("is3h"))));
+				gw.setCustelno(String.valueOf(good.get("custelno")==null?"":good.get("custelno")));
+				gw.setCusname(String.valueOf(good.get("cusname")==null?"":good.get("cusname")));
+				gw.setAddressprovince(String.valueOf(good.get("addressprovince")== null?"":good.get("addressprovince")));
+				gw.setAddresscity(String.valueOf(good.get("addresscity")==null?"":good.get("addresscity")));
+				gw.setAddressarea(String.valueOf(good.get("addressarea")==null?"":good.get("addressarea")));
+				gw.setAddressfull(String.valueOf(good.get("addressfull")==null?"":good.get("addressfull")));
+				gw.setIsdelivertohome(Integer.parseInt(String.valueOf(good.get("isdelivertohome")==null?"0":good.get("isdelivertohome"))));
+				gw.setCustomer(String.valueOf(good.get("customer")==null?"":good.get("customer")));
+				gw.setDeviceno(String.valueOf(good.get("deviceno")==null?"":good.get("deviceno")));
+				
+				goodslist.add(gw);
+			}
+			order.setItems(goodslist);
+			
+		}
+		return order;
+	}
+	
+	
+}

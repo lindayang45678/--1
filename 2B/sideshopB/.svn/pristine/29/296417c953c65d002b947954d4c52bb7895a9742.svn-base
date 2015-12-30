@@ -1,0 +1,121 @@
+package com.lakala.util;
+
+/**
+ * Created by HOT.LIU on 2015/5/20.
+ */
+public class MongoInterfaceUrl {
+    private String left;
+
+    private String list;
+
+    private String detail;
+
+    private String count;
+    
+    private String save;
+    
+    private String modify;
+    
+    private String down;
+    
+    private String publish;
+    
+    private String save_sku;
+    
+    private String modify_sku;
+    
+    private String mongoTestBaseUrl;
+    
+    public String getSave() {
+		return save;
+	}
+    
+
+	public void setSave(String save) {
+		this.save = save;
+	}
+
+	public String getModify() {
+		return modify;
+	}
+
+	public void setModify(String modify) {
+		this.modify = modify;
+	}
+
+	public String getDown() {
+		return down;
+	}
+
+	public void setDown(String down) {
+		this.down = down;
+	}
+
+	public String getPublish() {
+		return publish;
+	}
+
+	public void setPublish(String publish) {
+		this.publish = publish;
+	}
+
+    public String getLeft() {
+        return left;
+    }
+
+    public void setLeft(String left) {
+        this.left = left;
+    }
+
+    public String getList() {
+        return list;
+    }
+
+    public void setList(String list) {
+        this.list = list;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+	public String getMongoTestBaseUrl() {
+		return mongoTestBaseUrl;
+	}
+
+	public void setMongoTestBaseUrl(String mongoTestBaseUrl) {
+		this.mongoTestBaseUrl = mongoTestBaseUrl;
+	}
+
+
+	public String getSave_sku() {
+		return save_sku;
+	}
+
+
+	public void setSave_sku(String save_sku) {
+		this.save_sku = save_sku;
+	}
+
+
+	public String getModify_sku() {
+		return modify_sku;
+	}
+
+
+	public void setModify_sku(String modify_sku) {
+		this.modify_sku = modify_sku;
+	}
+}

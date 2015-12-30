@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.sdbmediastatistics.TShopServiceMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.model.user.TShopService" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="shopId" property="shopId" jdbcType="BIGINT" />
+  </resultMap>
+    
+    <insert id="insertTShopServiceList" parameterType="java.util.List">
+    	<foreach collection="list" item="item" index="index" separator=";">
+    	insert into tshopservice(name,phone,shopId) values (
+    		#{item.name} , #{item.phone}, #{item.shopId}
+    	)
+    	</foreach>
+    </insert>
+    
+    <update id="updateTShopServiceList" parameterType="java.util.List">
+    	<foreach collection="list" item="item" index="index" separator=";">
+    	update tshopservice set name = #{item.name}, phone = #{item.phone}, shopId = #{item.shopId}
+    	where id = #{item.id}
+    	</foreach>
+    </update>
+    
+    <delete id="removeShopServiceList" parameterType="java.lang.Long">
+    	delete from tshopservice where shopId = #{shopid}
+    </delete>
+    
+      
+  <!-- 更新修改小店地址信息,yangjunguo 2015-07-27 -->
+  <update id="uptShopAddInfo" parameterType="map" >
+  	update sdb_media_statistics set 
+  	   prov_no = #{provinceCode,jdbcType=VARCHAR},
+       prov = #{provinceName,jdbcType=VARCHAR},
+       city_no = #{cityCode,jdbcType=VARCHAR},
+       city = #{cityName,jdbcType=VARCHAR},
+       city_area_no = #{areaCode,jdbcType=VARCHAR},
+       city_area = #{areaName,jdbcType=VARCHAR},
+       community_no = #{communityCode,jdbcType=VARCHAR},
+       community = #{communityName,jdbcType=VARCHAR},
+       addr = #{address,jdbcType=VARCHAR},
+       longitude = #{lng,jdbcType=VARCHAR},
+       latitude = #{lat,jdbcType=VARCHAR},
+       net_custom_name = #{shopTitle,jdbcType=VARCHAR},
+       contact_name_1 = #{name,jdbcType=VARCHAR}
+       where mobile = #{mobile,jdbcType=VARCHAR}
+  </update>
+    <!-- 更新修改小店地址信息，同时修改tmemberb里的店主名称 yangjunguo 2015-07-27 -->
+<!--   <update id="uptShopperName" parameterType="map" >
+  	update tmemberb set name = #{name,jdbcType=VARCHAR}
+       where membername = #{mobile,jdbcType=VARCHAR}
+  </update> -->
+    
+    
+    
+    
+    
+    
+</mapper>

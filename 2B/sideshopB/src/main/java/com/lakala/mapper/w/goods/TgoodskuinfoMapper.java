@@ -1,0 +1,24 @@
+package com.lakala.mapper.w.goods;
+
+import java.util.Map;
+
+import com.lakala.base.model.Tgoodinfo;
+import com.lakala.base.model.Tgoodskuinfo;
+
+public interface TgoodskuinfoMapper {
+    int deleteByPrimaryKey(Integer tgoodskuinfoid);
+
+    int insert(Tgoodskuinfo record);
+
+    int insertSelective(Tgoodskuinfo record);
+
+    int updateSKU4PublishByGoodsId(Tgoodinfo record);
+    
+    int updateByPrimaryKeySelective(Tgoodskuinfo record);
+
+    int updateByPrimaryKeyWithBLOBs(Tgoodskuinfo record);
+
+    int updateByPrimaryKey(Tgoodskuinfo record);
+
+	void updateSupplierNameBySupplierId(Map map);
+}

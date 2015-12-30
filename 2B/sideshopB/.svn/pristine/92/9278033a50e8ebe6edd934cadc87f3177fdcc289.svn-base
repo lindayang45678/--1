@@ -1,0 +1,10 @@
+# 拉卡拉快捷/钱包支付
+# 测试
+lakala.callbackurl=http://m.lakalaec.com/webpayapp/redirect/paysucess?source=
+# 生产
+#lakala.callbackurl=http://m.lakalaec.com/webpay/redirect/paysucess?source=
+# 微信网页版支付
+# 测试
+lakala.wxcallbackurl = http://10.1.80.47:8088/webpayapp/wx/getcode
+# 生产
+#lakala.wxcallbackurl = http://10.1.80.47:8089/webpay/wx/getcode

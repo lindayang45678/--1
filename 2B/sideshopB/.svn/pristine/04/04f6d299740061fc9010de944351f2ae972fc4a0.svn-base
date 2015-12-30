@@ -1,0 +1,42 @@
+package com.lakala.module.order.model;
+
+public class Constant {
+	/**
+	 * @author: yhg
+	 * @project:sideshopB
+	 * @time: 2015年3月12日 下午6:14:04
+	 * @todo: TODO
+	 */
+	
+	//订单是否支付  149:未支付;150:已支付
+	public final static int TORDER_ISPAY_DZF = 149; //订单是否支付
+	public final static int TORDER_ISPAY_YZF = 150; //订单是否支付
+	
+	//订单状态  99:未发货;100:发货中;101:部分发货;102:已发货;103:部分签收;104:已签收;216:已拒收;217:物流异常
+	public final static int TORDER_STATE_WFH = 99;
+	public final static int TORDER_STATE_FHZ = 100;
+	public final static int TORDER_STATE_BFFH = 101;
+	public final static int TORDER_STATE_YFH = 102;
+	public final static int TORDER_STATE_BFQS = 103;
+	public final static int TORDER_STATE_YQS = 104;
+	public final static int TORDER_STATE_YJS = 216;
+	public final static int TORDER_STATE_WLYC = 217;
+	
+    //3H商品标识。配送标识：	一小时送达   362;三到五小时送达  363;三到五天送达  364;五天以上送达  365
+	public static final int TORDER_IS3H_1H = 362;
+  	public static final int TORDER_IS3H_3H5H = 363;
+  	
+    //订单配送方式 86:快递到店;87:快递到家
+    public final static int TORDER_ISDELIVERTOHOME_KDDD = 86;  //快递到店
+    public final static int TORDER_ISDELIVERTOHOME_KDDJ = 87;  //快递到家
+    
+    //订单取消状态  136:未取消;137:已取消
+  	public final static int TORDER_CANCELSTATE_WQX = 136; 
+  	public final static int TORDER_CANCELSTATE_YQX = 137; 
+  	
+    //未支付订单库存释放状态  276:未库存库存;275:已释放库存
+  	public final static int TORDER_ISRESTORE_WTB = 276; 
+  	
+  	public static final int TORDER_SOURCE_APPB = 466;
+  	
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>编辑小店信息</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="x-hidden">
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back"></a>
+  		<h1>编辑小店信息</h1>
+        <a href="javascript:;" class="head-right">保存</a>
+	</header>
+    <section class="container editshop1">
+    	<div class="edit-bgborder edit-part1">
+        	<ul>
+            	<li>
+                	<em>小店名称</em><div contenteditable="false">巫龙飞的的小店</div>
+                </li>
+                <li>
+                	<em>店主姓名</em><div>巫龙飞</div>
+                </li>
+                <li>
+                	<em>店主手机</em><input type="tel" value="16010981091" readonly/>
+                </li>
+                <li>
+                	<em>店铺地址</em><div class="max-2line">北京市海淀区中关村金融大厦29层</div>                
+                </li>
+            </ul>
+        </div>
+        <div class="edit-bgborder edit-part2">
+        	<ul>
+            	<li>
+                	<a href="shop-hours.html">
+                    	<em>营业时间</em><div><time>09:00－22:00</time></div>
+                    </a>
+                </li>
+                <li>
+                    	<em>营业状态</em><div><span id="on-off" class="item-right turn-on"><i></i></span><input type="text" id="on-off1" class="item-left" value="营业中" readonly/></div>
+                </li>
+                <li>
+                    	<em>配送方式</em><div><span id="receipt" class="item-right turn-on"><i></i></span><input type="text" id="receipt-2" class="item-left" value="到店自提、送货上门" readonly/></div>
+                </li>
+                <li><em>运费设置</em><div>满29元起送，满79元免5元运费</div></li>
+            </ul>
+        </div>
+        <div class="edit-bgborder upload-icon"><a href="#"><i><img src="../../images/upload-icon.png" alt=""/></i>上传小店招牌</a></div>
+        <div class="shop-logoimg"><img src="../../images/shop-logo.jpg" alt=""/></div>
+    </section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/shops/editshop1.js"></script>
+</html>

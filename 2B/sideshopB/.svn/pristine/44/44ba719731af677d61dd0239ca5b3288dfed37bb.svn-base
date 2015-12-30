@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.profit.TrechargeMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.profit.Trecharge" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="payId" property="payid" jdbcType="VARCHAR" />
+    <result column="netPoint" property="netpoint" jdbcType="VARCHAR" />
+    <result column="netid" property="netid" jdbcType="BIGINT" />
+    <result column="shoperName" property="shopername" jdbcType="VARCHAR" />
+    <result column="shopperMobile" property="shoppermobile" jdbcType="VARCHAR" />
+    <result column="orderCount" property="ordercount" jdbcType="INTEGER" />
+    <result column="duePay" property="duepay" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="failedReason" property="failedreason" jdbcType="VARCHAR" />
+    <result column="wallet" property="wallet" jdbcType="VARCHAR" />
+    <result column="payTime" property="paytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, payId, netPoint, netid, shoperName, shopperMobile, orderCount, duePay, status, 
+    createTime, failedReason, wallet, payTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from trecharge
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPayId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from trecharge
+    where payId = #{payId,jdbcType=INTEGER}
+  </select>
+     <!--结算款单日 -->
+    <select id="selectDuePay" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    select 
+	     	 <include refid="Base_Column_List" />
+	    from trecharge
+	    where netPoint = #{ecNetNo,jdbcType=INTEGER}
+	    			<if test="executetimeStart != null">
+						and <![CDATA[ payTime >= #{executetimeStart}]]>
+					</if>
+					<if test="executetimeEnd != null">
+						and <![CDATA[ payTime  <= #{executetimeEnd}]]>
+					</if>
+	</select>
+     <!--结算款多日 -->
+    <select id="selectDuePayList" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    select 
+	     	 <include refid="Base_Column_List" />
+	    from trecharge
+	    where netPoint = #{ecNetNo,jdbcType=INTEGER}
+	    			<if test="executetimeStart != null">
+						and <![CDATA[ payTime >= #{executetimeStart}]]>
+					</if>
+					<if test="executetimeEnd != null">
+						and <![CDATA[ payTime  <= #{executetimeEnd}]]>
+					</if>
+	</select>
+</mapper>

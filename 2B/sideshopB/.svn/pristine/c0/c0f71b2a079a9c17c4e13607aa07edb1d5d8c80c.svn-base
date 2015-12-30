@@ -1,0 +1,168 @@
+package com.lakala.module.profit.vo;
+
+
+/**
+ * 收益查询数据
+ * 
+ * @author pengyunle
+ *
+ */
+public class OrderEarningsOutput {
+
+	/** 验证令牌 */
+	protected String token;
+	/** 支付号 */
+	private String orderId;
+	/** 大订单号 */
+	private String prioderOrderId;
+	/** 支付方式 */
+	private String payMode;
+	/** 收益日期 */
+	private String earningsDate;
+	/** 店主收益 */
+	private String earningsAmount;
+	/** 正向逆向订单区分 */
+	private int returnFlg;
+
+	/** 支付费率 */
+	private String payRate;
+
+	/** 支付手续费 */
+	private String payRateAmount;
+
+	/** 支付手续费公式 */
+	private String payRateFormula;
+
+	/** 自营平台结算金额 */
+	private String settlementAmount;
+	/** 自营平台结算公式 */
+	private String settlementFormula;
+	/** 自营平台运费 */
+	private String freight;
+	/** 自营平台优惠金额 */
+	private String couponValue;
+
+	/** 自营平台订单金额（二级订单） */
+	private String orderAmount;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getPrioderOrderId() {
+		return prioderOrderId;
+	}
+
+	public void setPrioderOrderId(String prioderOrderId) {
+		this.prioderOrderId = prioderOrderId;
+	}
+
+	public String getEarningsDate() {
+		return earningsDate;
+	}
+
+	public String getEarningsAmount() {
+		return earningsAmount;
+	}
+
+	public void setEarningsAmount(String earningsAmount) {
+		this.earningsAmount = earningsAmount;
+	}
+
+	public String getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(String payMode) {
+		this.payMode = payMode;
+	}
+
+	public int getReturnFlg() {
+		return returnFlg;
+	}
+
+	public void setReturnFlg(int returnFlg) {
+		this.returnFlg = returnFlg;
+	}
+
+	public void setEarningsDate(String earningsDate) {
+		this.earningsDate = earningsDate;
+	}
+
+	public String getPayRate() {
+		return payRate;
+	}
+
+	public void setPayRate(String payRate) {
+		this.payRate = payRate;
+	}
+
+	public String getSettlementAmount() {
+		return settlementAmount;
+	}
+
+	public void setSettlementAmount(String settlementAmount) {
+		this.settlementAmount = settlementAmount;
+	}
+
+	public String getSettlementFormula() {
+		return settlementFormula;
+	}
+
+	public void setSettlementFormula(String settlementFormula) {
+		this.settlementFormula = settlementFormula;
+	}
+
+	public String getPayRateAmount() {
+		return payRateAmount;
+	}
+
+	public void setPayRateAmount(String payRateAmount) {
+		this.payRateAmount = payRateAmount;
+	}
+
+	public String getPayRateFormula() {
+		return payRateFormula;
+	}
+
+	public void setPayRateFormula(String payRateFormula) {
+		this.payRateFormula = payRateFormula;
+	}
+
+	public String getFreight() {
+		return freight;
+	}
+
+	public void setFreight(String freight) {
+		this.freight = freight;
+	}
+
+	public String getCouponValue() {
+		return couponValue;
+	}
+
+	public void setCouponValue(String couponValue) {
+		this.couponValue = couponValue;
+	}
+
+	public String getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(String orderAmount) {
+		this.orderAmount = orderAmount;
+	}
+
+}

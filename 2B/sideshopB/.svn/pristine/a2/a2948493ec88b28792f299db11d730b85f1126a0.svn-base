@@ -1,0 +1,175 @@
+package com.lakala.module.goods.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.base.model.TgoodsinfopoolWithBLOBs;
+import com.lakala.base.model.TgoodskuinfopoolWithBLOBs;
+import com.lakala.base.model.Timages;
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.service.GoodsPoolService;
+import com.lakala.module.goods.vo.GoodsPoolBaseInfoVO;
+import com.lakala.module.goods.vo.GoodsPoolInfoVO;
+import com.lakala.module.goods.vo.GoodsPoolSkuInfoVO;
+import com.lakala.module.goods.vo.ImageInfoVO;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.StringUtil;
+
+/**
+ * 
+ * @ClassName: GoodsPoolServiceImpl
+ * @Description: 平台商品池服务接口实现
+ * @author zhiziwei
+ * @date 2015-3-6 上午11:29:34
+ * 
+ */
+@Service
+public class GoodsPoolServiceImpl implements GoodsPoolService {
+	private Logger logger = Logger.getLogger(GoodsPoolServiceImpl.class);
+	
+	@Autowired
+	private com.lakala.mapper.r.goods.TgoodsinfopoolMapper tgoodsinfopoolMapper_R;
+	@Autowired
+	private com.lakala.mapper.r.goods.TgoodskuinfopoolMapper tgoodskuinfopoolMapper_R;
+	@Autowired
+	private com.lakala.mapper.r.goods.TimagesMapper timagesMapper_R;
+	
+	/**
+     * @Description 根据结算分类，获取平台商品池商品列表
+     * @author zhiziwei
+     */
+	@Override
+	public ObjectOutput<List<GoodsPoolBaseInfoVO>> getGoodsPoolList(
+			String tRealCateId, String page, String rows) throws LakalaException {
+		
+		logger.info("获取平台商品池商品列表：tRealCateId = " + tRealCateId + "、page = " + page + "、rows = " + rows);
+		
+		Map<String, Object> parm = new HashMap<String, Object>();
+		
+		ObjectOutput<List<GoodsPoolBaseInfoVO>> res = new ObjectOutput<List<GoodsPoolBaseInfoVO>>();
+		res._ReturnData = new ArrayList<GoodsPoolBaseInfoVO>();
+		
+		//页面参数合法性校验
+		if (!StringUtil.verdict(tRealCateId) || !StringUtil.verdict(page) || 
+				!StringUtil.verdict(rows)) {
+			res.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			res.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return res;
+		}
+		
+		//业务处理
+		try {
+			//封装查询参数
+			parm.put("tRealCateId", tRealCateId);
+			parm.put("page", (Integer.parseInt(page) - 1) * Integer.parseInt(rows));
+			parm.put("rows", Integer.valueOf(rows));
+			
+			List<TgoodsinfopoolWithBLOBs> goods = tgoodsinfopoolMapper_R.getGoodsListByRealCat(parm);
+			
+			for (TgoodsinfopoolWithBLOBs good : goods) {
+				GoodsPoolBaseInfoVO vo = new GoodsPoolBaseInfoVO();
+				vo.settGoodInfoPoolId(good.getTgoodinfopoolid());
+				vo.setGoodName(good.getGoodname());
+				vo.setDistributionFlag(good.getDistributionflag());
+				vo.setGoodBigPic(good.getGoodbigpic().split(";")[0]);
+				
+				res._ReturnData.add(vo);
+			}
+			
+			res.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			res.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+		
+		return res;
+	}
+
+	/**
+	 * @Description 获取平台商品详情
+	 * @author zhiziwei
+	 */
+	@Override
+	public ObjectOutput<GoodsPoolInfoVO> getGoodsDetail(String tGoodsInfoId)
+			throws LakalaException {
+		logger.info("获取商品详情：tGoodsInfoId = " + tGoodsInfoId);
+		
+		ObjectOutput<GoodsPoolInfoVO> res = new ObjectOutput<GoodsPoolInfoVO>();
+		res._ReturnData = new GoodsPoolInfoVO();
+		
+		//页面参数合法性校验
+		if (!StringUtil.verdict(tGoodsInfoId)) {
+			res.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			res.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return res;
+		}
+		
+		//业务处理
+		try {
+			//商品基本信息
+			TgoodsinfopoolWithBLOBs goodsInfo = tgoodsinfopoolMapper_R
+					.selectByPrimaryKey(Integer.valueOf(tGoodsInfoId));
+			
+			res._ReturnData.settGoodInfoPoolId(goodsInfo.getTgoodinfopoolid());
+			res._ReturnData.settRealCateId(goodsInfo.getTrealcateid());
+			res._ReturnData.settRealCateDisc(goodsInfo.getTrealcatedisc());
+			res._ReturnData.settRealCateTreeDisc(goodsInfo.getTrealcatetreedisc());
+			res._ReturnData.setGoodName(goodsInfo.getGoodname());
+			res._ReturnData.setGoodBigPic(goodsInfo.getGoodbigpic());
+			res._ReturnData.setDistributionFlag(goodsInfo.getDistributionflag());
+			res._ReturnData.setGoodIntroduce(goodsInfo.getGoodintroduce());
+			res._ReturnData.setBalanceWay(goodsInfo.getBalanceway());
+			res._ReturnData.setIsExpressToHome(goodsInfo.getIsexpresstohome());
+			
+			//商品sku信息
+			List<TgoodskuinfopoolWithBLOBs> skusInfo = tgoodskuinfopoolMapper_R
+					.selectGoodSkuInfoByGoodId(Integer.valueOf(tGoodsInfoId));
+			
+			List<GoodsPoolSkuInfoVO> skus = new ArrayList<GoodsPoolSkuInfoVO>();
+			for (TgoodskuinfopoolWithBLOBs skuInfo : skusInfo) {
+				GoodsPoolSkuInfoVO gsv = new GoodsPoolSkuInfoVO();
+				gsv.settGoodSkuInfoPoolId(skuInfo.getTgoodskuinfopoolid());
+				gsv.setSkuIdStr(skuInfo.getSkuidstr());
+				gsv.setSkuFrontDisNameStr(gsv.getSkuFrontDisNameStr());
+				
+				skus.add(gsv);
+			}
+			res._ReturnData.setSkus(skus);
+			
+			//图片数据
+			Map<String, Object> imgParm = new HashMap<String, Object>();
+			imgParm.put("goodsId", Long.valueOf(tGoodsInfoId));
+			imgParm.put("targetType", 3);
+			List<Timages> imgs = timagesMapper_R.queryImgByGoodsId(imgParm);
+			
+			List<ImageInfoVO> imgsVo = new ArrayList<ImageInfoVO>();
+			
+			for (Timages img : imgs) {
+				ImageInfoVO imgVo = new ImageInfoVO();
+				
+				imgVo.setTimageId(img.getTimageid());
+				imgVo.setUrl(img.getUrl());
+				imgVo.setSort(img.getSort());
+				
+				imgsVo.add(imgVo);
+			}
+			res._ReturnData.setImages(imgsVo);
+			
+			res.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			res.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+			
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+        
+		return res;
+	}
+	
+}

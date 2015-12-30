@@ -1,0 +1,13 @@
+var paychanel = "";
+
+$("#to-pay").on("tap",function(){
+	var url = window.location.href;
+	paychanel = getParamValueByName(url, "paychanel");
+	if(paychanel != ""){
+		paychanel = paychanel;
+	}else{
+		paychanel = storage.getItem("paychanel") || "";
+	}
+	var payurl = storage.getItem("payurl") || "";
+	window.location.href = payurl;
+})

@@ -1,0 +1,430 @@
+package com.lakala.module.order.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.lakala.base.model.SDBMediaStatistics;
+import com.lakala.base.model.Tgoodinfo;
+import com.lakala.base.model.Tgoodskuinfo;
+import com.lakala.base.model.TgoodskuinfoWithBLOBs;
+import com.lakala.exception.LakalaException;
+import com.lakala.module.goods.vo.GoodsCol;
+import com.lakala.module.goods.vo.GoodsSKU;
+import com.lakala.module.goods.vo.RealCate;
+import com.lakala.module.goods.vo.VirtualCate;
+import com.lakala.module.goods.vo.in.*;
+import com.lakala.module.order.service.Mongo4GoodsService;
+import com.lakala.util.*;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+
+/**
+ * @author zhiziwei
+ * @ClassName: Mongo4GoodsServiceImpl
+ * @Description: 商品Mongo接口实现
+ * @date 2015-5-26 下午6:23:14
+ */
+@Service
+public class Mongo4GoodsServiceImpl implements Mongo4GoodsService {
+    private Logger logger = LoggerFactory.getLogger(Mongo4GoodsServiceImpl.class);
+
+    @Autowired
+    private com.lakala.mapper.r.sdbmediastatistics.SdbMediaStatisticsMapper sdbMediaStatisticsMapper_R;
+    @Autowired
+    private MongoInterfaceUrl cfg;
+
+    public void setGoodsStock(StoreChangeInPut input, TgoodskuinfoWithBLOBs sku)
+            throws Exception {
+        // TODO Auto-generated method stub
+        try {
+            if (null != sku) {
+                input.setGoodsId(sku.getTgoodinfoid());
+                input.setSkuId(sku.getTgoodskuinfoid().longValue());
+                input.setNum(sku.getSkustock().intValue());
+                input.setFlag(2);//标记直接替换
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+
+    }
+
+    public void writeStockToMongo(StoreChangeInPut input, String userid,
+                                  String username) throws Exception {
+        // TODO Auto-generated method stub
+        try {
+            input.setUserId(Integer.valueOf(userid));
+            input.setUserName(username);
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(); //获取本次调用service的请求
+            input.setIp(request.getRemoteHost() == null ? "" : request.getRemoteHost());
+
+            ObjectMapper om = new ObjectMapper();
+            String instr = om.writeValueAsString(input);
+
+            String res = HttpUtil.httpPostConnetion(cfg.getMongoTestBaseUrl()
+                    + Constants.MOD_STOCK, instr);
+
+            logger.info(res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    /**
+     * Mongo接口调用：收集商品信息
+     *
+     * @param gc
+     * @param good 商品基本信息
+     * @param sku  商品SKU信息
+     * @author zhiziwei
+     */
+    @Override
+    public void setGoodsCol(GoodsCol gc, Tgoodinfo good, Tgoodskuinfo sku) throws LakalaException {
+        try {
+            if (null != good) {
+                gc.set_id(good.getTgoodinfoid());
+                gc.setBalanceWay(good.getBalanceway());
+                gc.setBrandId(good.getTbrandid());
+                gc.setBrandName(good.getBrandname());
+                gc.setCarton(good.getCarton());
+                gc.setCreateTime(good.getCreateddate());
+                gc.setDelFlag(good.getDeflag());
+                gc.setDesc(good.getGooddisc());
+                gc.setDistributionCondition(good.getDistributioncondition());
+                gc.setDistributionFlag(good.getDistributionflag());
+                gc.setExpDate(good.getExpdate());
+                gc.setGoodAdWord(good.getGoodadword());
+                gc.setGoodBarCode(good.getGoodbarcode());
+                gc.setGoodIntroduce(good.getGoodintroduce());
+                gc.setGoodsName(good.getGoodname());
+                gc.setGoodsSort(null);
+                gc.setGoodType(good.getGoodtype());
+                gc.setHeight(null != good.getHeight() ? good.getHeight().doubleValue() : 0);
+                gc.setIscontractmachine(good.getIscontractmachine());
+                gc.setIsExpressToHome(good.getIsexpresstohome());
+                gc.setIsForeigngoods(good.getIsforeigngoods());
+                gc.setIsfreshfood(good.getIsfreshfood());
+                gc.setIsNoReasonReturn(good.getIsnoreasonreturn());
+                gc.setIsPayAfterArrival(gc.getIsPayAfterArrival());
+                gc.setLength(null != good.getLength() ? good.getLength().doubleValue() : 0);
+                gc.setMeasureUnits(good.getMeasureunits());
+                gc.setOrgid(good.getOrgid());
+                gc.setPackageList(good.getPackagelist());
+                gc.setPlatorself(good.getPlatorself());
+                gc.setProducingArea(good.getProducingarea());
+                gc.setStorageCondition(good.getStoragecondition());
+                gc.setSupplierId(good.getSupplierid());
+                gc.setSupplierName(good.getSuppliername());
+                gc.setTempStoreGoodsFlag(good.getTempstoregoodsflag());
+                gc.settGoodInfoPoolId(good.getTgoodinfopoolid());
+                gc.setVolume(null != good.getVolume() ? good.getVolume().doubleValue() : 0);
+                gc.setWeight(null != good.getWeight() ? good.getWeight().doubleValue() : 0);
+                gc.setWidth(null != good.getWidth() ? good.getWidth().doubleValue() : 0);
+
+                String[] imgs = good.getGoodbigpic().split(";");
+                List<String> pics = new ArrayList<String>();
+                for (int i = 0; i < imgs.length; i++) {
+                    pics.add(imgs[i]);
+                }
+                gc.setPics(pics);
+
+                RealCate rc = new RealCate();
+                rc.setForId(good.getTrealcateid());
+                rc.setAllCate(good.getTrealcatetreedisc());
+                gc.setRc(rc);
+
+                //获取店主信息
+                SDBMediaStatistics media = sdbMediaStatisticsMapper_R.selectByPrimaryKey(Long.valueOf(good.getSupplierid()));
+                gc.setTel(media.getMobile());
+                gc.setAddress(media.getAddr());
+
+                gc.setSupplierCode(null);
+                gc.setPublishGoodsName(null);
+                gc.setSr(null);
+            }
+
+            if (null != sku) {
+                GoodsSKU _sku = new GoodsSKU();
+                _sku.setBalancePrice(null != sku.getBalanceprice() ? sku.getBalanceprice().doubleValue() : 0);
+                _sku.setCheapestSalePrice(null != sku.getCheapestsaleprice() ? sku.getCheapestsaleprice().doubleValue() : 0);
+                _sku.setDeductPercent(null != sku.getDeductpercent() ? sku.getDeductpercent().doubleValue() : 0);
+                _sku.setDistributeProfitBase(null != sku.getDistributeprofitbase() ? sku.getDistributeprofitbase().doubleValue() : 0);
+                _sku.setGf(sku.getGoodstatus());
+                _sku.setMarketPrice(null != sku.getMarketprice() ? sku.getMarketprice().doubleValue() : 0);
+                _sku.setSalePrice(null != sku.getSaleprice() ? sku.getSaleprice().doubleValue() : 0);
+                _sku.setSkuGoodsId(sku.getTgoodskuinfoid());
+                _sku.setSkuIds(sku.getSkuidstr());
+                _sku.setSkuNames(sku.getSkufrontdisnamestr());
+                _sku.setSkuStock(sku.getSkustock().intValue());
+                _sku.setSoldSkuStock(null == sku.getSoldSkuStock() ? 0 : sku.getSoldSkuStock().intValue());
+                _sku.setActivityIds(null);
+                _sku.setUlf(sku.getGoodsstatus());
+
+                // 整理虚分类数据
+                List<VirtualCate> vcs = new ArrayList<VirtualCate>();
+                setVcs(vcs, sku);
+                _sku.setVc(vcs);
+                gc.getSkus().add(_sku);
+
+                //返现、补贴sku上获取
+                gc.setRetrunCash(null != sku.getRetruncash() ? sku.getRetruncash().doubleValue() : 0);
+                gc.setSubsidy(null != sku.getSubsidy() ? sku.getSubsidy().doubleValue() : 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LakalaException(e.getMessage());
+        }
+    }
+
+    /**
+     * @Title: setVcs
+     * @Description: 整理虚拟分类数据
+     */
+    private static void setVcs(List<VirtualCate> vcs, Tgoodskuinfo sku) throws LakalaException {
+        try {
+            if (null == sku || !StringUtil.verdict(sku.getVirtualcateids())) {
+                return;
+            }
+            // 分割 ：42-vid1_vid11,42-vid2_vid21_vid22
+            String[] temp = sku.getVirtualcateids().split(",");
+
+            for (int i = 0; i < temp.length; i++) {
+                VirtualCate vc = new VirtualCate();
+                vc.setChannel(BussConst.APP_2C_FREQUENCYID);
+                vc.setSource(BussConst.APP_CHANNELID);
+
+                // 分割 ：42-vid1_vid11
+                String[] _temp = temp[i].split("-")[1].split("_");
+                HashMap<Integer, Integer[]> vids = new HashMap<Integer, Integer[]>();
+                for (int j = 0; j < _temp.length; j++) {
+                    vids.put(j + 1, new Integer[]{Integer.valueOf(_temp[j])});
+                }
+                vc.setIds(vids);
+
+                HashMap<String, Double> psam = new HashMap<String, Double>();
+                psam.put(sku.getDeviceno(), sku.getSaleprice().doubleValue());
+                vc.setPsam(psam);
+                vcs.add(vc);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LakalaException(e.getMessage());
+        }
+    }
+
+    /**
+     * Mongo接口调用：调接口，写入商品数据，一键上传商品，自动上架
+     *
+     * @param col      商品数据
+     * @param userid   用户ID
+     * @param username 用户名
+     * @param flag     标记 add-新增商品，mod-更新商品
+     * @author zhiziwei
+     */
+    @Override
+    public void writeGoodsToMongo(GoodsCol col, String userid, String username, String ip, String flag)
+            throws LakalaException {
+        try {
+			GoodsSaveInPut input = new GoodsSaveInPut();
+			List<GoodsSKU> skus = new ArrayList<GoodsSKU>();
+            
+            for (GoodsSKU sku : col.getSkus()) {
+            	GoodsSKU _sku = new GoodsSKU();
+				BeanUtils.copyProperties(_sku, sku);
+				skus.add(_sku);
+			}
+            
+            for (GoodsSKU goodsSKU : col.getSkus()) {
+                goodsSKU.setVc(new ArrayList<VirtualCate>());
+            }
+            
+			input.setUserId(null);
+			input.setUserName(username);
+			input.setGoods(col);
+			input.setIp(ip);
+			
+			ObjectMapper om = new ObjectMapper();
+			//调用接口：新增/修改商品
+			writeLog("add".equals(flag) ? cfg.getSave() : cfg.getModify(), om.writeValueAsString(input),
+					null);
+			String res = HttpUtil.httpPostConnetion("add".equals(flag) ? cfg.getSave() : cfg.getModify(), 
+					om.writeValueAsString(input));
+			writeLog(null, null, res);
+			
+			 // 一键上传商品，直接上架
+			if (res.contains("SUCCESS")) {
+				for (GoodsSKU sku : skus) {
+					GoodsOperatorPublishInPut _input = new GoodsOperatorPublishInPut();
+					_input.setGoodsId(col.get_id()); // 商品ID
+					_input.setSkuId(sku.getSkuGoodsId()); // SKU ID
+					_input.setPrice(sku.getSalePrice());// 统一的发布价格 
+					
+					/**
+					 * 发布数据：店主自营商品按终端发布，店主对应唯一的虚拟终端 key
+					 * 发布类型(1-8)：按全国，省，市，区，区块，网点，终端，合作商 value 发布的目的地
+					 */
+					HashMap<Integer, String[]> data = new HashMap<Integer, String[]>();
+					HashMap<String, Double> psam = sku.getVc().get(0).getPsam(); // 终端号:销售价
+					Iterator<String> pit = psam.keySet().iterator();
+					while (pit.hasNext()) {
+						data.put(7, new String[] { pit.next() }); // 7 = 按终端上架
+					}
+					_input.setData(data);
+					
+					/**
+					 * 虚分类列表
+					 */
+					List<VirtualCateInPut> vcs = new ArrayList<VirtualCateInPut>();
+					for (VirtualCate _vc : sku.getVc()) {
+						HashMap<Integer, Integer[]> ids = _vc.getIds();
+						Iterator<Integer> vit = ids.keySet().iterator();
+						List<Integer[]> _ids = new ArrayList<Integer[]>();
+						while(vit.hasNext()){
+							_ids.add(ids.get(vit.next()));
+						}
+						
+						VirtualCateInPut vin = new VirtualCateInPut();
+						vin.setSource(BussConst.APP_CHANNELID);
+						vin.setChannel(BussConst.APP_2C_FREQUENCYID);
+						vin.setIds(_ids);
+						vcs.add(vin);
+					}
+					_input.setVc(vcs);
+					_input.setRemark("店主APP自营商品一键上传，自动上架。");
+					_input.setSort(col.get_id());
+					_input.setGoodsName(col.getGoodsName());
+					_input.setUserId(null);
+					_input.setUserName(username);
+					_input.setIp(ip);
+					
+					//调用接口：商品上架
+					writeLog(cfg.getPublish(), om.writeValueAsString(_input), null);
+					String res1 = HttpUtil.httpPostConnetion(cfg.getPublish(), om.writeValueAsString(_input));
+					writeLog(null, null, res1);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new LakalaException(e.getMessage());
+		}
+    }
+
+    /**
+     * Mongo接口调用：调接口，写入SKU数据
+     *
+     * @param sku      商品数据
+     * @param userid   用户ID
+     * @param username 用户名
+     * @param flag     标记 add-新增商品，mod-更新商品
+     * @author zhiziwei
+     */
+    @Override
+    public void writeSkusToMongo(Tgoodskuinfo sku, String userid, String username, String ip, String flag)
+            throws LakalaException {
+        try {
+            //初始化接口参数
+            GoodsSKUInPut input = new GoodsSKUInPut();
+            input.setGoodsId(sku.getTgoodinfoid());
+            input.setSkus(new ArrayList<GoodsSKU>());
+            //收集接口参数数据
+            GoodsSKU _sku = new GoodsSKU();
+            _sku.setBalancePrice(null != sku.getBalanceprice() ? sku.getBalanceprice().doubleValue() : 0);
+            _sku.setCheapestSalePrice(null != sku.getCheapestsaleprice() ? sku.getCheapestsaleprice().doubleValue() : 0);
+            _sku.setDeductPercent(null != sku.getDeductpercent() ? sku.getDeductpercent().doubleValue() : 0);
+            _sku.setDistributeProfitBase(null != sku.getDistributeprofitbase() ? sku.getDistributeprofitbase().doubleValue() : 0);
+            _sku.setGf(sku.getGoodstatus());
+            _sku.setMarketPrice(null != sku.getMarketprice() ? sku.getMarketprice().doubleValue() : 0);
+            _sku.setSalePrice(null != sku.getSaleprice() ? sku.getSaleprice().doubleValue() : 0);
+            _sku.setSkuGoodsId(sku.getTgoodskuinfoid().longValue());
+            _sku.setSkuIds(sku.getSkuidstr());
+            _sku.setSkuNames(sku.getSkufrontdisnamestr());
+            _sku.setSkuStock(sku.getSkustock().intValue());
+            _sku.setSoldSkuStock(null == sku.getSoldSkuStock() ? 0 : sku.getSoldSkuStock().intValue());
+            _sku.setActivityIds(null);
+            _sku.setUlf(sku.getGoodsstatus());
+
+            // 整理虚分类数据
+            List<VirtualCate> vcs = new ArrayList<VirtualCate>();
+            setVcs(vcs, sku);
+            _sku.setVc(vcs);
+
+            input.getSkus().add(_sku);
+            input.setUserId(null);
+            input.setUserName(username);
+            input.setIp(ip);
+
+            ObjectMapper om = new ObjectMapper();
+            String instr = om.writeValueAsString(input);
+            //调用接口
+            writeLog("add".equals(flag) ? cfg.getSave_sku() : cfg.getModify_sku(), om.writeValueAsString(input), null);
+            String res = HttpUtil.httpPostConnetion("add".equals(flag) ? cfg.getSave_sku() : cfg.getModify_sku(), instr);
+            writeLog(null, null, res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LakalaException(e.getMessage());
+        }
+    }
+
+    /**
+     * Mongo接口调用：下架
+     *
+     * @param sku      商品数据
+     * @param goodsId  待下架的商品ID
+     * @param userid   用户ID
+     * @param username 用户名
+     * @param ip       IP地址
+     * @author zhiziwei
+     */
+    @Override
+    public void downPublish(Integer goodsId, String userid, String username, String ip)
+            throws LakalaException {
+        try {
+            //初始化接口参数
+            GoodsOperatorPublishInPut input = new GoodsOperatorPublishInPut();
+            input.setGoodsId(goodsId);
+            input.setUserId(null);
+            input.setUserName(username);
+            input.setIp(ip);
+
+            ObjectMapper om = new ObjectMapper();
+            String instr = om.writeValueAsString(input);
+
+            //调用接口
+            writeLog(cfg.getDown(), om.writeValueAsString(input), null);
+            String res = HttpUtil.httpPostConnetion(cfg.getDown(), instr);
+            writeLog(null, null, res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LakalaException(e.getMessage());
+        }
+    }
+
+
+    /**
+     * 日志输出
+     */
+    private void writeLog(String url, String parm, String result) {
+        if (StringUtil.verdict(url)) {
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("==> 调用接口：" + url + "\n");
+        }
+        if (StringUtil.verdict(parm)) {
+            System.out.println("==>    入参：" + parm + "\n");
+        }
+        if (StringUtil.verdict(result)) {
+            System.out.println("==> 响应结果：" + result + "\n");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+        }
+    }
+
+}

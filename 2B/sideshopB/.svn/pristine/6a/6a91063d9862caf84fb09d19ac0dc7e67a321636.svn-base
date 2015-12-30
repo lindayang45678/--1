@@ -1,0 +1,94 @@
+package com.lakala.module.upload.service.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.base.model.Timages;
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.upload.service.UploadService;
+import com.lakala.module.upload.vo.UploadInfoInput;
+import com.lakala.module.upload.vo.UploadInfoOutput;
+import com.lakala.util.Base64;
+import com.lakala.util.ConfigUtil;
+import com.lakala.util.ImageUtil;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.StringUtil;
+
+@Service
+public class UploadServiceImpl implements UploadService {
+    private Logger logger = LoggerFactory.getLogger(UploadServiceImpl.class);
+
+    @Autowired
+    private com.lakala.mapper.w.goods.TimagesMapper timagesMapper_W;
+	@Autowired
+    private ConfigUtil cfg;
+	
+	private final static String ISWRITETIMAGE_TRUE = "1";
+	
+	/**
+	 * 图片上传
+	 */
+	@Override
+	public ObjectOutput<UploadInfoOutput> uploadImg(UploadInfoInput input,
+			HttpServletRequest req) throws LakalaException {
+		
+		logger.info("上传图片：isWriteTimage" + input.getIsWriteTimage());
+		
+		//取出请求参数
+		String isWriteTimage = input.getIsWriteTimage();
+		//定义返回值
+		ObjectOutput<UploadInfoOutput> result = new ObjectOutput<UploadInfoOutput>();
+		result._ReturnData = new UploadInfoOutput();
+
+		// 异常判断
+		if (!StringUtil.verdict(isWriteTimage)) {
+			result.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			result.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return result;
+		}
+
+		try {
+			//图片上传
+			input.setData(input.getData().replace("data:image/jpeg;base64,", ""));
+			List<String> list = ImageUtil.uploadFileToLocalForPhone(cfg, req, 
+					input.getMobile(), Base64.decode(input.getData()));
+			
+			List<String> temp = new ArrayList<String>();
+			
+			//图片信息记录Timage表，返回：timageId_url，不记录，返回：文件名_url
+			if (ISWRITETIMAGE_TRUE.equals(isWriteTimage)) {
+				Date now = new Date(System.currentTimeMillis());
+				for (String str : list) {
+					// 上传成功后，写库
+					Timages img = new Timages();
+					img.setUrl(str.split("_")[1]);
+					img.setSort(0);// 初始化为0，商品新增时提交更新数据
+					img.setImagename(str.split("_")[0]);
+					img.setLastmoddate(now);
+					timagesMapper_W.insertSelective(img);
+					
+					temp.add(img.getTimageid().toString() + "_" + str.split("_")[1]);
+				}
+				
+				list = temp;
+			}
+			
+			result._ReturnData.setSuccess(list);
+			result.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			result.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+		return result;
+	}
+
+}

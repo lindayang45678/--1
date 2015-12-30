@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>销售员列表</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css"/>
+	<link rel="stylesheet" href="../../css/admin.css"/>
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html">批发进货</a>
+			<a href="../order-query/order-query.html">订单查询</a>
+			<a href="../benefit-query/order-income.html">收益查询</a>
+			<a href="../sales-manage/sales-list.html" class="active">销售员管理</a>
+			<a href="../tools/index.html">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+			<menu>
+				<a href="../sales-manage/sales-list.html" class="active">销售员列表</a>
+				<a href="../sales-manage/add-sales.html">添加销售员</a>
+				<a href="../sales-manage/set-sales-revenue.html">销售员收益分成</a>
+				<a href="../tools/index.html">返回店主工具</a>
+				<a href="#">返回商城首页</a>
+			</menu>
+			<section class="main">
+				<div class="title">
+					<h2>本店销售员</h2>
+					<span>本店已发展到<em>10000</em>个会员</span>
+				</div>
+				<div class="search">
+					<label>销售员手机号:</label><input type="text" name="sales-phone" class="sales-phone" />
+					<div><label>时间：<input type="text" class="date" value="2014-07-01" name="date"/></label><label>到 <input type="text" class="date" value="2014-07-31" name="date"/></label>
+					<a href="javascript:;" class="ico-btn btn-blue search-btn">查询</a>
+					</div>
+				</div>
+				<section class="sales-list">
+					<header>
+						<div>销售员名称</div>
+						<div>手机号</div>
+						<div>分润比例</div>
+						<div>返现比例</div>
+						<div>补贴比例</div>
+						<div>加入时间</div>
+						<div>操作</div>
+					</header>
+					<section id="sales-list">
+						<ul>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+							<li>
+								<div>郭若洋</div><div>13512345678</div><div>60%</div><div>60%</div><div>60%</div><div>2014-12-12 12:12:12</div><a href="../sales-manage/sales-information.html">查看</a>
+							</li>
+						</ul>
+					</section>
+					<div class="foot-line"></div>	
+				</section>
+			</section>
+	</section>
+
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myscroll = new iScroll("sales-list",{hScrollbar:false, vScrollbar:true, fixedScrollbar:true, hideScrollbar:true});
+		});
+	</script>
+</body>
+</html>

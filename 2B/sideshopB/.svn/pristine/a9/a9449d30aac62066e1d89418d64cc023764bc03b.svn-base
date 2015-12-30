@@ -1,0 +1,48 @@
+package com.lakala.module.news.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+public class OrderInput extends ObjectInput {
+	
+	private String tAllOrderId;
+
+	private String tOrderId;
+	
+	private String orderProviderID;
+	
+	private String tOrderItemsId;
+
+	public String gettAllOrderId() {
+		return tAllOrderId;
+	}
+
+	public void settAllOrderId(String tAllOrderId) {
+		this.tAllOrderId = tAllOrderId;
+	}
+
+	public String gettOrderId() {
+		return tOrderId;
+	}
+
+	public void settOrderId(String tOrderId) {
+		this.tOrderId = tOrderId;
+	}
+
+	public String getOrderProviderID() {
+		return orderProviderID;
+	}
+
+	public void setOrderProviderID(String orderProviderID) {
+		this.orderProviderID = orderProviderID;
+	}
+
+	public String gettOrderItemsId() {
+		return tOrderItemsId;
+	}
+
+	public void settOrderItemsId(String tOrderItemsId) {
+		this.tOrderItemsId = tOrderItemsId;
+	}
+	
+	
+}

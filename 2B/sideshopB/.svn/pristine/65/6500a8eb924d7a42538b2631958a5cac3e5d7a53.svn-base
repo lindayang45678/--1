@@ -1,0 +1,74 @@
+package com.lakala.module.order.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.module.goods.vo.in.StoreChangeInPut;
+import com.lakala.module.order.service.Mongo4GoodsService;
+import com.lakala.base.model.TgoodskuinfoWithBLOBs;
+import com.lakala.util.Constants;
+import com.lakala.util.HttpUtil;
+import com.lakala.util.MongoInterfaceUrl;
+
+/**
+ * 
+ * @ClassName: Mongo4GoodsServiceImpl
+ * @Description: 商品Mongo接口实现
+ * @author zhiziwei
+ * @date 2015-5-26 下午6:23:14
+ * 
+ */
+@Service
+public class Mongo4GoodsServiceImpl implements Mongo4GoodsService {
+	private Logger logger = LoggerFactory.getLogger(Mongo4GoodsServiceImpl.class);
+
+	@Autowired
+	private MongoInterfaceUrl cfg;
+ 
+	public void setGoodsStock(StoreChangeInPut input, TgoodskuinfoWithBLOBs sku)
+			throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			if (null != sku) {
+				input.setGoodsId(sku.getTgoodinfoid());
+				input.setSkuId(sku.getTgoodskuinfoid().longValue());
+				input.setNum(sku.getSkustock().intValue());
+				input.setFlag(2);//标记直接替换
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage());
+		}
+		
+	}
+
+	public void writeStockToMongo(StoreChangeInPut input, String userid,
+			String username) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			input.setUserId(Integer.valueOf(userid));
+			input.setUserName(username);
+			input.setIp("");
+			
+			ObjectMapper om = new ObjectMapper();
+			String instr = om.writeValueAsString(input);
+			
+			String res = HttpUtil.httpPostConnetion(cfg.getMongoTestBaseUrl()
+					+ Constants.MOD_STOCK, instr);
+			
+			logger.info(res);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage());
+		}
+	}
+
+	
+
+}

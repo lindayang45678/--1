@@ -1,0 +1,13 @@
+package com.lakala.mapper.r.user;
+
+import java.util.List;
+
+import com.lakala.model.user.Tmedia;
+import com.lakala.model.user.Tmember;
+
+public interface TmemberMapper {
+
+    Tmember selectTmemberById(String membername);
+    
+    List<Tmedia> selectSdbMediaByCriteria(String mobile);
+}

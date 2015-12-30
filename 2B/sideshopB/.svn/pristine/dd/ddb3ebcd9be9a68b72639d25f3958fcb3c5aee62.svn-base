@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>店主收货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="body-white">
+	<header>	
+		<a href="shopreceipt.html" class="back"></a>	
+		<h1>店主收货</h1>
+	</header>
+	<section class="wrap letter">
+		<div class="receipt">
+			<h2 class="f-18 color center">恭喜您，收货成功！</h2>
+			<div class="receipt-info receipt-infosuccess">
+				<div><i>快递单号：</i><em>23987987897234</em></div>
+				<div class="receipt-infosuccessnub"><i>订单号：</i><em>23987987298634234</em><em>（部分收货）</em></div>
+				<div class="c-black">本快递，已收货的商品有：</div>
+				<ul>
+					<li>
+						<p><i>订单号：</i><em>23987987897234</em></p>
+						<i>雅诗兰黛洗发水</i>
+						<p>
+							<i>数量：</i><em>1</em>
+							<i>实收：</i><em>1</em>
+						</p>
+					</li>
+				</ul>	
+			</div>
+		</div>
+		<a href="shopreceipt.html" class="btn-red">继续收货</a>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/receipt/shopreceiptsuccess.js"></script>
+</html>

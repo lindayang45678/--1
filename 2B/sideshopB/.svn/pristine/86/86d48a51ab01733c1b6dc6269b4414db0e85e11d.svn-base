@@ -1,0 +1,22 @@
+package com.lakala.mapper.r.user;
+
+import java.util.List;
+import java.util.Map;
+
+import com.lakala.model.user.Tmedia;
+import com.lakala.model.user.Tmember;
+import com.lakala.module.user.vo.Tagent;
+import com.lakala.module.user.vo.Tcustomermanager;
+
+public interface TmemberMapper {
+
+    Tmember selectTmemberById(String membername);
+    
+    List<Tmedia> selectSdbMediaByCriteria(String mobile);
+    
+    Tcustomermanager selectTcustomermanager(String registerCode);
+    Tagent selectTagent(String registerCode);
+    
+    String selectRegisterCode(Map<String, String> map);
+    String selectRegisterCode2(Map<String, String> map);
+}

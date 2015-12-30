@@ -1,0 +1,101 @@
+package com.lakala.module.user.vo;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.lakala.model.user.TShopService;
+import com.lakala.module.comm.ObjectInput;
+
+public class ShopInfoInput extends ObjectInput{
+
+	private Long id;
+	
+	private String phone;
+	
+	private String shopname;
+	private String type;
+	
+	private String announcement;  //店铺公告
+	
+	private String weixin_no;
+	
+	private List<Map<String, String>> dispatcherlist;
+	
+	private String imgInfoList;
+	
+	private HttpServletRequest req;
+	
+	public HttpServletRequest getReq() {
+		return req;
+	}
+
+	public void setReq(HttpServletRequest req) {
+		this.req = req;
+	}
+
+	public String getImgInfoList() {
+		return imgInfoList;
+	}
+
+	public void setImgInfoList(String imgInfoList) {
+		this.imgInfoList = imgInfoList;
+	}
+
+	public String getShopname() {
+		return shopname;
+	}
+
+	public void setShopname(String shopname) {
+		this.shopname = shopname;
+	}
+
+	public List<Map<String, String>> getDispatcherlist() {
+		return dispatcherlist;
+	}
+
+	public void setDispatcherlist(List<Map<String, String>> dispatcherlist) {
+		this.dispatcherlist = dispatcherlist;
+	}
+
+	public String getWeixin_no() {
+		return weixin_no;
+	}
+
+	public void setWeixin_no(String weixin_no) {
+		this.weixin_no = weixin_no;
+	}
+
+	public String getAnnouncement() {
+		return announcement;
+	}
+
+	public void setAnnouncement(String announcement) {
+		this.announcement = announcement;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+}

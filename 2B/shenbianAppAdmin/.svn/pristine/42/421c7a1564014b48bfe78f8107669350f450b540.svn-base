@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>选择地址</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>
+		<h1>选择地址</h1>
+	</header>
+	<section class="container fill-address-wrap">
+		<ul class="fill-address">
+			<li class="f-14">
+				<div><i class="address-name">巫龙飞 </i>&nbsp;<i class="address-phone">13522428283</i></div>
+				<div><i class="address-area">北京 &nbsp;北京市&nbsp;海淀区海淀区海淀区海淀区</i></div>
+				<div><i class="address-detail">北京海淀区中区中关关关村金额大厦8层</i></div>
+				<div class="fill-close"></div>
+				<a href="#" class="fill-edit">编辑</a>
+			</li>
+			<li class="f-14">
+				<div><i class="address-name">巫龙飞 </i><i class="address-phone">13522428283</i></div>
+				<div><i class="address-area">北京 &nbsp;北京市&nbsp;海淀区海</i></div>
+				<div><i class="address-detail">北京海淀区中区中关关关村金额大厦8层</i></div>
+				<div class="fill-close"></div>
+				<a href="#" class="fill-edit">编辑</a>
+			</li>	
+		</ul>
+		<div class="fill-add-address">＋新建地址</div>
+		<ul class="fill-edit-address hidden">
+			<li class="edit-name"><i>收货人姓名：</i><input type="text" value="新建地址新建地址新建地址新建地址新建地址新建地址新建地址新建地址新建地址"/></li>
+			<li class="edit-phone"><i>收货人手机号码：</i><input type="tel" value="12345678900"/></li>
+			<li class="edit-area"><i>所在地区：</i><input type="text" value="北京 &nbsp;北京市&nbsp;海淀区海" readonly="readonly"/></li>
+			<li  class="edit-address"><i>详细地址：</i><input type="text" value="新建地址新建地址新建地址新建地址新建地址新建地址新建地址新建地址新建地址"/></li>
+			<li class="save-address"><a href="#" class="btn-red btn-save-address">保存并使用</a></li>
+		</ul>
+		
+	</section>
+	<div class="masker hidden"></div>
+	<div class="popup hidden"><p>很抱歉，最多只能添加5条常用地址信息!<br/>您已添加了5条，请删除或编辑现有地址!</p><a href="javascript:;" class="btn-red popup-btn">确定</a></div>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/wholesale/address.js"></script>
+</html>

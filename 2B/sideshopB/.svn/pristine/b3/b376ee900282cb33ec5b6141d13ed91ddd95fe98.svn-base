@@ -1,0 +1,94 @@
+package com.lakala.module.wholesale.model;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+/**
+ * Created by HOT.LIU on 2015/2/13.
+ */
+public class SkuDetails implements Serializable {
+
+    private static final long serialVersionUID = 3045163199190576003L;
+
+    private BigDecimal marketPrice;
+    private Integer o2oId;
+    private BigDecimal salePrice;
+    private String skuFrontDisNameStr;
+    private String skuIdStr;
+    private Double soldStore;
+    private Double store;
+    private Integer tGoodInfoId;
+    private Integer tGoodSkuInfoId;
+
+    public BigDecimal getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(BigDecimal marketPrice) {
+        this.marketPrice = (marketPrice == null ? new BigDecimal(0) : marketPrice);
+    }
+
+    public Integer getO2oId() {
+        return o2oId;
+    }
+
+    public void setO2oId(Integer o2oId) {
+        this.o2oId = o2oId;
+    }
+
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = (salePrice == null ? new BigDecimal(0) : salePrice);
+    }
+
+    public String getSkuFrontDisNameStr() {
+        return skuFrontDisNameStr;
+    }
+
+    public void setSkuFrontDisNameStr(String skuFrontDisNameStr) {
+        this.skuFrontDisNameStr = (skuFrontDisNameStr == null ? "" : skuFrontDisNameStr);
+    }
+
+    public String getSkuIdStr() {
+        return skuIdStr;
+    }
+
+    public void setSkuIdStr(String skuIdStr) {
+        this.skuIdStr = (skuIdStr == null ? "" : skuIdStr);
+    }
+
+    public Double getSoldStore() {
+        return soldStore;
+    }
+
+    public void setSoldStore(Double soldStore) {
+        this.soldStore = (soldStore == null ? Double.parseDouble("0") : soldStore);
+    }
+
+    public Double getStore() {
+        return store;
+    }
+
+    public void setStore(Double store) {
+        this.store = (store == null ? Double.parseDouble("0") : store);
+    }
+
+    public Integer getTGoodInfoId() {
+        return tGoodInfoId;
+    }
+
+    public void setTGoodInfoId(Integer tGoodInfoId) {
+        this.tGoodInfoId = tGoodInfoId;
+    }
+
+    public Integer getTGoodSkuInfoId() {
+        return tGoodSkuInfoId;
+    }
+
+    public void setTGoodSkuInfoId(Integer tGoodSkuInfoId) {
+        this.tGoodSkuInfoId = tGoodSkuInfoId;
+    }
+}

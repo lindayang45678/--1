@@ -1,0 +1,8 @@
+//临时的跳入搜索成功和失败页
+$('.w-searchbtn').on('tap',function(){
+	alert();
+	if($('.search-wrap input').val())
+	{	$('.w-searchbtn').attr('href','searchsuccess.html');}
+	else
+	{	$('.w-searchbtn').attr('href','searchfail.html');}
+});

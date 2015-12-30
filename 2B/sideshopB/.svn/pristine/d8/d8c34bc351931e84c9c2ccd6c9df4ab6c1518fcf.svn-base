@@ -1,0 +1,55 @@
+package com.lakala.module.news.service.impl;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.news.NewsMapper;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.news.service.NewsService;
+import com.lakala.module.news.vo.NewsItemOutput;
+import com.lakala.module.news.vo.NewsOutput;
+import com.lakala.util.ReturnMsg;
+
+@Service("NewsServiceBean")
+public class NewsServiceImp implements NewsService {
+	
+	private static Logger logger = Logger.getLogger(NewsServiceImp.class);
+	
+	@Autowired
+	private NewsMapper  newsmapper_R;
+
+	@Override
+	public ObjectOutput<List<NewsItemOutput>> getInfo(Integer newsid)
+			throws LakalaException {
+		ObjectOutput<List<NewsItemOutput>> data = new ObjectOutput<List<NewsItemOutput>>(); 
+		
+		List<NewsItemOutput> list = newsmapper_R.getInfo(newsid);
+		
+		if(list == null || list.size() == 0){
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("返回数据为空！");
+		}
+		else{
+		 data.set_ReturnData(list);
+         data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+         data.set_ReturnMsg("返回成功！");
+		}
+		return data;
+	}
+
+	@Override
+	public ObjectOutput<List<NewsItemOutput>> getConsultInfo(Integer itemsid)
+			throws LakalaException {
+		ObjectOutput<List<NewsItemOutput>> data = new ObjectOutput<List<NewsItemOutput>>();
+		
+		List<NewsItemOutput> ouputList = newsmapper_R.getConsultInfo(itemsid);
+		data.set_ReturnData(ouputList);
+		return data;
+	}
+
+
+}

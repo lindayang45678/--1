@@ -1,0 +1,51 @@
+//点击获取验证码
+var wait=60;//时间
+function verificationCodetTime(obj) {//obj为按钮的对象
+	if (wait==0) {
+		obj.removeAttr("disabled");
+		obj.html("重新发送验证码");//改变按钮中value的值
+		wait=60;
+		obj.removeClass('getVerificationCode')
+		}
+	else {	
+			obj.addClass('getVerificationCode')
+			obj.attr("disabled","disabled");//倒计时过程中禁止点击按钮
+			obj.html(wait+"s获取验证码");//改变按钮中value的值
+			wait--;
+			setTimeout(function() {
+			verificationCodetTime(obj);//循环调用
+			},1000)
+		}
+} 
+$(function() {
+	$("#getVerificationCode").on("tap", function(event) {
+		if(wait == 60 || wait == 0){
+			verificationCodetTime($("#getVerificationCode"));
+			var mobile = $.trim($("#mobile").val());
+			var data = {"phone":mobile,"type":"1"};
+			var resultJson = ajaxCommon(urlGetCode, data);
+		}else{
+			return;
+		}
+		event.stopPropagation();
+	});
+	
+	$("#btnRegister").on("tap", function() {
+		var mobile = $.trim($("#mobile").val());
+		var verificationCode=$.trim($("#verificationCode").val()); //验证码
+		var pwd = $.trim($("#pwd").val());
+		var data = {"mobile":mobile,"verificationCode":verificationCode,"pwd":pwd};
+		var resultJson = ajaxCommon(urlRegister, data);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			var userName = resultJson._ReturnData.userName;
+			var userType = resultJson._ReturnData.userType;
+			storage.setItem("mobile", mobile);
+			storage.setItem(hasLogined, "1");
+			window.location.href = "shop.html?t=" + t;
+		} 
+		else {		
+				alert(resultJson._ReturnMsg);
+		}
+	});
+	
+});

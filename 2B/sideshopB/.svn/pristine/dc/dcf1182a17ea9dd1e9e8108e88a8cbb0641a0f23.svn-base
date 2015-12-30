@@ -1,0 +1,1194 @@
+package com.lakala.module.goods.service.impl;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.converters.BigDecimalConverter;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.base.model.Approval;
+import com.lakala.base.model.Realcate;
+import com.lakala.base.model.Tgoodinfo;
+import com.lakala.base.model.Tgoodskuinfo;
+import com.lakala.base.model.TgoodslogWithBLOBs;
+import com.lakala.base.model.Tgoodsprovider;
+import com.lakala.base.model.Timages;
+import com.lakala.base.model.Tpropertykey;
+import com.lakala.base.model.Tpropertyvalue;
+import com.lakala.base.model.Tuser;
+import com.lakala.base.model.VirtualCate;
+import com.lakala.exception.LakalaException;
+import com.lakala.module.approval.ApprovalConstant;
+import com.lakala.module.approval.service.ApprovalService;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.service.GoodsPublishService;
+import com.lakala.module.goods.service.GoodsService;
+import com.lakala.module.goods.vo.CategoryInput;
+import com.lakala.module.goods.vo.CategorySub;
+import com.lakala.module.goods.vo.GoodsInput;
+import com.lakala.module.goods.vo.GoodsListInput;
+import com.lakala.module.goods.vo.GoodsPublishInput;
+import com.lakala.module.goods.vo.MarketableInput;
+import com.lakala.module.goods.vo.PropertyKeyVO;
+import com.lakala.module.goods.vo.PropertyValueVO;
+import com.lakala.module.goods.vo.RealCateVO;
+import com.lakala.module.goods.vo.TgoodsSkuInfo;
+import com.lakala.module.goods.vo.TgoodsSkuInfoInput;
+import com.lakala.module.goods.vo.VirtualCateVO;
+import com.lakala.util.BussConst;
+import com.lakala.util.ConfigUtil;
+import com.lakala.util.HtmlDomUtil;
+import com.lakala.util.ImageUtil;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.StringUtil;
+
+@Service
+public class GoodsServiceImpl implements GoodsService {
+    private Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class);
+
+	@Autowired
+    private com.lakala.mapper.w.goods.TgoodsinfoMapper tgoodinfoMapper_W;
+	@Autowired
+    private com.lakala.mapper.w.goods.TgoodskuinfoMapper tgoodskuinfoMapper_W;
+    @Autowired
+    private com.lakala.mapper.r.goods.TgoodsinfoMapper tgoodinfoMapper_R;
+    @Autowired
+    private com.lakala.mapper.r.goods.TgoodskuinfoMapper tgoodskuinfoMapper_R;
+    @Autowired
+    private com.lakala.mapper.w.goods.TimagesMapper timagesMapper_W;
+    @Autowired
+    private com.lakala.mapper.r.goods.TimagesMapper timagesMapper_R;
+    @Autowired
+    private com.lakala.mapper.r.realcat.RealcateMapper realcateMapper_R;
+    @Autowired
+    private com.lakala.mapper.r.goods.TpropertykeyMapper tpropertykeyMapper_R;
+    @Autowired
+    private com.lakala.mapper.r.goods.TpropertyvalueMapper tpropertyvalueMapper_R;
+    @Autowired
+    private com.lakala.mapper.w.goods.TgoodslogMapper tgoodslogMapper_W;
+    @Autowired
+    private com.lakala.mapper.r.goods.TgoodslogMapper tgoodslogMapper_R;
+    @Autowired
+    private com.lakala.mapper.r.virtualcat.VirtualCateMapper virtualCateMapper_R;
+    @Autowired
+    private com.lakala.mapper.r.provider.TgoodsproviderMapper tgoodsproviderMapper_R;
+    @Autowired
+    private com.lakala.mapper.r.approval.ApprovalMapper approvalMapper_R;
+    @Autowired
+    private com.lakala.mapper.w.approval.ApprovalMapper approvalMapper_W;
+    @Autowired
+    private com.lakala.mapper.r.user.TuserMapper tuserMapper_R;
+	@Autowired
+    private ConfigUtil cfg;
+	@Autowired
+	private GoodsPublishService goodsPublishService;
+	@Autowired
+    private ApprovalService approvalService ;
+	
+	
+	public ObjectOutput getCategory(CategoryInput cate) throws LakalaException {  
+		ObjectOutput data = new ObjectOutput();		
+		String psam = cate.getPsam();
+		if(psam == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		//继续判断里面的必须参数
+		CategorySub categorySub1 = new CategorySub();
+		categorySub1.setCategoryId(1);
+		categorySub1.setCategoryName("品类1");
+		
+		CategorySub categorySub2 = new CategorySub();
+		categorySub2.setCategoryId(2);
+		categorySub2.setCategoryName("品类2");
+		
+		CategorySub categorySub11 = new CategorySub();
+		categorySub1.setCategoryId(11);
+		categorySub1.setCategoryName("子品类1");
+		
+		CategorySub categorySub12 = new CategorySub();
+		categorySub1.setCategoryId(12);
+		categorySub1.setCategoryName("子品类2");
+		List<CategorySub> sublists = new ArrayList<CategorySub>();
+		sublists.add(categorySub11);
+		sublists.add(categorySub12);
+		
+		categorySub1.setLists(sublists);
+		categorySub2.setLists(sublists);
+		
+        List<CategorySub> lists = new ArrayList<CategorySub>();
+        lists.add(categorySub1);
+        lists.add(categorySub2);
+		
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(lists);
+		return data;
+	}
+	
+	
+	public ObjectOutput maketAbleGoods(MarketableInput input) throws LakalaException{
+		ObjectOutput data = new ObjectOutput();	
+		data.set_ReturnData(true);
+		return data;
+	}
+	
+	public ObjectOutput getGoodsList(GoodsListInput input) throws LakalaException{
+		ObjectOutput data = new ObjectOutput();	
+		List<TgoodsSkuInfo> lists = new ArrayList<TgoodsSkuInfo>();
+		TgoodsSkuInfo tgoodsSkuInfo1 = new TgoodsSkuInfo();
+		tgoodsSkuInfo1.setGoodname("测试商品");
+		tgoodsSkuInfo1.setSaleprice(new BigDecimal(123));
+		tgoodsSkuInfo1.setSkustock(new BigDecimal(88));
+		lists.add(tgoodsSkuInfo1);
+		data.set_ReturnData(lists);
+		return data;
+	}
+	
+	/**
+	 * 新增、修改商品
+	 * @throws LakalaException
+	 */
+	public ObjectOutput<Integer> upGoodsInfo(TgoodsSkuInfoInput input) throws LakalaException{
+		 //新增商品基本信息的主键
+        Integer tgoodinfoid = input.getTgoodinfoid();
+        if (tgoodinfoid != null) {
+     		//判断商品是否自营商品（自营并且是下架状态才可以修改）
+        	Tgoodinfo goodInfoBean = tgoodinfoMapper_R.selectByPrimaryKey(tgoodinfoid);
+    		if (goodInfoBean.getPlatorself()==452 && goodInfoBean.getGoodsstatus()==209) {
+    			//写库:商品基本信息表(修改记录)
+    			tgoodinfoid = updateGood(input);
+    		}
+        } else {
+			//写库:商品基本信息表(增加记录)
+        	tgoodinfoid = addGood(input);
+        }
+        
+        ObjectOutput<Integer> data = new ObjectOutput<Integer>();	
+        data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+        data.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		data.set_ReturnData(tgoodinfoid);
+		return data;
+	}
+	
+	/**
+	 * 商品新增处理
+	 * @throws LakalaException 
+	 */
+	public int addGood(TgoodsSkuInfoInput input) throws LakalaException{
+		Date now = new Date(System.currentTimeMillis());//当前时间
+		Integer tgoodinfoid = null;
+		try {
+			//根据手机号获取供应商信息
+			Tgoodsprovider provider = tgoodsproviderMapper_R.selectByTel(input.getMobile());
+			if (null == provider) {
+				throw new LakalaException("NO_PROVIDER");
+			}
+			input.setSupplierid(provider.getTgoodsproviderid());
+			input.setSuppliername(provider.getName());
+			
+			//添加模板商品时，后台读取虚分类信息
+			if (!StringUtil.verdict(input.getVirtualcateids())) {
+				String virCateStr = getVirCatByRealCat(input.getTrealcateid());
+				if (!StringUtil.verdict(virCateStr)) {
+					throw new LakalaException("NO_VIRTUALCATE");
+				}
+				input.setVirtualcateids(virCateStr);
+			} else {//自定义上传自营商品
+				String virCateStr = input.getVirtualcateids();
+				input.setVirtualcateids(BussConst.APP_2B_CHANNELID + "-" + virCateStr.substring(0, virCateStr.length() - 1));
+			}
+			
+			//封装商品基本信息数据
+			Tgoodinfo goodInfoBean = new Tgoodinfo();
+			setTgoodsinfoWithBLOBs(goodInfoBean, input);
+			goodInfoBean.setCreateddate(now);
+			goodInfoBean.setLastupdatedate(now);
+			
+			//写库:商品基本信息表
+			tgoodinfoMapper_W.insertSelective(goodInfoBean);
+			
+			//新增商品基本信息的主键
+			tgoodinfoid = goodInfoBean.getTgoodinfoid();
+			
+			/**
+			 * 处理商品图片：
+			 * targetType = 3，表示引用的商品池的图片，此时，将图片信息复制一份，更新targetId
+			 * targetType = null，表示供应商新增图片，此时，只更新targetId
+			 */
+			String tempImgsStr = "";//商品表图片字段数据格式：文件名,多张图片之间用“;”隔开
+			String[] imgs = String.valueOf(input.getImgInfoList()).split(";");//页面图片数据
+			for (int i = 0; imgs.length > 0 && i < imgs.length; i++) {
+				
+				//关联上传商品图片(多张图片之间用“;”隔开，页面传入图片数据包含图片id，及排序：图片id_排序)
+				String[] imgInfo = imgs[i].split("_");
+				Timages imgObj = timagesMapper_R.selectByPrimaryKey(Integer.valueOf(imgInfo[0]));
+				
+				//移动文件：从临时路径移动到正式路径
+				String newUrl = ImageUtil.moveMainPic(cfg, imgObj.getUrl(), tgoodinfoid, 
+								BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS, input.getReq(), false, false);
+				imgObj.setUrl(newUrl);
+				imgObj.setSort(Integer.valueOf(imgInfo[1]));
+				imgObj.setTargetid(Long.valueOf(tgoodinfoid.toString()));
+				imgObj.setTargettype(BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS);
+				//写库
+				timagesMapper_W.updateByPrimaryKeySelective(imgObj);
+				
+				//整理商品表图片字段数据
+				tempImgsStr += getImgNamesStr(i, imgObj.getUrl(), imgs.length);
+			}
+			
+			//更新商品基本信息图片信息
+	        goodInfoBean.setGoodbigpic(tempImgsStr);
+	        tgoodinfoMapper_W.updateByPrimaryKeySelective(goodInfoBean);
+			
+			/**
+			 * 封装商品SKU信息数据：页面传入的sku信息包含sku属性、销售价、市场价、库存，数据格式：
+			 * 属性ID键值对(属性ID:属性值ID)_属性描述(属性值描述1x属性值描述2)_销售价_市场价_库存
+			 * #属性ID键值对(属性ID:属性值ID)_属性描述(属性值描述1x属性值描述2)_销售价_市场价_库存
+			 */
+			String[] skus = input.getSkuidstr().split("#");
+			for (int i = 0; i < skus.length; i++) {
+				Tgoodskuinfo goodSkuInfoBean = new Tgoodskuinfo();
+				setTgoodskuinfoWithBLOBs(goodSkuInfoBean, input);
+				goodSkuInfoBean.setTgoodinfoid(tgoodinfoid);
+				//分解sku属性、销售价、市场价、库存，并记录在商品信息中
+				String[] temp = skus[i].split("_");
+				goodSkuInfoBean.setSkuidstr(temp[0]);
+				
+				goodSkuInfoBean
+				.setSaleprice(StringUtil.isNumber(temp[2]) ? new BigDecimal(
+						temp[2]) : new BigDecimal("0"));//销售价
+				
+				goodSkuInfoBean
+				.setMarketprice(StringUtil.isNumber(temp[3]) ? new BigDecimal(
+						temp[3]) : new BigDecimal("0"));//市场价
+				
+				goodSkuInfoBean
+				.setSkustock(StringUtil.isNumber(temp[4]) ? new BigDecimal(
+						temp[4]) : new BigDecimal("0"));//库存
+				
+				goodSkuInfoBean.setSkufrontdisnamestr("NONE".equals(temp[0]) ? ""
+						: getSkuDisc(temp[0]));
+				
+				goodSkuInfoBean.setGoodbigpic(tempImgsStr);//图片
+				
+				goodSkuInfoBean.setCreateddate(now);
+				goodSkuInfoBean.setLastupdatedate(now);
+				
+				//写库：商品SKU信息表
+				tgoodskuinfoMapper_W.insertSelective(goodSkuInfoBean);
+				
+				//获取本次操作日志批次号
+				Integer batNo = getBatNo(tgoodinfoid);
+				//记录日志
+				writeGoodsLog(goodSkuInfoBean, input.getLoginusername(), BussConst.GOODS_LOG_ACTIONTYPE_NEW, 
+							BussConst.GOODS_LOG_OPREATESRC_PROVIDERADD, batNo);
+			}
+			
+			//模板商品，新增成功直接上架，自定义商品后台审核通过后上架
+			if (input.isModel()) {//模板商品
+				GoodsPublishInput gpi = new GoodsPublishInput();
+				List<Integer> ids = new ArrayList<Integer>();
+				ids.add(tgoodinfoid);
+				gpi.setGoodsIdList(ids);
+				//调用上架接口
+				goodsPublishService.updateGoods(gpi);
+			} else {//自定义商品
+				//暂定：根据供应商信息查询用户信息
+				Tuser user = tuserMapper_R.selectByGysId(provider.getTgoodsproviderid());
+				//商品信息，新增成功后，配置该商品审批数据
+				Approval approval = new Approval();
+				approval.setUserId(user.getTuserid().toString());
+				approval.setObjType(ApprovalConstant.OBJTYPE_ADD_GOODS);//审批模板数据类型
+				approval.setDocentry(String.valueOf(tgoodinfoid));
+				approval.setOwnerRemark("商品新增成功，请审批！");
+				approval.setStatus(ApprovalConstant.WAIT);//审批状态：163   待审批
+				approval.setUrl("goods/showgoodsdetail/"+goodInfoBean.getTgoodinfoid());//商品详情页
+				//写库：审批模板配置表
+				approvalService.insertSelective(approval);
+			}
+			
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+		return tgoodinfoid;
+	}
+	
+	/**
+	 * 根据实分类，获取关联的虚分类
+	 */
+	private String getVirCatByRealCat(Integer tRealCateId) {
+		List<String> temp = new ArrayList<String>();
+		//查询所有关联的虚分类
+		List<VirtualCate> vcs = virtualCateMapper_R.findVirCatByRealCat(tRealCateId);
+		
+		//遍历所有虚分类
+		for (VirtualCate vc : vcs) {
+			String virCateStr = vc.getTvirtualcateid().toString();
+			temp.add(goForward(virCateStr, vc.getFathervirtualcateid()));
+		}
+
+		//整理数据：转成字符串，并拼接上频道信息
+		String _virCateStr = "";
+		for (int i = 0; i < temp.size(); i++) {
+			_virCateStr += (i == temp.size() - 1 ?BussConst.APP_2B_CHANNELID + "-" + temp.get(i) 
+					: BussConst.APP_2B_CHANNELID + "-" + temp.get(i) + ",");
+		}
+		return _virCateStr;
+	}
+
+	/**
+	 * 向前查找父类 zhiziwei
+	 */
+	private String goForward(String str, Integer fatherCateId){
+		VirtualCate vc = virtualCateMapper_R.selectByPrimaryKey(fatherCateId);
+		if (null != vc) {
+			//拼分类ID
+			str = vc.getTvirtualcateid().toString() + "_" + str;
+			//递归调用，查询前边的父类
+			if (vc.getFathervirtualcateid().intValue() != 0) {
+				str = goForward(str, vc.getFathervirtualcateid());
+			}
+		}
+		return str;
+	}
+	
+	/**
+	 * 修改商品
+	 * @throws LakalaException 
+	 */
+	public int updateGood(TgoodsSkuInfoInput input) throws LakalaException{
+		Date now = new Date(System.currentTimeMillis());//当前时间
+		Integer tgoodInfoId = Integer.valueOf(input.getTgoodinfoid());//商品基本信息id
+		
+		try {
+			//封装商品基本信息数据
+			Tgoodinfo goodInfoBean = tgoodinfoMapper_R.selectByPrimaryKey(tgoodInfoId);
+			//处理商品基本信息
+			setTgoodsinfoWithBLOBs(goodInfoBean, input);
+			goodInfoBean.setLastupdatedate(now);
+			//写库:商品基本信息表
+			tgoodinfoMapper_W.updateByPrimaryKeySelective(goodInfoBean);
+			
+			//处理商品图片信息
+			//修改前该商品关联的图片
+			Map<String, Object> imgParm = new HashMap<String, Object>();
+			imgParm.put("goodsId", Long.valueOf(tgoodInfoId.toString()));
+			imgParm.put("targetType", BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS);
+			List<Timages> imgsBeforeUpdate = timagesMapper_R.queryImgByGoodsId(imgParm);
+			
+			//修改后该商品关联的图片(多张图片之间用“;”隔开，页面传入图片数据包含图片id，及排序：图片id_排序)
+			String[] imgs = String.valueOf(input.getImgInfoList()).split(";");
+			//商品表图片字段数据格式：文件名,多张图片之间用“;”隔开
+			String tempImgsStr = "";
+			
+			for (int i = 0; imgs.length > 0 && i < imgs.length; i++) {
+				boolean flag = false;//更新标记,默认未更新
+				//处理原来就存在的图片
+				for (Timages timages : imgsBeforeUpdate) {
+					String[] imgInfo = imgs[i].split("_");
+					if (timages.getTimageid().equals(Integer.valueOf(imgInfo[0]))) {// 更新图片数据
+						timages.setSort(Integer.valueOf(imgInfo[1]));
+						// 写库
+						timagesMapper_W.updateByPrimaryKeySelective(timages);
+						//更新更新标记
+						flag = true;
+						//整理图片文件名字符串
+						tempImgsStr += getImgNamesStr(i, timages.getUrl(), imgs.length);
+					}
+				}
+				//处理新增的图片
+				if(!flag){//未更新，说明是新增的图片
+					String[] imgInfo = imgs[i].split("_");
+					Timages imgObj = timagesMapper_R.selectByPrimaryKey(Integer.valueOf(imgInfo[0]));
+					
+					//移动文件：从临时路径移动到正式路径，并返回最新url
+					String newUrl = ImageUtil.moveMainPic(cfg, imgObj.getUrl(), tgoodInfoId, 
+							BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS, input.getReq(), false, false);
+					imgObj.setUrl(newUrl);
+					imgObj.setSort(Integer.valueOf(imgInfo[1]));
+					imgObj.setTargetid(Long.valueOf(tgoodInfoId.toString()));
+					imgObj.setTargettype(BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS);
+					//写库
+					timagesMapper_W.updateByPrimaryKeySelective(imgObj);
+					//整理图片文件名字符串
+					tempImgsStr += getImgNamesStr(i, imgObj.getUrl(), imgs.length);
+				}
+			}
+			
+			//更新商品基本信息图片信息
+			goodInfoBean.setGoodbigpic(tempImgsStr);
+			input.setGoodbigpic(tempImgsStr);
+			tgoodinfoMapper_W.updateByPrimaryKeySelective(goodInfoBean);
+			
+			//获取本次操作日志批次号
+			Integer batNo = getBatNo(tgoodInfoId);
+			
+			/**
+			 * 处理商sku信息：
+			 * 数据：
+			 *     封装商品SKU信息数据：页面传入的sku信息包含sku属性、销售价、市场价、库存，数据格式：
+			 *     属性1:属性值1,属性2:属性值1_销售价_市场价_库存#
+			 *     属性1:属性值2,属性2:属性值2_销售价_市场价_库存
+			 * 处理：
+			 *     修改：修改前后都存在的sku；
+			 *     删除：修改前存在，修改后不存在的sku
+			 *     新增：修改前不存在，修改后存在的sku       */
+			//修改前的sku信息
+			List<Tgoodskuinfo> goodSkuInfoBeans = tgoodskuinfoMapper_R
+					.selectSKUByGoodsId(tgoodInfoId);
+			List<String> skusBeforeUpdate = new ArrayList<String>();
+			for (Tgoodskuinfo blog : goodSkuInfoBeans) {
+				skusBeforeUpdate.add(blog.getSkuidstr());
+			}
+			
+			//修改后的sku信息
+			String[] skus = input.getSkuidstr().split("#");
+			List<String> skusAfterUpdate = new ArrayList<String>();
+			for (String s : skus) {
+				skusAfterUpdate.add(s.split("_")[0]);
+			}
+			
+			List<String> skusForMod = new ArrayList<String>();
+			List<String> skusForDel = new ArrayList<String>();
+			List<String> skusForAdd = new ArrayList<String>();
+			
+			//修改前存在
+			for (String s : skusBeforeUpdate) {
+				if (skusAfterUpdate.contains(s)) {//修改后存在
+					skusForMod.add(s);
+				}else{//修改后不存在
+					skusForDel.add(s);
+				}
+			}
+			
+			//修改后存在
+			for (String s : skusAfterUpdate) {
+				//修改前不存在
+				if (!skusBeforeUpdate.contains(s)) {
+					skusForAdd.add(s);
+				}
+			}
+			
+			//修改：修改前存在，修改后存在
+			for (String s : skusForMod) {
+				for (int i = 0; i < skus.length; i++) {
+					//分解属性、销售价、市场价、最低销售价、销售价、库存，并记录在商品信息中
+					String[] temp = skus[i].split("_");
+					if(s.equals(temp[0])){
+						Tgoodskuinfo blob = getGoodsSkuBean(goodSkuInfoBeans, s);
+						setTgoodskuinfoWithBLOBs(blob, input);
+						blob.setSaleprice(StringUtil.isNumber(temp[2]) ? new BigDecimal(
+								temp[2]) : new BigDecimal("0"));
+						blob.setMarketprice(StringUtil.isNumber(temp[3]) ? new BigDecimal(
+								temp[3]) : new BigDecimal("0"));
+						blob.setSkustock(StringUtil.isNumber(temp[4]) ? new BigDecimal(
+								temp[4]) : new BigDecimal("0"));
+						blob.setGoodbigpic(input.getGoodbigpic());
+						blob.setLastupdatedate(now);
+						//写库：更新商品SKU信息表
+						tgoodskuinfoMapper_W.updateByPrimaryKeySelective(blob);
+						
+						//记录日志
+						writeGoodsLog(blob, input.getLoginusername(), BussConst.GOODS_LOG_ACTIONTYPE_MOD, 
+								BussConst.GOODS_LOG_OPREATESRC_PROVIDERMOD, batNo);
+					}
+				}
+			}
+			
+			//删除：修改前存在，修改后不存在
+			for (String s : skusForDel) {
+				Tgoodskuinfo blob = getGoodsSkuBean(goodSkuInfoBeans, s);
+				//写库：删除商品SKU信息表
+				tgoodskuinfoMapper_W.deleteByPrimaryKey(blob.getTgoodskuinfoid());
+				
+				//记录日志
+				writeGoodsLog(blob, input.getLoginusername(), BussConst.GOODS_LOG_ACTIONTYPE_DEL, 
+						BussConst.GOODS_LOG_OPREATESRC_PROVIDERMOD, batNo);
+			}
+			
+			//新增：修改前不存在，修改后存在
+			for (String s : skusForAdd) {
+				for (int i = 0; i < skus.length; i++) {
+					//分解属性、销售指导价，并记录在商品信息中
+					String[] temp = skus[i].split("_");
+					if(s.equals(temp[0])){
+						Tgoodskuinfo skuBean = new Tgoodskuinfo();
+						setTgoodskuinfoWithBLOBs(skuBean, input);
+						skuBean.setTgoodinfoid(tgoodInfoId);
+						skuBean.setSkuidstr(temp[0]);
+						
+						skuBean.setSaleprice(StringUtil.isNumber(temp[2]) ? new BigDecimal(
+								temp[2]) : new BigDecimal("0"));
+						skuBean.setMarketprice(StringUtil.isNumber(temp[3]) ? new BigDecimal(
+								temp[3]) : new BigDecimal("0"));
+						skuBean.setSkustock(StringUtil.isNumber(temp[4]) ? new BigDecimal(
+								temp[4]) : new BigDecimal("0"));
+						
+						skuBean.setSupplierid(goodInfoBean.getSupplierid());
+						skuBean.setSuppliername(goodInfoBean.getSuppliername());
+						skuBean.setVirtualcateids(goodInfoBean.getVirtualcateids());
+						skuBean.setGoodbigpic(input.getGoodbigpic());
+						skuBean.setSkufrontdisnamestr("NONE".equals(temp[0]) ? "" : getSkuDisc(temp[0]));
+						skuBean.setCreateddate(now);
+						skuBean.setLastupdatedate(now);
+						
+						//写库：商品SKU信息表
+						tgoodskuinfoMapper_W.insertSelective(skuBean);
+						
+						//记录日志
+						writeGoodsLog(skuBean, input.getLoginusername(), BussConst.GOODS_LOG_ACTIONTYPE_NEW, 
+								BussConst.GOODS_LOG_OPREATESRC_PROVIDERMOD, batNo);
+					}
+				}
+			}
+			
+			//模板商品，新增成功直接上架，自定义商品后台审核通过后上架
+			if (input.isModel()) {//模板商品
+				GoodsPublishInput gpi = new GoodsPublishInput();
+				List<Integer> ids = new ArrayList<Integer>();
+				ids.add(tgoodInfoId);
+				gpi.setGoodsIdList(ids);
+				//调用上架接口
+				goodsPublishService.updateGoods(gpi);
+			} else {//自定义商品
+				List<Approval> apps = approvalMapper_R.getAppListByDocentry(tgoodInfoId.toString());
+				//插入新的审批数据前，将审批数据中待审核的数据关闭：isreturn字段置为1
+				for (Approval app : apps) {
+					if (app.getStatus().intValue() == ApprovalConstant.WAIT.intValue()) {
+						app.setIsreturn(1);
+						app.setStatus(ApprovalConstant.NOT_AGREE);
+						app.setRemarks("供应商修改待审核商品，重新提交了审核申请，该条申请作废！");
+						approvalMapper_W.updateSelective(app);
+					}
+				}
+				
+				//暂定：根据供应商信息查询用户信息
+				Tuser user = tuserMapper_R.selectByGysId(goodInfoBean.getSupplierid());
+				
+				//商品信息，修改成功后，配置该商品审批数据
+				Approval approval = new Approval();
+				approval.setUserId(user.getTuserid().toString());
+				approval.setObjType(ApprovalConstant.OBJTYPE_ADD_GOODS);//审批模板数据类型
+				approval.setDocentry(tgoodInfoId.toString());
+				approval.setOwnerRemark("商品新增成功，请审批！");
+				approval.setStatus(ApprovalConstant.WAIT);//审批状态：163   待审批
+				approval.setUrl("goods/showgoodsdetail/"+goodInfoBean.getTgoodinfoid());//商品详情页
+				//写库：审批模板配置表
+				approvalService.insertSelective(approval);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return tgoodInfoId;
+	}
+	
+	
+	/**
+	 * 移动商品详情图，删除临时目录，返回最新的商品详情
+	 * @param currentUserName 
+	 */
+	private String moveDetailPic(String tgoodInfoId, String gooddisc, String loginuserid, 
+			HttpServletRequest req) throws IOException{
+		// 当前WEB环境的上层目录
+		String webParentPath = cfg.getTemp() + new File(req.getSession().getServletContext()
+				.getRealPath("/")).getParent();
+		//获取图片信息（url）
+		Map<String, String> imgs = HtmlDomUtil.getAttrValue(gooddisc, "img", "src", "title");
+		Map<String, String> newUrl = new HashMap<String, String>();
+		
+		//遍历图片信息
+		Iterator<String> key = imgs.keySet().iterator();
+		while(key.hasNext()){
+			String skey = key.next();
+			String img = imgs.get(skey);
+			//当前图片路径
+			String[] temp = img.split("/");
+			File srcDir = new File(webParentPath + cfg.getSystem_name() + cfg.getLocal_temp_path()
+					+ cfg.getGoods_detailimg_path() + "/" + temp[temp.length - 2] + "/" 
+					+ temp[temp.length - 1]);
+			// 目标图片路径
+			File destDir = new File(webParentPath + cfg.getSystem_name() + cfg.getGoods_local_path() + "/"
+					+ tgoodInfoId + cfg.getGoods_detailimg_path());
+			//移动到目标路径
+			if (srcDir.exists() && srcDir.isFile()) {
+				FileUtils.moveFileToDirectory(srcDir, destDir, true);
+				
+				//生成新的访问地址
+				newUrl.put(skey, cfg.getImg_server_url() + cfg.getGoods_img_server_path() + "/" + tgoodInfoId
+						+ cfg.getGoods_detailimg_path() + img.substring(img.lastIndexOf("/"), img.length()));
+			}
+			
+		}
+		
+		//移动后更新商品描述
+		String newGoodsDisc = HtmlDomUtil.modHtml(gooddisc, "img", "src", newUrl, "title");
+		
+		//删除临时目录
+		FileUtils.deleteDirectory(new File(webParentPath + cfg.getSystem_name() + cfg.getLocal_temp_path() 
+				+ "/" + loginuserid));
+		
+		return newGoodsDisc;
+	}
+	
+	/**
+	 * 获取商品主图文件名字符串，用“;”分割 
+	 */
+	private String getImgNamesStr(int index, String imgUrl, int length){
+		String temp = "";
+		if (index == length - 1)
+			temp += imgUrl.substring(imgUrl.lastIndexOf("/") + 1, imgUrl.length());
+		else
+			temp += (imgUrl.substring(imgUrl.lastIndexOf("/") + 1, imgUrl.length()) + ";");
+		return temp;
+	}
+	
+	/**
+	 * 根据sku属性获取bean
+	 */
+	private Tgoodskuinfo getGoodsSkuBean(List<Tgoodskuinfo> beans, String skuIdStr){
+		Tgoodskuinfo obj = null;
+		for (Tgoodskuinfo blob : beans) {
+			if (skuIdStr.equals(blob.getSkuidstr())) {
+				obj = blob;
+			}
+		}
+		return obj;
+	}
+	
+	/**
+	 * 获取sku属性值描述
+	 */
+	private String getSkuDisc(String skuId){
+		String result = "";
+		String[] pros = skuId.split(",");
+		for (int i = 0; i < pros.length; i++) {
+			String temp = tpropertyvalueMapper_R
+					.selectByPrimaryKey(Integer.valueOf(pros[i].split(":")[1])).getPropertyvalue();
+			if(i != pros.length - 1){
+				result += (temp + "x");
+			}else{
+				result += temp;
+			}
+		}
+		return result;
+	}
+	
+    /**
+     * @Title: setTgoodsinfoWithBLOBs
+     * @Description: 封装页面数据（TgoodsSkuInfoInput）
+     */
+    private Tgoodinfo setTgoodsinfoWithBLOBs(Tgoodinfo bean, TgoodsSkuInfoInput parm) {
+        //页面数据
+    	bean.setTrealcateid(parm.getTrealcateid());
+    	bean.setTrealcatedisc(parm.getTrealcatedisc());
+    	bean.setTrealcatetreedisc(parm.getTrealcatetreedisc());
+    	bean.setSupplierid(parm.getSupplierid());
+    	bean.setSuppliername(parm.getSuppliername());
+    	bean.setTbrandid(parm.getTbrandid());
+    	bean.setBrandname(StringUtil.verdict(parm.getBrandname()) ? parm.getBrandname() : "");
+    	bean.setGoodname(parm.getGoodname());
+    	bean.setGoodbarcode(StringUtil.verdict(parm.getGoodbarcode()) ? parm.getGoodbarcode() : "");
+    	bean.setGoodintroduce(StringUtil.verdict(parm.getGoodintroduce()) ? parm.getGoodintroduce() : "");
+    	bean.setIspayafterarrival(parm.getIspayafterarrival());
+    	bean.setIsnoreasonreturn(0); // 默认否
+    	bean.setIscontractmachine(0); // 默认否
+    	bean.setIsexpresstohome(parm.getIsexpresstohome());
+    	bean.setDistributionflag(362); // 默认 362  一小时送达
+        bean.setMeasureunits("件"); // 默认 【件】
+        bean.setIsforeigngoods(0); //默认否
+        bean.setStoragecondition(1); //默认常温
+        bean.setDistributioncondition(1);//默认常温
+        bean.setGoodtype(202);//默认 202 正常商品
+        bean.setBalanceway(1);//默认 1 按扣点结算
+        bean.setGoodstatus(196);//196: 待审核
+        bean.setTempstoregoodsflag(380);//380 不暂存
+        bean.setPlatorself(452);//自营-452，平台-453
+        bean.setGoodsstatus(209);//商品销售状态（在售:208/已下架:209）
+        bean.setDeflag(455); //删除标记，默认有效
+        bean.setDeviceno(parm.getDeviceno());
+        if (StringUtil.verdict(parm.getVirtualcateids())) {
+        	bean.setVirtualcateids(parm.getVirtualcateids());
+		}
+        if (StringUtil.verdict(parm.gettGoodInfoPoolId())) {
+        	bean.setTgoodinfopoolid(Integer.valueOf(parm.gettGoodInfoPoolId()));
+        	bean.setGoodsstatus(208);//商品销售状态（在售:208/已下架:209）
+		} else {
+			bean.setGoodsstatus(209);//商品销售状态（在售:208/已下架:209）
+		}
+        
+        return bean;
+    }
+    
+    /**
+     * @Title: setTgoodskuinfoWithBLOBs
+     * @Description: 封装页面数据（TgoodsSkuInfoInput）
+     */
+    private Tgoodskuinfo setTgoodskuinfoWithBLOBs(Tgoodskuinfo bean, TgoodsSkuInfoInput parm) {
+        //页面数据
+    	bean.setTrealcateid(parm.getTrealcateid());
+    	bean.setTrealcatedisc(parm.getTrealcatedisc());
+    	bean.setTrealcatetreedisc(parm.getTrealcatetreedisc());
+    	bean.setSupplierid(parm.getSupplierid());
+    	bean.setSuppliername(parm.getSuppliername());
+    	bean.setTbrandid(parm.getTbrandid());
+		bean.setBrandname(StringUtil.verdict(parm.getBrandname()) ? parm.getBrandname() : "");
+    	bean.setGoodname(parm.getGoodname());
+		bean.setGoodbarcode(StringUtil.verdict(parm.getGoodbarcode()) ? parm.getGoodbarcode() : "");
+		bean.setGoodintroduce(StringUtil.verdict(parm.getGoodintroduce()) ? parm.getGoodintroduce() : "");
+    	bean.setIspayafterarrival(parm.getIspayafterarrival());
+     	bean.setIsnoreasonreturn(0); // 默认否
+    	bean.setIscontractmachine(0); // 默认否
+    	bean.setIsexpresstohome(parm.getIsexpresstohome());
+    	bean.setDistributionflag(362); // 默认 362  一小时送达
+        bean.setMeasureunits("件"); // 默认 【件】
+        bean.setIsforeigngoods(0); // 默认否
+        bean.setStoragecondition(1); // 默认常温
+        bean.setDistributioncondition(1);// 默认常温
+        bean.setGoodtype(202);// 默认 202 正常商品
+        bean.setBalanceway(1);// 默认 1 按扣点结算
+        bean.setGoodstatus(196);//196: 待审核
+        bean.setTempstoregoodsflag(380);//380 不暂存
+        bean.setPlatorself(452);//自营-452，平台-453
+        bean.setDeviceno(parm.getDeviceno());
+        bean.setDeflag(455); //删除标记，默认有效
+        if (StringUtil.verdict(parm.getVirtualcateids())) {
+        	bean.setVirtualcateids(parm.getVirtualcateids());
+		}
+        if (StringUtil.verdict(parm.gettGoodInfoPoolId())) {
+        	bean.setTgoodinfopoolid(Integer.valueOf(parm.gettGoodInfoPoolId()));
+        	bean.setGoodsstatus(208);//商品销售状态（在售:208/已下架:209）
+		} else {
+			bean.setGoodsstatus(209);//商品销售状态（在售:208/已下架:209）
+		}
+        
+        return bean;
+    }
+	
+	/**
+	 * 商品新增：图片上传
+	 */
+	public ObjectOutput uploadImg(TgoodsSkuInfoInput input,HttpServletRequest request) {
+		logger.info("开始处理商品图片上传......");
+		//图片上传
+		Map<String, List<String>> result = ImageUtil.uploadFileToLocal(cfg, request, input.getLoginuserid());
+		Date now = new Date(System.currentTimeMillis());
+		List<String> list = result.get("SUCCESS");
+		for (String str : list) {
+			// 上传成功后，写库
+			Timages img = new Timages();
+			img.setUrl(str.split("_")[1]);
+			img.setSort(0);// 初始化为0，商品新增时提交更新数据
+			img.setImagename(str.split("_")[0]);
+			img.setLastmoddate(now);
+			timagesMapper_W.insertSelective(img);
+		}
+		ObjectOutput info = new ObjectOutput();
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		info.set_ReturnData(result);
+		return info;
+	}
+
+	/**
+	 * @Description 获取2C使用的所有虚分类（即营销分类）
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<List<VirtualCateVO>> queryVirtualCat() throws LakalaException{
+		logger.info("获取所有虚分类....");
+		
+		ObjectOutput<List<VirtualCateVO>> result = new ObjectOutput<List<VirtualCateVO>>();
+		result._ReturnData = new ArrayList<VirtualCateVO>();
+		
+		try {
+			//读取所有实分类数据
+			List<VirtualCate> vc = virtualCateMapper_R.findAll();
+			
+			//整理返回值
+			for (VirtualCate r : vc) {
+				VirtualCateVO vo = new VirtualCateVO();
+				vo.settVirtualCateId(r.getTvirtualcateid());
+				vo.setVirtualCateDisc(r.getVirtualcatedisc());
+				vo.setFatherVirtualCateId(r.getFathervirtualcateid());
+				result._ReturnData.add(vo);
+			}
+			
+			result.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			result.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * @Description 根据四级实分类获取sku属性数据
+	 * @author zhiziwei
+	 */
+	@Override
+	public ObjectOutput<List<PropertyKeyVO>> queryGoodProperty(
+			GoodsInput input) throws LakalaException {
+		logger.info("根据四级实分类获取sku属性数据：input = " + input.toString());
+	
+		//取出请求参数
+		String trealcateid = input.gettRealCateId();
+		//定义返回值
+		ObjectOutput<List<PropertyKeyVO>> result = new ObjectOutput<List<PropertyKeyVO>>();
+		result._ReturnData = new ArrayList<PropertyKeyVO>();
+
+		// 异常判断
+		if (!StringUtil.verdict(trealcateid)) {
+			result.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			result.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return result;
+		}
+
+		try {
+			// 业务处理
+			List<Tpropertykey> proKeyList = tpropertykeyMapper_R
+					.getGoodProperty(Integer.valueOf(trealcateid));
+			
+			// 遍历属性，并查询每个属性的值
+			for (Tpropertykey tk : proKeyList) {
+				
+				PropertyKeyVO keyVo = new PropertyKeyVO();
+				keyVo.settPropertyKeyId(tk.getTpropertykeyid());
+				keyVo.setPropertyName(tk.getPropertyname());
+				
+				// 读取属性值
+				List<Tpropertyvalue> values = tpropertyvalueMapper_R
+						.queryByPropertyId(tk.getTpropertykeyid());
+				
+				//没有属性值的属性过滤掉，不返回
+				if (null == values || values.size() == 0) {
+					continue;
+				}
+				
+				List<PropertyValueVO> valueVos = new ArrayList<PropertyValueVO>();
+				for (Tpropertyvalue value : values) {
+					PropertyValueVO valueVo = new PropertyValueVO();
+					valueVo.settPropertyValueId(value.getTpropertyvalueid());
+					valueVo.setPropertyValue(value.getPropertyvalue());
+					valueVo.setOrderBy(value.getOrderby());
+					
+					valueVos.add(valueVo);
+				}
+				keyVo.setPropertyValues(valueVos);
+				
+				result._ReturnData.add(keyVo);
+			}
+			
+			result.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			result.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * @Description: 记录商品日志
+	 * @author zhiziwei
+	 */
+	private void writeGoodsLog(Tgoodskuinfo sku, String opreater,
+			Integer actionType, Integer opreateSrc, Integer batNo) throws Exception{
+
+		// 使用BeanUtils.copyProperties,bean中如果有BigDecimal属性，要注册默认值
+        BigDecimalConverter bd = new BigDecimalConverter(new BigDecimal(0));
+        ConvertUtils.register(bd, java.math.BigDecimal.class);
+        ConvertUtils.register(null, java.util.Date.class);
+        
+		TgoodslogWithBLOBs logBean = new TgoodslogWithBLOBs();
+		
+		//复制商品数据
+		BeanUtils.copyProperties(logBean, sku);
+		
+		logBean.setBatno(batNo);
+		logBean.setOpreatesrc(opreateSrc);
+		logBean.setActiontype(actionType);
+		logBean.setOpreater(opreater);
+		
+		tgoodslogMapper_W.insertSelective(logBean);
+	}
+	
+	/**
+	 * @Description: 获取本次操作日志批次号
+	 * @author zhiziwei
+	 */
+	private Integer getBatNo(Integer tgoodinfoid) {
+		Integer batNo = tgoodslogMapper_R.getMaxBatNoByGoodsId(tgoodinfoid);
+		return null == batNo ? 1 : batNo + 1;
+	}
+
+	/**
+	 * 测试图片上传
+	 */
+	@Override
+	public Map<String, List<String>> testImg(HttpServletRequest req,
+			String ismove, String cate) throws LakalaException{
+		Map<String, List<String>> map = ImageUtil.uploadFileToLocal(cfg, req, "123");
+		
+		List<String> list = new ArrayList<String>();
+		
+		for (String s : map.get("SUCCESS")) {
+			String url = s.split("_")[1];
+			
+			if ("1".equals(ismove)) {
+				String newurl = "";
+				try {
+					newurl = ImageUtil.moveMainPic(cfg, url, 10000, Integer.valueOf(cate), req, true, false);
+				} catch (IOException e) {
+					throw new LakalaException(e.fillInStackTrace());
+				}
+				
+				list.add(s.split("_")[0] + "_" + newurl);
+			}
+		}
+		if ("1".equals(ismove)) {
+			map.put("SUCCESS", list);
+		}
+		
+		return map;
+	}
+
+	/**
+	 * @Description 根据虚分类获取其关联的实分类
+	 * @author zhiziwei
+	 */
+	@Override
+	public ObjectOutput<List<RealCateVO>> queryRealCatByVirtualcat(
+			GoodsInput input) throws LakalaException {
+		logger.info("根据虚分类获取其关联的实分类：input = " + input.toString());
+
+		// 取出请求参数
+		String tVirtualCateId = input.gettVirtualCateId();
+		// 定义返回值
+		ObjectOutput<List<RealCateVO>> result = new ObjectOutput<List<RealCateVO>>();
+		result._ReturnData = new ArrayList<RealCateVO>();
+
+		// 异常判断
+		if (!StringUtil.verdict(tVirtualCateId)) {
+			result.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			result.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return result;
+		}
+		
+		try {
+			//获取与其关联的实分类（实分类末级分类）
+			List<Realcate> rcats = realcateMapper_R.selectByVirtualCate(
+					Integer.valueOf(tVirtualCateId));
+			
+			//验证：是否有关联的实分类
+			if (null == rcats || rcats.size() == 0) {
+				result.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+				result.set_ReturnMsg("未关联实分类！");
+				return result;
+			}
+			
+			for (Realcate rcat : rcats) {
+				//该实分类以及上级分类数据
+				List<Realcate> list = new ArrayList<Realcate>();
+				list.add(rcat);
+				//分类描述
+				StringBuffer treeCateDisc = new StringBuffer("》" + rcat.getRealcatedisc());
+				
+				Integer fCateId = rcat.getFatherrealcateid();
+				
+				//获取该分类的所有上级分类，并逐级拼接分类描述
+				getParentCate(list, fCateId, treeCateDisc);
+				
+				//整理返回数据
+				for (Realcate realcate : list) {
+					RealCateVO vo = new RealCateVO();
+					
+					//返回的实分类，包含父级
+//					vo.settRealCateId(realcate.getTrealcateid());
+//					vo.setFatherRealCateId(realcate.getFatherrealcateid());
+//					vo.setRealCateDisc(realcate.getRealcatedisc());
+					
+					//分类描述，记录在末级分类上
+					if (rcat.getTrealcateid().intValue() == realcate.getTrealcateid().intValue()) {
+						vo.settRealCateId(realcate.getTrealcateid());
+						vo.setFatherRealCateId(realcate.getFatherrealcateid());
+						vo.setRealCateDisc(realcate.getRealcatedisc());
+						vo.settRealCateTreeDisc(treeCateDisc.toString());
+						result._ReturnData.add(vo);
+					}
+				}
+				
+			}
+			result.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			result.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @Title: getParentCate
+	 * @Description: 递归获取父级分类
+	 * @author zhiziwei
+	 */
+	private void getParentCate(List<Realcate> list, Integer parentCateId, StringBuffer treeCateDisc){
+		//获取父分类数据
+		Realcate cate = realcateMapper_R.selectByPrimaryKey(parentCateId);
+		list.add(cate);
+		
+		//递归获取上级分类
+		if (cate.getFatherrealcateid().intValue() != 0) {
+			treeCateDisc.insert(0, "》" + cate.getRealcatedisc());
+			//递归调用
+			getParentCate(list, cate.getFatherrealcateid(), treeCateDisc);
+		}else {
+			treeCateDisc.insert(0, cate.getRealcatedisc());
+		}
+	}
+
+	/**
+	 * @Description 删除指定商品
+	 * @author zhiziwei
+	 */
+	@Override
+	public ObjectOutput<String> deleteGoods(GoodsInput input)
+			throws LakalaException {
+		
+		logger.info("删除指定商品：input = " + input.toString());
+
+		// 取出请求参数
+		String tGoodsInfoId = input.gettGoodsInfoId();
+		// 定义返回值
+		ObjectOutput<String> result = new ObjectOutput<String>();
+
+		// 异常判断
+		if (!StringUtil.verdict(tGoodsInfoId)) {
+			result.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			result.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return result;
+		}
+		
+		try {
+			Integer goodsId = Integer.valueOf(tGoodsInfoId);
+			//更新商品主表
+			Tgoodinfo goodInfo = tgoodinfoMapper_R.selectByPrimaryKey(goodsId);
+			
+			if (BussConst.GOODS_GOODSSTATUS_ONSALE == goodInfo.getGoodsstatus()
+					.intValue()) {//在售商品校验：在售商品不可删除
+				result.set_ReturnData("商品在售，不可删除！");
+			} else if(BussConst.GOODS_PLATORSELF_PLAT == goodInfo.getPlatorself()
+					.intValue()){//是否是自营商品校验：非自营商品，不可删除
+				result.set_ReturnData("非自营商品，不可删除！");
+			} else {
+				//符合删除条件
+				goodInfo.setDeflag(BussConst.GOODS_DELFLAG_INVALID);
+				tgoodinfoMapper_W.updateByPrimaryKeySelective(goodInfo);
+				
+				//更新SKU表
+				List<Tgoodskuinfo> skus = tgoodskuinfoMapper_R.selectSKUByGoodsId(goodsId);
+				
+				for (Tgoodskuinfo sku : skus) {
+					sku.setDeflag(BussConst.GOODS_DELFLAG_INVALID);
+					tgoodskuinfoMapper_W.updateByPrimaryKeySelective(sku);
+				}
+				
+				result.set_ReturnData("删除成功！");
+			}
+			
+			result.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			result.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+ 		} catch (Exception e) {
+ 			throw new LakalaException(e);
+		}
+		
+		return result;
+	}
+
+    /**
+     * @Description 获取该用户所属商品的虚拟分类
+     * @author zhiziwei
+     */
+	@Override
+	public ObjectOutput<List<VirtualCateVO>> queryVirCateByGoods(GoodsInput input)
+			throws LakalaException {
+		// 取出请求参数
+		String mobile = input.getMobile();
+		// 定义返回值
+		ObjectOutput<List<VirtualCateVO>> result = new ObjectOutput<List<VirtualCateVO>>();
+		result._ReturnData = new ArrayList<VirtualCateVO>();
+
+		// 异常判断
+		if (!StringUtil.verdict(mobile)) {
+			result.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			result.set_ReturnMsg(ReturnMsg.MSG_PARAMS_ERROR);
+			return result;
+		}
+		
+		try {
+			//根据手机号获取供应商信息
+			Tgoodsprovider provider = tgoodsproviderMapper_R.selectByTel(mobile);
+			if (null == provider) {
+				throw new LakalaException("NO_PROVIDER");
+			}
+			//获取指定供应商的所有自营商品
+			List<Tgoodinfo> goods = tgoodinfoMapper_R.selectBySupplierId(provider.getTgoodsproviderid());
+			
+			//遍历取出所有虚分类ID，过滤去重
+			Set<Integer> tempSet = new HashSet<Integer>();
+			for (Tgoodinfo tg : goods) {
+				//取每个商品的虚分类信息：频道ID-虚分类1_虚分类2...
+				String[] vircateStrs = tg.getVirtualcateids().split(",");
+				for (String vircateStr : vircateStrs) {
+					if (StringUtil.verdict(vircateStr)) {
+						String[] _vircateStr = vircateStr.split("-")[1].split("_");
+						//缓存并过滤虚分类ID
+						for (int i = 0; i < _vircateStr.length; i++) {
+							tempSet.add(Integer.valueOf(_vircateStr[i]));
+						}
+					}
+				}
+			}
+			
+			//查询分类信息
+			Iterator<Integer> it = tempSet.iterator();
+			while (it.hasNext()) {
+				VirtualCate vc = virtualCateMapper_R.selectByPrimaryKey(it.next());
+				
+				VirtualCateVO vo = new VirtualCateVO();
+				vo.settVirtualCateId(vc.getTvirtualcateid());
+				vo.setVirtualCateDisc(vc.getVirtualcatedisc());
+				vo.setFatherVirtualCateId(vc.getFathervirtualcateid());
+				
+				result._ReturnData.add(vo);
+			}
+			
+			result.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			result.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		} catch (Exception e) {
+			throw new LakalaException(e);
+		}
+		return result;
+	}
+}

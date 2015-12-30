@@ -1,0 +1,579 @@
+package com.lakala.module.profit.service.impl;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.profit.TorderMapper;
+import com.lakala.mapper.r.profit.TorderitemsMapper;
+import com.lakala.mapper.r.profit.TorderproviderMapper;
+import com.lakala.model.profit.TearningscycleApp;
+import com.lakala.model.profit.TearningsdayApp;
+import com.lakala.model.profit.Torder;
+import com.lakala.model.profit.TorderearningsProvider;
+import com.lakala.model.profit.Torderitems;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.profit.controller.ProfitConstant;
+import com.lakala.module.profit.service.ProfitService;
+import com.lakala.module.profit.vo.Oditem;
+import com.lakala.module.profit.vo.OrderCycleProfitInput;
+import com.lakala.module.profit.vo.OrderCycleProfitOutput;
+import com.lakala.module.profit.vo.OrderEarningsDetailInput;
+import com.lakala.module.profit.vo.OrderEarningsDetailOutput;
+import com.lakala.module.profit.vo.OrderEarningsInput;
+import com.lakala.module.profit.vo.OrderEarningsOutput;
+import com.lakala.module.profit.vo.ProfitHomeInput;
+import com.lakala.module.profit.vo.ProfitHomeOutput;
+import com.lakala.util.DateUtils;
+import com.lakala.util.NumberUtils;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.TokenUtil;
+
+/**
+ * 用户收益接口实现
+ * 
+ * @author pengyunle
+ *
+ */
+@Service("ProfitServiceBean")
+public class ProfitServiceImpl implements ProfitService {
+	/** 日志 */
+	protected static final Logger log = Logger.getLogger(ProfitServiceImpl.class);
+
+	@Autowired
+	private com.lakala.mapper.r.profit.TearningscycleAppMapper earningscycleAppMapper_R;
+
+	@Autowired
+	private com.lakala.mapper.r.profit.TearningsdayAppMapper earningsdayAppMapper_R;
+
+	@Autowired
+	private com.lakala.mapper.r.profit.TorderearningsProviderMapper orderearningsProviderMapper_R;
+
+	@Autowired
+	private TorderMapper orderMapper_r;
+
+	@Autowired
+	private TorderitemsMapper orderitemsMapper_r;
+
+	@Autowired
+	private TorderproviderMapper orderproviderMapper_r;
+
+	/**
+	 * 用户进入到收益首页查询业务
+	 * 
+	 * @param profit
+	 * @see ProfitHomeInput
+	 * @return @see ObjectOutput
+	 * @throws LakalaException
+	 */
+	public ObjectOutput<ProfitHomeOutput> earningsTotal(ProfitHomeInput profit) throws ParseException {
+		ObjectOutput<ProfitHomeOutput> data = new ObjectOutput<ProfitHomeOutput>();
+
+		// 继续判断里面的必须参数
+		if (profit == null) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		log.info("输入参数：电话号：" + profit.getMobile());
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, -1);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("tel", profit.getMobile());
+		map.put("executetimeStart", DateUtils.dateFormatYMD.format(calendar.getTime()) + " 00:00:00");
+		map.put("executetimeEnd", DateUtils.dateFormatYMD.format(calendar.getTime()) + " 23:59:59");
+		TearningsdayApp result = earningsdayAppMapper_R.selectByTel(map);
+		map.put("executetimeStart", "2015-03-06 00:00:00");
+		TearningsdayApp resultSum = earningsdayAppMapper_R.selectByTelSum(map);
+		ProfitHomeOutput info = new ProfitHomeOutput();
+		if (result != null) {
+			// 平台订单
+			info.setTerraceTodayEarnings(getNullBigDecimal(result.getTerraceamount()));
+			info.setTerraceTodayOrderNum(getNullLong(result.getTerrace0rdernum()));
+			info.setTerraceAddEarnings(getNullBigDecimal(resultSum.getTerraceamount()));
+			info.setTerraceAddOrderNum(getNullLong(resultSum.getTerrace0rdernum()));
+
+			// 自营订单
+			info.setOwnTodayEarnings(getNullBigDecimal(result.getSelfamount()));
+			info.setOwnTodayOrderNum(getNullLong(result.getSelf0rdernum()));
+			info.setOwnAddEarnings(getNullBigDecimal(resultSum.getSelfamount()));
+			info.setOwnAddOrderNum(getNullLong(resultSum.getSelf0rdernum()));
+		} else {
+			// 平台订单
+			info.setTerraceTodayEarnings(BigDecimal.valueOf(0));
+			info.setTerraceTodayOrderNum(0L);
+			info.setTerraceAddEarnings(BigDecimal.valueOf(0));
+			info.setTerraceAddOrderNum(0L);
+
+			// 自营订单
+			info.setOwnTodayEarnings(BigDecimal.valueOf(0));
+			info.setOwnTodayOrderNum(0L);
+			info.setOwnAddEarnings(BigDecimal.valueOf(0));
+			info.setOwnAddOrderNum(0L);
+		}
+
+		info.setToken(TokenUtil.getToken(profit.getMobile()));
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(info);
+		// TODO 测试死数据
+		testHome(profit, data);
+		return data;
+	}
+
+	/**
+	 * 判断对象是否为空, 为空返回 数字0
+	 * 
+	 * @param o
+	 * @param b
+	 * @return
+	 */
+	private BigDecimal getNullBigDecimal(BigDecimal b) {
+		if (b == null) {
+			return BigDecimal.valueOf(0);
+		}
+		return b;
+	}
+
+	/**
+	 * 判断对象是否为空, 为空返回 数字0
+	 * 
+	 * @param o
+	 * @param b
+	 * @return
+	 */
+	private Long getNullLong(Long b) {
+		if (b == null) {
+			return 0L;
+		}
+		return b;
+	}
+
+	private void testHome(ProfitHomeInput profit, ObjectOutput<ProfitHomeOutput> data) throws ParseException {
+		ProfitHomeOutput info = new ProfitHomeOutput();
+		info.setOwnAddEarnings(BigDecimal.valueOf(100.56));
+		info.setOwnAddOrderNum(100L);
+		info.setOwnTodayEarnings(BigDecimal.valueOf(100.56));
+		info.setOwnTodayOrderNum(200L);
+		info.setTerraceAddEarnings(BigDecimal.valueOf(900.56));
+		info.setTerraceAddOrderNum(999L);
+		info.setTerraceTodayEarnings(BigDecimal.valueOf(900.56));
+		info.setTerraceTodayOrderNum(777L);
+		info.setToken(TokenUtil.getToken(profit.getMobile()));
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(info);
+	}
+
+	/**
+	 * 根据店主手机号查询周期收益list
+	 * 
+	 * @param ocProfit
+	 * @see OrderCycleProfitInput
+	 * @return @see ObjectOutput
+	 * @throws ParseException
+	 * @throws LakalaException
+	 */
+	public ObjectOutput<List<OrderCycleProfitOutput>> getCycleEarningsList(OrderCycleProfitInput ocProfit) throws ParseException {
+		ObjectOutput<List<OrderCycleProfitOutput>> data = new ObjectOutput<List<OrderCycleProfitOutput>>();
+
+		// 继续判断里面的必须参数
+		if (ocProfit == null) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("tel", map.put("tel", ocProfit.getMobile()));
+		map.put("settlementId", map.put("settlementId", ocProfit.getMobile()));
+		List<TearningscycleApp> dataList = earningscycleAppMapper_R.selectCycleEarningsByTel(map);
+		List<OrderCycleProfitOutput> returnList = new ArrayList<OrderCycleProfitOutput>();
+		Map<String, Map<String, Object>> settlementIdMap = getgetCycleSettlementIds(new Date());
+		OrderCycleProfitOutput info = null;
+		for (Entry<String, Map<String, Object>> entry : settlementIdMap.entrySet()) {
+			// 判断周期是否有记录
+			boolean hasFlg = false;
+			for (TearningscycleApp bean : dataList) {
+				if (entry.getKey().equals(bean.getSettlementid())) {
+					info = new OrderCycleProfitOutput();
+					info.setAuthFlag("未结算");
+					info.setSettlementId(bean.getSettlementid());
+					info.setOrderEndtTime(DateUtils.formatTimeToYMD(bean.getOrderstarttime()));
+					info.setOrderStartTime(DateUtils.formatTimeToYMD(bean.getOrderendtime()));
+					// 平台订单
+					info.setTerraceGoodsProfit(getNullBigDecimal(bean.getTotalamount()));
+					info.setTerraceEarningsOrderNum(getNullLong(bean.getTerrace0rdernum()));
+					// 自营
+					info.setOwnGoodsAccounts(getNullBigDecimal(bean.getSelfamount()));
+					info.setOwnEarningsOrderNum(getNullLong(bean.getSelf0rdernum()));
+					// 本店总收益
+					info.setTotalEarningsAmount(info.getTerraceGoodsProfit().add(info.getOwnGoodsAccounts()));
+					info.setTotalEarningsOrderNum(info.getTerraceEarningsOrderNum() + (info.getOwnEarningsOrderNum()));
+					returnList.add(info);
+					hasFlg = true;
+				}
+				if (!hasFlg) {
+					crateNullCycleData(returnList, entry);
+				}
+			}
+		}
+		for (Entry<String, Map<String, Object>> entry : settlementIdMap.entrySet()) {
+			if (dataList == null || dataList.size() == 0) {
+				crateNullCycleData(returnList, entry);
+			}
+		}
+
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(returnList);
+		return data;
+	}
+
+	/**
+	 * 显示周期没有记录做空数据
+	 * 
+	 * @param returnList
+	 * @param entry
+	 */
+	private void crateNullCycleData(List<OrderCycleProfitOutput> returnList, Entry<String, Map<String, Object>> entry) {
+		OrderCycleProfitOutput info = new OrderCycleProfitOutput();
+		info.setAuthFlag("未结算");
+		info.setSettlementId(entry.getKey());
+		info.setOrderEndtTime(DateUtils.formatTimeToYMD((Date) entry.getValue().get("startTime")));
+		info.setOrderStartTime(DateUtils.formatTimeToYMD((Date) entry.getValue().get("endTime")));
+		// 平台订单
+		info.setTerraceGoodsProfit(BigDecimal.valueOf(0));
+		info.setTerraceEarningsOrderNum(0L);
+		// 自营
+		info.setOwnGoodsAccounts(BigDecimal.valueOf(0));
+		info.setOwnEarningsOrderNum(0L);
+		// 本店总收益
+		info.setTotalEarningsAmount(info.getTerraceGoodsProfit().add(info.getOwnGoodsAccounts()));
+		info.setTotalEarningsOrderNum(info.getTerraceEarningsOrderNum() + (info.getOwnEarningsOrderNum()));
+
+		// TODO
+		// 平台订单
+		info.setTerraceGoodsProfit(BigDecimal.valueOf(1130.98));
+		info.setTerraceEarningsOrderNum(110L);
+		// 自营
+		info.setOwnGoodsAccounts(BigDecimal.valueOf(200.1));
+		info.setOwnEarningsOrderNum(2000L);
+		// 本店总收益
+		info.setTotalEarningsAmount(info.getTerraceGoodsProfit().add(info.getOwnGoodsAccounts()));
+		info.setTotalEarningsOrderNum(info.getTerraceEarningsOrderNum() + (info.getOwnEarningsOrderNum()));
+
+		returnList.add(info);
+	}
+
+	/**
+	 * 显示周期没有记录做空数据 (单条)
+	 * 
+	 * @param returnList
+	 * @param entryMap
+	 */
+	private OrderCycleProfitOutput crateNullCycleData(Map<String, Object> entryMap) {
+		OrderCycleProfitOutput info = new OrderCycleProfitOutput();
+		info.setAuthFlag("未结算");
+		info.setSettlementId((String) entryMap.get("settlementId"));
+		info.setOrderEndtTime(DateUtils.formatTimeToYMD((Date) entryMap.get("startTime")));
+		info.setOrderStartTime(DateUtils.formatTimeToYMD((Date) entryMap.get("endTime")));
+		// 平台订单
+		info.setTerraceGoodsProfit(BigDecimal.valueOf(0));
+		info.setTerraceEarningsOrderNum(0L);
+		// 自营
+		info.setOwnGoodsAccounts(BigDecimal.valueOf(0));
+		info.setOwnEarningsOrderNum(0L);
+		// 本店总收益
+		info.setTotalEarningsAmount(info.getTerraceGoodsProfit().add(info.getOwnGoodsAccounts()));
+		info.setTotalEarningsOrderNum(info.getTerraceEarningsOrderNum() + (info.getOwnEarningsOrderNum()));
+
+		// TODO
+		// 平台订单
+		info.setTerraceGoodsProfit(BigDecimal.valueOf(1130.98));
+		info.setTerraceEarningsOrderNum(110L);
+		// 自营
+		info.setOwnGoodsAccounts(BigDecimal.valueOf(200.1));
+		info.setOwnEarningsOrderNum(2000L);
+		// 本店总收益
+		info.setTotalEarningsAmount(info.getTerraceGoodsProfit().add(info.getOwnGoodsAccounts()));
+		info.setTotalEarningsOrderNum(info.getTerraceEarningsOrderNum() + (info.getOwnEarningsOrderNum()));
+
+		return info;
+	}
+
+	/**
+	 * 根据结算周期ID查询周期收益
+	 * 
+	 * @param ocProfit
+	 * @see OrderCycleProfitInput
+	 * @return @see ObjectOutput
+	 * @throws ParseException
+	 * @throws LakalaException
+	 */
+	public ObjectOutput<OrderCycleProfitOutput> getCycleEarningsData(OrderCycleProfitInput ocProfit) throws ParseException {
+		ObjectOutput<OrderCycleProfitOutput> data = new ObjectOutput<OrderCycleProfitOutput>();
+
+		// 继续判断里面的必须参数
+		if (ocProfit == null) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("tel", map.put("tel", ocProfit.getMobile()));
+		map.put("settlementId", map.put("settlementId", ocProfit.getMobile()));
+		TearningscycleApp bean = earningscycleAppMapper_R.selectCycleEarningsBySettlementId(map);
+		Map<String, Map<String, Object>> settlementIdMap = getgetCycleSettlementIds(new Date());
+		OrderCycleProfitOutput info = new OrderCycleProfitOutput();
+		if (bean == null) {
+			info = crateNullCycleData(settlementIdMap.get(ocProfit.getSettlementId()));
+		} else {
+			info.setAuthFlag("未结算");
+			info.setOrderEndtTime(DateUtils.formatTimeToYMD(bean.getOrderstarttime()));
+			info.setOrderStartTime(DateUtils.formatTimeToYMD(bean.getOrderendtime()));
+			// 平台订单
+			info.setTerraceGoodsProfit(getNullBigDecimal(bean.getTotalamount()));
+			info.setTerraceEarningsOrderNum(getNullLong(bean.getTerrace0rdernum()));
+			// 自营
+			info.setOwnGoodsAccounts(getNullBigDecimal(bean.getSelfamount()));
+			info.setOwnEarningsOrderNum(getNullLong(bean.getSelf0rdernum()));
+			// 本店总收益
+			info.setTotalEarningsAmount(info.getTerraceGoodsProfit().add(info.getOwnGoodsAccounts()));
+			info.setTotalEarningsOrderNum(info.getTerraceEarningsOrderNum() + (info.getOwnEarningsOrderNum()));
+		}
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(info);
+		return data;
+	}
+
+	/**
+	 * 收益查询业务
+	 * 
+	 * @param odEarnings
+	 * @see OrderEarningsInput
+	 * @return @see ObjectOutput
+	 * @throws ParseException
+	 * @throws LakalaException
+	 */
+	public ObjectOutput<List<OrderEarningsOutput>> earningsQuery(OrderEarningsInput odEarnings) throws ParseException {
+
+		ObjectOutput<List<OrderEarningsOutput>> data = new ObjectOutput<List<OrderEarningsOutput>>();
+
+		// 继续判断里面的必须参数
+		if (odEarnings == null) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		List<OrderEarningsOutput> dataList = new ArrayList<OrderEarningsOutput>();
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		List<TorderearningsProvider> selectList = new ArrayList<TorderearningsProvider>();
+		paramMap.put("orderProviderId", odEarnings.getOrderProviderId());
+		paramMap.put("startTime", odEarnings.getStartTime());
+		paramMap.put("endTime", odEarnings.getEndTime());
+		paramMap.put("orderSource", odEarnings.getOrderSource());
+		paramMap.put("isAfterSale", odEarnings.getIsAfterSale());
+		if (odEarnings.getEarningsType() != null) {
+			if (ProfitConstant.EARNINGS_TYPE_SELF.equals(odEarnings.getEarningsType())) {
+				paramMap.put("selfFlg", odEarnings.getEarningsType());
+			}
+			if (ProfitConstant.EARNINGS_TYPE_TERRACE.equals(odEarnings.getEarningsType())) {
+				paramMap.put("terraceFlg", odEarnings.getEarningsType());
+			}
+		}
+		paramMap.put("tel", odEarnings.getMobile());
+		paramMap.put("pageStart", 0);
+		paramMap.put("pageEnd", 10);
+		selectList = orderearningsProviderMapper_R.selectOrderEarings(paramMap);
+		OrderEarningsOutput info = new OrderEarningsOutput();
+
+		for (TorderearningsProvider bean : selectList) {
+			info = new OrderEarningsOutput();
+			info.setEarningsDate(DateUtils.formatTimeToYMD(bean.getEarningstime()));
+			info.setOrderId(bean.getOrderid());
+			info.setPrioderOrderId(bean.getOrderproviderid());
+			info.setEarningsAmount(bean.getDivideprofit());
+			info.setPayMode(bean.getPayMode());
+			info.setReturnFlg(bean.getReturnflg());
+
+			// 自营商品
+			if (ProfitConstant.EARNINGS_TYPE_SELF.equals(odEarnings.getEarningsType())) {
+				info.setPayRate(getNullBigDecimal(bean.getPayRate()));
+				info.setSettlementAmount(getNullBigDecimal(bean.getOrderAmount()).subtract(
+						getNullBigDecimal(bean.getOrderAmount()).multiply(info.getPayRate())));
+				StringBuffer sb = new StringBuffer();
+				sb.append("(");
+				sb.append(getNullBigDecimal(bean.getOrderAmount()));
+				sb.append("-");
+				sb.append(getNullBigDecimal(bean.getOrderAmount()));
+				sb.append("*");
+				sb.append(bean.getPayRate());
+				sb.append("%");
+				sb.append(")");
+				info.setSettlementFormula(sb.toString());
+			}
+			dataList.add(info);
+		}
+
+		// TODO
+		if (selectList == null || selectList.size() == 0) {
+			info.setEarningsDate("2014-11-22");
+			info.setOrderId("67d8888");
+			info.setPrioderOrderId("7898890");
+			info.setPayMode("拉卡拉支付");
+			info.setEarningsAmount(BigDecimal.valueOf(100.56));
+			dataList.add(info);
+		}
+
+		info.setToken(TokenUtil.getToken(odEarnings.getMobile()));
+		dataList.add(info);
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(dataList);
+		return data;
+	}
+
+	/**
+	 * 订单详情页查询业务
+	 * 
+	 * @param opDetail
+	 * @see OrderEarningsDetailInput
+	 * @return @see ObjectOutput
+	 * @throws ParseException
+	 * @throws LakalaException
+	 */
+	public ObjectOutput<OrderEarningsDetailOutput> getOrderDetail(OrderEarningsDetailInput opDetail) throws ParseException {
+		ObjectOutput<OrderEarningsDetailOutput> data = new ObjectOutput<OrderEarningsDetailOutput>();
+		if (opDetail == null) {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("startDate", opDetail.getEarningsDate() + " 00:00:00");
+		paramMap.put("endDate", opDetail.getEarningsDate() + " 23:59:59");
+		paramMap.put("orderProviderId", opDetail.getOrderProviderId());
+		paramMap.put("returnFlg", opDetail.getReturnFlg());
+
+		// 查询主订单二级订单详细
+		Torder order = orderMapper_r.selectByOrderProviderId(paramMap);
+		// 查询三级订单
+		List<Torderitems> orderitemsList = orderitemsMapper_r.selectByOrderProviderId(paramMap);
+
+		// 结果设定
+		OrderEarningsDetailOutput od = new OrderEarningsDetailOutput();
+		od.setPrvoidOrderId(order.getOrderearningid());
+		od.setOrderDate(DateUtils.formatTimeToYMDHMS(order.getOrdertime()));
+		od.setCusName(order.getCusname());
+		od.setCusTelNo(order.getCustelno());
+		od.setIsDeliverTohome(order.getIsdelivertohomeStr());
+		od.setAddr(order.getAddressfull());
+		od.setSource(order.getSourceStr());
+		od.setPlatorSelf(order.getPlatorSelf());
+		od.setReturnFlg(order.getReturnFlg());
+		od.setToken(TokenUtil.getToken(opDetail.getMobile()));
+
+		Oditem oditem = new Oditem();
+		BigDecimal terraceGoodsProfit = BigDecimal.valueOf(0);
+		BigDecimal ownGoodsAccounts = BigDecimal.valueOf(0);
+		List<Oditem> oditemList = new ArrayList<Oditem>();
+		for (Torderitems items : orderitemsList) {
+			oditem.setGoodCount(items.getGoodscount());
+			oditem.setGoodName(items.getGoodsname());
+			oditem.setGoodSalePrice(items.getGoodssaleprice());
+			oditem.setOrderState(items.getStateStr());
+			oditem.setReceiveDate(DateUtils.formatTimeToYMDHMS(items.getReceivertime()));
+			oditem.setInvaliState(items.getInvalidstateStr());
+			oditem.setReturnDate(DateUtils.formatTimeToYMDHMS(items.getReturntime()));
+			oditem.setOrderPrice(NumberUtils.IsNullToZero(items.getGoodssaleprice()).multiply(
+					new BigDecimal(NumberUtils.IsNullToZero(items.getGoodscount()))));
+			terraceGoodsProfit =terraceGoodsProfit.add(items.getStoreprofits());
+			// 支付手续费
+			BigDecimal payRateAmount = NumberUtils.IsNullToZero(items.getGoodspayoff()).multiply(
+					NumberUtils.IsNullToZero(items.getPayRate()));
+			ownGoodsAccounts = ownGoodsAccounts.add(NumberUtils.IsNullToZero(items.getGoodspayoff()).subtract(payRateAmount));
+			oditem.setEarningsAmount(items.getStoreprofits());
+			oditemList.add(oditem);
+		}
+		od.setOditmList(oditemList);
+		od.setTerraceGoodsProfit(terraceGoodsProfit);
+		od.setOwnGoodsAccounts(ownGoodsAccounts);
+		data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		data.set_ReturnData(od);
+		return data;
+	}
+
+	/**
+	 * 2014.10.21~2014.11.20 startTime :2014.10.20 middleTime :2014.11.21
+	 * endTime:2014.12.21 周期批次：为2014102120141120 2014.11.21~2014.12.20
+	 * startTime:2014.10.20 middleTime :2014.11.21 endTime:2014.12.21
+	 * 周期批次：为2014112120141220
+	 * 
+	 * @param executeTime
+	 * @param sfymd
+	 * @return
+	 */
+
+	private Map<String, Object> getCycleSettlementId(Date executeTime) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String cycleSettlementId = null;
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(executeTime);
+		calendar.set(Calendar.DAY_OF_MONTH, 20);
+		Date middleTime = calendar.getTime();
+		calendar.add(Calendar.MONTH, -1);
+		calendar.set(Calendar.DAY_OF_MONTH, 21);
+		Date startTime = calendar.getTime();
+		calendar.add(Calendar.MONTH, 2);
+		calendar.set(Calendar.DAY_OF_MONTH, 20);
+		Date endTime = calendar.getTime();
+		if ((executeTime.before(middleTime) || executeTime.equals(middleTime))
+				&& (executeTime.after(startTime) || executeTime.equals(startTime))) {
+			// 本次处理 月批次ID
+			cycleSettlementId = DateUtils.dateFormatYMD2.format(startTime) + DateUtils.dateFormatYMD2.format(middleTime);
+			map.put("startTime", startTime);
+			map.put("endTime", middleTime);
+		} else if ((executeTime.before(endTime) || executeTime.equals(endTime))
+				&& (executeTime.after(middleTime) || executeTime.equals(middleTime))) {
+			calendar.add(Calendar.MONTH, -1);
+			calendar.set(Calendar.DAY_OF_MONTH, 21);
+			cycleSettlementId = DateUtils.dateFormatYMD2.format(calendar.getTime()) + DateUtils.dateFormatYMD2.format(endTime);
+			map.put("startTime", calendar.getTime());
+			map.put("endTime", endTime);
+		}
+		map.put("settlementId", cycleSettlementId);
+		return map;
+	}
+
+	/**
+	 * 取得结算周期list
+	 * 
+	 * @param executeTime
+	 * @return
+	 */
+	private Map<String, Map<String, Object>> getgetCycleSettlementIds(Date executeTime) {
+		Map<String, Map<String, Object>> settlementIdMap = new HashMap<String, Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, -1);
+		map = getCycleSettlementId(calendar.getTime());
+		settlementIdMap.put((String) map.get("settlementId"), map);
+		calendar.add(Calendar.MONTH, -1);
+		map = getCycleSettlementId(calendar.getTime());
+		settlementIdMap.put((String) map.get("settlementId"), map);
+		calendar.add(Calendar.MONTH, -1);
+		map = getCycleSettlementId(calendar.getTime());
+		settlementIdMap.put((String) map.get("settlementId"), map);
+		return settlementIdMap;
+	}
+}

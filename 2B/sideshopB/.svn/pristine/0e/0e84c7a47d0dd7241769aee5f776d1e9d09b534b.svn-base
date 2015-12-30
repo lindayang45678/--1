@@ -1,0 +1,184 @@
+/* 初始化iScroll*/
+var orderListScroll;
+function scrollOrderList() {
+	orderListScroll = new iScroll("container-wrap", { 
+		hScrollbar: false, 
+		vScrollbar: true,
+		onScrollEnd: function(){
+			getOrdersList();
+		},
+		onScrollMove:function(){
+			
+		}
+	});
+}
+
+/* 根据浏览器的高度计算iScroll的高度  */
+$(function() {
+	$("#container-wrap").css("height",windowHeight - $("header").height()-$(".orders .header").height()- 3 + "px");
+	scrollOrderList();
+	getOrdersList();
+});
+
+var page = 0;
+var pageSize = 10;
+var hasNextPage = true;//是否有下一页
+
+/* 获取订单列表 */
+function getOrdersList() {
+	var url = window.location.href;
+	var data = getParamValueByName(url, "data");
+	
+	if(data != "") {
+		setTimeout(function() {
+			if(hasNextPage) {
+				data = $.parseJSON(data);
+				page ++;
+				data.page = page;
+				data.pageSize = pageSize;
+				var resultJson = ajaxCommon(urlOrderQuery, data);
+				resultJson = convertNullToEmpty(resultJson);
+				if (resultJson._ReturnCode === returnCodeSuccess) {
+					var _ReturnData = resultJson._ReturnData;
+					var orderproviderlist = _ReturnData.orderproviderlist;
+					//订单总数
+					var total = _ReturnData.total;
+					if(orderproviderlist.length > 0) {
+						var containerWrap = $("#querywarp");
+						var content = "";
+						$("#total").text(total);
+						for(var i = 0; i < orderproviderlist.length; i ++) {
+							var torderproviderid = orderproviderlist[i].torderproviderid; //订单号
+							var ordertime = orderproviderlist[i].ordertime; //下单时间
+							var actualamount = orderproviderlist[i].actualamount; //订单金额
+							var logiscalfee = orderproviderlist[i].logiscalfee; //物流费用
+							var paychanel = getPaychanelDesc(orderproviderlist[i].paychanel); //付款方式
+							var state = getOrderStateDesc(orderproviderlist[i].state); //订单状态
+							var source = getOrderSourceDesc(orderproviderlist[i].source); //来源渠道
+							var cusname = orderproviderlist[i].cusname; //收货人姓名
+							var custelno = orderproviderlist[i].custelno; //收货人手机
+							var isdelivertohome = getDevicetypeDesc(orderproviderlist[i].isdelivertohome); //配送方式
+							var addressfull	= orderproviderlist[i].addressfull; //配送地址
+							//默认展开第一个订单
+							if(i == 0 && page == 1) {
+								content += "<section class='orders-items bt bb'>";
+								content += "<div class='order-number color f-14 bb'>";
+								content += "<div class='down'><span>";
+								content += "订单号：";
+								content += torderproviderid;
+								content += "</span><em>￥"+actualamount+"</em><i></i></div>";
+								content += "</div>";
+								content += "<section class='orders-content'>";
+							} else {
+								content += "<section class='orders-items bt bb'>";
+								content += "<div class='order-number color f-14 bb'>";
+								content += "<div><span>";
+								content += "订单号：";
+								content += torderproviderid;
+								content += "</span><em>￥"+actualamount+"</em><i></i></div>";
+								content += "</div>";
+								content += "<section class='orders-content hidden'>";
+							}
+
+							//订单信息
+							content += "<div class='order-infor bb'>";
+							content += "<h3><u></u>订单信息</h3>";
+							content += "<dl>";
+							content += "<dt>下单时间：</dt>";
+							content += "<dd>" + ordertime + "</dd>";
+							content += "<dt>订单金额：</dt>";
+							content += "<dd>￥" + actualamount + "<span class='freight'>运费：<em>￥" + logiscalfee + "</em></span></dd>";
+							content += "<dt>付款方式：</dt>";
+							content += "<dd>" + paychanel + "</dd>";
+							content += "<dt>订单状态：</dt>";
+							content += "<dd>" + state + "</dd>";
+							content += "<dt>来源渠道：</dt>";
+							content += "<dd>" + source + "&nbsp;</dd>";
+							content += "</dl>";
+							content += "</div>";
+
+							//收货人信息
+							content += "<div class='consignee-infor bb'>";
+							content += "<h3><u></u>收货人信息</h3>";
+							content += "<div>收货人姓名：<span>" + cusname + "</span></div>";
+							content += "<div>收货人手机：<span>" + custelno + "</span></div>";
+							content += "<div>配送方式：<span>" + isdelivertohome + "</span></div>";
+							content += "<div>配置地址：<span class='address'>" + addressfull + "</span></div>";
+							content += "</div>";
+							
+							var providername = orderproviderlist[i].providername; //供应商名称
+							var clientservicetel = orderproviderlist[i].clientservicetel; //供应商售后电话
+							//供应商信息
+							content += "<div class='commodity-infor'>";
+							content += "<h3><u></u>商品信息</h3>";
+							content += "<dl class='clearfix'>";
+							content += "<dt class='contact'><span>所属供应商：" + providername + 
+										"</span>&nbsp;&nbsp;<span>售后电话：" + clientservicetel + "</span></dt>";
+
+							var orderitemslist = orderproviderlist[i].orderitemslist; //商品订单集合
+							for(var k = 0; k < orderitemslist.length; k ++) {
+								var goodsid = orderitemslist[k].goodsid; //商品ID
+								var goodbigpic = orderitemslist[k].goodbigpic.split(";")[0]; //商品主图
+								var is3h = orderitemslist[k].is3h; //值为363时，属于生鲜商品
+								var goodsname = orderitemslist[k].goodsname; //商品名称
+								var goodscount = orderitemslist[k].goodscount; //购买数量
+								var goodssaleprice = orderitemslist[k].goodssaleprice; //商品单价
+								var norms = orderitemslist[k].norms; //商品规格
+								var invalidstate = getInvalidstateDesc(orderitemslist[k].invalidstate); //售后状态
+								var goodnamedesc;
+							    //全局js变量ship3hCode=363
+							    if(orderitemslist[k].is3h!=undefined&&orderitemslist[k].is3h!=null&&orderitemslist[k].is3h!=''&&orderitemslist[k].is3h==ship3hCode){
+							    	goodnamedesc = "<em class='color'>【生鲜】</em>"+orderitemslist[k].goodsname;
+							    }else{
+							    	goodnamedesc = orderitemslist[k].goodsname;
+							    }
+								
+								
+								//商品信息
+								content += "<dl>";
+								content += "<dd><img src='" + urlImage + "/" + goodsid + "/" + imgw100 + "/" + goodbigpic + "'></dd>";
+								content += "<dt class='commodity-content'>";
+								if(is3h == ship3hCode) {
+									content += "<strong>"+goodnamedesc+"</strong>";
+								} else {
+									content += "<strong>" + goodsname + "</strong>";
+								}
+								content += "<span>规格：" + norms + "</span>";
+								content += "<span>数量：x" + goodscount + "</span>";
+								content += "<span>单价：￥" + goodssaleprice + "</span>";
+								content += "<span>售后状态：" + invalidstate + "</span>";
+								content += "</dt>";
+								content += "</dl>";
+							}
+							content += "</dl>";
+								
+							content += "</div>";
+							content += "</section>";
+							content += "</section>";
+						}
+						containerWrap.append(content);
+						orderListScroll.refresh();
+					} else {
+						if(page == 1) {
+							window.location.href = "queryfail.html";
+						} else {
+							hasNextPage = false;
+						}
+					}
+				} else {
+					window.location.href = "queryfail.html";
+				}
+			}
+		}, 1000);
+	}
+}
+
+$(function() {
+	//订单展开
+	$(".order-number").live("tap",function() {
+		$(this).find("div").toggleClass("down").parent().siblings().toggle();
+		$(this).parent().siblings().find(".orders-content").hide();
+		$(this).parent().siblings().find(".order-number div").removeClass("down");
+		orderListScroll.refresh();
+	});
+});

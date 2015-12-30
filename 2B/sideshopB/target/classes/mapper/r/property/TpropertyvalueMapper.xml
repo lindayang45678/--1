@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.property.TpropertyvalueMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Tpropertyvalue" >
+    <id column="tPropertyValueId" property="tpropertyvalueid" jdbcType="INTEGER" />
+    <result column="tPropertyKeyId" property="tpropertykeyid" jdbcType="INTEGER" />
+    <result column="propertyValue" property="propertyvalue" jdbcType="VARCHAR" />
+    <result column="propertyValuePic" property="propertyvaluepic" jdbcType="VARCHAR" />
+    <result column="orderBy" property="orderby" jdbcType="INTEGER" />
+    <result column="alias" property="alias" jdbcType="VARCHAR" />
+    <result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="lastUpdateDate" property="lastupdatedate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tPropertyValueId, tPropertyKeyId, propertyValue, propertyValuePic, orderBy, alias, 
+    createDate, lastUpdateDate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tpropertyvalue
+    where tPropertyValueId = #{tpropertyvalueid,jdbcType=INTEGER}
+  </select>
+  <!-- 根据属性Id查询属性值 -->
+  <select id="queryByPropertyId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tpropertyvalue
+    where tPropertyKeyId = #{tpropertykeyid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据属性Id查询属性值 -->
+  <select id="queryByPropertyIds" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tpropertyvalue
+    where tPropertyKeyId in 
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      	#{item}
+    </foreach>
+  </select>
+</mapper>

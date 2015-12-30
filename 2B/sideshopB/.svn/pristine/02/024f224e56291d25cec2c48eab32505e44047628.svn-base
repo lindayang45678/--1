@@ -1,0 +1,14 @@
+$(function() {
+	$('#shopreceipt').on("tap", function() {		
+		var verificationCode = $('.receipt input').val();//店主快递单号
+		var data = {"logno":verificationCode};
+		var resultJson = ajaxCommon(urlreceipt, data);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			resultJson =JSON. stringify(resultJson);
+			window.location.href = "shopreceiptinfo.html?logno="+ verificationCode +"&result="+ resultJson +"&t=" + t;	
+		}
+		else {
+			window.location.href = "shopreceiptfail.html?logno="+ verificationCode +"&t=" + t;
+		}	
+	});	
+});

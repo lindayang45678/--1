@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lakala.mapper.r.user.TmemberMapper">
+  <!-- 会员表 -->
+  <resultMap id="TmemberBaseResultMap" type="com.lakala.model.user.Tmember">
+    <id column="membername" jdbcType="VARCHAR" property="membername" />
+    <result column="memberpwd" jdbcType="VARCHAR" property="memberpwd" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="membertype" jdbcType="INTEGER" property="membertype" />
+    <result column="provinceCode" jdbcType="VARCHAR" property="provincecode" />
+    <result column="provinceName" jdbcType="VARCHAR" property="provincename" />
+    <result column="cityCode" jdbcType="VARCHAR" property="citycode" />
+    <result column="cityName" jdbcType="VARCHAR" property="cityname" />
+    <result column="areaCode" jdbcType="VARCHAR" property="areacode" />
+    <result column="areaName" jdbcType="VARCHAR" property="areaname" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="psam" jdbcType="VARCHAR" property="psam" />
+    <result column="netNo" jdbcType="VARCHAR" property="netno" />
+    <result column="branchCorp" jdbcType="VARCHAR" property="branchcorp" />
+    <result column="deployType" jdbcType="INTEGER" property="deploytype" />
+    <result column="sourceName" jdbcType="VARCHAR" property="sourcename" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nickName" jdbcType="VARCHAR" property="nickname" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="age" jdbcType="SMALLINT" property="age" />
+    <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="acountNo" jdbcType="VARCHAR" property="acountno" />
+    <result column="acountName" jdbcType="VARCHAR" property="acountname" />
+    <result column="bankName" jdbcType="VARCHAR" property="bankname" />
+    <result column="createdDate" jdbcType="TIMESTAMP" property="createddate" />
+    <result column="updatedDate" jdbcType="TIMESTAMP" property="updateddate" />
+    <result column="groupId" jdbcType="BIGINT" property="groupid" />
+    <result column="bizType" jdbcType="INTEGER" property="bizType" />
+    <result column="terminalCode" jdbcType="VARCHAR" property="terminalCode" />
+  </resultMap>
+  <sql id="Tmember_Base_Column_List">
+    membername, memberpwd, source, membertype, provinceCode, provinceName, cityCode, 
+    cityName, areaCode, areaName, address, psam, netNo, branchCorp, deployType, sourceName, 
+    name, nickName, sex, age, birthday, email, acountNo, acountName, bankName, createdDate, 
+    updatedDate, groupId, bizType, terminalCode
+  </sql>
+  <select id="selectTmemberById" parameterType="java.lang.String" resultMap="TmemberBaseResultMap">
+    select 
+    <include refid="Tmember_Base_Column_List" />
+    from tmemberb
+    where membername = #{membername,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 设备表 -->
+  <resultMap id="SdbMediaBaseResultMap" type="com.lakala.model.user.Tmedia">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="prov_no" jdbcType="VARCHAR" property="provNo" />
+    <result column="prov" jdbcType="VARCHAR" property="prov" />
+    <result column="city_no" jdbcType="VARCHAR" property="cityNo" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="city_area_no" jdbcType="VARCHAR" property="cityAreaNo" />
+    <result column="city_area" jdbcType="VARCHAR" property="cityArea" />
+    <result column="vdc_no" jdbcType="VARCHAR" property="vdcNo" />
+    <result column="vdc" jdbcType="VARCHAR" property="vdc" />
+    <result column="cop_no" jdbcType="VARCHAR" property="copNo" />
+    <result column="cop" jdbcType="VARCHAR" property="cop" />
+    <result column="net_type" jdbcType="VARCHAR" property="netType" />
+    <result column="net_typestr" jdbcType="VARCHAR" property="netTypestr" />
+    <result column="net_name" jdbcType="VARCHAR" property="netName" />
+    <result column="net_no" jdbcType="VARCHAR" property="netNo" />
+    <result column="net_sname" jdbcType="VARCHAR" property="netSname" />
+    <result column="work_no" jdbcType="VARCHAR" property="workNo" />
+    <result column="work_name" jdbcType="VARCHAR" property="workName" />
+    <result column="work_mobile" jdbcType="VARCHAR" property="workMobile" />
+    <result column="term_isshangcheng" jdbcType="CHAR" property="termIsshangcheng" />
+    <result column="term_isshangchengstr" jdbcType="VARCHAR" property="termIsshangchengstr" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="statestr" jdbcType="VARCHAR" property="statestr" />
+    <result column="open_date" jdbcType="TIMESTAMP" property="openDate" />
+    <result column="close_date" jdbcType="TIMESTAMP" property="closeDate" />
+    <result column="term_yetai" jdbcType="VARCHAR" property="termYetai" />
+    <result column="term_yetaistr" jdbcType="VARCHAR" property="termYetaistr" />
+    <result column="term_brand" jdbcType="VARCHAR" property="termBrand" />
+    <result column="term_brandstr" jdbcType="VARCHAR" property="termBrandstr" />
+    <result column="term_fbtype" jdbcType="VARCHAR" property="termFbtype" />
+    <result column="term_fbtypestr" jdbcType="VARCHAR" property="termFbtypestr" />
+    <result column="psam" jdbcType="VARCHAR" property="psam" />
+    <result column="machine_kind" jdbcType="VARCHAR" property="machineKind" />
+    <result column="machine_kindstr" jdbcType="VARCHAR" property="machineKindstr" />
+    <result column="dev_state" jdbcType="VARCHAR" property="devState" />
+    <result column="dev_statestr" jdbcType="VARCHAR" property="devStatestr" />
+    <result column="dev_open_date" jdbcType="TIMESTAMP" property="devOpenDate" />
+    <result column="dev_close_date" jdbcType="TIMESTAMP" property="devCloseDate" />
+    <result column="profit_type" jdbcType="VARCHAR" property="profitType" />
+    <result column="is_profit" jdbcType="VARCHAR" property="isProfit" />
+    <result column="contact_name_1" jdbcType="VARCHAR" property="contactName1" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="term_lxrtel" jdbcType="VARCHAR" property="termLxrtel" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="lklbank_no" jdbcType="VARCHAR" property="lklbankNo" />
+    <result column="lklbank_name" jdbcType="VARCHAR" property="lklbankName" />
+    <result column="areacode" jdbcType="VARCHAR" property="areacode" />
+    <result column="voutype" jdbcType="VARCHAR" property="voutype" />
+    <result column="account_bank_no" jdbcType="VARCHAR" property="accountBankNo" />
+    <result column="account_bank" jdbcType="VARCHAR" property="accountBank" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="account_no" jdbcType="VARCHAR" property="accountNo" />
+    <result column="account_type" jdbcType="VARCHAR" property="accountType" />
+    <result column="account_typestr" jdbcType="VARCHAR" property="accountTypestr" />
+    <result column="first_open_date" jdbcType="VARCHAR" property="firstOpenDate" />
+    <result column="is_fr" jdbcType="VARCHAR" property="isFr" />
+    <result column="fr_type_code" jdbcType="VARCHAR" property="frTypeCode" />
+    <result column="fr_type" jdbcType="VARCHAR" property="frType" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="wh_mobile" jdbcType="VARCHAR" property="whMobile" />
+    <result column="is_onehour" jdbcType="INTEGER" property="isOnehour" />
+    <result column="is_doorstep" jdbcType="INTEGER" property="isDoorstep" />
+    <result column="is_pickup" jdbcType="INTEGER" property="isPickup" />
+    <result column="net_custom_name" jdbcType="VARCHAR" property="netCustomName" />
+    <result column="is_homepay" jdbcType="INTEGER" property="isHomepay" />
+    <result column="maxgathering" jdbcType="DECIMAL" property="maxgathering" />
+    <result column="DeliveryType" jdbcType="INTEGER" property="deliverytype" />
+    <result column="COMMUNITY_NAME_3" jdbcType="VARCHAR" property="communityName3" />
+    <result column="BUILDING_NAME_3" jdbcType="VARCHAR" property="buildingName3" />
+    <result column="SHOP_NAME_3" jdbcType="VARCHAR" property="shopName3" />
+    <result column="NET_CHANNEL" jdbcType="VARCHAR" property="netChannel" />
+    <result column="is_area" jdbcType="VARCHAR" property="isArea" />
+    <result column="distributionType" jdbcType="VARCHAR" property="distributiontype" />
+    <result column="TENGYUN_TYPE" jdbcType="TINYINT" property="tengyunType" />
+    <result column="ec_net_no" jdbcType="VARCHAR" property="ecNetNo" />
+  </resultMap>
+  <sql id="SdbMedia_Base_Column_List">
+    id, prov_no, prov, city_no, city, city_area_no, city_area, vdc_no, vdc, cop_no, cop, 
+    net_type, net_typestr, net_name, net_no, net_sname, work_no, work_name, work_mobile, 
+    term_isshangcheng, term_isshangchengstr, type, state, statestr, open_date, close_date, 
+    term_yetai, term_yetaistr, term_brand, term_brandstr, term_fbtype, term_fbtypestr, 
+    psam, machine_kind, machine_kindstr, dev_state, dev_statestr, dev_open_date, dev_close_date, 
+    profit_type, is_profit, contact_name_1, mobile, term_lxrtel, addr, updatetime, lklbank_no, 
+    lklbank_name, areacode, voutype, account_bank_no, account_bank, account_name, account_no, 
+    account_type, account_typestr, first_open_date, is_fr, fr_type_code, fr_type, name, 
+    wh_mobile, is_onehour, is_doorstep, is_pickup, net_custom_name, is_homepay, maxgathering, 
+    DeliveryType, COMMUNITY_NAME_3, BUILDING_NAME_3, SHOP_NAME_3, NET_CHANNEL, is_area, 
+    distributionType, TENGYUN_TYPE, ec_net_no
+  </sql>
+  <select id="selectSdbMediaByCriteria" parameterType="string" resultMap="SdbMediaBaseResultMap">
+    select 
+    <include refid="SdbMedia_Base_Column_List" />
+    from sdb_media_statistics
+    where mobile = #{mobile,jdbcType=VARCHAR} and terminalType = 3
+  </select>
+  
+  <select id="querySdbMediaByCriteria" parameterType="string" resultMap="SdbMediaBaseResultMap">
+    select 
+    <include refid="SdbMedia_Base_Column_List" />
+    from sdb_media_statistics
+    where mobile = #{mobile,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 客户经理表 -->
+  <resultMap id="CustMagBaseResultMap" type="com.lakala.module.user.vo.Tcustomermanager" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="agentid" property="agentid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="managerno" property="managerno" jdbcType="VARCHAR" />
+    <result column="serialnumber" property="serialnumber" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="offerdate" property="offerdate" jdbcType="DATE" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createuserid" property="createuserid" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+    <result column="provincecode" property="provincecode" jdbcType="VARCHAR" />
+    <result column="provincename" property="provincename" jdbcType="VARCHAR" />
+    <result column="citycode" property="citycode" jdbcType="VARCHAR" />
+    <result column="cityname" property="cityname" jdbcType="VARCHAR" />
+    <result column="areacode" property="areacode" jdbcType="VARCHAR" />
+    <result column="areaname" property="areaname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="CustMag_Base_Column_List" >
+    id, agentid, name, mobile, managerno, serialnumber, birthday, idcard, offerdate, 
+    createtime, createuserid, creator, status, orgid, provincecode, provincename, citycode, 
+    cityname, areacode, areaname
+  </sql>
+  <select id="selectTcustomermanager" resultMap="CustMagBaseResultMap" parameterType="map" >
+    select 
+    <include refid="CustMag_Base_Column_List" />
+    from tcustomermanager
+    WHERE provincecode = #{provno,jdbcType=VARCHAR}
+		AND citycode = #{cityno,jdbcType=VARCHAR}
+		AND serialnumber = #{registerCode,jdbcType=VARCHAR}
+    limit 1
+  </select>
+  <select id="selectTcustomermanagerByCode" resultMap="CustMagBaseResultMap" parameterType="string" >
+    select 
+    <include refid="CustMag_Base_Column_List" />
+    from tcustomermanager
+    WHERE serialnumber = #{registerCode,jdbcType=VARCHAR}
+    limit 1
+  </select>
+
+  <!-- 代理商表 -->
+  <resultMap id="AgentBaseResultMap" type="com.lakala.module.user.vo.Tagent">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="agentname" jdbcType="VARCHAR" property="agentname" />
+    <result column="agentno" jdbcType="VARCHAR" property="agentno" />
+    <result column="legalperson" jdbcType="VARCHAR" property="legalperson" />
+    <result column="provincecode" jdbcType="VARCHAR" property="provincecode" />
+    <result column="provincename" jdbcType="VARCHAR" property="provincename" />
+    <result column="citycode" jdbcType="VARCHAR" property="citycode" />
+    <result column="cityname" jdbcType="VARCHAR" property="cityname" />
+    <result column="areacode" jdbcType="VARCHAR" property="areacode" />
+    <result column="areaname" jdbcType="VARCHAR" property="areaname" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="exprovincecode" jdbcType="VARCHAR" property="exprovincecode" />
+    <result column="exprovincename" jdbcType="VARCHAR" property="exprovincename" />
+    <result column="excitycode" jdbcType="VARCHAR" property="excitycode" />
+    <result column="excityname" jdbcType="VARCHAR" property="excityname" />
+    <result column="exareacode" jdbcType="VARCHAR" property="exareacode" />
+    <result column="exareaname" jdbcType="VARCHAR" property="exareaname" />
+    <result column="startdate" jdbcType="DATE" property="startdate" />
+    <result column="enddate" jdbcType="DATE" property="enddate" />
+    <result column="accountname" jdbcType="VARCHAR" property="accountname" />
+    <result column="bankaccount" jdbcType="VARCHAR" property="bankaccount" />
+    <result column="bankname" jdbcType="VARCHAR" property="bankname" />
+    <result column="bankno" jdbcType="VARCHAR" property="bankno" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="creatuserid" jdbcType="INTEGER" property="creatuserid" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="orgid" jdbcType="INTEGER" property="orgid" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Agent_Base_Column_List">
+    id, agentname, agentno, legalperson, provincecode, provincename, citycode, cityname, 
+    areacode, areaname, address, tel, exprovincecode, exprovincename, excitycode, excityname, 
+    exareacode, exareaname, startdate, enddate, accountname, bankaccount, bankname, bankno, 
+    createtime, creatuserid, creator, orgid, status, remark
+  </sql>
+  <select id="selectTagent" parameterType="java.lang.Integer" resultMap="AgentBaseResultMap">
+    select 
+    <include refid="Agent_Base_Column_List" />
+    from tagent
+    WHERE agentno = #{registerCode,jdbcType=VARCHAR}
+    limit 1
+  </select>
+  
+  <!-- 统计业绩最少的客户经理(508:自营) -->
+  <select id="selectRegisterCode" resultType="String" parameterType="map">
+	SELECT registerCode FROM sdb_media_statistics
+	WHERE prov_no = #{provno,jdbcType=VARCHAR}
+	AND city_no = #{cityno,jdbcType=VARCHAR}
+	AND city_area_no = #{areano,jdbcType=VARCHAR}
+	AND registerCode IS NOT NULL
+	and agentId in (select id from tagent where type = 508)
+	GROUP BY registerCode
+	HAVING  registerCode IN(
+		select serialnumber from tcustomermanager 
+		where provincecode = #{provno,jdbcType=VARCHAR}
+		AND citycode = #{cityno,jdbcType=VARCHAR}
+		AND areacode = #{areano,jdbcType=VARCHAR}
+		AND serialnumber is not null 
+	) 
+	ORDER BY COUNT(mobile)
+	LIMIT 1
+  </select>
+  <select id="selectRegisterCode2" resultType="String" parameterType="map">
+	SELECT serialnumber FROM tcustomermanager
+	WHERE provincecode = #{provno,jdbcType=VARCHAR}
+	AND citycode = #{cityno,jdbcType=VARCHAR}
+	AND areacode = #{areano,jdbcType=VARCHAR}
+	AND serialnumber NOT IN(
+		SELECT registerCode FROM sdb_media_statistics
+		WHERE prov_no = #{provno,jdbcType=VARCHAR}
+		AND city_no = #{cityno,jdbcType=VARCHAR}
+		AND city_area_no = #{areano,jdbcType=VARCHAR}
+		AND registerCode IS NOT NULL
+	)
+	and agentid in (select id from tagent where type = 508)
+	AND serialnumber IS NOT NULL
+	LIMIT 1
+  </select>
+  <select id="selectRegisterCode3" resultType="String" parameterType="map">
+  	SELECT serialnumber from tcustomermanager 
+	where agentid in (
+		SELECT id from tagent 
+		WHERE orgid in (
+			SELECT id from torganization WHERE code like CONCAT('%',#{areano,jdbcType=VARCHAR},'%')
+		)
+		AND type = 508
+	)
+	LIMIT 1
+  </select>
+  <select id="checkRegisterCodeType" resultType="int" parameterType="string">
+  	SELECT count(0) from tagent where id in (
+		SELECT agentid from tcustomermanager WHERE serialnumber = #{registerCode,jdbcType=VARCHAR}
+	) and type in (508, 509, 512);
+  </select>
+  
+</mapper>

@@ -1,0 +1,137 @@
+$(function() {
+	storage.setItem("windowHeight", $(window).height());
+	loadJs();
+})
+
+$(function() {
+	$("#btnLogin").on("touchend", function(e) {
+		//if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			//隐藏键盘
+			//cordova._native.navigation.hideKeyboard();
+		//}
+		$(this).removeClass("focus");
+
+		var mobile = $.trim($("#mobile").val());
+		var pwd = $.trim($("#pwd").val());
+		var pushToken = ""; //推送Token
+		var terminalType = "1"; //0:其他, 1:安卓, 2:苹果
+		if(mobile == "") {
+			showAlertMsg(msgMobileNotEmpty);
+			return false;
+		}
+		if(mobile.length != 11) {
+			showAlertMsg(msgMobileError);
+			return false;
+		}
+		var patrn = /(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
+		if(!patrn.test(mobile)) {
+			showAlertMsg(msgMobileError);
+			return false;
+		}
+		if(pwd == "") {
+			showAlertMsg(msgPawFormat);
+			return;
+		}
+		if(!pwd.match(/^[A-Za-z0-9]{6,20}$/)) {
+			showAlertMsg(msgPawFormat);
+			return;
+		}
+
+		var os = osType().toLowerCase();
+		if(os != "other") {
+			cordova._native.system.deviceInfo(function(res) {
+				platform = res.platform;
+				deviceId = res.deviceId;
+				terminalCode = deviceId;
+				subChannelId = res.subChannelId;
+				objectId = res.objectId;
+				pushToken = res.token;
+
+				if(platform.toLowerCase() === "ios") {
+					terminalType = "2";
+				}
+
+				storage.setItem("platform", platform);
+				storage.setItem("deviceId", deviceId);
+				storage.setItem("subChannelId", subChannelId);
+				storage.setItem("objectId", objectId);
+				storage.setItem("pushToken", pushToken);
+
+				var data = {"mobile":mobile, "pwd":pwd, "terminalCode":pushToken, "terminalType":terminalType};
+				toLogin(data);
+			});
+		} else {
+			var data = {"mobile":mobile, "pwd":pwd, "terminalCode":"browswerTest", "terminalType":"0"};
+			toLogin(data);
+		}
+
+		e.preventDefault();
+	});
+});
+
+/*function toLogin(data) {
+	var resultJson = ajaxCommon(urlLogin, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var userToken = resultJson._ReturnData.token;
+		var userName = resultJson._ReturnData.userName;
+		var userType = resultJson._ReturnData.userType;
+		var bizType = resultJson._ReturnData.bizType;  //商户类型--加盟型:459; 标准型:460; 旗舰型:461;
+		var ecNetNo = resultJson._ReturnData.ecNetNo;  //电商网店编号
+		var psam = resultJson._ReturnData.psam;  //PSAM编号
+
+		storage.setItem("userToken", userToken);
+		storage.setItem("mobile", data.mobile);
+		storage.setItem("password", data.pwd);
+		storage.setItem(hasLogined, "1");
+		storage.setItem("bizType", bizType);  //商户类型存放到storage中
+		storage.setItem("psam", psam);  //PSAM存放到storage中
+		storage.setItem("netNo", ecNetNo);  //网点编号存放到storage中
+
+		if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			//记录登录状态--true:代表已登录，false:代表未登录
+			cordova._native.saveInfo.set(hasLogined, true);
+			cordova._native.saveInfo.set("mobile", data.mobile);
+		}
+		window.location.href = "../homepage/index.html?t=" + t;
+	} else {
+		showAlertMsg(msgLoginError);
+	}
+}*/
+
+/* 登录*/
+function toLogin(data) {
+	var resultJson = ajaxCommon(urlLogin, data);
+	resultJson = convertNullToEmpty(resultJson);
+	var _ReturnCode = resultJson._ReturnCode;
+	if(_ReturnCode === returnCode100008){
+		//登录成功
+		var userToken = resultJson._ReturnData.token;
+		var userName = resultJson._ReturnData.userName;
+		var userType = resultJson._ReturnData.userType;
+		var bizType = resultJson._ReturnData.bizType;  //商户类型--加盟型:459; 标准型:460; 旗舰型:461;
+		var ecNetNo = resultJson._ReturnData.ecNetNo;  //电商网店编号
+		var psam = resultJson._ReturnData.psam;  //PSAM编号
+
+		storage.setItem("userToken", userToken);
+		storage.setItem("mobile", data.mobile);
+		storage.setItem("password", data.pwd);
+		storage.setItem(hasLogined, "1");
+		storage.setItem("bizType", bizType);  //商户类型存放到storage中
+		storage.setItem("psam", psam);  //PSAM存放到storage中
+		storage.setItem("netNo", ecNetNo);  //网点编号存放到storage中
+
+		if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			//记录登录状态--true:代表已登录，false:代表未登录
+			cordova._native.saveInfo.set(hasLogined, true);
+			cordova._native.saveInfo.set("mobile", data.mobile);
+		}
+		window.location.href = "../homepage/index.html?t=" + t;
+	}else if(_ReturnCode === returnCode100004){
+		//很抱歉，您输入的手机号或密码错误，请检查后重新输入
+		showAlertMsg(msgReturn100004);
+	}else if(_ReturnCode === returnCode100002){
+		//很抱歉，该手机号不是店主手机号，请检查后重新输入
+		showAlertMsg(msgReturn100002);
+	}
+}

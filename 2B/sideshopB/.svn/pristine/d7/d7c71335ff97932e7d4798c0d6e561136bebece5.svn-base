@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.approval.ApprovalMapper">
+    <insert id="insert" parameterType="com.lakala.base.model.Approval">
+        insert into tapproval (id, wtmcode, userid,
+        docentry, objtype, approvaluserid,
+        status, createdate, updatedate,
+        sortid, url, ownerremark,
+        remarks,isreturn)
+        values (#{id,jdbcType=BIGINT}, #{wtmCode,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+        #{docentry,jdbcType=VARCHAR}, #{objType,jdbcType=VARCHAR}, #{approvalUserId,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR}, now(), null,
+        #{sortId,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ownerRemark,jdbcType=LONGVARCHAR},
+        #{remarks,jdbcType=LONGVARCHAR},#{isreturn,jdbcType=VARCHAR})
+    </insert>
+
+</mapper>

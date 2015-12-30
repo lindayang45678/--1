@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.afterapprovalrecord.AfterapprovalrecordMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Afterapprovalrecord">
+        <id column="afterApprovalRecordId" property="afterapprovalrecordid" jdbcType="INTEGER"/>
+        <result column="approvingUser" property="approvinguser" jdbcType="INTEGER"/>
+        <result column="approvingUserName" property="approvingusername" jdbcType="VARCHAR"/>
+        <result column="approvingTime" property="approvingtime" jdbcType="TIMESTAMP"/>
+        <result column="approvingStatus" property="approvingstatus" jdbcType="VARCHAR"/>
+        <result column="approvingRemark" property="approvingremark" jdbcType="VARCHAR"/>
+        <result column="tReturnItemsId" property="treturnitemsid" jdbcType="INTEGER"/>
+        <result column="tReturnId" property="treturnid" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="insertSelective" parameterType="com.lakala.base.model.Afterapprovalrecord">
+        insert into tafterapprovalrecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="afterapprovalrecordid != null">
+                afterApprovalRecordId,
+            </if>
+            <if test="approvinguser != null">
+                approvingUser,
+            </if>
+            <if test="approvingusername != null">
+                approvingUserName,
+            </if>
+            <if test="approvingtime != null">
+                approvingTime,
+            </if>
+            <if test="approvingstatus != null">
+                approvingStatus,
+            </if>
+            <if test="approvingremark != null">
+                approvingRemark,
+            </if>
+            <if test="treturnitemsid != null">
+                tReturnItemsId,
+            </if>
+            <if test="treturnid != null">
+                tReturnId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="afterapprovalrecordid != null">
+                #{afterapprovalrecordid,jdbcType=INTEGER},
+            </if>
+            <if test="approvinguser != null">
+                #{approvinguser,jdbcType=INTEGER},
+            </if>
+            <if test="approvingusername != null">
+                #{approvingusername,jdbcType=VARCHAR},
+            </if>
+            <if test="approvingtime != null">
+                #{approvingtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="approvingstatus != null">
+                #{approvingstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="approvingremark != null">
+                #{approvingremark,jdbcType=VARCHAR},
+            </if>
+            <if test="treturnitemsid != null">
+                #{treturnitemsid,jdbcType=INTEGER},
+            </if>
+            <if test="treturnid != null">
+                #{treturnid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+</mapper>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>查看配送状态</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+	<header>
+		<h1>查看配送状态</h1>
+		<a href="javascript:window.history.go(-1);" class="back">返回</a>
+	</header>
+	<section class="container deliverystate">
+		<section class="wrap">
+			<dl>
+				<dt class="letter-spacing">发货人：</dt>
+				<dd id="sendName"></dd>
+				<dt>发货时间：</dt>
+				<dd id="startTime"></dd>
+				<dt>快递公司：</dt>
+				<dd id="com"></dd>
+				<dt>快递单号：</dt>
+				<dd id="logno"></dd>
+				<dt class="letter-spacing">收件人：</dt>
+				<dd id="cusName"></dd>
+				<dt>收件时间：</dt>
+				<dd id="signaturetime"></dd>
+				<dt>配送状态：</dt>
+				<dd id="status"></dd>
+			</dl>
+			<ul id="deliveryinfos"></ul>
+			<a href="javascript:window.history.go(-1);" class="btn-red">关闭</a>
+		</section>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/orders/deliverystate.js"></script>
+</html>

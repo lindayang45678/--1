@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>批发进货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>
+		<h1>批发进货</h1>
+		<a href="register.html" class="head-right wholesale-search">搜索</a>
+	</header>
+	<section class="container">
+		<div class="wholesale clearfix">
+			<div id="wholesale-l">
+				<div  id="menu-l">
+					<ul class="left-l1">
+						<li><a href="#">活动推荐</a><i></i></li>
+						<li><a href="#">全国批发</a><i></i></li>
+						<li>
+							<a href="#">福建批发福建批发福建批发</a><i></i>
+							<ul class="left-l2">
+								<li>
+									<a href="#" class="white">21ashdahd阿红说的话<i class="sj-redr"></i></a>
+									<ul class="left-l3">
+										<li><a href="#">31</a><i></i></li>
+										<li><a href="#">32</a><i></i></li>
+										<li><a href="#">33</a><i></i></li>
+									</ul>
+								</li>
+								<li><a href="#">22</a><i></i></li>
+								<li><a href="#">23</a><i></i></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div id="wholesale-r">
+				<ul id="wholesale-ad">
+					<li><a href="#"><img src="../../images/example440x212.png"/></a></li>
+					<li><a href="#"><img src="../../images/example440x212.png"/></a></li>
+					<li><a href="#"><img src="../../images/example440x212.png"/></a></li>
+				</ul>
+				<ul id="wholesale-goods">
+					<li>
+						<a href="#">
+							<div class="box-picture"><img src="../../images/example240x240.png"/></div>
+							<div class="box-detail">
+								<p>单人床单40支纯棉斜纹加大床单</p>
+								<div class="sale-price">¥89.00</div>
+								<del class="market-price">¥124.00</del>
+								<a href="javascript:;" class="add-cart">加入购物车</a>	
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div id="wholesale-foot" class="clearfix">
+				<i id="goodscart">436</i>
+				<i id="goodscart-total">共计436件</i>
+				<i id="goodscart-price">￥1284.00</i>
+				<a href="#" class="gopay">去结算</a>
+			</div>	
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/accounts/login.js"></script>
+</html>

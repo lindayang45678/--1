@@ -1,0 +1,42 @@
+package com.lakala.module.goods.vo;
+
+/**
+ * 
+ * @ClassName: GoodsPoolSkuInfoVO
+ * @Description: 商品池商品sku信息实体
+ * @author zhiziwei
+ * @date 2015-3-6 下午12:11:19
+ * 
+ */
+public class GoodsPoolSkuInfoVO {
+	private Integer tGoodSkuInfoPoolId;
+
+	private String skuIdStr;
+
+	private String skuFrontDisNameStr;
+
+	public Integer gettGoodSkuInfoPoolId() {
+		return tGoodSkuInfoPoolId;
+	}
+
+	public void settGoodSkuInfoPoolId(Integer tGoodSkuInfoPoolId) {
+		this.tGoodSkuInfoPoolId = tGoodSkuInfoPoolId;
+	}
+
+	public String getSkuIdStr() {
+		return skuIdStr;
+	}
+
+	public void setSkuIdStr(String skuIdStr) {
+		this.skuIdStr = skuIdStr;
+	}
+
+	public String getSkuFrontDisNameStr() {
+		return skuFrontDisNameStr;
+	}
+
+	public void setSkuFrontDisNameStr(String skuFrontDisNameStr) {
+		this.skuFrontDisNameStr = skuFrontDisNameStr;
+	}
+
+}

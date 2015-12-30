@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>开店宝工具-本店信息-管理收货人地址</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+	<link rel="stylesheet" href="../../css/admin.css" />
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html">批发进货</a>
+			<a href="../order-query/order-query.html">订单查询</a>
+			<a href="../benefit-query/order-income.html">收益查询</a>
+			<a href="../sales-manage/sales-list.html">销售员管理</a>
+			<a href="../tools/index.html" class="active">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+		<menu>
+			<a href="../tools/index.html" class="active">本店信息</a>
+			<a href="../tools/feedback.html">建议反馈</a>
+			<a href="../tools/operation.html">操作说明</a>
+			<a href="../tools/index.html">返回店主工具</a>
+			<a href="javascript:;">返回商城首页</a>
+		</menu>
+		<section class="main">
+			<div class="title">
+				<h2>本店信息</h2>
+				<a href="javascript:;" class="btn-blue">使用邀请码升级</a>
+				<a href="../tools/feedback.html" class="btn-white">建议反馈</a>
+			</div>
+			<section class="main-wrap">
+				<div class="shop-information">
+					<a href="../tools/notice.html" class="notice">[紧急通知]拉卡拉商城要送钱啦，快点来收吧~~~~</a>
+					<dl>
+						<dt><img src="../../images/admin/shop.png"/><div>vip</div></dt>
+						<dd>门店名称：<span>拉卡拉社区商城</span></dd>
+						<dd>开店宝名称：<span>巫龙飞</span>开店宝手机号：<span>13512345678</span></dd>
+						<dd>门店地址：<span>北京市海淀区丹棱街6号中关村金融大厦7层</span></dd>
+					</dl>
+					<section>
+						<div>2014年7月21日-8月20日</div>
+						<div class="shop-inf"><img src="../../images/admin/notebook.png"/><span><span>开店宝</span><em>1900.00</em>元</span><span>+</span><span><span>销售员支付订单</span><em>1900.00</em>元</span><span>=</span><span><span>本店待结算金额</span><i>1900.00元</i></span></div>
+					</section>
+					<ul>
+						<li>本店当月结算周期</li>
+						<li><span>总收益全省排名：</span>第<em>23456</em>位，击败了全国<em>60%</em>的门店</li>
+						<li><span>开店宝收益全省排名：</span>第<em>23456</em>位，击败了全国<em>60%</em>的门店</li>
+						<li><span>销售员收益全省排名：</span>第<em>23456</em>位，击败了全国<em>60%</em>的门店<i>您销售员的日子不好过啊~~</i></li>
+					</ul>
+					<div class="shop-sh"><span>本店常用地址管理：</span><a href="#" class="btn-white">快递到家地址管理</a></div>
+				</div>
+				<div class="mask"></div>
+				<div class="address">
+					<div class="close"></div>
+					<div class="address-head">管理收货人地址：<a href="../tools/add-address.html">增加地址信息</a></div>
+					<div id="address-list">
+						<ul>
+							<li><span>巫龙飞  13522424242 广东省   广州市   罗湖区中关村金融大厦8层 拉卡拉支付有限公司</span><a href="../tools/add-address.html" class="wb">编辑</a><a href="../tools/del-address.html">删除</a></li>
+							<li><span>巫龙飞  13522424242 广东省   广州市   罗湖区中关村金融大厦8层 拉卡拉支付有限公司</span><a href="../tools/add-address.html" class="wb">编辑</a><a href="../tools/del-address.html">删除</a></li>
+						</ul>
+					</div>
+					<div class="foot-line"></div>
+					<div class="address-foot">
+						<a href="javascript:;" class="btn-white">取消</a>
+						<a href="javascript:;" class="btn-blue">确定</a>
+					</div>
+				</div>
+			</section>
+		</section>
+	</section>
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myscroll = new iScroll("address-list",{hScrollbar:false, vScrollbar:true, fixedScrollbar:true, hideScrollbar:true});
+		});
+	</script>
+</body>
+</html>

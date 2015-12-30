@@ -1,0 +1,33 @@
+package com.lakala.util;
+
+public class ConstantsUtil {
+	private String callbackurl;
+	private String wxcallbackurl;
+	private String callbackurl_m;
+	
+
+	public String getCallbackurl_m() {
+		return callbackurl_m;
+	}
+
+	public void setCallbackurl_m(String callbackurl_m) {
+		this.callbackurl_m = callbackurl_m;
+	}
+
+	public String getWxcallbackurl() {
+		return wxcallbackurl;
+	}
+
+	public void setWxcallbackurl(String wxcallbackurl) {
+		this.wxcallbackurl = wxcallbackurl;
+	}
+
+	public String getCallbackurl() {
+		return callbackurl;
+	}
+
+	public void setCallbackurl(String callbackurl) {
+		this.callbackurl = callbackurl;
+	}
+	
+}

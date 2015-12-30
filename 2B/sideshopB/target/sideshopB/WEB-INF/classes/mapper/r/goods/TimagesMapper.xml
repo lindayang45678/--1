@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goods.TimagesMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Timages" >
+    <id column="timageId" property="timageid" jdbcType="INTEGER" />
+    <result column="imageName" property="imagename" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="targetId" property="targetid" jdbcType="BIGINT" />
+    <result column="targetType" property="targettype" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="lastModDate" property="lastmoddate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    timageId, imageName, url, targetId, targetType, sort, lastModDate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from timages
+    where timageId = #{timageid,jdbcType=INTEGER}
+  </select>
+  <!-- 根据商品id查询图片信息 zhiziwei -->
+  <select id="queryImgByGoodsId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />
+  	from timages 
+  	where targetId = #{goodsId,jdbcType=BIGINT} 
+  	  and targetType = #{targetType,jdbcType=INTEGER} 
+  	order by sort
+  </select>
+</mapper>

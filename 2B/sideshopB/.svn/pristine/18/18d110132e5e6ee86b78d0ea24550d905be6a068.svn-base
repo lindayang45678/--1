@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.profit.TorderdetailMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.profit.Torderdetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="orderItemsId" property="orderitemsid" jdbcType="VARCHAR" />
+    <result column="orderProviderID" property="orderproviderid" jdbcType="VARCHAR" />
+    <result column="orderID" property="orderid" jdbcType="VARCHAR" />
+    <result column="orderDetailId" property="orderdetailid" jdbcType="VARCHAR" />
+    <result column="orderDetailType" property="orderdetailtype" jdbcType="INTEGER" />
+    <result column="goodsID" property="goodsid" jdbcType="INTEGER" />
+    <result column="goodsName" property="goodsname" jdbcType="VARCHAR" />
+    <result column="goodsClassificationID" property="goodsclassificationid" jdbcType="VARCHAR" />
+    <result column="providerID" property="providerid" jdbcType="INTEGER" />
+    <result column="providerName" property="providername" jdbcType="VARCHAR" />
+    <result column="goodsPayOff" property="goodspayoff" jdbcType="DECIMAL" />
+    <result column="goodsSalePrice" property="goodssaleprice" jdbcType="DECIMAL" />
+    <result column="goodsCount" property="goodscount" jdbcType="INTEGER" />
+    <result column="goodsFinalPrice" property="goodsfinalprice" jdbcType="DECIMAL" />
+    <result column="orderFinalAmount" property="orderfinalamount" jdbcType="DECIMAL" />
+    <result column="goodsOutTime" property="goodsouttime" jdbcType="TIMESTAMP" />
+    <result column="goodsInTime" property="goodsintime" jdbcType="TIMESTAMP" />
+    <result column="fav" property="fav" jdbcType="VARCHAR" />
+    <result column="goodsFavoRuleMoney" property="goodsfavorulemoney" jdbcType="DECIMAL" />
+    <result column="duePay" property="duepay" jdbcType="DECIMAL" />
+    <result column="tradeCharges" property="tradecharges" jdbcType="DECIMAL" />
+    <result column="goodsDeductionPoints" property="goodsdeductionpoints" jdbcType="REAL" />
+    <result column="saleCommissions" property="salecommissions" jdbcType="DECIMAL" />
+    <result column="channelCode" property="channelcode" jdbcType="INTEGER" />
+    <result column="goodChannelCode" property="goodchannelcode" jdbcType="INTEGER" />
+    <result column="netProfit" property="netprofit" jdbcType="DECIMAL" />
+    <result column="netReturnAmount" property="netreturnamount" jdbcType="DECIMAL" />
+    <result column="netSubsidyAmount" property="netsubsidyamount" jdbcType="DECIMAL" />
+    <result column="companyProfit" property="companyprofit" jdbcType="DECIMAL" />
+    <result column="companyReturnAmount" property="companyreturnamount" jdbcType="DECIMAL" />
+    <result column="companySubsidyAmount" property="companysubsidyamount" jdbcType="DECIMAL" />
+    <result column="areaProfit" property="areaprofit" jdbcType="DECIMAL" />
+    <result column="areaReturnAmount" property="areareturnamount" jdbcType="DECIMAL" />
+    <result column="areaSubsidyAmount" property="areasubsidyamount" jdbcType="DECIMAL" />
+    <result column="createBill" property="createbill" jdbcType="INTEGER" />
+    <result column="billId" property="billid" jdbcType="VARCHAR" />
+    <result column="createBillTime" property="createbilltime" jdbcType="TIMESTAMP" />
+    <result column="isSettle" property="issettle" jdbcType="INTEGER" />
+    <result column="receiveTime" property="receivetime" jdbcType="TIMESTAMP" />
+    <result column="payTime" property="paytime" jdbcType="TIMESTAMP" />
+    <result column="providerSettleTime" property="providersettletime" jdbcType="TIMESTAMP" />
+    <result column="isSettleProviderAmount" property="issettleprovideramount" jdbcType="INTEGER" />
+    <result column="branchCompanySettleTime" property="branchcompanysettletime" jdbcType="TIMESTAMP" />
+    <result column="isBranchCompanyAmount" property="isbranchcompanyamount" jdbcType="INTEGER" />
+    <result column="customerManagerSettleTime" property="customermanagersettletime" jdbcType="TIMESTAMP" />
+    <result column="isCustomerManagerAmount" property="iscustomermanageramount" jdbcType="INTEGER" />
+    <result column="shopmanProfitSettleTime" property="shopmanprofitsettletime" jdbcType="TIMESTAMP" />
+    <result column="isSettleShopmanProfit" property="issettleshopmanprofit" jdbcType="INTEGER" />
+    <result column="termfbtype" property="termfbtype" jdbcType="VARCHAR" />
+    <result column="termfbtypestr" property="termfbtypestr" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="orderProperty" property="orderproperty" jdbcType="INTEGER" />
+    <result column="orderStatus" property="orderstatus" jdbcType="INTEGER" />
+    <result column="branchId" property="branchid" jdbcType="VARCHAR" />
+    <result column="branchCompany" property="branchcompany" jdbcType="VARCHAR" />
+    <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+    <result column="returnTime" property="returntime" jdbcType="TIMESTAMP" />
+    <result column="netProperty" property="netproperty" jdbcType="INTEGER" />
+    <result column="psam" property="psam" jdbcType="VARCHAR" />
+    <result column="netPoint" property="netpoint" jdbcType="VARCHAR" />
+    <result column="shopperSettlementId" property="shoppersettlementid" jdbcType="VARCHAR" />
+    <result column="shopperPayTime" property="shopperpaytime" jdbcType="TIMESTAMP" />
+    <result column="providerDeliverFee" property="providerdeliverfee" jdbcType="DECIMAL" />
+    <result column="providerDeliverType" property="providerdelivertype" jdbcType="INTEGER" />
+    <result column="salerProfit" property="salerprofit" jdbcType="DECIMAL" />
+    <result column="paymentDeadLine" property="paymentdeadline" jdbcType="TIMESTAMP" />
+    <result column="billDeadLine" property="billdeadline" jdbcType="TIMESTAMP" />
+    <result column="payperiod" property="payperiod" jdbcType="INTEGER" />
+    <result column="settleStateDueDate" property="settlestateduedate" jdbcType="INTEGER" />
+    <result column="platorself" property="platorself" jdbcType="INTEGER" />
+    <result column="refundTime" property="refundtime" jdbcType="TIMESTAMP" />
+    <result column="payRate" property="payrate" jdbcType="DECIMAL" />
+    <result column="payRateAmount" property="payrateamount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, orderItemsId, orderProviderID, orderID, orderDetailId, orderDetailType, goodsID, 
+    goodsName, goodsClassificationID, providerID, providerName, goodsPayOff, goodsSalePrice, 
+    goodsCount, goodsFinalPrice, orderFinalAmount, goodsOutTime, goodsInTime, fav, goodsFavoRuleMoney, 
+    duePay, tradeCharges, goodsDeductionPoints, saleCommissions, channelCode, goodChannelCode, 
+    netProfit, netReturnAmount, netSubsidyAmount, companyProfit, companyReturnAmount, 
+    companySubsidyAmount, areaProfit, areaReturnAmount, areaSubsidyAmount, createBill, 
+    billId, createBillTime, isSettle, receiveTime, payTime, providerSettleTime, isSettleProviderAmount, 
+    branchCompanySettleTime, isBranchCompanyAmount, customerManagerSettleTime, isCustomerManagerAmount, 
+    shopmanProfitSettleTime, isSettleShopmanProfit, termfbtype, termfbtypestr, createTime, 
+    orderProperty, orderStatus, branchId, branchCompany, orderTime, returnTime, netProperty, 
+    psam, netPoint, shopperSettlementId, shopperPayTime, providerDeliverFee, providerDeliverType, 
+    salerProfit, paymentDeadLine, billDeadLine, payperiod, settleStateDueDate, platorself, 
+    refundTime, payRate, payRateAmount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from torderdetail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <!-- 自营货款流水 -->
+    <select id="selectSumDuePay" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+            select 
+    				sum( duePay) as  duePay, count(DISTINCT orderProviderID) as ownOrderNum
+    		from 
+    				torderdetail
+    		where 
+    				netPoint = #{ecNetNo,jdbcType=INTEGER}
+   					<!-- 品自营平台标识。自营-452，平台-453 -->
+   					and platorself=452
+					and(
+								( 		<![CDATA[ receiveTime >= #{executetimeStart}]]>
+								 and <![CDATA[ receiveTime  <= #{executetimeEnd}]]>
+								 ) 
+							or
+								(       <![CDATA[ refundTime >= #{executetimeStart}]]>
+								 and <![CDATA[ refundTime  <= #{executetimeEnd}]]>
+								)
+							)
+  </select>
+       <!-- 自营货款到账统计 -->
+    <select id="selectSumDuePayPaid" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    select 
+	    		t1.duePay, count(DISTINCT t2.orderProviderID) as ownSettleNum, t1.payTime
+	    from
+	    		trecharge t1, torderdetail t2
+	    where 
+	    			t1.netPoint = #{ecNetNo,jdbcType=INTEGER}
+	      		and  t1.payId=t2.shopperSettlementId
+	    		<if test="executetimeStart != null">
+				and <![CDATA[ t1.payTime >= #{executetimeStart}]]>
+				</if>
+				<if test="executetimeEnd != null">
+				and <![CDATA[t1. payTime  <= #{executetimeEnd}]]>
+				</if>
+     </select>
+     <!-- 平台商品分润收益统计 -->
+    <select id="selectSumEarnings" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    	select 
+    				sum(netProfit) as  netProfit,
+    				count(DISTINCT orderProviderID) as terraceOrderNum
+    		from 
+    				torderdetail
+    		where 
+    				netPoint = #{ecNetNo,jdbcType=INTEGER}
+    				<!-- 品自营平台标识。自营-452，平台-453 -->
+   					and platorself=453
+					and(
+								( 		 <![CDATA[ receiveTime >= #{executetimeStart}]]>
+								 and <![CDATA[ receiveTime  <= #{executetimeEnd}]]>
+								 ) 
+							or
+								(       <![CDATA[ refundTime >= #{executetimeStart}]]>
+								 and <![CDATA[ refundTime  <= #{executetimeEnd}]]>
+								)
+							)
+     </select>
+      <!--  平台商品分润到账统计 -->
+    <select id="selectSumEarningsPaid" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    select 
+	    	sum(netProfit) as  netPoint
+	    from trecharge
+	    where netPoint = #{ecNetNo,jdbcType=INTEGER}
+	    			<if test="executetimeStart != null">
+						and <![CDATA[ payTime >= #{executetimeStart}]]>
+					</if>
+					<if test="executetimeEnd != null">
+						and <![CDATA[ payTime  <= #{executetimeEnd}]]>
+					</if>
+     </select>
+     
+    <!-- 平台商品分润收益统计 -->
+    <select id="queryEarningsOrder" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    	select 
+    				sum(t1.netProfit) as  netPoint, t1.orderProviderID, t1.orderProperty,
+    				t3.nameCN  as payMode,
+    				sum(t1.goodsFinalPrice) as  goodsFinalPrice,
+    				sum(t1.duePay) as  duePay,
+    				t1.receiveTime,t1.refundTime,
+    				t1.orderDetailType
+    		from 
+    				torderdetail t1, torder  t2  left join  tdictionary  t3 on t3.dictionayId = t2.payChanel,
+    				torderitems t4
+    		where 
+    				t1.netPoint = #{ecNetNo,jdbcType=INTEGER}
+    				and t1.orderID =t2.tOrderId
+    				and t1.orderItemsId =t4.tOrderItemsId
+    				<if test="orderProviderId != null">
+						and t1.orderProviderID =#{orderProviderId}
+					</if>
+					<if test="orderSource != null">
+						and t1.channelCode =#{orderSource}
+					</if>
+					<if test="isAfterSale != null">
+						and t1.orderDetailType =#{isAfterSale}
+					</if>
+					<if test="earningsType != null">
+						and t1.platorself =#{earningsType}
+					</if>
+					<if test="earningsType =='453'">
+						and t4.deductionBasePoints > 0
+					</if>
+					<if test="isSettle == '78'">
+						and t1.isSettleShopmanProfit =#{isSettle}
+						and(
+									( 		     <![CDATA[ t1.receiveTime >= #{executetimeStart}]]>
+										 and <![CDATA[t1. receiveTime  <= #{executetimeEnd}]]>
+									 ) 
+									or
+									(           <![CDATA[ t1.refundTime >= #{executetimeStart}]]>
+										 and <![CDATA[ t1.refundTime  <= #{executetimeEnd}]]>
+									)
+								)
+					</if>
+					<if test="isSettle == '79'">
+						and t1.isSettleShopmanProfit =#{isSettle}
+						and   <![CDATA[ t1.shopmanProfitSettleTime >= #{executetimeStart}]]>
+						and <![CDATA[ t1.shopmanProfitSettleTime  <= #{executetimeEnd}]]>
+					</if>
+					Group by t1.orderDetailType, orderProviderID
+     </select>
+        <select id="selectByOrderProviderId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select 
+           t1.id, t1.orderItemsId, t1.orderProviderID, t1.orderID, t1.orderDetailId, t1.orderDetailType, 
+           t1.goodsName, t1.goodsCount, t1.goodsSalePrice, t1.goodsFinalPrice,t1. orderStatus, 
+           t1.receiveTime,  t1.orderProperty,t1.netPoint, t1.duePay,t1.tradeCharges, t1.refundTime,
+           t1.returnTime,t1.payRate, t1.payRateAmount,t1.providerDeliverFee,
+           t2.nameCN as  stateStr,t3.nameCN as  invalidstateStr,t1.shopperSettlementId
+		   from torderdetail t1    left join  tdictionary  t2 on t2.dictionayId = t1.orderStatus
+										 				 left join  tdictionary  t3 on t3.dictionayId = t1.orderProperty
+		 where 
+		        t1.orderProviderID= #{orderProviderId}
+		        and  t1.orderDetailType= #{returnFlg}
+		        and t1.platorself = #{earningsType} 
+		 		and(
+							( 		     <![CDATA[ t1.receiveTime >= #{executetimeStart}]]>
+								and <![CDATA[t1. receiveTime  <= #{executetimeEnd}]]>
+							) 
+							or
+							(           <![CDATA[ t1.refundTime >= #{executetimeStart}]]>
+								 and <![CDATA[ t1.refundTime  <= #{executetimeEnd}]]>
+							)
+						)
+        </select>
+</mapper>

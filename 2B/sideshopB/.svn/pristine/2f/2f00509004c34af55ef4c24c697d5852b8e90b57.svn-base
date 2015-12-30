@@ -1,0 +1,126 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+
+
+/**
+ * 订单查询输入
+ * @author yhg
+ *
+ */
+public class OrderMultQueryInput extends ObjectInput{
+
+	private String ispay;   //是否支付串  149,150
+	
+	private String paychannel;  //支付方式串  237,240
+	
+	private String ispayfornodeliver;  //是否显示货到付款订单
+	
+	private String cancelstate;   //订单取消状态
+	
+	private String state;   //订单发货状态串 99,101,102
+
+	private String source;  //订单来源  95,96,357
+	
+	private String torderid;  //大订单号
+	
+	private String starttime;   //查询开始时间
+	
+	private String endtime;     //查询结束时间
+	
+	private String custelno;    //手机号
+	
+	private String querytype;   //查询类型 cnt-标识查总数 list-标识查列表
+	
+	public String getIspay() {
+		return ispay;
+	}
+
+	public void setIspay(String ispay) {
+		this.ispay = ispay;
+	}
+
+	public String getPaychannel() {
+		return paychannel;
+	}
+
+	public void setPaychannel(String paychannel) {
+		this.paychannel = paychannel;
+	}
+
+	public String getIspayfornodeliver() {
+		return ispayfornodeliver;
+	}
+
+	public void setIspayfornodeliver(String ispayfornodeliver) {
+		this.ispayfornodeliver = ispayfornodeliver;
+	}
+
+	public String getCancelstate() {
+		return cancelstate;
+	}
+
+	public void setCancelstate(String cancelstate) {
+		this.cancelstate = cancelstate;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(String starttime) {
+		this.starttime = starttime;
+	}
+
+	public String getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(String endtime) {
+		this.endtime = endtime;
+	}
+
+	public String getCustelno() {
+		return custelno;
+	}
+
+	public void setCustelno(String custelno) {
+		this.custelno = custelno;
+	}
+
+	public String getQuerytype() {
+		return querytype;
+	}
+
+	public void setQuerytype(String querytype) {
+		this.querytype = querytype;
+	}
+
+	public String getTorderid() {
+		return torderid;
+	}
+
+	public void setTorderid(String torderid) {
+		this.torderid = torderid;
+	}
+	
+	
+	
+}

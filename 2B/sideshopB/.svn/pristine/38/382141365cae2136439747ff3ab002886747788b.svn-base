@@ -1,0 +1,134 @@
+var searchparm = "";//搜索参数
+var page = 0;
+var pageSize = 10;
+var hasNextPage = true;//是否有下一页
+var virtualcatid = "all";//虚拟分类ID
+var myScroll,pullDownOffset,pullUpEl, pullUpOffset;
+//初始化iScroll控件 
+function loaded() {
+	pullUpEl = document.getElementById('loading');
+	pullUpOffset = pullUpEl.offsetHeight;
+	myScroll = new iScroll('wholesale-search', {//iScroll的对象
+		hScrollbar: false, 
+		vScrollbar: false,
+		useTransition: false, 
+		topOffset: pullDownOffset,
+		onScrollMove: function () {
+			if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
+				pullUpEl.className = 'flip';
+				this.maxScrollY = this.maxScrollY;
+			} else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
+				pullUpEl.className = '';
+				this.maxScrollY = pullUpOffset;
+			}
+		},
+		onScrollEnd: function () {
+			if (pullUpEl.className.match('flip')) {
+				pullUpEl.className = 'hidden';
+				if(searchparm == ''){
+					return;
+				}
+				getGoodsList(virtualcatid);	// 执行加载后的自定义功能	
+			}
+		}
+	});
+}
+document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
+document.addEventListener('DOMContentLoaded', function() { setTimeout(loaded, 200); }, false);
+
+//设定显示商品列表高度
+$(function() {
+	$("#wholesale-search").css("height",windowHeight-$("header").height()-$(".search-title").height());
+	var url = window.location.href;
+	var getsearchparm = storage.getItem("searchparm") || getParamValueByName(url, "searchparm");
+	if(getsearchparm != "") {//判断是否从批发进货进来
+		searchparm = decodeURI(getsearchparm);
+		getGoodsList(virtualcatid);
+	}
+});
+
+//请求接口获取搜索的商品
+function getGoodsList(virtualcatid){
+	var container = $(".search-result");
+	var content = "";
+	var searchTitle = $(".search-title");
+	var countList = "";
+	setTimeout(function () {
+		if(hasNextPage){
+			page ++;
+			var data = {
+				"psam":psam,
+				"channelid":channelcodePF,
+				"virtualcatid":virtualcatid,
+				"searchparm":searchparm,
+				"page":page,
+				"pageSize":pageSize
+			};
+			var resultJson = ajaxCommon(urlWholesaleList, data);
+			resultJson = convertNullToEmpty(resultJson);
+			if (resultJson._ReturnCode === returnCodeSuccess) {
+				goodList = resultJson._ReturnData.list;
+				if(goodList.length > 0){
+					$('.w-search-fail').hide();
+					$('.w-search-failimg').hide();
+					for(var i = 0; i < goodList.length; i ++){
+						content +="<li class='clearfix'>";
+						content +="<a href='prodetail.html?goodsid=" +goodList[i].tgoodinfoid+ "&search=search'>";
+						content +="<i class='box-picture'><img src='" +urlImage+ "/" +goodList[i].tgoodinfoid+ "/" +imgw300+ "/" +goodList[i].goodbigpic.split(",")[0]+ "' onerror='productErrImg(this);'/><i></i></i>";
+						content +="<i class='box-detail'>";
+						content +="<i class='detail-head'>" +goodList[i].goodname+ "</i>";
+						content +="<i class='sale-price'>¥" +goodList[i].saleprice_o2o+ "</i>";
+						content +="<del class='market-price'>¥" +goodList[i].marketprice+ "</del>";
+						content +="<i class='add-cart' goodsid='" +goodList[i].tgoodinfoid+ "' goodIndex="+i+">立即购买</i>";
+						content +="</i>";
+						content +="</a>";
+						content +="</li>";
+					}
+					container.append(content);
+					myScroll.refresh();
+					countList = "搜索到和【"+ searchparm +"】相关的商品，共 <em>"+ resultJson._ReturnData.count +"</em>个";
+					searchTitle.html(countList);
+				}
+			}else{
+				//接口返回错误
+				if(page == 1){
+					searchTitle.html("");
+					$(".w-search-fail").show().html("没有搜索到和【" + searchparm + "】相关的商品");
+					$(".w-search-failimg").show();
+				}else{
+					hasNextPage = false;
+				}
+			}
+		}
+	},400);
+}
+
+/* 键盘搜索事件*/
+$(".orders-search input").on("keyup",function(e){
+	if(e.keyCode == 13){
+		page = 0;
+		hasNextPage = true;//是否有下一页
+		searchparm = $.trim($(".orders-search input").val());
+		if(searchparm == ""){
+			showAlertMsg(msgProductNameEmpty);
+			return;
+		}
+		$(".search-result").html("");
+		storage.setItem("searchparm", searchparm);
+		getGoodsList(virtualcatid,searchparm);
+	}
+});
+
+/* 确认查询*/
+$(".good-search").on("tap",function	(){
+	page = 0;
+	hasNextPage = true;//是否有下一页
+	searchparm = $.trim($(".orders-search input").val());
+	if(searchparm == ""){
+		showAlertMsg(msgProductNameEmpty);
+		return;
+	}
+	$(".search-result").html("");
+	storage.setItem("searchparm", searchparm);
+	getGoodsList(virtualcatid,searchparm);
+});

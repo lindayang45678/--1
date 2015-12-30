@@ -1,0 +1,42 @@
+package com.lakala.module.user.vo;
+
+
+/**
+ * 用户信息
+ * @author ph.li
+ *
+ */
+public class UserInfoOutput{
+
+	/** 验证令牌 */
+	protected String token;
+	/** 用户名 */
+	private String userName;
+	/** 用户类型 */
+	private String userType;
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+	
+	
+}

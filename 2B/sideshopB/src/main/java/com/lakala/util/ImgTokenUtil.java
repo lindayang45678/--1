@@ -1,0 +1,76 @@
+package com.lakala.util;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
+
+/**
+ * token工具
+ * @author ph.li
+ *
+ */
+public class ImgTokenUtil {
+
+	//失效时间30*24*60*60*1000 = 2592000000
+	private final static BigInteger VALID = new BigInteger("2592000000");
+	//KEY
+	private final static String KEY = "lakalaImg";
+	
+	//获取TOKEN
+	public static String getToken(final String mobile){	
+		StringBuffer sb = new StringBuffer(25);
+		sb.append(System.currentTimeMillis());
+		if(mobile != null){
+			sb.append(1).append(mobile);
+		}else{
+			sb.append(0);
+		}
+		String token = null;
+		try {
+			token = DES.encrypt(sb.toString(), KEY);  
+		} catch (Exception e) {
+		}
+		sb.setLength(0);
+		return URLEncoder.encode(token);
+	}
+	
+	//判断TOKEN是否有效(y:有效  n:无效)
+	public static boolean isValidToken(final String mobile,final String token){
+		if(token == null) return false;
+		String value = null;
+		try {
+			value = DES.decrypt(token,KEY);
+		} catch (IOException e) {
+		} catch (Exception e) {
+			
+		}
+		if(value != null){
+			//判断时效先
+			long t = -1;
+			try{
+				t = Long.parseLong(value.substring(0,13));
+			}catch(NumberFormatException e){
+				
+			}
+			if(t == -1) return false;
+			t = System.currentTimeMillis()-t;
+			if(VALID.compareTo(BigInteger.valueOf(t))<= 0) return false;
+			if(value.charAt(13) == '0') return true;
+			if(value.indexOf(mobile) > -1){
+				//手机号是OK的
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void main(String[] args) {
+		String token = getToken("18518767901 ");
+		System.out.println(token);
+		boolean flag = isValidToken("18518767901","RsRoQO0g4v/x8XTj/7o2h5RC4VHmH+KuDSg/Diw7Maw=");//"RsRoQO0g4v/x8XTj/7o2h5RC4VHmH+KuDSg/Diw7Maw");RsRoQO0g4v/x8XTj/7o2h5RC4VHmH+KuDSg/Diw7Maw
+		System.out.println(flag);
+	}
+	
+}

@@ -1,0 +1,23 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.module.comm.ObjectInput;
+/**
+ * 店主全部收货输入参数
+ * @author ls
+ *
+ */
+public class ShouhuoAllInput extends ObjectInput{
+	private String orderproviderid;
+
+	public String getOrderproviderid() {
+		return orderproviderid;
+	}
+
+	public void setOrderproviderid(String orderproviderid) {
+		this.orderproviderid = orderproviderid;
+	}
+
+	
+	
+
+}

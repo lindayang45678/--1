@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goodspublishkdbskuo2o.TgoodsPublishKdbSkuO2oMapper">
+
+	<resultMap id="BaseResultMap"
+               type="com.lakala.module.goods.vo.TgoodsPublishKdbSkuO2o">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="goodsId" property="goodsid" jdbcType="INTEGER"/>
+        <result column="skuId" property="skuid" jdbcType="INTEGER"/>
+        <result column="batchBuy" property="batchbuy" jdbcType="VARCHAR"/>
+        <result column="skuStatus" property="skustatus" jdbcType="INTEGER"/>
+        <result column="salePrice" property="saleprice" jdbcType="DOUBLE"/>
+        <result column="store" property="store" jdbcType="DOUBLE"/>
+        <result column="publishPerson" property="publishperson"
+                jdbcType="VARCHAR"/>
+        <result column="publishDate" property="publishdate" jdbcType="TIMESTAMP"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="publishTiming" property="publishtiming"
+                jdbcType="TIMESTAMP"/>
+        <result column="termConMD5" property="termconmd5" jdbcType="VARCHAR"/>
+        <result column="publishStatus" property="publishstatus"
+                jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs"
+               type="com.lakala.module.goods.vo.TgoodsPublishKdbSkuO2o" extends="BaseResultMap">
+        <result column="terminalCondition" property="terminalcondition"
+                jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		Id, goodsId, skuId, batchBuy, skuStatus, salePrice, store,
+		publishPerson,
+		publishDate,
+		remark, publishTiming, termConMD5,
+		publishStatus
+	</sql>
+    <sql id="Blob_Column_List">
+		terminalCondition
+	</sql>
+	
+    <select id="getSkuStockAndSoldSkuStock" resultType="hashmap">
+        select
+        tg.tGoodSkuInfoId,tg.skuStock as store,tg.soldSkuStock as soldStore,tg.platorself as platorself,tg.balancePrice ,tg.distributeProfitBase,
+         tg.distributionFlag,tg.tempStoreGoodsFlag
+        from
+        tgoodskuinfo tg
+        where
+        tg.tGoodSkuInfoId in
+        <foreach item="item" index="index" collection="skuids" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectGoodsByO2oidsAndGoodsId" resultType="hashmap">
+        select
+        ta.id o2oId, ta.goodsId tGoodInfoId, ta.skuId
+        tGoodSkuInfoId,ta.salePrice
+        salePrice, tb.marketPrice marketPrice,
+        tb.skuIdStr skuIdStr,tb.skuFrontDisNameStr
+        skuFrontDisNameStr,tg.skuStock as store,tg.soldSkuStock as soldStore
+        from
+        tgoods_publish_kdb_sku_o2o ta , tgoods_publish_kdb_sku tb , tgoodskuinfo tg
+        where
+        ta.goodsId = tg.tGoodInfoId and ta.skuId = tg.tGoodSkuInfoId
+        and ta.goodsId = tb.tGoodInfoId and ta.skuId = tb.tGoodSkuInfoId
+        and
+        ta.id in
+        <foreach item="item" index="index" collection="o2oIds" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+        and tb.goodsStatus = 208 and ta.goodsId = #{goodsId}
+    </select>
+
+    <select id="selectSkunetListBySkuidsAndPsam" parameterType="map" resultType="hashmap">
+        SELECT o.tGoodSkuInfoId skuid,a.stock stock,a.soldstock soldstock FROM
+        tgoodskuinfo o LEFT JOIN (SELECT
+        t.skuid,t.netno,t.stock,t.soldstock,t.providerid
+        FROM tskunetinfo t ,sdb_media_statistics s where t.netno = s.net_no and
+        s.psam = #{psam}) a ON o.tGoodSkuInfoId = a.skuid where
+        o.tempStoreGoodsFlag = 378 and o.tGoodSkuInfoId IN
+        <foreach item="item" index="index" collection="skuIds" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <select id="selectsaleo2oinfo" resultMap="ResultMapWithBLOBs"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tgoods_publish_kdb_sku_o2o
+        where Id = #{id,jdbcType=INTEGER} and
+        skuStatus = 208
+    </select>
+
+</mapper>

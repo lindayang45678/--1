@@ -1,0 +1,82 @@
+//分享
+//$(function() {
+//	$('#share').on('tap', function(e) {
+//		var title = $(this).siblings('h2').text();
+//		cordova._native.share.share(title, title, '', function() {
+//			
+//		}, function() {
+//			
+//		});
+//	});
+//});
+
+/* 获取店主信息 */
+$(function(){
+	var data = {"id":shopId};
+	var resultJson = ajaxCommon(urlShopInfo, data);
+	resultJson = convertNullToEmpty(resultJson);
+	
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		$("#shopname").html("").html(_ReturnData.shopname);
+	}else{
+		//接口返回错误
+	}
+	var hasMoreShops = storage.getItem("hasMoreShops")|| 0;
+	//如果hasMoreShops == 0时，只有一个小店，“查看我的其他小店”隐藏
+	if(hasMoreShops==0){
+		$('.list3').addClass('hidden');
+	}
+});
+/*初始化iScroll*/
+var indexScroll;
+function scrollIndex() {
+	indexScroll = new iScroll("index-left",{ hScrollbar: false, vScrollbar: true });
+}
+var rightScroll;
+function scrollRight(){
+	rightScroll=new iScroll("index-content",{hScrollbar: false, vScrollbar: true });
+}
+	
+
+/*根据浏览器的高度计算iScroll的高度以及相应的块高度*/
+$(function() {
+	var sHeight = $(window).height();
+	if($('.shopindex-part1').height()===82){
+		$('.index-main').style.top=162;	
+		$("#index-left").css("height", sHeight-162);
+		$('#index-content').css("height", sHeight-162);
+	}else{
+		$('.index-main').style.top=188;	
+		$("#index-left").css("height", sHeight-188);
+		$('#index-content').css("height", sHeight-188);
+	}
+	
+});
+
+/*批发进货首页菜单*/
+$(function() {
+	scrollIndex();
+	$("#index-left a").live("tap", function() {
+		$("#index-left").find("a").removeClass("bgwhite").find("i").removeClass("red-icon"); //去掉所有选中样式
+		$(this).addClass("bgwhite").find("i").addClass("red-icon"); //添加当前选中样式
+		
+		if($(this).siblings("ul").hasClass("hidden")) {
+			$(this).siblings("ul").removeClass("hidden");
+			indexScroll.refresh();
+		} else {
+			$(this).siblings("ul").addClass("hidden");
+			$(this).parent().find("ul").addClass("hidden");
+			if($(this).siblings("ul").length != 0) {
+				$(this).removeClass("bgwhite").find("i").removeClass("red-icon"); //去掉当前选中样式
+			}
+			indexScroll.refresh();
+		}
+		$(this).parent().siblings("li").find("a").siblings("ul").addClass("hidden"); //同级隐藏
+	});
+	indexScroll.refresh();
+});
+$(function() {
+	scrollRight();
+});
+

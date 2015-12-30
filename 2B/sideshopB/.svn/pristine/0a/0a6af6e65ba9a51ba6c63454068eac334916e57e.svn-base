@@ -1,0 +1,165 @@
+package com.lakala.module.user.service.impl;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.castor.core.util.Base64Encoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import sun.misc.BASE64Decoder;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.user.TShopUpdateMapper;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.ShopUpdateInfoService;
+import com.lakala.module.user.vo.TstoreApprove;
+import com.lakala.util.ImageUploadException;
+import com.lakala.util.ImageUtil;
+import com.lakala.util.ReturnMsg;
+
+/**
+ * 店铺信息升级
+ * @author yangjunguo
+ * @date 2015年5月21日
+ */
+@Component
+public class ShopUpdateInfoServiceImpl implements ShopUpdateInfoService{ 
+	
+	private static Logger logger = Logger.getLogger(ShopUpdateInfoServiceImpl.class);
+	
+	
+	@Autowired
+	private TShopUpdateMapper tShopUpdateInfoMapper_r;
+	
+
+	@Override
+	public ObjectOutput<TstoreApprove> shopUpdateInfo(HttpServletRequest request, TstoreApprove input)
+			throws LakalaException {
+		ObjectOutput<TstoreApprove> info = new ObjectOutput<TstoreApprove>();
+		try {
+			List<TstoreApprove> list = tShopUpdateInfoMapper_r.selectNetInfo(input.getPhoneno());
+			if(list != null && list.size() > 0){
+				TstoreApprove store = list.get(0);
+				input.setNetno(store.getNetno());
+				input.setElectronno(store.getElectronno());
+				input.setOrgid(store.getOrgid());
+				input.setPsam(store.getPsam());
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				input.setApplydate(format.format(new Date()));
+				input.setState(455);
+				input.setApprovestate(163);
+				
+//				FileInputStream fi = new FileInputStream("C:/Users/lakala/Desktop/11.png");
+//				byte[] buff = new byte[fi.available()];
+//				fi.read(buff,0,fi.available());
+//				Base64Encoder encoder = new Base64Encoder();
+//				Base64Encoder.encode(buff);
+				
+				
+				//解析身份证图片正面
+				BASE64Decoder decoder = new BASE64Decoder();
+				String temppositive = "";
+				byte[] positive = decoder.decodeBuffer(input.getIdimage_positive());
+				List<String> plist = ImageUtil.uploadFileToLocalForPhone(request, input.getPhoneno(), positive, input.getPositive_file(), 6, false);
+				if(plist != null && plist.size() > 0){
+					String[] p = plist.get(0).split("\\|");
+					temppositive = p[2];
+					input.setIdimage_positive(p[1]);
+				}
+				//解析身份证图片正面
+				String tempnegative = "";
+				byte[] negative = decoder.decodeBuffer(input.getIdimage_negative());
+				List<String> nlist = ImageUtil.uploadFileToLocalForPhone(request, input.getPhoneno(), negative, input.getNegative_file(), 6, false);
+				if(plist != null && plist.size() > 0){
+					String[] n = nlist.get(0).split("\\|");
+					tempnegative = n[2];
+					input.setIdimage_negative(n[1]);
+				}
+				
+				//解析营业执照
+				String templicense = "";
+				byte[] license = decoder.decodeBuffer(input.getBusinessLicence());
+				List<String> llist = ImageUtil.uploadFileToLocalForPhone(request, input.getPhoneno(), license, input.getLicence_file(), 6, false);
+				if(llist != null && llist.size() > 0){
+					String[] l = llist.get(0).split("\\|");
+					templicense = l[2];
+					input.setBusinessLicence(l[1]);
+				}
+				
+				tShopUpdateInfoMapper_r.shopUpdateInfo(input);
+				//移动身份证正面图片
+				ImageUtil.moveMainPic(temppositive, input.getPhoneno(), 6, request, false, true, false);
+				//移动身份证反面图片
+				ImageUtil.moveMainPic(tempnegative, input.getPhoneno(), 6, request, false, true, false);
+				//移动营业执照图片
+				ImageUtil.moveMainPic(templicense, input.getPhoneno(), 6, request, false, true, false);
+				info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+				info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+				info.set_ReturnData(input);
+			}else{
+				info.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+				info.set_ReturnMsg(ReturnMsg.MSG_ORDERCANCE_000002);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ImageUploadException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return info;
+	}
+	
+	
+
+
+	/**
+	 * 检测小店是否注册存在，返回true表示未注册
+	 * @return
+	 */
+	@Override
+	public int checkShopExists(TstoreApprove input) throws LakalaException {
+		int result = tShopUpdateInfoMapper_r.checkShopExists(input.getPhoneno());
+		return result;
+	}
+
+
+	/**
+	 * 检测小店是否已经是标准店，可升级为旗舰店
+	 * @return
+	 */
+	@Override
+	public int checkShopType(TstoreApprove input) throws LakalaException {
+		int type = tShopUpdateInfoMapper_r.checkShopType(input.getPhoneno());
+		return type;
+	}
+
+
+	@Override
+	public int checkShopExistsInTmemberb(TstoreApprove input)
+			throws LakalaException {
+		int count = tShopUpdateInfoMapper_r.checkShopExistsInTmemberb(input.getPhoneno());
+		return count;
+	}
+
+
+
+
+	@Override
+	public TstoreApprove getShopInfo(String mobile) throws LakalaException {
+	/*	List<TstoreApprove> lstore = tShopUpdateInfoMapper_r.getShopInfo(mobile);
+		if(lstore != null && lstore.size() > 0){
+			return lstore.get(0);
+		}*/
+		return null;
+	}
+	
+}

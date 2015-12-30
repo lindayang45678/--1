@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>查看配送状态</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+	<header>
+		<h1>查看配送状态</h1>
+		<a href="javascript:window.history.go(-1);" class="back">返回</a>
+	</header>
+	<section class="container deliverystate">
+		<section class="wrap">
+			<dl>
+				<dt class="letter-spacing">发货人：</dt>
+				<dd>巫龙飞</dd>
+				<dt>发货时间：</dt>
+				<dd>2014-12-12</dd>
+				<dt>物流公司：</dt>
+				<dd>顺丰快递</dd>
+				<dt>快递单号：</dt>
+				<dd>23980923094234</dd>
+				<dt class="letter-spacing">收货人：</dt>
+				<dd>巫龙飞</dd>
+				<dt>收件时间：</dt>
+				<dd>2014-12-12 12:12:12</dd>
+				<dt>配送状态：</dt>
+				<dd>已发货</dd>
+			</dl>
+			<ul>
+				<li class="clearfix"><div>2014-12-12 12:12:12 </div><div class="dealing"><span>北京市内部 已发往中关村 </span></div></li>
+				<li class="clearfix"><div>2014-12-12 12:12:12 </div><div class="dealing"><span>北京市内部 已发往 北京中关村 </span></div></li>
+			</ul>
+			<a href="javascript:window.history.go(-1)" class="btn-red">关闭</a>
+		</section>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+</html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goods.TgoodskuinfopoolMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Tgoodskuinfopool" >
+    <id column="tGoodSkuInfoPoolId" property="tgoodskuinfopoolid" jdbcType="INTEGER" />
+    <result column="tGoodInfoPoolId" property="tgoodinfopoolid" jdbcType="INTEGER" />
+    <result column="outerId" property="outerid" jdbcType="VARCHAR" />
+    <result column="tRealCateId" property="trealcateid" jdbcType="INTEGER" />
+    <result column="tRealCateDisc" property="trealcatedisc" jdbcType="VARCHAR" />
+    <result column="tRealCateTreeDisc" property="trealcatetreedisc" jdbcType="VARCHAR" />
+    <result column="tBrandId" property="tbrandid" jdbcType="INTEGER" />
+    <result column="brandName" property="brandname" jdbcType="VARCHAR" />
+    <result column="goodName" property="goodname" jdbcType="VARCHAR" />
+    <result column="goodBarCode" property="goodbarcode" jdbcType="VARCHAR" />
+    <result column="goodAdWord" property="goodadword" jdbcType="VARCHAR" />
+    <result column="goodIntroduce" property="goodintroduce" jdbcType="VARCHAR" />
+    <result column="packageList" property="packagelist" jdbcType="VARCHAR" />
+    <result column="isPayAfterArrival" property="ispayafterarrival" jdbcType="INTEGER" />
+    <result column="isNoReasonReturn" property="isnoreasonreturn" jdbcType="INTEGER" />
+    <result column="iscontractmachine" property="iscontractmachine" jdbcType="INTEGER" />
+    <result column="isExpressToHome" property="isexpresstohome" jdbcType="INTEGER" />
+    <result column="distributionFlag" property="distributionflag" jdbcType="INTEGER" />
+    <result column="expDate" property="expdate" jdbcType="INTEGER" />
+    <result column="producingArea" property="producingarea" jdbcType="VARCHAR" />
+    <result column="measureUnits" property="measureunits" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="volume" property="volume" jdbcType="DECIMAL" />
+    <result column="length" property="length" jdbcType="DECIMAL" />
+    <result column="width" property="width" jdbcType="DECIMAL" />
+    <result column="height" property="height" jdbcType="DECIMAL" />
+    <result column="carton" property="carton" jdbcType="INTEGER" />
+    <result column="cartonUnit" property="cartonunit" jdbcType="VARCHAR" />
+    <result column="isForeigngoods" property="isforeigngoods" jdbcType="INTEGER" />
+    <result column="storageCondition" property="storagecondition" jdbcType="INTEGER" />
+    <result column="distributionCondition" property="distributioncondition" jdbcType="INTEGER" />
+    <result column="goodType" property="goodtype" jdbcType="INTEGER" />
+    <result column="balanceWay" property="balanceway" jdbcType="INTEGER" />
+    <result column="skuIdStr" property="skuidstr" jdbcType="VARCHAR" />
+    <result column="skuFrontDisNameStr" property="skufrontdisnamestr" jdbcType="VARCHAR" />
+    <result column="createdDate" property="createddate" jdbcType="TIMESTAMP" />
+    <result column="lastUpdateDate" property="lastupdatedate" jdbcType="TIMESTAMP" />
+    <result column="lastModUser" property="lastmoduser" jdbcType="VARCHAR" />
+    <result column="tempStoreGoodsFlag" property="tempstoregoodsflag" jdbcType="INTEGER" />
+    <result column="isfreshfood" property="isfreshfood" jdbcType="INTEGER" />
+    <result column="salePrice" property="saleprice" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lakala.base.model.TgoodskuinfopoolWithBLOBs" extends="BaseResultMap" >
+    <result column="goodDisc" property="gooddisc" jdbcType="LONGVARCHAR" />
+    <result column="goodBigPic" property="goodbigpic" jdbcType="LONGVARCHAR" />
+    <result column="goodSmallPic" property="goodsmallpic" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tGoodSkuInfoPoolId, tGoodInfoPoolId, outerId, tRealCateId, tRealCateDisc, tRealCateTreeDisc, 
+    tBrandId, brandName, goodName, goodBarCode, goodAdWord, goodIntroduce, packageList, 
+    isPayAfterArrival, isNoReasonReturn, iscontractmachine, isExpressToHome, distributionFlag, 
+    expDate, producingArea, measureUnits, weight, volume, length, width, height, carton, 
+    cartonUnit, isForeigngoods, storageCondition, distributionCondition, goodType, balanceWay, 
+    skuIdStr, skuFrontDisNameStr, createdDate, lastUpdateDate, lastModUser, tempStoreGoodsFlag,isfreshfood,salePrice
+  </sql>
+  <sql id="Blob_Column_List" >
+    goodDisc, goodBigPic, goodSmallPic
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tgoodskuinfopool
+    where tGoodSkuInfoPoolId = #{tgoodskuinfopoolid,jdbcType=INTEGER}
+  </select>
+  
+    <!-- 根据商品Id查询商品的SKU信息 -->
+  <select id="selectGoodSkuInfoByGoodId" resultMap="ResultMapWithBLOBs"  parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+	from tgoodskuinfopool 
+	where tGoodInfoPoolId = #{tgoodinfopoolid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据商品池id，供应商商品skuid，查询对应的商品的sku信息 zhiziwei-->
+	<select id="selectSkuByPoolGoodsId" resultMap="ResultMapWithBLOBs" >
+		SELECT
+			t1.*
+		FROM
+			tgoodskuinfopool t1,
+			tsupplierandpool t2
+		WHERE
+			t1.tGoodSkuInfoPoolId = t2.tGoodSkuInfoPoolId
+		AND t2.tGoodInfoPoolId = #{tGoodInfoPoolId,jdbcType=INTEGER} 
+		AND t2.tGoodSkuInfoId = #{tGoodSkuInfoId,jdbcType=INTEGER} 
+	</select>
+</mapper>

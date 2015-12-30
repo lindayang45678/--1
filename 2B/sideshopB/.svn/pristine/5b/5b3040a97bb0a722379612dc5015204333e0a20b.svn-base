@@ -1,0 +1,302 @@
+var shopPhone;
+//获取小店信息
+$(function(){
+	loadJs();
+	osFixed();
+	
+	// 显示店铺的配送方式
+	showPayAndDelivery();
+
+	var urls=decodeURI(window.location.href);
+	var data = {"id":shopId};
+	var resultJson = ajaxCommon(urlShopInfo, data);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		$("#shopname").html("").html(_ReturnData.shopname);
+		$("#shopper-name").html("").html(_ReturnData.shoppername);
+		$("#shopper-phone").val("").val(_ReturnData.phone);
+		$("#shopadress").html("").html(_ReturnData.province+_ReturnData.city+_ReturnData.cityarea+_ReturnData.address);
+		var startTime ,endTime ,minAmounts ,transportExpenses ,singleFreeExpenses;
+		var dispatcherlist = _ReturnData.dispatcherlist;
+		shopPhone=_ReturnData.phone;
+		if(dispatcherlist != "undefined" && dispatcherlist.length>0){
+		    $("#service-name1").html("").html(dispatcherlist[0].name);
+		    $("#service-phone1").html("").html(dispatcherlist[0].phone);
+		}
+		if(urls.indexOf("preSaveData=1")!=-1){//判断是否从营业时间、运费配置页跳转过来，如果是则读取Localstorage数据，否则读取数据库数据
+			if($.trim(businessStartTime).length > 0){//营业开始时间
+				startTime = businessStartTime;
+			}else{
+				if(_ReturnData.businessStartTime != "undefined" && $.trim(_ReturnData.businessStartTime.toString()).length>0){
+				    storage.setItem("businessStartTime",_ReturnData.businessStartTime);
+				    startTime = _ReturnData.businessStartTime;
+				}else{
+					storage.setItem("businessStartTime","9:00");
+					startTime = "9:00";
+				}
+			}
+			
+			if($.trim(businessEndTime).length > 0){//营业结束时间
+				endTime = businessEndTime;
+			}else{
+				if(_ReturnData.businessEndTime != "undefined" && $.trim(_ReturnData.businessEndTime.toString()).length>0){
+				    storage.setItem("businessEndTime",_ReturnData.businessEndTime);
+				    endTime = _ReturnData.businessEndTime;
+				}else{
+					storage.setItem("businessEndTime","22:00");
+					endTime = "22:00";
+				}
+			}
+			
+			if($.trim(minAmount).length > 0){//起送金额
+				minAmounts = minAmount;
+			}else{
+				if(_ReturnData.minAmount != "undefined" && $.trim(_ReturnData.minAmount.toString()).length>0){
+				    storage.setItem("minAmount",_ReturnData.minAmount);
+				    minAmounts = _ReturnData.minAmount;
+				}else{
+					storage.setItem("minAmount","29.00");
+					minAmounts = "29.00";
+				}
+			}
+			
+			if($.trim(transportExpense).length > 0){//单笔满多少钱免运费
+				transportExpenses = transportExpense;
+			}else{
+				if(_ReturnData.transportExpense != "undefined" && $.trim(_ReturnData.transportExpense.toString()).length>0){
+				    storage.setItem("transportExpense",_ReturnData.transportExpense);
+				    transportExpenses = _ReturnData.transportExpense;
+				}else{
+					storage.setItem("transportExpense","5.00");
+					transportExpenses = "5.00";
+				}
+			}
+			
+			if($.trim(singleFreeExpense).length > 0){//运费
+				singleFreeExpenses = singleFreeExpense;
+			}else{
+				if(_ReturnData.singleFreeExpense != "undefined" && $.trim(_ReturnData.singleFreeExpense.toString()).length>0){
+				    storage.setItem("singleFreeExpense",_ReturnData.singleFreeExpense);
+				    singleFreeExpenses = _ReturnData.singleFreeExpense;
+				}else{
+					storage.setItem("singleFreeExpense","79.00");
+					singleFreeExpenses = "79.00";
+				}
+			}
+		}else{
+			//营业开始时间
+			if(_ReturnData.businessStartTime != "undefined" && $.trim(_ReturnData.businessStartTime.toString()).length>0){
+			    storage.setItem("businessStartTime",_ReturnData.businessStartTime);
+			    startTime = _ReturnData.businessStartTime;
+			}else{
+				storage.setItem("businessStartTime","9:00");
+				startTime = "9:00";
+			}
+			//营业结束时间
+			if(_ReturnData.businessEndTime != "undefined" && $.trim(_ReturnData.businessEndTime.toString()).length>0){
+			    storage.setItem("businessEndTime",_ReturnData.businessEndTime);
+			    endTime = _ReturnData.businessEndTime;
+			}else{
+				storage.setItem("businessEndTime","22:00");
+				endTime = "22:00";
+			}
+			//起送金额
+			if(_ReturnData.minAmount != "undefined" && $.trim(_ReturnData.minAmount.toString()).length>0){
+			    storage.setItem("minAmount",_ReturnData.minAmount);
+			    minAmounts = _ReturnData.minAmount;
+			}else{
+				storage.setItem("minAmount","29.00");
+				minAmounts = "29.00";
+			}
+			//运费
+			if(_ReturnData.transportExpense != "undefined" && $.trim(_ReturnData.transportExpense.toString()).length>0){
+			    storage.setItem("transportExpense",_ReturnData.transportExpense);
+			    transportExpenses = _ReturnData.transportExpense;
+			}else{
+				storage.setItem("transportExpense","5.00");
+				transportExpenses = "5.00";
+			}
+			//单笔满免金额
+			if(_ReturnData.singleFreeExpense != "undefined" && $.trim(_ReturnData.singleFreeExpense.toString()).length>0){
+			    storage.setItem("singleFreeExpense",_ReturnData.singleFreeExpense);
+			    singleFreeExpenses = _ReturnData.singleFreeExpense;
+			}else{
+				storage.setItem("singleFreeExpense","79.00");
+				singleFreeExpenses = "79.00";
+			}
+		}
+		$("#businesshours").html("").html(startTime+ '－' +endTime);
+		$("#freightsetting").html("").html("满"+parseFloat(minAmounts)+"元起送，满"+parseFloat(singleFreeExpenses)+"元免"+parseFloat(transportExpenses)+"元运费");
+		$("#on-off i").css("-webkit-transition","none");
+		$("#isHomepay i").css("-webkit-transition","none");
+		if(_ReturnData.businessState=="1"){
+			$("#on-off").addClass("turn-on");
+			$("#on-off1").val("营业中");
+		}else{
+			$("#on-off").removeClass("turn-on");
+			$("#on-off1").val("打烊了");
+		}
+		
+		if(_ReturnData.is_homepay=="1"){
+			$("#isHomepay").addClass("turn-on");
+			$("#isHomepay1").val("货到付款、在线支付");
+		}else{
+			$("#isHomepay").removeClass("turn-on");
+			$("#isHomepay1").val("仅支持在线支付");
+		}
+		
+		
+		
+		if(_ReturnData.imagePath != ""){
+			var imgContent = "<img src='" +_ReturnData.imagePath+ "' />";
+			$(".shop-logoimg").html(imgContent);
+		}
+	}else{
+		//接口返回错误
+	}
+})
+
+
+/* 保存小店信息*/
+$(".head-right").on("touchend",function(e){
+	$("div").blur();
+	e.preventDefault();
+	var businessStates, homeDelivers, isPickups ,isHomepay;
+	var pskfName = $.trim($("#service-name1").text());
+	var pskfPhone = $.trim($("#service-phone1").text());
+	var dispatcherlist = [{"name":pskfName,"phone":pskfPhone}];
+	var reg= /^1[3,4,5,8]{1}\d{9}$/; //校验手机号
+	if(pskfPhone.length>0){
+		if(pskfPhone.length != 11 || !reg.test(pskfPhone)){
+			showAlertMsg(msgServicePhoneError); 	
+			return;
+		}
+	}
+	if(pskfPhone==shopPhone){
+		showAlertMsg(deliveryStaffPhoneError); 	
+		return;
+	}
+	if($("#on-off").hasClass("turn-on")) {
+		businessStates = "1";
+	} else {
+		businessStates = "0";
+	}
+		
+	if($("#receipt").hasClass("turn-on")){
+		homeDelivers = "1";
+		isPickups = "1";
+	}else{
+		homeDelivers = "0";
+		isPickups = "1";
+	}
+	if($("#isHomepay").hasClass("turn-on")) {
+		isHomepay = "1";
+	} else {
+		isHomepay = "0";
+	}
+	var data = {
+		"id":shopId,
+		"businessState":businessStates,
+		"businessStartTime":businessStartTime,
+		"businessEndTime":businessEndTime,
+		"minAmount":minAmount,
+		"phone":mobile,
+		"transportExpense":transportExpense,
+		"singleFreeExpense":singleFreeExpense,
+		"homeDeliver":homeDelivers,
+		"is_pickup":isPickups,
+		"is_homepay":isHomepay,
+		"dispatcherlist":dispatcherlist,
+		"imgInfoList":imgInfoList
+	};
+	var resultJson = ajaxCommon(urlEditshop, data);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		storage.setItem("homeDeliver", homeDelivers);
+		storage.setItem("isPickup", isPickups);
+		window.location.href="index.html?t="+t;
+	}else{
+		//信息格式填写有误，保存不了
+	}
+});
+
+/* 小店门面图片*/
+var imgInfoList = "";
+/* 调用现相机上传小店门面图片*/
+$(".upload-icon").on("tap",function(){
+	cordova._native.camera.picker({width:300, height:300, quality:.5}, function(res){
+		var imgContent = "<img src='" +res.data+ "' />";
+		$(".shop-logoimg").html("").html(imgContent);
+		var data = {
+				"token":userToken, 
+				"isWriteTimage":"1", 
+				"data":res.data, 
+				"fileName":res.path, 
+				"osType":osType(),
+				"mobile":mobile,
+				"targetType":8
+		}
+		var resultJson = ajaxCommon(urlUploadImg, data);
+		if(resultJson._ReturnCode === returnCodeSuccess){
+			imgInfoList = resultJson._ReturnData.success[0];
+		}else{
+			$(".shop-logoimg").html("");
+			showAlertMsg(resultJson._ReturnMsg);
+		}
+	})
+})
+
+$(function(){
+	//是否营业状态、收货方式、配送方式选择	
+	$("#on-off").on("tap",function(){
+		$("#on-off i").removeAttr("style");
+		$(this).toggleClass("turn-on");
+		if($(this).hasClass("turn-on")){
+			$("#on-off1").val("营业中");
+		}else{
+			$("#on-off1").val("打烊了");
+		}
+	});
+	$("#receipt").on("tap",function(){
+		$("#receipt i").removeAttr("style");
+		$(this).toggleClass("turn-on");
+		if($(this).hasClass("turn-on")){
+			$("#receipt-2").val("到店自提、送货上门");
+			}else{
+				$("#receipt-2").val("仅支持到店自提");
+			}
+		});
+	$("#isHomepay").on("tap",function(){
+		$("#isHomepay i").removeAttr("style");
+		$(this).toggleClass("turn-on");
+		if($(this).hasClass("turn-on")){
+			$("#isHomepay1").val("货到付款、在线支付");
+			}else{
+				$("#isHomepay1").val("仅支持在线支付");
+			}
+		})
+	})
+
+/**
+ * 显示店铺的支付方式和配送方式
+ */
+function showPayAndDelivery() {
+	//获取默认收货地址、支付方式和配送方式
+	shipAddress();
+
+	var homeDeliver = storage.getItem("homeDeliver");  //是否支持送货到家(0：否； 1：是)
+	var isPickup = storage.getItem("isPickup");  //是否支持到店自提(0：否； 1：是)
+	$("#receipt i").css("-webkit-transition","none");
+	if(homeDeliver == "1" && isPickup == "1"){
+		$("#receipt").addClass("turn-on");
+		$("#receipt-2").val("到店自提、送货上门");
+	}else{
+		$("#receipt").removeClass("turn-on");
+		$("#receipt-2").val("仅支持到店自提");
+	}
+}
+//点击屏幕其他 地方隐藏键盘
+$(function(){
+	$("body").on("touchend",function(){
+		$("div").blur();
+	});
+})

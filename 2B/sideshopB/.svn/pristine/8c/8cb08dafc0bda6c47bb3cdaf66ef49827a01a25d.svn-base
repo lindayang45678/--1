@@ -1,0 +1,76 @@
+package com.lakala.module.wholesale.model;
+
+import com.lakala.module.comm.ObjectInput;
+
+import java.io.Serializable;
+
+/**
+ * 批发进货入参实体
+ * <p/>
+ * Created by HOT.LIU on 2015/3/2.
+ */
+public class InputModel extends ObjectInput implements Serializable {
+
+    private static final long serialVersionUID = 8392613581668620546L;
+
+
+    private String virtualpsam;//虚拟psam，自营商品虚拟psam
+
+    private String psam;//平台商品psam
+
+    private String channelid;//频道ID
+
+    private String virtualcatid;//虚拟分类ID
+
+    private String searchparm;//查询参数
+
+    private String goodsid;//商品ID
+
+    public String getVirtualpsam() {
+        return virtualpsam;
+    }
+
+    public void setVirtualpsam(String virtualpsam) {
+        this.virtualpsam = virtualpsam;
+    }
+
+    public String getPsam() {
+        return psam == null ? psam : psam.toUpperCase();
+    }
+
+    public void setPsam(String psam) {
+        this.psam = psam.toUpperCase();
+    }
+
+    public String getChannelid() {
+        return channelid;
+    }
+
+    public void setChannelid(String channelid) {
+        this.channelid = channelid;
+    }
+
+    public String getVirtualcatid() {
+        return virtualcatid;
+    }
+
+    public void setVirtualcatid(String virtualcatid) {
+        this.virtualcatid = virtualcatid;
+    }
+
+    public String getSearchparm() {
+        return searchparm;
+    }
+
+    public void setSearchparm(String searchparm) {
+        this.searchparm = searchparm;
+    }
+
+    public String getGoodsid() {
+        return goodsid;
+    }
+
+    public void setGoodsid(String goodsid) {
+        this.goodsid = goodsid;
+    }
+}

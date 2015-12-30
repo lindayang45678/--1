@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>升级身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="setting.html" class="back"></a>	
+		<h1>升级身边小店</h1>
+	</header>
+	<section class="container shopupdate f-12">
+		<h2 class="f-14 center color"><span><i></i>恭喜您，您的店铺已升级为【<s></s>】！</span></h2>
+		<div class="shop-info">
+			<div>
+				<span>店主姓名<em id="shopkeeper"></em></span>
+			</div>
+			<div>
+				<span>店主手机<em id="phoneno"></em></span>
+				</div>
+			<div>
+				<span>身份证号<em id="id_no"></em></span>
+			</div>
+			<div class="id-card">
+				<span>身份证照片<img id="zm" class="zm" src="../../images/ico-idcard-p.png" /><i>+</i><img id="fm" class="fm" src="../../images/ico-idcard-r.png" /></span>
+			</div>
+			<div>
+				<span>店铺名称<em id="shopname"></em></span>
+			</div>
+			<div class="shop-address">
+				<span>店铺地址<em id="address"></em></span>
+			</div>
+			<div class="shop-type">
+				<span>店铺类型<em></em></span>
+			</div>
+			<div class="licence">
+				<span>营业执照<img id="licence" src="../../images/ico-licence.png"></span>
+			</div>
+		</div>
+	</section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/homepage/upgradesuccessfully.js?t2015070800"></script>
+</body>
+</html>

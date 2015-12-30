@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.profit.TrechargeMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.profit.Trecharge" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="payId" property="payid" jdbcType="VARCHAR" />
+    <result column="netPoint" property="netpoint" jdbcType="VARCHAR" />
+    <result column="netid" property="netid" jdbcType="BIGINT" />
+    <result column="shoperName" property="shopername" jdbcType="VARCHAR" />
+    <result column="shopperMobile" property="shoppermobile" jdbcType="VARCHAR" />
+    <result column="orderCount" property="ordercount" jdbcType="INTEGER" />
+    <result column="duePay" property="duepay" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="failedReason" property="failedreason" jdbcType="VARCHAR" />
+    <result column="wallet" property="wallet" jdbcType="VARCHAR" />
+    <result column="payTime" property="paytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, payId, netPoint, netid, shoperName, shopperMobile, orderCount, duePay, status, 
+    createTime, failedReason, wallet, payTime,payno
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from trecharge
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPayId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    t1.id, t1.payId, t1.netPoint, t1.netid, t1.shoperName, t1.shopperMobile, t1.orderCount, t1.duePay, t1.status, 
+    t1.createTime, t1.failedReason, t1.wallet, t1.payTime,t1.payno
+    from
+    			 trecharge t1, trecharge t2
+    where
+    			 t2.payId = #{payId,jdbcType=INTEGER}
+              	and t1.payId=t2.parentpayid
+  </select>
+    <select id="selectProfitByPayId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	               t1. id, t1.payId, t1.netpoint as netPoint,  case t1.state when  6 then 4  when 7 then 5 end as status,
+	               t1.failedReason,  t1.payTime,t1.payno, t1.money as  duePay, t1.payTime,t1.payno
+	    from 
+	    		tpay t1,tsettlement t2, tpay t3
+    	where 
+    			t2.settlementId = #{payId,jdbcType=INTEGER}
+                 and t3.payId=t2.payId
+                 and t3.settlementIds=t1.payId
+  </select>
+     <!--结算款单日 -->
+    <select id="selectDuePay" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    select 
+	     	 <include refid="Base_Column_List" />
+	    from trecharge
+	    where netPoint = #{ecNetNo,jdbcType=INTEGER}
+	    			<if test="executetimeStart != null">
+						and <![CDATA[ payTime >= #{executetimeStart}]]>
+					</if>
+					<if test="executetimeEnd != null">
+						and <![CDATA[ payTime  <= #{executetimeEnd}]]>
+					</if>
+	</select>
+     <!--结算款多日 -->
+    <select id="selectDuePayList" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    select 
+	     	 <include refid="Base_Column_List" />
+	    from trecharge
+	    where netPoint = #{ecNetNo,jdbcType=INTEGER}
+	    			<if test="executetimeStart != null">
+						and <![CDATA[ payTime >= #{executetimeStart}]]>
+					</if>
+					<if test="executetimeEnd != null">
+						and <![CDATA[ payTime  <= #{executetimeEnd}]]>
+					</if>
+					<!-- 状态(0：待初审；1：待复审；2：待付款；3：付款中；4：付款成功；5付款失败,；6：审核不通过;7：审核通过) -->
+					and status in (4,5)
+					AND (parentpayid="" or parentpayid is NULL)
+			ORDER BY payTime DESC,payId DESC
+	</select>
+	     <!--结算款多日 -->
+    <select id="selectDuePayProfitList" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+	    select 
+	               t1. id, t1.payId, t1.netpoint as netPoint,  case t1.state when  6 then 4  when 7 then 5 end as status ,
+	               t1.failedReason, t1.payTime,t1.payno, t1.money as  duePay, t1.payTime,t1.payno
+	    from tpay t1
+	    where t1.netPoint = #{ecNetNo,jdbcType=INTEGER}
+	    			<!-- 店主分润结算状态：{状态    0：【待审核】；1：【对私审核通过 | 对公核销完成 】；2：【审核不通过】；3：【对公审核通过 | 对公待核销】；4：【待付款】; 5：【付款中】; 6：【付款成功】；7：【付款失败】 -->
+					and t1.state in (6,7)
+	   				<!--  结算类型（0：供应商结算； 1：店主结算） -->
+	                 and t1.settleType='1'
+	                 AND (t1.settlementIds="" or t1.settlementIds is NULL)
+	    			<if test="executetimeStart != null">
+						and <![CDATA[ t1.payTime >= #{executetimeStart}]]>
+					</if>
+					<if test="executetimeEnd != null">
+						and <![CDATA[ t1.payTime  <= #{executetimeEnd}]]>
+					</if>
+					ORDER BY payTime DESC
+	</select>
+</mapper>

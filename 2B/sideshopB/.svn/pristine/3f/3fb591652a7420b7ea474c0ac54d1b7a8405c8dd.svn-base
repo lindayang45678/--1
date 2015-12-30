@@ -1,0 +1,32 @@
+$(function() {
+	//优惠券列表	
+	var data = {"token":userToken,"mobile":mobile,"status":"unused","disabled": 1,"page": 1,"pageSize": 10};
+	var resultJson = ajaxCommon(urlFindCoupon,data);
+	//测试数据
+	resultJson = {"_ReturnData":{"couponList":[{"status":null,"usednum":10,"couponType":null,"cost":100,"favusenum":null,"usenum":20,"frequencys":"每周特惠,考拉专区","starttime":1425114012297,"endtime":1425114012297,"batchtickeid":null,"favorablecode":"xxxx","batchtickename":null,"orderamount":120},{"status":null,"usednum":10,"couponType":null,"cost":100,"favusenum":null,"usenum":20,"frequencys":"每周特惠,考拉专区","starttime":1425114012297,"endtime":1425114012297,"batchtickeid":null,"favorablecode":"xxxx","batchtickename":null,"orderamount":120},{"status":null,"usednum":10,"couponType":null,"cost":100,"favusenum":null,"usenum":20,"frequencys":"每周特惠,考拉专区","starttime":1425114012297,"endtime":1425114012297,"batchtickeid":null,"favorablecode":"xxxx","batchtickename":null,"orderamount":120},{"status":null,"usednum":10,"couponType":null,"cost":100,"favusenum":null,"usenum":20,"frequencys":"每周特惠,考拉专区","starttime":1425114012297,"endtime":1425114012297,"batchtickeid":null,"favorablecode":"xxxx","batchtickename":null,"orderamount":120}],"token":"wo shi token"},"_ReturnCode":"000000","_ReturnMsg":"SUCCESS"};
+	var content ="";
+	var container = $(".coupon-container");
+	if(resultJson._ReturnCode === returnCodeSuccess){
+		var _ReturnData = resultJson._ReturnData;
+		var	couponList = _ReturnData.couponList;
+		if (couponList.length>0) {
+			for (var i = 0; i < couponList.length; i++) {
+				console.log("couponList.length"+":"+couponList[i].length);
+				content +="<div class='coupon-list'>";
+				content +="<a href='details.html'>";
+				content +="<dl class='elapsed clearfix'>";
+				content +="<dt><p>券&nbsp;&nbsp;号:"+couponList[i].favorablecode+"</p>";
+				content +="<p><span>已&nbsp;&nbsp;用："+couponList[i].usednum+"次</span><span>剩&nbsp;&nbsp;余："+couponList[i].usednum+"次</span></p></dt>";
+				content +="<dd class='fl c-white "+'coupon1'+"'><strong>"+couponList[i].cost+"</strong><span>满"+couponList[i].orderamount+"元可用</span></dd>";
+				content +="</dl>";
+				content +="</a>";
+				content +="</div>";
+			};
+			container.html("").append(content);
+		};
+	}else{
+		showAlertMsg(resultJson._ReturnMsg);
+	};
+
+	
+});

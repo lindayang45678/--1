@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.returnitems.ReturnItemsMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.ReturnItems">
+        <id column="tReturnItemsId" property="treturnitemsid" jdbcType="INTEGER"/>
+        <result column="returnID" property="returnid" jdbcType="INTEGER"/>
+        <result column="orderID" property="orderid" jdbcType="VARCHAR"/>
+        <result column="providerID" property="providerid" jdbcType="INTEGER"/>
+        <result column="providerName" property="providername" jdbcType="VARCHAR"/>
+        <result column="tOrderItemID" property="torderitemid" jdbcType="VARCHAR"/>
+        <result column="goodsID" property="goodsid" jdbcType="INTEGER"/>
+        <result column="goodsName" property="goodsname" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="returnMoneyStatus" property="returnmoneystatus" jdbcType="VARCHAR"/>
+        <result column="account" property="account" jdbcType="DECIMAL"/>
+        <result column="shouldRefund" property="shouldrefund" jdbcType="DECIMAL"/>
+        <result column="number" property="number" jdbcType="DOUBLE"/>
+        <result column="unitName" property="unitname" jdbcType="VARCHAR"/>
+        <result column="returnGoodStatus" property="returngoodstatus" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="addressFull" property="addressfull" jdbcType="VARCHAR"/>
+        <result column="returnMoneyApproveFinishDate" property="returnmoneyapprovefinishdate" jdbcType="DATE"/>
+        <result column="returnGoodApproveFinishDate" property="returngoodapprovefinishdate" jdbcType="DATE"/>
+        <result column="refundProject" property="refundproject" jdbcType="VARCHAR"/>
+        <result column="orgid" property="orgid" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="insertSelective" parameterType="com.lakala.base.model.ReturnItems" useGeneratedKeys="true"
+            keyProperty="treturnitemsid">
+        insert into treturnitems
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="treturnitemsid != null">
+                tReturnItemsId,
+            </if>
+            <if test="returnid != null">
+                returnID,
+            </if>
+            <if test="orderid != null">
+                orderID,
+            </if>
+            <if test="providerid != null">
+                providerID,
+            </if>
+            <if test="providername != null">
+                providerName,
+            </if>
+            <if test="torderitemid != null">
+                tOrderItemID,
+            </if>
+            <if test="goodsid != null">
+                goodsID,
+            </if>
+            <if test="goodsname != null">
+                goodsName,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="returnmoneystatus != null">
+                returnMoneyStatus,
+            </if>
+            <if test="account != null">
+                account,
+            </if>
+            <if test="shouldrefund != null">
+                shouldRefund,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="unitname != null">
+                unitName,
+            </if>
+            <if test="returngoodstatus != null">
+                returnGoodStatus,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="addressfull != null">
+                addressFull,
+            </if>
+            <if test="returnmoneyapprovefinishdate != null">
+                returnMoneyApproveFinishDate,
+            </if>
+            <if test="returngoodapprovefinishdate != null">
+                returnGoodApproveFinishDate,
+            </if>
+            <if test="refundproject != null">
+                refundProject,
+            </if>
+            <if test="orgid != null">
+                orgid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="treturnitemsid != null">
+                #{treturnitemsid,jdbcType=INTEGER},
+            </if>
+            <if test="returnid != null">
+                #{returnid,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=VARCHAR},
+            </if>
+            <if test="providerid != null">
+                #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="providername != null">
+                #{providername,jdbcType=VARCHAR},
+            </if>
+            <if test="torderitemid != null">
+                #{torderitemid,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsname != null">
+                #{goodsname,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="returnmoneystatus != null">
+                #{returnmoneystatus,jdbcType=VARCHAR},
+            </if>
+            <if test="account != null">
+                #{account,jdbcType=DECIMAL},
+            </if>
+            <if test="shouldrefund != null">
+                #{shouldrefund,jdbcType=DECIMAL},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=DOUBLE},
+            </if>
+            <if test="unitname != null">
+                #{unitname,jdbcType=VARCHAR},
+            </if>
+            <if test="returngoodstatus != null">
+                #{returngoodstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="addressfull != null">
+                #{addressfull,jdbcType=VARCHAR},
+            </if>
+            <if test="returnmoneyapprovefinishdate != null">
+                #{returnmoneyapprovefinishdate,jdbcType=DATE},
+            </if>
+            <if test="returngoodapprovefinishdate != null">
+                #{returngoodapprovefinishdate,jdbcType=DATE},
+            </if>
+            <if test="refundproject != null">
+                #{refundproject,jdbcType=VARCHAR},
+            </if>
+            <if test="orgid != null">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.lakala.base.model.ReturnItems">
+        update treturnitems
+        <set>
+            <if test="returnid != null">
+                returnID = #{returnid,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                orderID = #{orderid,jdbcType=VARCHAR},
+            </if>
+            <if test="providerid != null">
+                providerID = #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="providername != null">
+                providerName = #{providername,jdbcType=VARCHAR},
+            </if>
+            <if test="torderitemid != null">
+                tOrderItemID = #{torderitemid,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsid != null">
+                goodsID = #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsname != null">
+                goodsName = #{goodsname,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="returnmoneystatus != null">
+                returnMoneyStatus = #{returnmoneystatus,jdbcType=VARCHAR},
+            </if>
+            <if test="account != null">
+                account = #{account,jdbcType=DECIMAL},
+            </if>
+            <if test="shouldrefund != null">
+                shouldRefund = #{shouldrefund,jdbcType=DECIMAL},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=DOUBLE},
+            </if>
+            <if test="unitname != null">
+                unitName = #{unitname,jdbcType=VARCHAR},
+            </if>
+            <if test="returngoodstatus != null">
+                returnGoodStatus = #{returngoodstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="addressfull != null">
+                addressFull = #{addressfull,jdbcType=VARCHAR},
+            </if>
+            <if test="returnmoneyapprovefinishdate != null">
+                returnMoneyApproveFinishDate = #{returnmoneyapprovefinishdate,jdbcType=DATE},
+            </if>
+            <if test="returngoodapprovefinishdate != null">
+                returnGoodApproveFinishDate = #{returngoodapprovefinishdate,jdbcType=DATE},
+            </if>
+            <if test="refundproject != null">
+                refundProject = #{refundproject,jdbcType=VARCHAR},
+            </if>
+            <if test="orgid != null">
+                orgid = #{orgid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where tReturnItemsId = #{treturnitemsid,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,219 @@
+var couponlist=[];//请求的优惠券列表
+	
+/*现金券请求数据函数*/
+function checkCoupon(couponlist) {
+	var items = [];//去请求的商品列表
+	for(var i = 0; i < storage.length; i ++){
+		var key = storage.key(i);
+		if(key.indexOf(productPrefix) >= 0){
+			var proVal = JSON.parse(storage.getItem(key));
+			var item = {
+				"skuo2oid":	proVal.o2oId,
+				"skuid": proVal.tGoodSkuInfoId,
+				"goodsname": proVal.goodName,
+				"goodssaleprice": proVal.salePrice,
+				"goodscount": proVal.goodscount,
+				"channel": proVal.channelcode
+			}
+			items.push(item);
+		}
+	}
+	var data = {
+			"token":userToken,
+		    "mobile":mobile,
+		    "pasmid":psam,
+		    "source":sourceSbApp2B,
+		    "custelno":mobile,
+		    "wholesale":"2B",
+		    "couponlist":couponlist,
+		    "items":items
+	}
+	return ajaxCommon(urlCheckCoupon, data);
+}
+
+$(function(){
+	var resultJson = checkCoupon(couponlist);
+	var container = $(".select-coupon");
+	var content = "";
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var tcouponlist = resultJson._ReturnData.tcouponlist;
+		$(".tab-red i").html("(" +tcouponlist.length+ ")");
+		for(var i = 0; i < tcouponlist.length; i ++){
+			var tcoupon = tcouponlist[i];
+			content += "<li class='clearfix coupon-off'>";
+			var favcode = tcoupon.favcode;
+			if(favcode.charAt(0) === "Q" || favcode.charAt(0) === "q"){
+				content += "<div class='fl QGPF'>" +QGPF_Coupon;
+			}else if(favcode.charAt(0) === "B" || favcode.charAt(0) === "b"){
+				content += "<div class='fl BDPF'>" +BDPF_Coupon;
+			}else{
+				content += "<div class='fl'>";
+			}
+			content += "<i class='favorablecode'>" +tcoupon.favorablecode+ "</i><br/>剩余<i class='coupon-surplus'>" +tcoupon.usenum+ "</i>次已用" +tcoupon.usednum+ "次";
+			content += "</div>";
+			content += "<div class='fr'>抵扣" +tcoupon.cost+ "元 <br/>满" +tcoupon.ordermount+ "元可用</div>";
+			content += "<div class='coupon-change'><i class='coupon-minus'>&minus;</i><input type='tel' value='1' class='usecoupon' count='" +tcoupon.usenum+ "'/><i class='coupon-plus'>+</i></div>";
+			content += "</li>";
+		}
+		container.append(content);
+		useCoupon();
+	}else{
+		//接口返回错误
+	}
+})
+
+/* 选择验证现金券时候*/
+$('.coupon-sure').live('tap',function(){
+	couponlist = [];//先清空列表项
+	$('.coupon-on').each(function(i){
+		var coupon = {"couponCode": $(this).find('.favorablecode').text(),"count": $(this).find('input').val()};
+		couponlist.push(coupon);
+	});
+	if (couponlist.length < 1) {
+		showAlertMsg(msgCouponsNotChoose);
+		return;
+	}
+	var resultJson = checkCoupon(couponlist);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		if(resultJson._ReturnData.retcode == 0000) {
+			var promfee =resultJson._ReturnData.coupondata.promfee;
+			storage.setItem("promfee", promfee);
+			storage.setItem("couponlist", JSON.stringify(couponlist));
+			window.location.href = "fill.html?t=" + t;	
+		} else{
+			$('.masker').removeClass('hidden');
+			$('.popup').removeClass('hidden');
+			var couponuse = parseInt(resultJson._ReturnData.coupondata.couponuse);
+			var state = getCouponuse(couponuse);
+			var output;
+			$('.popup p').html(state);
+		}	
+	} else {
+		showAlertMsg(resultJson._ReturnMsg);
+	}		
+});
+
+/* 手动输入点击验证时候*/
+$('.coupon-test-btn').live('tap',function(event){
+	couponlist = [];
+	var coupon = {"couponCode": $('.fill-coupon-use input').val(),"count":1};
+	couponlist.push(coupon);
+	if ($.trim($('.fill-coupon-use input').val()) == "") {
+		showAlertMsg(msgCouponsNotEmpty);
+		return;
+	}
+	var resultJson = checkCoupon(couponlist);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		if(resultJson._ReturnData.retcode == 0000) {
+			var promfee = resultJson._ReturnData.coupondata.promfee;
+			$('.fill-coupon .wrap a').addClass('hidden');
+			$('.fill-coupon .wrap p').addClass('hidden');
+			$('.test-ok').removeClass('hidden');
+			$('.test-ok i').html(promfee);
+			$('.coupon-finish-btn').removeClass('hidden');
+			$('.coupon-finish-btn').on('tap',function(){
+				storage.setItem("promfee", promfee);
+				storage.setItem("couponlist", JSON.stringify(couponlist));
+				window.location.href = "fill.html?t=" + t;
+			});	
+		} else {
+			$('.fill-coupon .wrap a').addClass('hidden');
+			$('.fill-coupon .wrap p').addClass('hidden');
+			$('.test-fail').removeClass('hidden');
+			var couponuse = parseInt(resultJson._ReturnData.coupondata.couponuse);
+			var state = getCouponuse(couponuse);
+			$('.test-fail').html(state);
+			$('.coupon-cancel-btn').removeClass('hidden');
+			$('.coupon-cancel-btn').on('tap',function(){
+				$('.fill-coupon-use input').val('');
+				$('.coupon-use-x').addClass('hidden');
+				$('.fill-coupon .wrap p').addClass('hidden');
+				$('.fill-coupon .wrap a').addClass('hidden');
+				$('.fill-coupon .wrap .coupon-test-btn').removeClass('hidden');	
+			});	
+		}
+		$('.coupon-use-x').removeClass('hidden');
+	}else {
+		showAlertMsg(resultJson._ReturnMsg);
+	}			
+});
+/* 点击弹窗确定隐藏弹窗*/
+$('.popup-btn').on('tap',function(){
+	$('.masker').addClass('hidden');
+	$('.popup').addClass('hidden');
+});
+/* 点击手动和选择现金券进行切换*/
+$('.select-coupon-tab').live('tap',function(){
+	$(this).find('em').addClass('tab-red');	
+	$('.hand-coupon-tab em').removeClass('tab-red');	
+	$('.fill-coupon .wrap p').addClass('hidden');
+	$('.fill-coupon .wrap a').addClass('hidden');
+	$('.coupon-pa').removeClass('hidden');
+	$('.coupon-sure').removeClass('hidden');
+	$('.fill-coupon-use').addClass('hidden');
+	$('.select-coupon').removeClass('hidden');				
+});
+
+$('.hand-coupon-tab').live('tap',function(){
+	$(this).find('em').addClass('tab-red');	
+	$('.select-coupon-tab em').removeClass('tab-red');	
+	$('.fill-coupon .wrap p').addClass('hidden');
+	$('.fill-coupon .wrap a').addClass('hidden');
+	$('.coupon-test-btn').removeClass('hidden');
+	$('.fill-coupon-use').removeClass('hidden');
+	$('.select-coupon').addClass('hidden');
+});
+
+function useCoupon(){
+	//选择优惠券
+	$('.coupon-off').on('tap',function(){
+		if($(this).hasClass('coupon-on')) {	
+			$(this).removeClass('coupon-on');
+		}else {	
+			$(this).addClass('coupon-on');
+		}
+	});
+	//优惠券加减号
+	$('.coupon-change').on('tap',function(event){
+		event.stopPropagation();		
+	});
+	$('.coupon-plus').on('tap',function(event){
+		var n = parseInt($(this).prev().attr('value'));
+		var surplus=$(this).parent().siblings().find('.coupon-surplus').html(); 
+		if(n < surplus){
+			$(this).prev().attr('value',n+1);
+			$(this).prev().val(n+1);
+		}	
+		
+	});
+	$('.coupon-minus').on('tap',function(){
+		var n = parseInt($(this).next().attr('value'));
+		if(n > 1){
+			$(this).next().attr('value',n-1);
+			$(this).next().val(n-1);
+		}	
+	});
+	/* 手动输入使用优惠券数量*/
+	$(".usecoupon").on("blur",function(){
+		var couponcount = parseInt($(this).attr("count"));
+		var count = parseInt($(this).val());
+		$(this).attr("value",count);
+		if(count > couponcount){
+			$(this).val(couponcount);
+			$(this).attr("value",couponcount);
+		}
+		if(count < 1 || !count || isNaN(count)){
+			$(this).val("1");
+			$(this).attr("value","1");
+		}
+	});
+}
+
+/* 手动输入优惠券点击叉的时候清除*/
+$('.coupon-use-x').on('tap',function(event){
+	$('.fill-coupon-use input').val('');
+	$(this).addClass('hidden');
+	$('.fill-coupon .wrap p').addClass('hidden');
+	$('.fill-coupon .wrap a').addClass('hidden');
+	$('.fill-coupon .wrap .coupon-test-btn').removeClass('hidden');
+});

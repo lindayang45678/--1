@@ -1,0 +1,16 @@
+$(function() {
+	//订单展开
+	$(".order-number").on("tap",function(){
+		$(this).find("div").toggleClass("down").parent().siblings().toggle();
+	});
+	
+	//订单菜单列表
+	var liWidth = $("#header-list-slide li").width();
+	var listCount = $("#header-list-slide li").length;//获取列表数量
+	$("#header-list-slide").css("width", liWidth * listCount + "px");
+	var prodetailScroll = new iScroll("header-list", {
+		hScroll : false,
+		vScroll : false
+	});
+	
+});

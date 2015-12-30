@@ -1,0 +1,17 @@
+#\u751f\u4ea7\u5730\u5740	http://10.1.80.53:8080/emall_weixin_service/client/setWxCouponAuth
+#\u6d4b\u8bd5\u5730\u5740	http://10.1.80.50:7070/emall_weixin_service/client/setWxCouponAuth
+emal.wx.service=http://10.1.80.50:7070/emall_weixin_service/client/setWxCouponAuth
+favcode.beijing=BXJQ_2015-03-30_c5z
+favcode.quanguo=BXJQ_2015-03-27_5b8
+
+#\u751f\u4ea7\u5730\u5740	
+#\u6d4b\u8bd5\u5730\u5740	http://10.5.12.27:8081/baidu-map-api/shop/getgeolocation
+#\u751f\u4ea7\u5730\u5740	http://10.1.80.58:8083/baidu-map-api/shop/getgeolocation
+#emal.wx.service.url.ll=http://10.5.12.27:8081/baidu-map-api/shop/getgeolocation
+emal.wx.service.url.ll=http://10.5.12.27:8081/baidu-map-api/shop/uploadnetpoi
+
+#\u5f00\u901a\u8fc7\u624b\u673a\u94b1\u5305 - \u6d4b\u8bd5\u5730\u5740 http://10.5.31.13:9060/adaptor/convert.do
+#\u5f00\u901a\u8fc7\u624b\u673a\u94b1\u5305 - \u751f\u4ea7\u5730\u5740 http://10.1.80.80:8080/WK/adaptor/convert.do?_t=json&_TransCode=openWallet4Login&Mobile=18788888888
+openWallet4Login.service.url=http://10.5.31.13:9060/adaptor/convert.do
+openWallet4Login.service._t=json
+openWallet4Login.service._transcode=openWallet4Login

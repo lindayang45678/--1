@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>关于身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015062600" />
+</head>
+
+<body>
+	<header>		
+		<h1>关于身边小店</h1>
+		<a href="setting.html" class="back"></a>
+	</header>
+    <section class="wrap aboutus-logo">
+    	<div><img src="../../images/sogologo.png"/></div>
+        <span>身边小店商户版_v1.1.1</span>
+        <p style="text-align:center;margin-top:-6px;" class="c-gray">PSAM卡号：<em id="psam"></em></p>
+    </section>
+    <section class="lakala-logo">
+    	<img src="../../images/lakala-copyright.png"/>
+    </section>
+    <script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+    <script type="text/javascript" src="../../js/common/setting.js"></script>
+    <script type="text/javascript">
+	    $(function() {
+			$("#psam").text(psam);
+		});
+    </script>
+</body>
+</html>

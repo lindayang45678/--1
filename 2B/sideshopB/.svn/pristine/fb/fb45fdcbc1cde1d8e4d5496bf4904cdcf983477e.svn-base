@@ -1,0 +1,12 @@
+package com.lakala.mapper.r.order;
+
+import java.util.List;
+
+import com.lakala.base.model.Torderitems;
+
+public interface TorderitemsMapper {
+    com.lakala.base.model.Torderitems selectByPrimaryKey(String torderitemsid);
+    
+    //查询指定psam，近一个月内，下过单的商品  zhiziwei
+    List<Torderitems> getGoodsListByPsam(String psam);
+}

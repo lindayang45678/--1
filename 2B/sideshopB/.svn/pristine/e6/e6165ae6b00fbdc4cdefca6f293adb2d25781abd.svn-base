@@ -1,0 +1,397 @@
+package com.lakala.util;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FileUtils;
+import org.fusesource.hawtbuf.ByteArrayInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+/**
+ * 
+ * @ClassName: ImageUtil
+ * @Description: 图片工具类
+ * @author zhiziwei
+ * @date 2015-3-12 上午10:05:27
+ * 
+ */
+public class ImageUtil {
+	
+    private static Logger logger = LoggerFactory.getLogger(ImageUtil.class);
+
+	public static final String IMGHOST = "http://img.lakalaec.com/product/";
+
+	/**
+	 * 
+	 * @Title: uploadFileToLocal
+	 * @Description: 图片上传(spring mvc 下)：图片上传到本地
+	 * @param cfg
+	 *            图片相关配置参数
+	 * @param req
+	 *            上传图片请求对象，获取图片数据流
+	 * @param userid
+	 *            临时目录下，图片存放的文件夹，暂定为当前操作用户名
+	 * @return Map<String,Object> 返回数据格式：上传成功：文件名_url；上传失败：原文件名
+	 */
+	public static Map<String, List<String>> uploadFileToLocal(ConfigUtil cfg, HttpServletRequest req, String userid){
+		Map<String, List<String>> resMap = new HashMap<String, List<String>>();
+		List<String> sucFilePath = new ArrayList<String>();//上传成功的文件
+		List<String> failFile = new ArrayList<String>();//上传成功的文件
+		
+		// 当前WEB环境的上层目录
+		String webParentPath = cfg.getTemp() + new File(req.getSession().getServletContext()
+				.getRealPath("/")).getParent();
+		//文件存放路径
+		String path = webParentPath + cfg.getSystem_name() + cfg.getLocal_temp_path() 
+				+ "/" + userid;
+		logger.info("文件上传路径：" + path);
+		try {
+			//实例化多部分解析器
+			CommonsMultipartResolver resolver = new CommonsMultipartResolver(
+					req.getSession().getServletContext());
+			//判断当前请求是否是上传文件的请求
+			if (resolver.isMultipart(req)) {
+				//强转多部分Request
+				MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) req;
+				//获取Request所有文件名
+				Iterator<String> it =  mRequest.getFileNames();
+				while (it.hasNext()) {
+					//获取文件
+					CommonsMultipartFile file = (CommonsMultipartFile) mRequest.getFile(it.next());
+					if (null != file) {
+						FileItem fi = file.getFileItem();
+						logger.info("上传前文件名称：" + fi.getName());
+						//获取文件扩展名
+						String extension = fi.getName().substring(fi.getName().lastIndexOf("."), fi.getName().length());
+						//服务器上的文件名
+						String remoteFileName = UUID.randomUUID().toString() + extension;
+						logger.info("上传后文件名称：" + remoteFileName);
+						//上传服务器
+						String result = RomoteIOUtil.uploadLocal(remoteFileName, path, fi.getInputStream());
+						
+						//对上传结果进行处理
+						if(BussConst.OPERATION_STATUS_SUCEESS.equals(result)){//成功
+							//获取上传后，网络访问地址
+							String httpUrl = cfg.getSideshopB_out_url()
+									+ cfg.getLocal_temp_path()
+									+ BussConst.PATH_SEPARATOR + userid
+									+ BussConst.PATH_SEPARATOR + remoteFileName;
+							//返回前端是的数据：文件名_图片URL
+							sucFilePath.add(remoteFileName + "_" + httpUrl);
+						}else{//失败
+							failFile.add(fi.getName());
+						}
+					}
+				}
+			}
+			//成功上传后，封装返回结果
+			resMap.put("SUCCESS", sucFilePath);
+			resMap.put("FAIL", failFile);
+		} catch (IOException e) {
+			logger.error(BussConst.SYSTEM_ERROR, e.fillInStackTrace());
+			e.printStackTrace();
+		}
+		return resMap;
+	}
+	
+	/**
+	 * 
+	 * @Title: uploadFileToLocal
+	 * @Description: 图片上传(spring mvc 下)：图片上传到本地
+	 * @param cfg
+	 *            图片相关配置参数
+	 * @param req
+	 *            上传图片请求对象，获取图片数据流
+	 * @param userid
+	 *            临时目录下，图片存放的文件夹，暂定为当前操作用户名
+	 * @param buff
+	 *            文件流
+	 * @return Map<String,Object> 返回数据格式：上传成功：文件名_url；上传失败：原文件名
+	 */
+	public static List<String> uploadFileToLocalForPhone(ConfigUtil cfg, 
+			HttpServletRequest req, String userid, byte[] buff){
+		
+		List<String> sucFilePath = new ArrayList<String>();//上传成功的文件
+		
+		// 当前WEB环境的上层目录
+		String webParentPath = cfg.getTemp() + new File(req.getSession().getServletContext()
+				.getRealPath("/")).getParent();
+		//文件存放路径
+		String path = webParentPath + cfg.getSystem_name() + cfg.getLocal_temp_path() 
+				+ "/" + userid;
+		logger.info("文件上传路径：" + path);
+//			logger.info("上传前文件名称：" + fi.getName());
+		InputStream sbs = new ByteArrayInputStream(buff); 
+		
+		//获取文件扩展名
+//			String extension = fi.getName().substring(fi.getName().lastIndexOf("."), fi.getName().length());
+		//服务器上的文件名
+		String remoteFileName = UUID.randomUUID().toString() + ".jpg";
+		logger.info("上传后文件名称：" + remoteFileName);
+		
+		//上传服务器
+		String result = RomoteIOUtil.uploadLocal(remoteFileName, path, sbs);
+		
+		//对上传结果进行处理
+		if(BussConst.OPERATION_STATUS_SUCEESS.equals(result)){//成功
+			//获取上传后，网络访问地址
+			String httpUrl = cfg.getSideshopB_out_url()
+					+ cfg.getLocal_temp_path()
+					+ BussConst.PATH_SEPARATOR + userid
+					+ BussConst.PATH_SEPARATOR + remoteFileName;
+			//返回前端是的数据：文件名_图片URL
+			sucFilePath.add(remoteFileName + "_" + httpUrl);
+		}
+		
+		return sucFilePath;
+	}
+	
+	/**
+	 * 
+	 * @Title: moveMainPic
+	 * @Description: 移动图片：临时目录 > 正式目录
+	 * @param cfg
+	 *            图片相关配置参数
+	 * @param url
+	 *            图片临时访问URL
+	 * @param targetid
+	 *            图片所属数据主键，如 商品为商品ID，广告为广告ID
+	 * @param targetType
+	 *            图片类型
+	 * @param req
+	 *            请求对象
+	 * @param isZooming
+	 *            是否缩放图片：true=缩放，false=不缩放
+	 * @param isSynchImgServer
+	 *            是否同步图片服务器：true=同步，false=不同步
+	 * @return 图片正式路径下的访问地址
+	 */
+	public static String moveMainPic(ConfigUtil cfg, String url, Integer targetId, Integer targetType, 
+			HttpServletRequest req, boolean isZooming, boolean isSynchImgServer) throws IOException{
+		
+		// 当前WEB环境的上层目录
+		String webParentPath = cfg.getTemp() + new File(req.getSession().getServletContext()
+				.getRealPath("/")).getParent();
+		
+		String path = getPath(cfg, targetType, targetId);
+		//移动前文件路径
+		File oldPath = new File(webParentPath + cfg.getSystem_name() + url.split(cfg.getSideshopB_out_url())[1]);
+		//移动后文件路径
+		File newPath = new File(webParentPath + cfg.getSystem_name() + path);
+		//移动
+		if (oldPath.exists() && oldPath.isFile()) {
+			//移动
+			FileUtils.moveFileToDirectory(oldPath, newPath, true);
+			
+			//移动后，生成指定尺寸的图片
+			File File = new File(webParentPath + cfg.getSystem_name() + path
+					+ url.substring(url.lastIndexOf("/"), url.length()));
+			//缩放图片
+			zoomingImg(isZooming, targetType, webParentPath + cfg.getSystem_name() + path.substring(0, path.lastIndexOf("/")), File);
+		}
+		
+		//最新访问地址
+		String newUrl = getUrl(cfg, targetType, targetId, url, isSynchImgServer);
+		
+		return newUrl;
+	}
+	
+	/**
+	 * 
+	 * @Title: getPath
+	 * @Description: 根据图片类型获取对应的存放路径
+	 * @param cfg
+	 *            图片相关配置参数
+	 * @param targetType
+	 *            图片类型
+	 */
+	private static String getPath(ConfigUtil cfg, Integer targetType,
+			Integer targetId) {
+		String path = "";
+
+		if (BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS == targetType.intValue()) {// 商品
+			path = cfg.getGoods_local_path();
+		} else if (BussConst.IMAGE_TARGETTYPE_AD == targetType.intValue()) {// 广告
+			path = cfg.getAd_local_path();
+		} else if (BussConst.IMAGE_TARGETTYPE_USER == targetType.intValue()) {// 用户
+			path = cfg.getUser_local_path();
+		} else if (BussConst.IMAGE_TARGETTYPE_SHOP_HEADER == targetType.intValue()) {// 小店门头
+			path = cfg.getShop_header_local_path();
+		} else if (BussConst.IMAGE_TARGETTYPE_SHOP == targetType.intValue()) {// 店铺图片
+			path = cfg.getShop_local_path();
+		}
+		
+		return path + "/" + targetId + cfg.getGoods_mainimg_path();
+	}
+	
+	/**
+	 * 
+	 * @Title: getUrl
+	 * @Description: 拼接正式的访问地址
+	 * @param cfg
+	 *            图片相关配置参数
+	 * @param targetType
+	 *            图片类型
+	 * @param targetId
+	 *            图片所属数据主键，如 商品为商品ID，广告为广告ID
+	 * @param url
+	 *            临时访问地址
+	 * @param isSynchImgServer
+	 *            是否同步图片到图片服务器：true = 同步；false = 不同步
+	 * @return String 正式的访问地址
+	 */
+	private static String getUrl(ConfigUtil cfg, Integer targetType, Integer targetId,
+			String url, boolean isSynchImgServer){
+		String newUrl = "";
+		//拼最新访问地址 
+		if (isSynchImgServer) {
+			newUrl = cfg.getImg_server_url() +  getPath(cfg, targetType, targetId).split("/postimg")[1]
+					+ url.substring(url.lastIndexOf("/"), url.length());
+		}else{
+			newUrl = cfg.getSideshopB_out_url() + "/postimg" + getPath(cfg, targetType, targetId).split("/postimg")[1]
+					+ url.substring(url.lastIndexOf("/"), url.length());
+		}
+		
+		return newUrl;
+	}
+	
+	/**
+	 * 
+	 * @Title: getImgUrl
+	 * @Description: 拼接正式的访问地址
+	 * @param cfg
+	 *            图片相关配置参数
+	 * @param targetType
+	 *            图片类型
+	 * @param targetId
+	 *            图片所属数据主键，如 商品为商品ID，广告为广告ID
+	 * @param imgName
+	 *            文件名
+	 * @param size
+	 *            尺寸（取原图，传入"mainImg"） 
+	 * @param isSynchImgServer
+	 *            是否同步图片到图片服务器：true = 同步；false = 不同步
+	 * @return String 正式的访问地址
+	 */
+	public static String getImgUrl(ConfigUtil cfg, Integer targetType, String targetId,
+			String imgName, String size, boolean isSynchImgServer){
+		
+		String newUrl = "";
+		
+		if (isSynchImgServer) {
+			switch (targetType) {
+			case BussConst.IMAGE_TARGETTYPE_USER:
+				newUrl = cfg.getImg_server_url() + cfg.getUser_img_server_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			case BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS:
+				newUrl = cfg.getImg_server_url() + cfg.getGoods_img_server_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			case BussConst.IMAGE_TARGETTYPE_AD:
+				newUrl = cfg.getImg_server_url() + cfg.getAd_img_server_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			case BussConst.IMAGE_TARGETTYPE_SHOP_HEADER:
+				newUrl = cfg.getImg_server_url() + cfg.getShop_header_img_server_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			case BussConst.IMAGE_TARGETTYPE_SHOP:
+				newUrl = cfg.getImg_server_url() + cfg.getShop_img_server_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			default:
+				newUrl = "";
+				break;
+			}
+		} else {
+			switch (targetType) {
+			case BussConst.IMAGE_TARGETTYPE_USER:
+				newUrl = cfg.getSideshopB_out_url() + cfg.getUser_local_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			case BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS:
+				newUrl = cfg.getSideshopB_out_url() + cfg.getGoods_local_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			case BussConst.IMAGE_TARGETTYPE_AD:
+				newUrl = cfg.getSideshopB_out_url() + cfg.getAd_local_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			case BussConst.IMAGE_TARGETTYPE_SHOP_HEADER:
+				newUrl = cfg.getSideshopB_out_url() + cfg.getShop_header_local_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			case BussConst.IMAGE_TARGETTYPE_SHOP:
+				newUrl = cfg.getSideshopB_out_url() + cfg.getShop_local_path() + "/" + targetId + "/" + size + "/" + imgName;
+				break;
+			default:
+				newUrl = "";
+				break;
+			}
+		}
+		
+		return newUrl;
+	}
+	
+	/**
+	 * 
+	 * @Title: zoomingImg
+	 * @Description: 缩放图片
+	 * @param isZooming
+	 *            是否缩放：true=缩放，false=不缩放
+	 * @param targetType
+	 *            图片类型
+	 * @param destPath
+	 *            缩放后图片存放路径
+	 * @param source
+	 *            待缩放的文件
+	 */
+	private static void zoomingImg(boolean isZooming, Integer targetType,
+			String destPath, File source) throws IOException {
+		if (!isZooming)
+			return;
+
+		if (BussConst.IMAGE_TARGETTYPE_SUPPLIER_GOODS == targetType.intValue()) {// 商品
+			int[] sizes = { 100, 240, 300, 600, 800 };// 定义缩放的尺寸
+			JPGPlug jp = JPGPlug.getInstance(sizes);
+			jp.createProductImage(destPath, source);
+		} else if (BussConst.IMAGE_TARGETTYPE_AD == targetType.intValue()) {// 广告
+			int[] sizes = { 100, 300, 600, 800 };// 定义缩放的尺寸
+			JPGPlug jp = JPGPlug.getInstance(sizes);
+			jp.createProductImage(destPath, source);
+		} else if (BussConst.IMAGE_TARGETTYPE_USER == targetType.intValue()) {// 用户
+			int[] sizes = { 112 };// 定义缩放的尺寸
+			JPGPlug jp = JPGPlug.getInstance(sizes);
+			jp.createProductImage(destPath, source);
+		} else if (BussConst.IMAGE_TARGETTYPE_SHOP_HEADER == targetType.intValue()) {// 小店门头
+			int[] sizes = { 486 };// 定义缩放的尺寸
+			JPGPlug jp = JPGPlug.getInstance(sizes);
+			jp.createProductImage(destPath, source);
+		} else if (BussConst.IMAGE_TARGETTYPE_SHOP == targetType.intValue()) {// 店铺图片
+			int[] sizes = { 130 };// 定义缩放的尺寸
+			JPGPlug jp = JPGPlug.getInstance(sizes);
+			jp.createProductImage(destPath, source);
+		}
+	}
+	
+	public static String getImageHttp(
+			String goodBigPic, Long goodInfoId, String size) {
+		
+		if(goodBigPic == null)
+			return null;
+		String[] pics = goodBigPic.split(";");
+		if(pics.length <= 0){
+			return null;
+		}else if(pics[0].startsWith("http")){
+			return pics[0];
+		}else{
+			return IMGHOST + goodInfoId+"/"+size+"/" + pics[0];
+		}
+	}
+}

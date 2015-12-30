@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="homepage">
+	<header>
+		<h1><img src="../../images/logo.png">身边小店<span>商户版</span></h1>
+		<a href="notices.html" class="head-left"></a>
+		<a href="setting.html" class="head-right"></a>
+	</header>
+	<section class="container homepage-main">
+		<div class="wrap">
+			<table>
+				<tr>
+					<td rowspan="2" id="sbxd"><a href="../shops/index.html"><span>我的小店</span></a></td>
+					<td class="order-management" id="ddgl"><a href="../orders/wholesaleorders.html"><span>订单管理</span></a></td>
+				</tr>
+				<tr>
+					<td id="sycx"><a href="../incomes/index.html"><span>收益查询</span></a></td>
+				</tr>
+				<tr>
+					<td id="pfjh"><a href="../wholesale/index.html"><span>批发进货</span></a></td>
+					<td id="wylq"><a href="../coupons/unuse.html"><span>现金券卡</span></a></td>
+				</tr>
+				<tr>
+					<td id="qhsh"><a href="../receipt/shopreceipt.html"><span>收货取货</span></a></td>
+					<td id="khgl"><a href="../customers/index.html"><span>客户管理</span></a></td>
+				</tr>
+			</table>
+		</div>
+	</section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/homepage/index.js"></script>
+</body>
+</html>

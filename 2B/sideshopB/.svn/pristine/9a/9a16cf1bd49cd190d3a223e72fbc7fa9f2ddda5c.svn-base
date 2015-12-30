@@ -1,0 +1,36 @@
+package com.lakala.util;
+
+/**
+ * Created by HOT.LIU on 2015/5/20.
+ */
+public class MongoInterfaceUrl {
+    private String left;
+
+    private String list;
+
+    private String detail;
+
+    public String getLeft() {
+        return left;
+    }
+
+    public void setLeft(String left) {
+        this.left = left;
+    }
+
+    public String getList() {
+        return list;
+    }
+
+    public void setList(String list) {
+        this.list = list;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+}

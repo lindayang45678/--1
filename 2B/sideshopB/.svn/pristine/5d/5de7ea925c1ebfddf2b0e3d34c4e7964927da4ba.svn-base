@@ -1,0 +1,38 @@
+package com.lakala.module.order.vo;
+
+import java.util.List;
+
+import com.lakala.model.order.OrderCommonInfo;
+import com.lakala.module.sreturn.model.ReturnMoble;
+
+/**
+ * 
+ * @author yhg
+ *
+ */
+public class OrderInfoOutput{
+	
+	/** 显示前端的大订单列表*/
+	private List<OrderCommonInfo> orderlist;
+	
+	/** 显示前端的售后列表*/
+	List<ReturnMoble> returnlist; 
+
+	public List<OrderCommonInfo> getOrderlist() {
+		return orderlist;
+	}
+
+	public void setOrderlist(List<OrderCommonInfo> orderlist) {
+		this.orderlist = orderlist;
+	}
+
+	public List<ReturnMoble> getReturnlist() {
+		return returnlist;
+	}
+
+	public void setReturnlist(List<ReturnMoble> returnlist) {
+		this.returnlist = returnlist;
+	}
+
+	
+}

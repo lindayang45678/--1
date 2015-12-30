@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>设置销售员收益分成</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css"/>
+	<link rel="stylesheet" href="../../css/admin.css"/>
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html">批发进货</a>
+			<a href="../order-query/order-query.html">订单查询</a>
+			<a href="../benefit-query/order-income.html">收益查询</a>
+			<a href="../sales-manage/sales-list.html" class="active">销售员管理</a>
+			<a href="../tools/index.html">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+			<menu>
+				<a href="../sales-manage/sales-list.html">销售员列表</a>
+				<a href="../sales-manage/add-sales.html">添加销售员</a>
+				<a href="../sales-manage/set-sales-revenue.html" class="active">销售员收益分成</a>
+				<a href="../tools/index.html">返回店主工具</a>
+				<a href="#">返回商城首页</a>
+			</menu>
+			<section class="main">
+				<div class="title">
+					<h2>设置本店销售员收益比例</h2>
+				</div>
+				<div class="main-wrap">
+					<div class="set-sales-revenue">
+						<ul>
+							<li>
+								<span>分润比例：</span><input type="text" />%
+								<p>销售员下的订单，只要订单中有分润的商品，就会按这个比例给销售员分钱</p>
+							</li>
+							<li>
+								<span>返现比例：</span><input type="text" />%
+								<p>销售员下的订单，只要订单中有分润的商品，就会按这个比例给销售员分钱</p>
+							</li>
+							<li>
+								<span>补贴比例：</span><input type="text" />%
+								<p>销售员下的订单，只要订单中有补贴的商品，就会按这个比例给销售员分钱</p>
+							</li>
+							<li>
+								<span>分润比例：</span><input type="text" /><input type="button" value="未收到重新发送" class="btn-white"/>
+								<p>短信验证码会发送到在系统录入的店主手机号！</p>
+							</li>
+						</ul>
+						<a href="javascript:;" class="btn-white">取消</a><a href="javascript:;" class="btn-blue">提交</a>
+						<div class="foot-line"></div>
+						<div class="des">温馨提示：销售员收益比例修改后，新下的订单将按新的比例进行计算</div>
+					</div>
+				</div>
+			</section>
+	</section>
+
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myscroll = new iScroll("sales-list",{hScrollbar:false, vScrollbar:true, fixedScrollbar:true, hideScrollbar:true});
+		});
+	</script>
+</body>
+</html>

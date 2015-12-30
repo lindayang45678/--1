@@ -1,0 +1,76 @@
+package com.lakala.module.news.vo;
+
+
+
+public class NewsItemOutput {
+    private Integer itemsid;
+
+    private Integer newsid;
+
+    private String childtitle;
+
+    private String picture;
+
+    private Integer type;
+
+//    private Integer sortid;
+
+    private String content;
+
+    public Integer getItemsid() {
+        return itemsid;
+    }
+
+    public void setItemsid(Integer itemsid) {
+        this.itemsid = itemsid;
+    }
+
+    public Integer getNewsid() {
+        return newsid;
+    }
+
+    public void setNewsid(Integer newsid) {
+        this.newsid = newsid;
+    }
+
+
+    public String getChildtitle() {
+		return childtitle;
+	}
+
+	public void setChildtitle(String childtitle) {
+		this.childtitle = childtitle;
+	}
+
+	public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+//    public Integer getSortid() {
+//        return sortid;
+//    }
+//
+//    public void setSortid(Integer sortid) {
+//        this.sortid = sortid;
+//    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+}

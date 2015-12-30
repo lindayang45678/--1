@@ -1,0 +1,33 @@
+$(function(){	
+	$('.first').find('li').on('tap',function(){
+		$('.third').hide('slow');
+		$('.fourth').hide('slow');
+		$('.second').show('slow');
+		$('.second').find('li').removeClass('color');
+		$('.second').find('li:first-child').addClass('color');
+		$('.first').find('li').removeClass('color');
+		$(this).addClass('color');
+		
+	});
+	$('.second').find('li').on('tap',function(){
+		$('.fourth').hide('slow');
+		$('.third').show('slow');
+		$('.third').find('li').removeClass('color');
+		$('.third').find('li:first-child').addClass('color');
+		$('.second').find('li').removeClass('color');
+		$(this).addClass('color');
+	});
+	$('.third').find('li').on('tap',function(){
+		$('.fourth').show('slow');
+		$('.fourth').find('li').removeClass('color');
+		$('.fourth').find('li:first-child').addClass('color');
+		$('.third').find('li').removeClass('color');
+		$(this).addClass('color');
+	});
+	$('.fourth').find('li').on('tap',function(){
+		$('.fourth').find('li').removeClass('color');
+		$(this).addClass('color');
+	});
+	
+	
+})

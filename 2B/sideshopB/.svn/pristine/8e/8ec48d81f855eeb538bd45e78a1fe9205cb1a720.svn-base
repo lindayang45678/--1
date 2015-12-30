@@ -1,0 +1,172 @@
+$(function() {
+	storage.setItem("windowHeight", $(window).height());
+	loadJs();
+});
+
+$(function() {		
+	//点击获取验证码
+	var wait = 60;//设定时间
+	function verificationCodetTime(obj) {
+		if (wait == 0) {
+			obj.removeAttr("disabled");
+			obj.html("重新发送验证码");
+			wait = 60;
+			obj.removeClass("getVerificationCode");
+		} else {	
+			obj.addClass("getVerificationCode");
+			obj.attr("disabled", "disabled");
+			obj.html(wait + "秒" + "获取验证码");
+			wait--;
+			setTimeout(function() {
+				verificationCodetTime(obj);
+			},1000);
+		}
+	} 
+	$("#getVerificationCode").on("tap", function(event) {
+		if(wait == 60 || wait == 0){
+			var phone = $.trim($("#mobile").val());
+			var data = {"phone":phone, "type":"6"};
+			var verificationCode = $.trim($("#verificationCode").val());
+			var resultJson = ajaxCommon(urlGetCode,data);
+			if(phone == ""){
+				showAlertMsg(msgMobileNotEmpty);
+				return;
+			}
+			if(!phone.match(/^1\d{10}$/) || phone.match(/^1[0-2]\d{9}$/)){
+				$("#mobile").val("");
+				showAlertMsg(msgMobileError);
+				return;
+			}	
+			if(resultJson._ReturnCode === returnCodeSuccess){
+				verificationCodetTime($("#getVerificationCode"));	
+			}
+		} 
+		event.stopPropagation();
+	});
+	
+	//进入小店
+	$("#goin-shop").on("touchend", function(e) {
+		$(this).removeClass("focus");
+
+		var mobile = $.trim($("#mobile").val());
+		var verificationCode = $.trim($("#verificationCode").val());
+		var pwd = $.trim($("#pwd").val());
+		var terminalType = "1"; //0:其他, 1:安卓, 2:苹果
+
+		if(mobile == ""){
+			showAlertMsg(msgMobileNotEmpty);
+			return ;
+		}
+		if(!mobile.match(/^1\d{10}$/)||mobile.match(/^1[0-2]\d{9}$/)){
+			$('#mobile').val('');
+			showAlertMsg(msgMobileError);
+			return ;
+		}
+		if(verificationCode == ""){	
+			showAlertMsg(msgVerificationEmpty);
+			return ;
+		}
+		if(pwd == ""){	
+			showAlertMsg(msgPawFormat);
+			return ;
+		}
+		if(!pwd.match(/^[A-Za-z0-9]{6,20}$/)){	
+			showAlertMsg(msgPawFormat);
+			return ;
+		}
+
+		var os = osType().toLowerCase();
+		if(os != "other") {
+			cordova._native.system.deviceInfo(function(res) {
+				platform = res.platform;
+				deviceId = res.deviceId;
+				terminalCode = deviceId;
+				subChannelId = res.subChannelId;
+				objectId = res.objectId;
+				pushToken = res.token;
+
+				if(platform.toLowerCase() === "ios") {
+					terminalType = "2";
+				}
+
+				storage.setItem("platform", platform);
+				storage.setItem("deviceId", deviceId);
+				storage.setItem("subChannelId", subChannelId);
+				storage.setItem("objectId", objectId);
+				storage.setItem("pushToken", pushToken);
+				
+				//密码加密
+				cordova._native.encrypt.pwdEncrpt(pwd, function(encryptPwd) {
+					var data = {
+							"mobile":mobile, 
+							"verificationCode":verificationCode, 
+							"pwd":encryptPwd, 
+							"terminalCode":pushToken, 
+							"terminalType":terminalType
+					};
+					toResetPwd(data);
+				});
+			});
+		} else {
+			storage.setItem("pushToken", "browswerTest-pushToken");
+			pwd = "1412163e967eeda3cf74341c99167ae14cd9a6c19e1c8b0658b34f4328424764cddc43da5db4c5e7f0e286a714e084c3700c5f213aaeb61c8d313c06e0b7434eab12977b6c542e7b3c7171bb251236cc26758522db4c92324529145d1e2b43618f2a6196fd06acb44b41a72eb85a830f1b49baa9244b8c9b5ec33b0bbf7fc2dd";
+			var data = {
+					"mobile":mobile, 
+					"verificationCode":verificationCode, 
+					"pwd":pwd, 
+					"terminalCode":"browswerTest", 
+					"terminalType":"0"
+			};
+			toResetPwd(data);
+		}
+
+		e.preventDefault();
+	});
+});
+
+/* 忘记密码*/
+function toResetPwd(data) {
+	var resultJson = ajaxCommon(urlForgetpwd, data);
+	resultJson = convertNullToEmpty(resultJson);
+	var _ReturnCode = resultJson._ReturnCode;
+	if(_ReturnCode === returnCode100001){
+		//很抱歉，该手机号未开通电商业务，请联系拉卡拉客户经理开通
+		showAlertMsg(msgReturn100001);
+	}else if(_ReturnCode === returnCode100002){
+		//很抱歉，该手机号不是店主手机号，请检查后重新输入
+		showAlertMsg(msgReturn100002);
+	}else if(_ReturnCode === returnCode100003){
+		//很抱歉，该手机号未激活，请先激活！
+		$("#register-psd").show();
+	}else if(_ReturnCode === returnCode100007){
+		//很抱歉，您输入的验证码错误，请确认后重新输入！
+		showAlertMsg(msgReturn100007);
+	}else if(_ReturnCode === returnCode100011){
+		//webService服务出错了
+		showAlertMsg(msgReturn100011);
+	}else if(_ReturnCode === returnCode100012){
+		//更新密码成功
+		var token = resultJson._ReturnData.token;
+		var userName = resultJson._ReturnData.userName;
+		var userType = resultJson._ReturnData.userType;
+		var bizType = resultJson._ReturnData.bizType;  //商户类型--加盟型:459; 标准型:460; 旗舰型:461;
+		var ecNetNo = resultJson._ReturnData.ecNetNo;  //电商网店编号
+		var psam = resultJson._ReturnData.psam;  //PSAM编号
+
+		storage.setItem("userToken", userToken);
+		storage.setItem("mobile", data.mobile);
+		storage.setItem("password", data.pwd);
+		storage.setItem(hasLogined, "1");
+		storage.setItem("bizType", bizType);  //商户类型存放到storage中
+		storage.setItem("psam", psam);  //PSAM存放到storage中
+		storage.setItem("netNo", ecNetNo);  //网点编号存放到storage中
+
+		if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			//记录登录状态--true:代表已登录，false:代表未登录
+			cordova._native.saveInfo.set(hasLogined, true);
+			cordova._native.saveInfo.set("mobile", data.mobile);
+			cordova._native.saveInfo.set("userToken", userToken);
+		}
+		window.location.href = "../homepage/index.html?t=" + t;
+	}
+}

@@ -1,0 +1,175 @@
+package com.lakala.util;
+
+/**
+ * 
+* @ClassName: ConfigUtil 
+* @Description: 系统参数配置类
+* @author zhiziwei 
+* @date 2015-1-21 下午5:13:38 
+*
+ */
+
+public class ConfigUtil {
+	/**
+	 * 商品主图、详情图、属性图片相关配置
+	 */
+	private String img_server_url; // 发布后
+	
+	private String system_name;// 当前系统名称
+	
+	private String admin_url;//运营系统访问地址
+	
+	private String provider_url;// 供应商系统访问地址
+	
+	private String admin_outer_url;//运营系统外网访问地址
+	
+	private String provider_outer_url;// 供应商系统外网访问地址
+	
+	private String temp;
+	
+	private String local_temp_path;//本地商品图临时存放路径
+	
+	private String local_path;//本地商品图正式存放路径
+	
+	private String img_server_path;//图片服务器商品图正式存放路径(测试)
+	
+	private String goods_mainimg_path;//商品主图存放路径
+	
+	private String goods_detailimg_path;//商品详情图存放路径
+	
+	private String goods_proimg_path;//商品属性值图片存放路径
+	
+	private String order_qsd_path;//已发货订单签收单上传路径
+	
+	private String msg_local_path;//本地消息图正式存放路径
+	
+	private String msg_img_path;//图片服务器消息图片存放路径
+	
+	public String getImg_server_url() {
+		return null == img_server_url ? "" : img_server_url;
+	}
+
+	public void setImg_server_url(String img_server_url) {
+		this.img_server_url = img_server_url;
+	}
+
+	public String getSystem_name() {
+		return null == system_name ? "" : system_name;
+	}
+
+	public void setSystem_name(String system_name) {
+		this.system_name = system_name;
+	}
+
+	public String getProvider_url() {
+		return null == provider_url ? "" : provider_url;
+	}
+
+	public void setProvider_url(String provider_url) {
+		this.provider_url = provider_url;
+	}
+
+	public String getTemp() {
+		return null == temp ? "" : temp;
+	}
+
+	public void setTemp(String temp) {
+		this.temp = temp;
+	}
+
+	public String getLocal_temp_path() {
+		return null == local_temp_path ? "" : local_temp_path;
+	}
+
+	public void setLocal_temp_path(String local_temp_path) {
+		this.local_temp_path = local_temp_path;
+	}
+
+	public String getLocal_path() {
+		return null == local_path ? "" : local_path;
+	}
+
+	public void setLocal_path(String local_path) {
+		this.local_path = local_path;
+	}
+
+	public String getImg_server_path() {
+		return null == img_server_path ? "" : img_server_path;
+	}
+
+	public void setImg_server_path(String img_server_path) {
+		this.img_server_path = img_server_path;
+	}
+
+	public String getGoods_mainimg_path() {
+		return null == goods_mainimg_path ? "" : goods_mainimg_path;
+	}
+
+	public void setGoods_mainimg_path(String goods_mainimg_path) {
+		this.goods_mainimg_path = goods_mainimg_path;
+	}
+
+	public String getGoods_detailimg_path() {
+		return null == goods_detailimg_path ? "" : goods_detailimg_path;
+	}
+
+	public void setGoods_detailimg_path(String goods_detailimg_path) {
+		this.goods_detailimg_path = goods_detailimg_path;
+	}
+
+	public String getGoods_proimg_path() {
+		return null == goods_proimg_path ? "" : goods_proimg_path;
+	}
+
+	public void setGoods_proimg_path(String goods_proimg_path) {
+		this.goods_proimg_path = goods_proimg_path;
+	}
+
+	public String getOrder_qsd_path() {
+		return null == order_qsd_path ? "" : order_qsd_path;
+	}
+
+	public void setOrder_qsd_path(String order_qsd_path) {
+		this.order_qsd_path = order_qsd_path;
+	}
+	public String getMsg_local_path() {
+		return null == msg_local_path ? "" : msg_local_path;
+	}
+
+	public void setMsg_local_path(String msg_local_path) {
+		this.msg_local_path = msg_local_path;
+	}
+
+	public String getMsg_img_path() {
+		return null == msg_img_path ? "" : msg_img_path;
+	}
+
+	public void setMsg_img_path(String msg_img_path) {
+		this.msg_img_path = msg_img_path;
+	}
+
+	public String getAdmin_url() {
+		return admin_url;
+	}
+
+	public void setAdmin_url(String admin_url) {
+		this.admin_url = admin_url;
+	}
+
+	public String getAdmin_outer_url() {
+		return admin_outer_url;
+	}
+
+	public void setAdmin_outer_url(String admin_outer_url) {
+		this.admin_outer_url = admin_outer_url;
+	}
+
+	public String getProvider_outer_url() {
+		return provider_outer_url;
+	}
+
+	public void setProvider_outer_url(String provider_outer_url) {
+		this.provider_outer_url = provider_outer_url;
+	}
+
+}

@@ -1,0 +1,193 @@
+package com.lakala.model.order;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+public class OrderProviderQueryInfo implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4904384422928629941L;
+
+	/**
+	 * @author: yhg
+	 * @project:sideshopB
+	 * @time: 2015年3月5日 上午10:05:10
+	 * @todo: TODO
+	 */
+	
+	private String torderproviderid;
+
+    private String orderid;
+
+    private Integer providerid;
+    
+	private String providername;
+	
+	private String clientservicetel;
+	
+	private Date ordertime;
+	
+	private BigDecimal actualamount;
+	
+	private BigDecimal logiscalfee;
+	
+	private Integer paychanel;
+	
+	private Integer ispay;
+	
+	private Integer state;
+	
+	private Integer source;
+	
+	private String cusname;
+	
+	private String custelno;
+	
+	private Integer isdelivertohome;
+	
+	private String addressfull;
+	
+	private List<OrderItemsInfo> orderitemslist;   //该订单所属的供应商下的商品子订单列表
+
+	public String getProvidername() {
+		return providername;
+	}
+
+	public void setProvidername(String providername) {
+		this.providername = providername;
+	}
+
+	public String getTorderproviderid() {
+		return torderproviderid;
+	}
+
+	public void setTorderproviderid(String torderproviderid) {
+		this.torderproviderid = torderproviderid;
+	}
+
+	public String getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
+	}
+
+	public Integer getProviderid() {
+		return providerid;
+	}
+
+	public void setProviderid(Integer providerid) {
+		this.providerid = providerid;
+	}
+
+	
+	public String getClientservicetel() {
+		return clientservicetel;
+	}
+
+	public void setClientservicetel(String clientservicetel) {
+		this.clientservicetel = clientservicetel;
+	}
+
+	public Date getOrdertime() {
+		return ordertime;
+	}
+
+	public void setOrdertime(Date ordertime) {
+		this.ordertime = ordertime;
+	}
+
+	public BigDecimal getActualamount() {
+		return actualamount;
+	}
+
+	public void setActualamount(BigDecimal actualamount) {
+		this.actualamount = actualamount;
+	}
+
+	public BigDecimal getLogiscalfee() {
+		return logiscalfee;
+	}
+
+	public void setLogiscalfee(BigDecimal logiscalfee) {
+		this.logiscalfee = logiscalfee;
+	}
+
+	public Integer getPaychanel() {
+		return paychanel;
+	}
+
+	public void setPaychanel(Integer paychanel) {
+		this.paychanel = paychanel;
+	}
+
+	public Integer getIspay() {
+		return ispay;
+	}
+
+	public void setIspay(Integer ispay) {
+		this.ispay = ispay;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	public Integer getSource() {
+		return source;
+	}
+
+	public void setSource(Integer source) {
+		this.source = source;
+	}
+
+	public String getCusname() {
+		return cusname;
+	}
+
+	public void setCusname(String cusname) {
+		this.cusname = cusname;
+	}
+
+	public String getCustelno() {
+		return custelno;
+	}
+
+	public void setCustelno(String custelno) {
+		this.custelno = custelno;
+	}
+
+	public Integer getIsdelivertohome() {
+		return isdelivertohome;
+	}
+
+	public void setIsdelivertohome(Integer isdelivertohome) {
+		this.isdelivertohome = isdelivertohome;
+	}
+
+	public String getAddressfull() {
+		return addressfull;
+	}
+
+	public void setAddressfull(String addressfull) {
+		this.addressfull = addressfull;
+	}
+	
+	public List<OrderItemsInfo> getOrderitemslist() {
+		return orderitemslist;
+	}
+
+	public void setOrderitemslist(List<OrderItemsInfo> orderitemslist) {
+		this.orderitemslist = orderitemslist;
+	}
+
+}

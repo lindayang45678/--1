@@ -1,0 +1,19 @@
+package com.lakala.module.goods.vo;
+
+import java.util.List;
+
+import com.lakala.module.comm.ObjectInput;
+
+public class GoodsListInputForm extends ObjectInput {
+
+	private List<RecommendGoodsInput> rgoods;
+
+	public List<RecommendGoodsInput> getRgoods() {
+		return rgoods;
+	}
+
+	public void setRgoods(List<RecommendGoodsInput> rgoods) {
+		this.rgoods = rgoods;
+	}
+
+}

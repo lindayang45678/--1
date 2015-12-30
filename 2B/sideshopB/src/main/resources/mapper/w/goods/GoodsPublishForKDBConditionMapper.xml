@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.goods.GoodsPublishForKDBConditionMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.GoodsPublishForKDBCondition" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="goodsIdAndSKUIds" property="goodsidandskuids" jdbcType="VARCHAR" />
+    <result column="termConMD5" property="termconmd5" jdbcType="VARCHAR" />
+    <result column="goodsStatus" property="goodsstatus" jdbcType="INTEGER" />
+    <result column="published" property="published" jdbcType="INTEGER" />
+    <result column="publishPerson" property="publishperson" jdbcType="VARCHAR" />
+    <result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="publishTime" property="publishtime" jdbcType="TIMESTAMP" />
+    <result column="publishTiming" property="publishtiming" jdbcType="DATE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="terminalCondition" property="terminalcondition" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tgoods_publish_kdb_condition
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lakala.base.model.GoodsPublishForKDBCondition" >
+    insert into tgoods_publish_kdb_condition (Id, goodsIdAndSKUIds, termConMD5, 
+      goodsStatus, published, publishPerson, 
+      createDate, publishTime, publishTiming, 
+      remark, terminalCondition)
+    values (#{id,jdbcType=INTEGER}, #{goodsidandskuids,jdbcType=VARCHAR}, #{termconmd5,jdbcType=VARCHAR}, 
+      #{goodsstatus,jdbcType=INTEGER}, #{published,jdbcType=INTEGER}, #{publishperson,jdbcType=VARCHAR}, 
+      #{createdate,jdbcType=TIMESTAMP}, #{publishtime,jdbcType=TIMESTAMP}, #{publishtiming,jdbcType=DATE}, 
+      #{remark,jdbcType=VARCHAR}, #{terminalcondition,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lakala.base.model.GoodsPublishForKDBCondition" >
+    insert into tgoods_publish_kdb_condition
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="goodsidandskuids != null" >
+        goodsIdAndSKUIds,
+      </if>
+      <if test="termconmd5 != null" >
+        termConMD5,
+      </if>
+      <if test="goodsstatus != null" >
+        goodsStatus,
+      </if>
+      <if test="published != null" >
+        published,
+      </if>
+      <if test="publishperson != null" >
+        publishPerson,
+      </if>
+      <if test="createdate != null" >
+        createDate,
+      </if>
+      <if test="publishtime != null" >
+        publishTime,
+      </if>
+      <if test="publishtiming != null" >
+        publishTiming,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="terminalcondition != null" >
+        terminalCondition,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="goodsidandskuids != null" >
+        #{goodsidandskuids,jdbcType=VARCHAR},
+      </if>
+      <if test="termconmd5 != null" >
+        #{termconmd5,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsstatus != null" >
+        #{goodsstatus,jdbcType=INTEGER},
+      </if>
+      <if test="published != null" >
+        #{published,jdbcType=INTEGER},
+      </if>
+      <if test="publishperson != null" >
+        #{publishperson,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null" >
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishtime != null" >
+        #{publishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishtiming != null" >
+        #{publishtiming,jdbcType=DATE},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalcondition != null" >
+        #{terminalcondition,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lakala.base.model.GoodsPublishForKDBCondition" >
+    update tgoods_publish_kdb_condition
+    <set >
+      <if test="goodsidandskuids != null" >
+        goodsIdAndSKUIds = #{goodsidandskuids,jdbcType=VARCHAR},
+      </if>
+      <if test="termconmd5 != null" >
+        termConMD5 = #{termconmd5,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsstatus != null" >
+        goodsStatus = #{goodsstatus,jdbcType=INTEGER},
+      </if>
+      <if test="published != null" >
+        published = #{published,jdbcType=INTEGER},
+      </if>
+      <if test="publishperson != null" >
+        publishPerson = #{publishperson,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null" >
+        createDate = #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishtime != null" >
+        publishTime = #{publishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishtiming != null" >
+        publishTiming = #{publishtiming,jdbcType=DATE},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalcondition != null" >
+        terminalCondition = #{terminalcondition,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lakala.base.model.GoodsPublishForKDBCondition" >
+    update tgoods_publish_kdb_condition
+    set goodsIdAndSKUIds = #{goodsidandskuids,jdbcType=VARCHAR},
+      termConMD5 = #{termconmd5,jdbcType=VARCHAR},
+      goodsStatus = #{goodsstatus,jdbcType=INTEGER},
+      published = #{published,jdbcType=INTEGER},
+      publishPerson = #{publishperson,jdbcType=VARCHAR},
+      createDate = #{createdate,jdbcType=TIMESTAMP},
+      publishTime = #{publishtime,jdbcType=TIMESTAMP},
+      publishTiming = #{publishtiming,jdbcType=DATE},
+      remark = #{remark,jdbcType=VARCHAR},
+      terminalCondition = #{terminalcondition,jdbcType=LONGVARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lakala.base.model.GoodsPublishForKDBCondition" >
+    update tgoods_publish_kdb_condition
+    set goodsIdAndSKUIds = #{goodsidandskuids,jdbcType=VARCHAR},
+      termConMD5 = #{termconmd5,jdbcType=VARCHAR},
+      goodsStatus = #{goodsstatus,jdbcType=INTEGER},
+      published = #{published,jdbcType=INTEGER},
+      publishPerson = #{publishperson,jdbcType=VARCHAR},
+      createDate = #{createdate,jdbcType=TIMESTAMP},
+      publishTime = #{publishtime,jdbcType=TIMESTAMP},
+      publishTiming = #{publishtiming,jdbcType=DATE},
+      remark = #{remark,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

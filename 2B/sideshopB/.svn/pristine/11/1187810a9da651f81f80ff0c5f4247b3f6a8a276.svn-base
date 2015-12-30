@@ -1,0 +1,95 @@
+package com.lakala.module.mongo.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.virtualcat.VirtualCateMapper;
+import com.lakala.model.virtualcate.VirtualCateMongo;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.vo.out.LeftGoodsSKU;
+import com.lakala.module.goods.vo.out.LeftVirtualCate;
+import com.lakala.module.goods.vo.out.SideShopBLeftOutPut;
+import com.lakala.module.mongo.service.SideShopBMongoService;
+import com.lakala.util.HttpUtil;
+import com.lakala.util.MongoInterfaceUrl;
+import com.lakala.util.ReturnMsg;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by HOT.LIU on 2015/5/20.
+ */
+@Service
+public class SideShopBMongoServiceImpl implements SideShopBMongoService {
+
+    private static final Logger logger = Logger.getLogger(SideShopBMongoServiceImpl.class);
+
+    @Autowired
+    private MongoInterfaceUrl mongoInterfaceUrl;
+
+    @Autowired
+    private VirtualCateMapper virtualCateMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.r.sdbmediastatistics.SdbMediaStatisticsMapper sdbMediaStatisticsMapper_R;
+
+    @Override
+    public ObjectOutput left_mongo(String psam, String channelid) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+        List<VirtualCateMongo> cateMongoList = new ArrayList<VirtualCateMongo>();
+        try {
+            Map<String, Object> sdbMap = sdbMediaStatisticsMapper_R.selectSdbMediaStatisticsByPsam(psam);
+            if (sdbMap.isEmpty()) {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("没有找到该终端所对应的网点信息！");
+                return data;
+            }
+            String url = mongoInterfaceUrl.getLeft().replaceAll("#psam#", psam).replaceAll("#channelid#", channelid);
+            String json = HttpUtil.httpGetConnetion(url);
+            ObjectOutput output = JSON.parseObject(json, ObjectOutput.class);
+            if (ReturnMsg.CODE_SUCCESS.equals(output.get_ReturnCode())) {
+                if (output.get_ReturnData() == null || "".equals(output.get_ReturnData())) {
+                    data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                    data.set_ReturnMsg("没有找到该终端下所属的分类！");
+                    return data;
+                }
+                List<SideShopBLeftOutPut> list = JSON.parseArray(output.get_ReturnData().toString(), SideShopBLeftOutPut.class);
+                Map<Integer, Object> map = new HashMap<Integer, Object>();
+                for (SideShopBLeftOutPut outPut : list) {
+                    for (LeftGoodsSKU leftGoodsSKU : outPut.getSkus()) {
+                        for (LeftVirtualCate leftVirtualCate : leftGoodsSKU.getVc()) {
+                            for (Integer id : leftVirtualCate.getIds()) {
+                                map.put(id, id);
+                            }
+                        }
+                    }
+                }
+                List idList = new ArrayList(map.values());
+                List<VirtualCateMongo> virtualCateMongoList = virtualCateMapper_R.findByIds(idList);
+                VirtualCateMongo virtualCateMongo = new VirtualCateMongo(virtualCateMongoList);
+                String childJson = JSON.toJSONString(virtualCateMongo.getChild());
+                if (childJson.indexOf("本市批发") > -1) {
+                    childJson = childJson.replaceAll("本市批发", (String) sdbMap.get("city") + "批发");
+                }
+                if (childJson.indexOf("本省") > -1) {
+                    childJson = childJson.replaceAll("本省批发", (String) sdbMap.get("prov") + "批发");
+                }
+                if (childJson.indexOf("本区") > -1) {
+                    childJson = childJson.replaceAll("本区批发", (String) sdbMap.get("city_area") + "批发");
+                }
+                cateMongoList = JSON.parseArray(childJson, VirtualCateMongo.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LakalaException(e);
+        }
+        data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+        data.set_ReturnData(cateMongoList);
+        return data;
+    }
+}

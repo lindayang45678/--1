@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>店主收货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="shopreceiptsuccess">
+	<header id="receipt">	
+		<a href="shopreceipt.html" class="back"></a>	
+		<h1><a href="shopreceipt.html">店主收货</a></h1>
+		<a href="custreceipt.html" class="head-right opacity">顾客取货</a>
+	</header>
+	<section class="wrap letter">
+		<div class="receipt c-gray">
+			<h2 class="f-16 center color"><span><i></i>恭喜您，收货成功！</span></h2>
+			<div class="receipt-info info">
+				<div>物流公司<i>顺丰快递</i></div>
+				<div>物流单号<i>12231310342</i></div>
+				<div>收货人<i>巫龙飞</i></div>
+				<div>电话<i>13522323232</i></div>
+			</div>
+			<div class="receipt-goods">
+				<h3>拉卡拉电商公司<i class="fr">2015-4-12 12:12:23</i></h3>
+				<ul>
+					<li class="clearfix">
+						<a href="javascript:;" class="tips">部分收货</a>
+						<img src="../../images/goods-img.jpg" />
+						<div class="items nobr">
+							<h4 class="c-black">雅诗兰黛沐浴乳</h4>
+							<p>
+								<i>尺寸：<em>红色</em></i>
+							</p>
+							<p class="c-black">
+								<i>数量：</i><em>3</em>
+							</p>
+							<p class="receipt-actual c-black">
+								<i>实收：</i>
+								<a href="javascript:;">&#8722;</a>
+								<input type="text" readonly="readonly" value="2"/>
+								<a href="javascript:;">+</a>
+							</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<a href="javascript:;" class="tips">部分收货</a>
+						<img src="../../images/goods-img.jpg" />
+						<div class="items nobr">
+							<h4 class="c-black">雅诗兰黛沐浴乳</h4>
+							<p>
+								<i>尺寸：<em>红色</em></i>
+							</p>
+							<p class="c-black">
+								<i>数量：</i><em>3</em>
+							</p>
+							<p class="receipt-actual c-black">
+								<i>实收：</i>
+								<a href="javascript:;">&#8722;</a>
+								<input type="text" readonly="readonly" value="2"/>
+								<a href="javascript:;">+</a>
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="receipt-goods">
+				<h3>拉卡拉电商公司<i class="fr">2015-4-12 12:12:23</i></h3>
+				<ul>
+					<li  class="clearfix">
+						<a href="javascript:;" class="tips">部分收货</a>
+						<img src="../../images/goods-img.jpg" />
+						<div class="items nobr">
+							<h4 class="c-black">雅诗兰黛沐浴乳</h4>
+							<p>
+								<i>尺寸：<em>红色</em></i>
+							</p>
+							<p class="c-black">
+								<i>数量：</i><em>3</em>
+							</p>
+							<p class="receipt-actual c-black">
+								<i>实收：</i>
+								<a href="javascript:;">&#8722;</a>
+								<input type="text" readonly="readonly" value="2"/>
+								<a href="javascript:;">+</a>
+							</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<a href="javascript:;" class="tips">部分收货</a>
+						<img src="../../images/goods-img.jpg" />
+						<div class="items nobr">
+							<h4 class="c-black">雅诗兰黛沐浴乳</h4>
+							<p>
+								<i>尺寸：<em>红色</em></i>
+							</p>
+							<p class="c-black">
+								<i>数量：</i><em>3</em>
+							</p>
+							<p class="receipt-actual c-black">
+								<i>实收：</i>
+								<a href="javascript:;">&#8722;</a>
+								<input type="text" readonly="readonly" value="2"/>
+								<a href="javascript:;">+</a>
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- <a href="shopreceiptsuccess.html" class="btn-red" id="custreceiptconfirm">确认收货</a> -->
+		<a href="shopreceipt.html" class="btn-red" id="custreceiptconfirm">继续收货</a>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<!-- <script type="text/javascript" src="../../js/receipt/receipt.js"></script>
+ -->
+</html>

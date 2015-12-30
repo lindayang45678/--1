@@ -1,0 +1,63 @@
+package com.lakala.module.order.service.impl;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
+import com.lakala.mapper.r.order.ExpressMapper;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.service.ExpressService;
+import com.lakala.module.order.vo.ExpressInput;
+import com.lakala.module.order.vo.ExpressOutput;
+import com.lakala.module.order.vo.ResultData;
+import com.lakala.util.MyUtil;
+import com.lakala.util.ReturnMsg;
+/**
+ * 物流服务接口的实现
+ * @author ls
+ */
+@Service
+public class ExpressServiceImpl implements ExpressService {
+	Logger logger = Logger.getLogger(ExpressServiceImpl.class);
+	@Autowired
+	private ExpressMapper expressMapper_r;
+	@Override
+	public ObjectOutput<ExpressOutput> getExpressInfo(ExpressInput ei) {
+		ObjectOutput<ExpressOutput> data = new ObjectOutput<ExpressOutput>();
+		if(ei == null || ei.getLogno() == null || ei.getLogno().equals("")){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		//通过物流单号查询相关信息
+		List<ExpressOutput> eolist = expressMapper_r.getExpressInfo(ei);
+		ExpressOutput eo = null;
+		if(eolist != null && eolist.size() > 0){
+			eo = eolist.get(0);
+		}
+		String deliveryinfo = "";
+		if(eo != null){
+			if(eo.getDeliveryComId() != null){
+				try {
+					deliveryinfo = MyUtil.connectwuliu(eo.getDeliveryComId(), ei.getLogno());
+				} catch (IOException e1) {
+					logger.error("查询物流接口失败");
+					e1.printStackTrace();
+				}
+				ResultData result =  JSON.parseObject(deliveryinfo, ResultData.class);
+				eo.setDeliveryinfo(result);
+			}
+			data.set_ReturnData(eo);
+			data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			return data;
+		}else{
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			data.set_ReturnMsg("查询为空!");
+		}
+		return data;
+	}
+}

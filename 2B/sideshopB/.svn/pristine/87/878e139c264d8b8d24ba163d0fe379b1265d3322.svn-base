@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>付款方式</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>
+		<h1>付款方式</h1>
+	</header>
+	<section class="container order-pay">
+		<div class="pay-details">
+			<p id="goodsname"></p>
+			<p><span class="fr">实付：<s class="color">¥</s><em id="actualamount"></em></span></p>
+		</div>
+		<div class="pay-items">
+			<div class="paytype-selected"><a href="javascript:;"><img src="../../images/fill_wallet.png"><button type="button" value="237">拉卡拉钱包支付</button></a></div>
+			<div><a href="javascript:;"><img src="../../images/fill_lakala.png"><button type="button" value="237">拉卡拉快捷支付</button></a></div>
+			<div><a href="javascript:;"><img src="../../images/fill_weixin.png"><button type="button" value="432">微信支付</button></a></div>
+		</div>
+		<a class="btn-red" href="javascript:;" id="topay">去付款</a>
+	</section>
+	<div class="masker hidden"><img src="../../images/loading.png" class="loading"/><p>玩命加载中...</p></div>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/orders/paytype.m.js"></script>
+</html>

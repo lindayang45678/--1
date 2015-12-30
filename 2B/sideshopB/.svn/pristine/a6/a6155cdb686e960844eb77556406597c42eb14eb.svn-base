@@ -1,0 +1,37 @@
+package com.lakala.module.order.service;
+
+import com.lakala.module.goods.vo.in.StoreChangeInPut;
+import com.lakala.base.model.TgoodskuinfoWithBLOBs;
+
+/**
+ * 
+ * @author yhg
+ *
+ */
+public interface Mongo4GoodsService {
+	
+	/**
+	 * Mongo接口调用：收集待更新数据（sku库存管理）。该方法来自从lakalaAdmin工程的移植
+	 * @param input
+	 * @param sku
+	 * @throws Exception
+	 * @author: yhg 
+	 * @time: 2015年6月1日 上午10:16:01
+	 * @todo: TODO
+	 */
+	public void setGoodsStock(StoreChangeInPut input, TgoodskuinfoWithBLOBs sku) throws Exception;
+	
+	/**
+	 * Mongo接口调用：调接口，更新库存（sku库存管理）.该方法来自从lakalaAdmin工程的移植
+	 * @param input 待更新数据
+	 * @param userid 用户ID
+	 * @param username 用户名
+	 * @throws Exception
+	 * @author: yhg 
+	 * @time: 2015年6月1日 上午10:16:04
+	 * @todo: TODO
+	 */
+	public void writeStockToMongo(StoreChangeInPut input, String userid, String username) throws Exception;
+	
+	
+}

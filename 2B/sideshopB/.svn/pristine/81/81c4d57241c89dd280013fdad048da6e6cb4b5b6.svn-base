@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.order.ShouhuoMapper">
+	<update id="updatestateinloginfo" parameterType="map" >
+     UPDATE 
+	  tlogisticsinfo o 
+	 SET
+	  o.`state` = #{state,jdbcType=INTEGER},
+	  o.`receivertime` = now() 
+	 WHERE o.`logisticsId` = #{logid,jdbcType=INTEGER}
+  	</update>
+  	<update id="updatedzstatefromcus" parameterType="map" >
+     UPDATE 
+	  torderitems o 
+	 SET
+	  o.`shipsignstate` = #{shipsignstate,jdbcType=INTEGER}
+	 WHERE o.`tOrderItemsId` = #{torderitemsid,jdbcType=INTEGER}
+  	</update>
+  	<update id="updatedzstate" parameterType="map" >
+     UPDATE 
+	  torderitems o 
+	 SET
+	  o.`state` = #{state,jdbcType=INTEGER}, 
+	  o.`shipsignstate` = #{shipsignstate,jdbcType=INTEGER}
+	 WHERE o.`tOrderItemsId` = #{torderitemsid,jdbcType=INTEGER}
+  	</update>
+  	<update id="updatedzcount" parameterType="map" >
+     UPDATE 
+	  torderitems o 
+	 SET
+	  o.`state` = #{state,jdbcType=INTEGER}, 
+	  o.`shipsignstate` = #{shipsignstate,jdbcType=INTEGER}, 
+	  o.`actualnum` = o.`actualnum` + #{actualnum,jdbcType=INTEGER}
+	 WHERE o.`tOrderItemsId` = #{torderitemsid,jdbcType=INTEGER}
+  </update>
+  <update id="updatedzstateinlogitem" parameterType="map" >
+     UPDATE 
+	  tlogisticsinfoitem o 
+	 SET
+	  o.`state` = #{state,jdbcType=INTEGER} 
+	 WHERE o.`tOrderItemsId` = #{torderitemsid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>商品详情</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>
+		<h1>商品详情</h1>
+	</header>
+	<section class="container">
+		<div class="wrap product">
+			<div id="wrapper">
+				<div id="scroller">
+					<ul id="product-pic">
+					 	<li><img src="../../images/example690x690a.png"/></li>
+					 	<li><img src="../../images/example690x690b.png"/></li>
+					 	<li><img src="../../images/example690x690a.png"/></li>
+					 	<li><img src="../../images/example690x690b.png"/></li>
+					</ul>
+				</div>
+			</div>
+			<ul id="pagination">
+				<li><a href="javascript:;" class="active">&nbsp;</a></li>
+				<li><a href="javascript:;">&nbsp;</a></li>
+				<li><a href="javascript:;">&nbsp;</a></li>
+				<li><a href="javascript:;">&nbsp;</a></li>
+			</ul>
+			<div class="pro-content">
+				<p class="pro-title">微力达拖把/神拖 拖把+拖把头 德国进口无纺布</p>
+				<div><em>商品简介：</em><i>商品简介商品简介商品简介商品简介商品简介商品简介</i></div>
+				<div><em>供应商名称：</em><i>拉卡拉电商京分公司拉卡拉电商京分公司拉卡拉电商京分公司拉卡拉电商京分公司<a href="rules.html">【售后规则】</a></span></i></div>
+				<div><em>售后地址：</em><i>北京 北京市 海淀区公北京分公8层</i></div>
+				<div><em>电话：</em><i>010-298798723234</i></div>
+				<div class="pro-lakala"><em>拉卡拉售价：</em><i>￥1284.00</i></div>
+				<div><em>库存：</em><i>23892438</i>件</div>
+			</div>
+			<div class="pro-btn clearfix">
+				<a href="javascript:;" class="sku-cancel fl">关闭</a>
+				<a href="javascript:;" class="sku-sure fr">加入购物车</a>	
+			</div>
+		</div>
+	</section>
+	<div class="masker hidden"></div>
+	<div id="sku" class="hidden">
+		<div class="sku-wrap">
+			<div class="sku-detail"><i>颜色：</i><br/><em class="sku-red">红色</em><em>红色</em></div>
+			<div class="sku-detail"><i>尺寸：</i><br/><em>M</em><em>Xl</em><em class="sku-red">XXl</em><em>XXXl</em></div>
+		</div>
+		<!-- <div class="store-wrap">
+			<div class="sku-a"><i class="stock">库存：<em>123456</em>件</i><i class="sku-solded">已售：<em>145226</em></i></div>
+			<div class="sku-a"><i class="sku-sale">拉卡拉价：<em class="color">￥1284.00</em></i><i class="sku-market">批发市场价：<em>￥1284.00</em></i></div>
+		</div>-->
+		<div class="sku-b"><em>购买数量：</em><i class="sku-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="sku-plus">+</i></div>
+		<a href="javascript:;" class="sku-cancel fl">取消</a>
+		<a href="javascript:;" class="sku-sure fr">加入购物车</a>
+	</div>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/wholesale/prodetail.js"></script>
+</html>

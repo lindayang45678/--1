@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.lakala.mapper.r.realcat.RealcateMapper" >
+	<cache/>
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Realcate" >
+    <id column="tRealCateId" property="trealcateid" jdbcType="INTEGER" />
+    <result column="tContractDetailId" property="tcontractdetailid" jdbcType="VARCHAR" />
+    <result column="realCateDisc" property="realcatedisc" jdbcType="VARCHAR" />
+    <result column="fatherRealCateId" property="fatherrealcateid" jdbcType="INTEGER" />
+    <result column="realCateStatus" property="realcatestatus" jdbcType="INTEGER" />
+    <result column="realCateIcon" property="realcateicon" jdbcType="VARCHAR" />
+    <result column="distributeProfitBase" property="distributeprofitbase" jdbcType="DECIMAL" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="ischildnode" property="ischildnode" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tRealCateId, tContractDetailId, realCateDisc, fatherRealCateId, realCateStatus, realCateIcon, 
+    distributeProfitBase, sort, ischildnode,returnAmount,subsidyAmount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+    select 
+    <include refid="Base_Column_List" />
+    from trealcate
+    where tRealCateId = #{trealcateid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" useCache="false">
+    select tRealCateId,realCateDisc,fatherRealCateId from trealcate
+  </select>
+  
+  <!-- 根据虚分类获取对应的实分类（单个虚分类） zhiziwei-->
+  <select id="selectByVirtualCate" resultMap="BaseResultMap" useCache="false" parameterType="java.lang.Integer">
+    SELECT
+		tRealCateId,
+		realCateDisc,
+		fatherRealCateId,
+		ischildnode
+	FROM
+		trealcate
+	WHERE
+		tRealCateId IN (
+			SELECT
+				distinct rid
+			FROM
+				tcategory_relation
+			WHERE
+				vid = #{tVirtualCateId, jdbcType=INTEGER})
+  </select>
+  
+  <!-- 获取APP2C下所有虚分类关联的实分类  zhiziwei-->
+  <select id="selectByVirtualCates" resultMap="BaseResultMap" useCache="false">
+    SELECT
+		tRealCateId,
+		realCateDisc,
+		fatherRealCateId,
+		ischildnode
+	FROM
+		trealcate
+	WHERE
+		tRealCateId IN (
+			SELECT
+				rid
+			FROM
+				tcategory_relation
+			WHERE
+				vid IN (SELECT tVirtualCateId FROM tvirtualcate WHERE frequencyid = 42 and virtualCateStatus = 1)
+		)
+  </select>
+  
+  <!-- 获取指定虚分类关联的有商品的实分类（只取末级）  zhiziwei-->
+  <select id="select4RidByVirtualCates" resultMap="BaseResultMap" useCache="false">
+    SELECT
+		DISTINCT tRealCateId
+	FROM
+		tgoodsinfo 
+	WHERE 
+		tRealCateId IN (
+			SELECT
+				rid
+			FROM
+				tcategory_relation
+			WHERE
+				vid IN 
+				<foreach collection="list" index="index" item="fid" open="(" close=")" separator="," >
+					#{fid.tvirtualcateid, jdbcType=INTEGER}
+				</foreach>
+		)
+  </select>
+  
+   <!-- 根据虚分类获取对应的实分类(单个父分类) zhiziwei-->
+  <select id="selectByFatherCateId" resultMap="BaseResultMap" useCache="false" parameterType="java.lang.Integer">
+	SELECT
+		tRealCateId,
+		realCateDisc,
+		fatherRealCateId,
+		ischildnode
+	FROM trealcate
+	WHERE fatherRealCateId = #{fatherRealCateId, jdbcType=INTEGER})
+  </select>
+  
+   <!-- 根据虚分类获取对应的实分类(多个父分类) zhiziwei-->
+  <select id="selectByFatherCateIds" resultMap="BaseResultMap" useCache="false" parameterType="java.lang.Integer">
+	SELECT
+		tRealCateId,
+		realCateDisc,
+		fatherRealCateId,
+		ischildnode
+	FROM trealcate
+	WHERE fatherRealCateId in 
+	<foreach collection="list" index="index" item="fid" open="(" close=")" separator="," >
+		#{fid.trealcateid, jdbcType=INTEGER}
+	</foreach>
+  </select>
+   <!-- 根据指定营销分类关联的结算分类 zhiziwei-->
+  <select id="selectRidsByVid" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+	SELECT rid tRealCateId FROM tcategory_relation WHERE vid = #{vid, jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据虚分类获取对应的实分类（单个虚分类） zhiziwei-->
+  <select id="selectByVirtualCateByRealCate" resultMap="BaseResultMap" useCache="false" parameterType="java.lang.Integer">
+    SELECT
+		tRealCateId,
+		realCateDisc,
+		fatherRealCateId,
+		ischildnode
+	FROM
+		trealcate
+	WHERE
+		tRealCateId IN (
+			SELECT
+				distinct rid
+			FROM
+				tcategory_relation
+			WHERE
+				vid = #{tVirtualCateId, jdbcType=INTEGER}) and ischildnode = 1
+  </select>
+  
+  
+</mapper>

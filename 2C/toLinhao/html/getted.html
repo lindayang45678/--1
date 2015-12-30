@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>已获红包</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../css/master.css" />
+</head>
+
+<body class="index">
+	<img src="../images/turn-1bg.png" alt=""/>
+	<section class="getted-wrap">
+		<a href="redPacketIndex.html" class="get-one-more"></a>
+        <div class="msg">红包已存入您的<span>18934087634</span>账号!</div>
+        <h2 class="today-getimg"><img src="../images/hasgetted.png" alt=""/></h2>
+        <div class="num"><img src="../images/money.png" alt=""/><p>8</p></div>
+        <a href="m.lakalaec.com" class="buynow"></a>
+        <div class="app-download"></div>
+	</section>
+    <section class="shade">
+	</section>
+	<section class="main">
+		<div class="main-wrap">
+    		<del class="del"><img src="../images/del.png" alt=""/></del>
+        	<div class="links">
+        	<a href="#" class="link1"><img src="../images/android.png" alt=""/><span>Android下载</span></a>
+        	<div class="link2"><img src="../images/iphone.png" alt=""/><span>Iphone下载</span></div>
+        	</div>
+    	</div>
+	</section>
+</body>
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$(".app-download").click(function(){
+			$(".shade").show();
+			$(".main").show("slow");
+			});
+		$(".del").click(function(){
+			$(this).parent().parent().hide('slow');
+			$(this).parent().parent().siblings('.shade').hide();
+			});
+	});
+</script>
+</html>

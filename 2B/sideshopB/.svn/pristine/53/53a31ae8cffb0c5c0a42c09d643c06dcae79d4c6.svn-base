@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>收益查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>	
+		<a href="../homepage/index.html" class="back"></a>	
+		<h1>收益查询</h1>
+	</header>
+	<section class="wrap">
+		<div class="incomes">
+			<div class="incomes-info">
+				<h2 class="f-14 c-black"><a href="javascript:;">自营商品</a></h2>
+				
+				<div>
+					<a href="incomesmonth.html?type=self" id="self-no">
+						<div class="incomes-l">
+							<p class="f-16">今日流水</p>
+							<i>￥</i><em>0.00</em>
+						</div>
+					</a>
+					<a href="incomesmonth.html?type=self" id="self-yes">
+						<div class="incomes-r">
+							<p class="f-16">今日到账</p>
+							<i>￥</i><em>0.00</em>
+						</div>
+					</a>
+					<div class="incomes-bottom clear"><a href="incomes.html?type=self">累计流水￥<em>0.00</em></a></div>
+				</div>
+			</div>
+			<div class="incomes-info">
+				<h2 class="f-14 c-black"><a href="javascript:;">平台商品</a></h2>
+				<div>
+					<a href="incomesmonth.html?type=plat" id="plat-no">
+						<div class="incomes-l">
+							<p class="f-16">本月分润</p>
+							<i>￥</i><em>0.00</em>
+						</div>
+					</a>
+					<a href="incomesmonth.html?type=plat" id="plat-yes">
+						<div class="incomes-r">
+							<p class="f-16">本月到账</p>
+							<i>￥</i><em>0.00</em>
+						</div>
+					</a>
+					<div class="incomes-bottom clear"><a href="incomes.html?type=plat">累计分润￥<em>0.00</em></a></div>
+				</div>
+			</div>
+		</div>
+		<p class="incomes-info-bottom">温馨提示：<br/>若订单产生退货行为，则该订单的流水或分润，将在当前或下个结算周期中扣除；<a href="rules.html" class="hidden">收益规则说明.</a></p>
+	</section>
+	
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/incomes/index.js"></script>
+</body>
+</html>

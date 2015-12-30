@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:amq="http://activemq.apache.org/schema/core" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans    
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context 
+     	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     	http://www.springframework.org/schema/util
+     	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+        http://www.springframework.org/schema/aop
+	 	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	 	http://www.springframework.org/schema/tx
+	 	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	 	http://www.springframework.org/schema/jms 
+	 	http://www.springframework.org/schema/jms/spring-jms-4.0.xsd">
+	
+	<context:annotation-config/>   
+
+	<context:component-scan base-package="com.lakala.module"/>
+
+<!-- 配置ConnectionFactory -->
+	<!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供-->  
+	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">  
+		<property name="brokerURL" value="tcp://127.0.0.1:61616"/>
+	</bean>  
+	
+	<!-- 连接池配置 -->
+	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+	    <property name="connectionFactory" ref="targetConnectionFactory"></property>
+   </bean>
+  
+   <!-- Spring JMS Template -->
+  <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+    <property name="connectionFactory" ref="jmsFactory">
+    </property>
+    <property name="explicitQosEnabled" value="true" /> 
+     <!-- deliveryMode, priority, timeToLive 的开关，要生效，必须配置为true，默认false--> 
+    <property name="deliveryMode" value="1" /> 
+     <!-- 发送模式  DeliveryMode.NON_PERSISTENT=1:非持久 ; DeliveryMode.PERSISTENT=2:持久-->  
+      <property name="pubSubDomain" value="false" />  
+  </bean>
+  
+  <bean id="SideShopQueue" class="org.apache.activemq.command.ActiveMQQueue">  
+    <constructor-arg value="SideShopQueue"/>  
+  </bean>  
+	
+  <bean id="SideShopPoolMessageListener" class="com.lakala.module.listener.SideShopPoolMessageListener"/>
+  
+  <bean id="sideShopQueueMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">  
+	    <property name="connectionFactory" ref="jmsFactory"/>  
+	    <property name="destination" ref="SideShopQueue"/>  
+	    <property name="messageListener" ref="SideShopPoolMessageListener"/>  
+	</bean>   
+</beans>

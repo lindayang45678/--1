@@ -1,0 +1,85 @@
+$(function() {
+	var url = window.location.href;
+	var newsId = getParamValueByName(url, "newsId");
+	if(newsId != "") {
+		storage.setItem("newsId", newsId);
+	} else {
+		newsId = storage.getItem("newsId");
+	}
+
+	if($.trim(newsId) == "") {
+		$(".notice-wrap").hide();
+		showAlertMsg(msgNoneNews);
+		//window.location.href = "index.html?t=" + t;
+	} else {
+		//获取消息通知列表
+		getNewsInfoById(newsId);
+	}
+})
+
+function getNewsInfoById(newsId) {
+	var data = {"newsId":newsId};
+	var resultJson = ajaxCommon(urlGetNewsInfo, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		if(_ReturnData.length > 0) {
+			var newsDateTime = _ReturnData[0].date;
+			var content = "";  //消息内容
+			var type = "";  //0:商品详情 1：商品列表  2：外链  3：专题列表  4：咨询
+			var itemsid = "";  //子节点id
+			var childtitle = "";  //子消息标题
+			var picture = "";  //消息图片
+			var result = "";
+			var url = "";  //消息链接到的url
+
+			$("#notice-time").html(newsDateTime);
+			for(var i = 0; i < _ReturnData.length; i ++) {
+				content = _ReturnData[i].content;
+				type = _ReturnData[i].type;
+				itemsid = _ReturnData[i].itemsid;
+				childtitle = _ReturnData[i].childtitle;
+				picture = _ReturnData[i].picture;
+				url = getUrlByType(type, content);
+				
+				if(i == 0) {
+					result += "<a class='top' href='" + url + "'>";
+					result += "<img src='../../images/products.jpg'/>";
+					result += "<em>" + childtitle + "</em>";
+					result += "</a>";
+					result += "<ul class='items'>";
+				} else if(i == _ReturnData.length) {
+					result += "</ul>";
+				} else {
+					result += "<li class='clearfix'>";
+					result += "<a href='" + url + "'>";
+					result += "<em>" + childtitle + "</em>";
+					result += "<img src='../../images/product3.jpg' />";
+					result += "</a>";
+					result += "</li>";
+				}
+			}
+			$(".products").html(result);
+		} else {
+			$(".notice-wrap").hide();
+			showAlertMsg(msgNewsInfoFail);
+			//window.location.href = "index.html?t=" + t;
+		}
+	} else {
+		$(".notice-wrap").hide();
+		showAlertMsg(msgNewsInfoFail);
+		//window.location.href = "index.html?t=" + t;
+	}
+}
+
+function getUrlByType(type, content) {
+	//0:商品详情  1：商品列表  2：外链  3：专题列表  4：咨询
+	var url = "";
+	if(type == "0") {
+		url = "../wholesale/prodetail.html?goodsid=" + content + "&t=" + t;
+	} else {
+		url = content;
+	}
+
+	return url;
+}

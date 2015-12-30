@@ -1,0 +1,46 @@
+package com.lakala.mapper.r.order;
+
+import java.util.List;
+import java.util.Map;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.model.Torder;
+import com.lakala.model.order.OrderInfo;
+import com.lakala.module.order.vo.OrderDetailInput;
+
+
+public interface TorderMapper {
+
+	Torder selectByPrimaryKey(String torderid);
+	
+	/**
+	 * 查询订单列表-用于身边店主订单多条件查询
+	 * @param map
+	 * @return
+	 * @author: yhg 
+	 * @time: 2015年3月4日 下午6:17:21
+	 * @todo: TODO
+	 */
+	List<OrderInfo> queryCommonOrderByMap(Map<String,Object> map);
+	
+	/**
+	 * 查询订单总数-用于身边店主订单多条件查询
+	 * @param map
+	 * @return
+	 * @author: yhg 
+	 * @time: 2015年3月4日 下午6:18:03
+	 * @todo: TODO
+	 */
+	Integer countCommonOrderByMap(Map<String,Object> map);
+
+	/**
+	 * 查询订单详情-用于身边店主订单多条件查询 返回json数据，
+	 * @param orderinput
+	 * @return
+	 * @throws LakalaException
+	 * @author: yhg 
+	 * @time: 2015年3月5日 上午11:21:10
+	 * @todo: TODO
+	 */
+	OrderInfo viewOrderByMap(OrderDetailInput orderdetailinput);
+}

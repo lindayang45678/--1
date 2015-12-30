@@ -1,0 +1,17 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="ehcache.xsd">
+   
+  <diskStore path="java.io.tmpdir"/>
+  
+  <defaultCache
+    maxElementsInMemory="1000" maxElementsOnDisk="0" eternal="true" overflowToDisk="true"
+    diskPersistent="false" timeToIdleSeconds="0" timeToLiveSeconds="0" diskSpoolBufferSizeMB="50"
+    diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LFU" />
+    
+  <cache 
+  	name="kdbGoodsCache" maxElementsInMemory="1000" maxElementsOnDisk="0" eternal="false" overflowToDisk="true"
+    diskPersistent="false" timeToIdleSeconds="0" timeToLiveSeconds="120" diskSpoolBufferSizeMB="500"
+    diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LFU" />
+
+   
+</ehcache>

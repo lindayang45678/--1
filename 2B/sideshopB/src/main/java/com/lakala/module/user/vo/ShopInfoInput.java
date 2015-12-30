@@ -1,0 +1,206 @@
+package com.lakala.module.user.vo;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.lakala.module.comm.ObjectInput;
+
+public class ShopInfoInput extends ObjectInput{
+
+	private Long id;
+	
+	private String psam;
+	
+	private String phone;
+	
+	private String shopname;	//配送员
+	private String type;
+	
+	private String announcement;  //店铺公告
+	
+	private Integer homeDeliver;//送货上门，支付方式
+	
+	private Integer is_pickup; //到店自提
+	
+	//是否支持货到付款和在线支付；0：表示只支持在线支付，1：表示在线支付和货到付款都支持
+	private Integer is_homepay;
+	
+	private String weixin_no;	//微信号
+	
+	private List<Map<String, String>> dispatcherlist;
+	
+	private String imgInfoList;
+	
+	private HttpServletRequest req;
+	
+	//营业状态
+	private int businessState;
+	//营业开始时间
+	private String businessStartTime;
+	//营业结束时间
+	private String businessEndTime;
+	//起送金额（元）
+	private BigDecimal minAmount;
+	//运费（元）
+	private BigDecimal transportExpense;
+	//单笔满额免运费（元）
+	private BigDecimal singleFreeExpense;
+	
+
+	public String getPsam() {
+		return psam;
+	}
+
+	public void setPsam(String psam) {
+		this.psam = psam;
+	}
+
+	public Integer getHomeDeliver() {
+		return homeDeliver;
+	}
+
+	public void setHomeDeliver(Integer homeDeliver) {
+		this.homeDeliver = homeDeliver;
+	}
+
+	public Integer getIs_pickup() {
+		return is_pickup;
+	}
+
+	public void setIs_pickup(Integer is_pickup) {
+		this.is_pickup = is_pickup;
+	}
+
+	public Integer getIs_homepay() {
+		return is_homepay;
+	}
+
+	public void setIs_homepay(Integer is_homepay) {
+		this.is_homepay = is_homepay;
+	}
+
+	public HttpServletRequest getReq() {
+		return req;
+	}
+
+	public void setReq(HttpServletRequest req) {
+		this.req = req;
+	}
+
+	public String getImgInfoList() {
+		return imgInfoList;
+	}
+
+	public void setImgInfoList(String imgInfoList) {
+		this.imgInfoList = imgInfoList;
+	}
+
+	public String getShopname() {
+		return shopname;
+	}
+
+	public void setShopname(String shopname) {
+		this.shopname = shopname;
+	}
+
+	public List<Map<String, String>> getDispatcherlist() {
+		return dispatcherlist;
+	}
+
+	public void setDispatcherlist(List<Map<String, String>> dispatcherlist) {
+		this.dispatcherlist = dispatcherlist;
+	}
+
+	public String getWeixin_no() {
+		return weixin_no;
+	}
+
+	public void setWeixin_no(String weixin_no) {
+		this.weixin_no = weixin_no;
+	}
+
+	public String getAnnouncement() {
+		return announcement;
+	}
+
+	public void setAnnouncement(String announcement) {
+		this.announcement = announcement;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public int getBusinessState() {
+		return businessState;
+	}
+
+	public void setBusinessState(int businessState) {
+		this.businessState = businessState;
+	}
+
+	public String getBusinessStartTime() {
+		return businessStartTime;
+	}
+
+	public void setBusinessStartTime(String businessStartTime) {
+		this.businessStartTime = businessStartTime;
+	}
+
+	public String getBusinessEndTime() {
+		return businessEndTime;
+	}
+
+	public void setBusinessEndTime(String businessEndTime) {
+		this.businessEndTime = businessEndTime;
+	}
+
+	public BigDecimal getMinAmount() {
+		return minAmount;
+	}
+
+	public void setMinAmount(BigDecimal minAmount) {
+		this.minAmount = minAmount;
+	}
+
+	public BigDecimal getTransportExpense() {
+		return transportExpense;
+	}
+
+	public void setTransportExpense(BigDecimal transportExpense) {
+		this.transportExpense = transportExpense;
+	}
+
+	public BigDecimal getSingleFreeExpense() {
+		return singleFreeExpense;
+	}
+
+	public void setSingleFreeExpense(BigDecimal singleFreeExpense) {
+		this.singleFreeExpense = singleFreeExpense;
+	}
+	
+	
+}

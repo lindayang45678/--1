@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单收益月查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+	<link rel="stylesheet" href="../../css/admin.css" />
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html">批发进货</a>
+			<a href="../order-query/order-query.html">订单查询</a>
+			<a href="../benefit-query/order-income.html" class="active">收益查询</a>
+			<a href="../sales-manage/sales-list.html">销售员管理</a>
+			<a href="../tools/index.html">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+		<menu>
+			<a href="../benefit-query/order-income.html" class="active">订单收益查询</a>
+			<a href="../benefit-query/my-coupons.html">我的优惠卷</a>
+			<a href="../benefit-query/index.html">商品预期收益</a>
+			<a href="../benefit-query/benefit-rule.html">收益规则说明</a>
+			<a href="../tools/index.html">返回店主工具</a>
+			<a href="#">返回商城首页</a>
+		</menu>
+		<section class="main">
+			<div class="title">
+				<h2>订单收益查询</h2>
+			</div>
+			<div class="main-wrap">
+				<div id="order-income-detail">
+					<div class="order-income-detail-wrap">
+						<table>
+							<tr>
+								<td>订单号：<span class="order-number">12345678912345678</span></td>
+								<td>订单类型：<span>普通订单</span></td>
+								<td>下订时间：<span>2014-07-07 08:20:20</span></td>
+							</tr>
+							<tr>
+								<td>售后状态：<span>无售后</span></td>
+								<td>订单状态：<span>已签收</span></td>
+								<td>签收时间：<span>2014-07-07 08:20:20</span></td>
+							</tr>
+							<tr>
+								<td>订单金额：<span>￥33.00</span></td>
+								<td>来源终端：<span>手机</span></td>
+								<td>终端渠道：<span>收款宝</span></td>
+							</tr>
+							<tr>
+								<td>分润总额：<span>￥33.00</span></td>
+								<td>返现总额：<span>￥33.00</span></td>
+								<td>补贴金额：<span>￥33.00</span></td>
+							</tr>
+							<tr>
+								<td>收货人手机号：<span>13512345678</span></td>
+								<td>收货人姓名：<span>张嘉怡</span></td>
+								<td>配送方式：<span>到店自提</span></td>
+							</tr>
+						</table>
+						<ul>
+							<li>订单归属：<span>销售员</span>-<span>巫龙飞</span>（<span>13512345678</span>）</li>
+							<li>配置地址：<span>北京市海淀区中关村大街甲8号丹棱SOHO大厦7楼</span></li>
+							<li>本地总收益：<span>分润</span><em>￥33.00</em><span>返现</span><em>￥33.00</em><span>补贴</span><em>￥33.00</em></li>
+							<li>开店宝收益结算状态：<span>已结算</span></li>
+							<li>开店宝收益：<span>分润</span><em>￥33.00</em><span>返现</span><em>￥33.00</em><span>补贴</span><em>￥33.00（已扣88元）</em></li>
+							<li>开店宝收益结算状态：<span>已结算</span></li>
+							<li>销售员收益：<span>分润</span><em>￥33.00</em><span>返现</span><em>￥33.00</em><span>补贴</span><em>￥33.00（已扣88元）</em></li>
+							<li>销售员收益结算状态：<span>已结算</span></li>
+						</ul>
+						<dl>
+							<dt><img src="../../images/admin/goodsmallpic.png"/></dt>
+							<dd>棉麻布艺抱枕套 午睡抱枕套 沙发靠垫套</dd>
+							<dd>购买数量：<span>1</span></dd>
+							<dd>购买数量：<span>1</span>商品金额：<span>￥33.00</span>分润金额：<span>￥33.00</span></dd>
+						</dl>
+						
+					</div>
+				</div>
+				<div class="foot-line"></div>
+				<a href="../benefit-query/order-income-month.html" class="income-month-btn btn-blue">返回上一页</a>
+			</div>
+		</section>
+	</section>
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myscroll = new iScroll("order-income-detail",{hScrollbar:false, vScrollbar:true, fixedScrollbar:true, hideScrollbar:true});
+		});
+	</script>
+</body>
+</html>

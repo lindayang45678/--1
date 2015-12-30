@@ -1,0 +1,37 @@
+package com.lakala.module.order.vo;
+
+import java.util.List;
+
+import com.lakala.model.order.OrderCommonInfo;
+
+/**
+ * 
+ * @author yhg
+ *
+ */
+public class OrderMultQueryOutput{
+	
+	/** 订单总数 */
+	private Integer total;
+	
+	/** 显示前端的大订单号数组*/
+	private List<OrderCommonInfo> orderlist;
+
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+
+	public List<OrderCommonInfo> getOrderlist() {
+		return orderlist;
+	}
+
+	public void setOrderlist(List<OrderCommonInfo> orderlist) {
+		this.orderlist = orderlist;
+	}
+
+	
+}

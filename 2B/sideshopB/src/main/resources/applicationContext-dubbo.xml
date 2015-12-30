@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://code.alibabatech.com/schema/dubbo 
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<dubbo:application name="lakala-sideshopB-client"  owner="lipeihua" organization="lakala"/>
+   
+    <!-- 促销接口 -->
+    <dubbo:reference id="OrderRemote" interface="com.lakala.promotion.remote.OrderRemote" check="false"/>
+    
+    <!-- 
+		正式环境   支付接口 
+		上面走拉卡拉支付
+		下面走走支付宝、微信-->
+	
+	<!---->
+	
+  <!--   <dubbo:reference id="payLakalaService"     group="payIntranet"  interface="com.lakala.service.PayLakalaService" />
+	<dubbo:reference id="payLakalaService_out" group="payExtranet" interface="com.lakala.service.PayLakalaService" />  -->
+	<!--测试  -->
+	 <dubbo:reference id="payLakalaServiceIntranet"      interface="com.lakala.service.PayLakalaService" />
+	<dubbo:reference id="payLakalaServiceExtranet"  interface="com.lakala.service.PayLakalaService" />
+	<dubbo:consumer timeout="30000" >
+    </dubbo:consumer>
+	
+    <!-- redis 查询商品售价接口 -->
+    <!-- <dubbo:reference id="redis" interface="com.lakala.service.Redis" check="false"/> -->
+    
+    <dubbo:reference id="userWebService" timeout="100000" interface="com.lakala.remote.UserWebService" check="false"/>
+    
+    <!--订单W接口 -->
+    <dubbo:reference id="orderDubboServiceImplW" interface="w.com.lakala.order.service.OrderDubboService"
+                     check="false"/>
+</beans>

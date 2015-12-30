@@ -1,0 +1,30 @@
+//分享
+//$(function() {
+//	$('#share').on('tap', function(e) {
+//		var title = $(this).siblings('h2').text();
+//		cordova._native.share.share(title, title, '', function() {
+//			
+//		}, function() {
+//			
+//		});
+//	});
+//});
+
+/* 获取店主信息 */
+$(function(){
+	var data = {"id":shopId};
+	var resultJson = ajaxCommon(urlShopInfo, data);
+	resultJson = convertNullToEmpty(resultJson);
+	
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		$("#shopname").html("").html(_ReturnData.shopname);
+	}else{
+		//接口返回错误
+	}
+	var hasMoreShops = storage.getItem("hasMoreShops")|| 0;
+	//如果hasMoreShops == 0时，只有一个小店，“查看我的其他小店”隐藏
+	if(hasMoreShops==0){
+		$('.list3').addClass('hidden');
+	}
+});

@@ -1,0 +1,169 @@
+package com.lakala.module.profit.vo;
+
+import java.math.BigDecimal;
+
+/**
+ * 收益查询数据
+ * 
+ * @author pengyunle
+ *
+ */
+public class OrderEarningsOutput {
+
+	/** 验证令牌 */
+	protected String token;
+	/** 支付号 */
+	private String orderId;
+	/** 大订单号 */
+	private String prioderOrderId;
+	/** 支付方式 */
+	private String payMode;
+	/** 收益日期 */
+	private String earningsDate;
+	/** 店主收益 */
+	private BigDecimal earningsAmount;
+	/** 正向逆向订单区分 */
+	private int returnFlg;
+
+	/** 支付费率 */
+	private BigDecimal payRate;
+
+	/** 支付手续费 */
+	private BigDecimal payRateAmount;
+
+	/** 支付手续费公式 */
+	private String payRateFormula;
+
+	/** 自营平台结算金额 */
+	private BigDecimal settlementAmount;
+	/** 自营平台结算公式 */
+	private String settlementFormula;
+	/** 自营平台运费 */
+	private BigDecimal freight;
+	/** 自营平台优惠金额 */
+	private BigDecimal couponValue;
+
+	/** 自营平台订单金额（二级订单） */
+	private BigDecimal orderAmount;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getPrioderOrderId() {
+		return prioderOrderId;
+	}
+
+	public void setPrioderOrderId(String prioderOrderId) {
+		this.prioderOrderId = prioderOrderId;
+	}
+
+	public String getEarningsDate() {
+		return earningsDate;
+	}
+
+	public BigDecimal getEarningsAmount() {
+		return earningsAmount;
+	}
+
+	public void setEarningsAmount(BigDecimal earningsAmount) {
+		this.earningsAmount = earningsAmount;
+	}
+
+	public String getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(String payMode) {
+		this.payMode = payMode;
+	}
+
+	public int getReturnFlg() {
+		return returnFlg;
+	}
+
+	public void setReturnFlg(int returnFlg) {
+		this.returnFlg = returnFlg;
+	}
+
+	public void setEarningsDate(String earningsDate) {
+		this.earningsDate = earningsDate;
+	}
+
+	public BigDecimal getPayRate() {
+		return payRate;
+	}
+
+	public void setPayRate(BigDecimal payRate) {
+		this.payRate = payRate;
+	}
+
+	public BigDecimal getSettlementAmount() {
+		return settlementAmount;
+	}
+
+	public void setSettlementAmount(BigDecimal settlementAmount) {
+		this.settlementAmount = settlementAmount;
+	}
+
+	public String getSettlementFormula() {
+		return settlementFormula;
+	}
+
+	public void setSettlementFormula(String settlementFormula) {
+		this.settlementFormula = settlementFormula;
+	}
+
+	public BigDecimal getPayRateAmount() {
+		return payRateAmount;
+	}
+
+	public void setPayRateAmount(BigDecimal payRateAmount) {
+		this.payRateAmount = payRateAmount;
+	}
+
+	public String getPayRateFormula() {
+		return payRateFormula;
+	}
+
+	public void setPayRateFormula(String payRateFormula) {
+		this.payRateFormula = payRateFormula;
+	}
+
+	public BigDecimal getFreight() {
+		return freight;
+	}
+
+	public void setFreight(BigDecimal freight) {
+		this.freight = freight;
+	}
+
+	public BigDecimal getCouponValue() {
+		return couponValue;
+	}
+
+	public void setCouponValue(BigDecimal couponValue) {
+		this.couponValue = couponValue;
+	}
+
+	public BigDecimal getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(BigDecimal orderAmount) {
+		this.orderAmount = orderAmount;
+	}
+
+}

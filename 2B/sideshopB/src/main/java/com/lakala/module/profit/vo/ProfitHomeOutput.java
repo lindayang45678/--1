@@ -1,0 +1,269 @@
+package com.lakala.module.profit.vo;
+
+/**
+ * 收益首页数据
+ * 
+ * @author pengyunle
+ *
+ */
+public class ProfitHomeOutput {
+
+	/** 验证令牌 */
+	protected String token;
+
+	/** 自营流水今日 */
+	private String ownTodayEarnings;
+
+	/** 自营流水今日订单单数 */
+	private Long ownTodayOrderNum;
+
+	/** 自营流水累计 */
+	private String ownAddEarnings;
+
+	/** 自营流水累计订单 */
+	private Long ownAddOrderNum;	
+	
+
+	/** 自营今日到账 */
+	private String ownSettleAmont;
+	
+	/** 自营今日到账订单单数 */
+	private Long ownSettleNum;
+	
+	/** 自营总到账金额 */
+	private String ownTotalSettleAmont;
+	/** 自营总到账单数 */
+	private Long ownTotalSettleNum;
+
+	
+	
+	/** 自营今日结算金额 */
+	private String ownSettleTodayAmont;
+
+	/** 自营今日结算订单数 */
+	private Long ownSettleTodayNum;
+
+	/** 自营累计结算金额 */
+	private String ownSettleAddUpAmont;
+
+	/** 自营累计结算订单数 */
+	private Long ownSettleAddUpNum;
+	
+
+	/** 自营结算日期 */
+	private String ownSettleDate;
+	
+	
+
+	/** 平台周期收益 */
+	private String terraceEarnings;
+
+	/** 平台周期收益单数 */
+	private Long terraceOrderNum;
+
+	/** 平台累计收益 */
+	private String terraceAddEarnings;
+
+	/** 平台累计订单 */
+	private Long terraceAddOrderNum;
+
+	/** 平台周期结算金额 */
+	private String terraceSettleAmont;
+
+	/** 平台累计总到账 */
+	private String terraceTotalSettleAmont;
+
+	/** 平台周期结算单数 */
+	private Long terraceSettleNum;
+
+	/** 平台结算日期开始 */
+	private String terraceSettleDateS;
+
+	/** 平台结算日期结束 */
+	private String terraceSettleDateE;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getOwnTodayEarnings() {
+		return ownTodayEarnings;
+	}
+
+	public void setOwnTodayEarnings(String ownTodayEarnings) {
+		this.ownTodayEarnings = ownTodayEarnings;
+	}
+
+	public Long getOwnTodayOrderNum() {
+		return ownTodayOrderNum;
+	}
+
+	public void setOwnTodayOrderNum(Long ownTodayOrderNum) {
+		this.ownTodayOrderNum = ownTodayOrderNum;
+	}
+
+	public String getOwnAddEarnings() {
+		return ownAddEarnings;
+	}
+
+	public void setOwnAddEarnings(String ownAddEarnings) {
+		this.ownAddEarnings = ownAddEarnings;
+	}
+
+	public Long getOwnAddOrderNum() {
+		return ownAddOrderNum;
+	}
+
+	public void setOwnAddOrderNum(Long ownAddOrderNum) {
+		this.ownAddOrderNum = ownAddOrderNum;
+	}
+
+	public String getOwnSettleAmont() {
+		return ownSettleAmont;
+	}
+
+	public void setOwnSettleAmont(String ownSettleAmont) {
+		this.ownSettleAmont = ownSettleAmont;
+	}
+
+	public Long getOwnSettleNum() {
+		return ownSettleNum;
+	}
+
+	public void setOwnSettleNum(Long ownSettleNum) {
+		this.ownSettleNum = ownSettleNum;
+	}
+
+	public String getOwnSettleDate() {
+		return ownSettleDate;
+	}
+
+	public void setOwnSettleDate(String ownSettleDate) {
+		this.ownSettleDate = ownSettleDate;
+	}
+
+	public String getTerraceEarnings() {
+		return terraceEarnings;
+	}
+
+	public void setTerraceEarnings(String terraceEarnings) {
+		this.terraceEarnings = terraceEarnings;
+	}
+
+	public Long getTerraceOrderNum() {
+		return terraceOrderNum;
+	}
+
+	public void setTerraceOrderNum(Long terraceOrderNum) {
+		this.terraceOrderNum = terraceOrderNum;
+	}
+
+	public String getTerraceAddEarnings() {
+		return terraceAddEarnings;
+	}
+
+	public void setTerraceAddEarnings(String terraceAddEarnings) {
+		this.terraceAddEarnings = terraceAddEarnings;
+	}
+
+	public Long getTerraceAddOrderNum() {
+		return terraceAddOrderNum;
+	}
+
+	public void setTerraceAddOrderNum(Long terraceAddOrderNum) {
+		this.terraceAddOrderNum = terraceAddOrderNum;
+	}
+
+	public String getTerraceSettleAmont() {
+		return terraceSettleAmont;
+	}
+
+	public void setTerraceSettleAmont(String terraceSettleAmont) {
+		this.terraceSettleAmont = terraceSettleAmont;
+	}
+
+	public Long getTerraceSettleNum() {
+		return terraceSettleNum;
+	}
+
+	public void setTerraceSettleNum(Long terraceSettleNum) {
+		this.terraceSettleNum = terraceSettleNum;
+	}
+
+	public String getTerraceSettleDateS() {
+		return terraceSettleDateS;
+	}
+
+	public void setTerraceSettleDateS(String terraceSettleDateS) {
+		this.terraceSettleDateS = terraceSettleDateS;
+	}
+
+	public String getTerraceSettleDateE() {
+		return terraceSettleDateE;
+	}
+
+	public void setTerraceSettleDateE(String terraceSettleDateE) {
+		this.terraceSettleDateE = terraceSettleDateE;
+	}
+
+	public String getOwnTotalSettleAmont() {
+		return ownTotalSettleAmont;
+	}
+
+	public void setOwnTotalSettleAmont(String ownTotalSettleAmont) {
+		this.ownTotalSettleAmont = ownTotalSettleAmont;
+	}
+
+	public String getTerraceTotalSettleAmont() {
+		return terraceTotalSettleAmont;
+	}
+
+	public void setTerraceTotalSettleAmont(String terraceTotalSettleAmont) {
+		this.terraceTotalSettleAmont = terraceTotalSettleAmont;
+	}
+
+	public String getOwnSettleTodayAmont() {
+		return ownSettleTodayAmont;
+	}
+
+	public void setOwnSettleTodayAmont(String ownSettleTodayAmont) {
+		this.ownSettleTodayAmont = ownSettleTodayAmont;
+	}
+
+	public Long getOwnSettleTodayNum() {
+		return ownSettleTodayNum;
+	}
+
+	public void setOwnSettleTodayNum(Long ownSettleTodayNum) {
+		this.ownSettleTodayNum = ownSettleTodayNum;
+	}
+
+	public String getOwnSettleAddUpAmont() {
+		return ownSettleAddUpAmont;
+	}
+
+	public void setOwnSettleAddUpAmont(String ownSettleAddUpAmont) {
+		this.ownSettleAddUpAmont = ownSettleAddUpAmont;
+	}
+
+	public Long getOwnSettleAddUpNum() {
+		return ownSettleAddUpNum;
+	}
+
+	public void setOwnSettleAddUpNum(Long ownSettleAddUpNum) {
+		this.ownSettleAddUpNum = ownSettleAddUpNum;
+	}
+
+	public Long getOwnTotalSettleNum() {
+		return ownTotalSettleNum;
+	}
+
+	public void setOwnTotalSettleNum(Long ownTotalSettleNum) {
+		this.ownTotalSettleNum = ownTotalSettleNum;
+	}
+
+}

@@ -1,0 +1,20 @@
+package com.lakala.module.mongo.service;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+
+/**
+ * Created by HOT.LIU on 2015/5/20.
+ */
+public interface SideShopBMongoService {
+
+    /**
+     * 获得批发进货左侧树形分类.
+     *
+     * @param psam the psam
+     * @param channelid the channelid
+     * @return the object output
+     * @throws LakalaException the lakala exception
+     */
+    public ObjectOutput left_mongo(String psam, String channelid) throws LakalaException;
+}

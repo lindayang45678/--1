@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>顾客取货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="custreceiptinfo">
+	<header id="receipt">
+		<a href="shopreceipt.html" class="back"></a>	
+		<h1 class="opacity"><a href="shopreceipt.html">店主收货</a></h1>
+		<a href="custreceipt.html" class="head-right">顾客取货</a>
+	</header>
+	<section class="wrap letter">
+		<div class="receipt c-gray">
+			<h2 class="f-16 center color"><span><i></i>验证通过，可以收货！</span></h2>
+			<div class="receipt-info info">
+				<div>取货码<i>2132442</i></div>
+				<div>商户<i>小熊的小店</i></div>
+				<div>取货人<i>巫龙飞</i></div>
+				<div>电话<i>13522323232</i></div>
+				<div>付款方式<i class="color">货到付款</i></div>
+				<div>待付款金额<i>¥100.00</i></div>
+			</div>
+			<div class="receipt-goods">
+				<h3><span>拉卡拉电商公司拉卡拉电商公司拉卡拉电商公司</span><i class="fr">2015-4-12 12:12:23</i></h3>
+				<ul>
+					<li class="clearfix">
+						<img src="../../images/goods-img.jpg" />
+						<div class="items nobr">
+							<h4 class="c-black">雅诗兰黛沐浴乳</h4>
+							<p>
+								<i>尺寸：<em>红色</em></i>
+							</p>
+							<p class="c-black">
+								<i>数量：</i><em>3</em>
+							</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<img src="../../images/goods-img.jpg" />
+						<div class="items nobr">
+							<h4 class="c-black">雅诗兰黛沐浴乳</h4>
+							<p>
+								<i>尺寸：<em>红色</em></i>
+							</p>
+							<p class="c-black">
+								<i>数量：</i><em>3</em>
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="receipt-goods">
+				<h3><span>拉卡拉电商公司拉卡拉电商公司拉卡拉电商公司</span><i class="fr">2015-4-12 12:12:23</i></h3>
+				<ul>
+					<li  class="clearfix">
+						<img src="../../images/goods-img.jpg" />
+						<div class="items nobr">
+							<h4 class="c-black">雅诗兰黛沐浴乳</h4>
+							<p>
+								<i>尺寸：<em>红色</em></i>
+							</p>
+							<p class="c-black">
+								<i>数量：</i><em>3</em>
+							</p>
+						</div>
+					</li>
+					<li  class="clearfix">
+						<img src="../../images/goods-img.jpg" />
+						<div class="items nobr">
+							<h4 class="c-black">雅诗兰黛沐浴乳</h4>
+							<p>
+								<i>尺寸：<em>红色</em></i>
+							</p>
+							<p class="c-black">
+								<i>数量：</i><em>3</em>
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<a href="custreceiptsuccess.html" class="btn-red" id="custreceiptconfirm">确认取货</a>
+		<a href="#" class="btn-gray reject" id="custreceiptreject">顾客拒收</a>
+		<div class="pop-up-box hidden">
+			<div>
+				<p class="f-18 c-gray">是否确认拒收 </p>
+				<input class="btn-gray" type="button" value="取&nbsp;消&nbsp;" id="custRejectCancel"/>
+				<input class="btn-red" type="button" value="确&nbsp;认 &nbsp;" id="custRejectConfirm"/>
+			</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<!--<script type="text/javascript" src="../../js/receipt/custreceiptinfo.js"></script>
+-->
+</html>

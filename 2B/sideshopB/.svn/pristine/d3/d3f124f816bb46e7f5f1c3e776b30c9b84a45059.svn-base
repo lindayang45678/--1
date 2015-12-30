@@ -1,0 +1,78 @@
+package com.lakala.module.goods.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectInput;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.vo.CategoryInput;
+import com.lakala.module.goods.vo.GoodsInput;
+import com.lakala.module.goods.vo.GoodsListInput;
+import com.lakala.module.goods.vo.MarketableInput;
+import com.lakala.module.goods.vo.PropertyKeyVO;
+import com.lakala.module.goods.vo.RealCateVO;
+import com.lakala.module.goods.vo.TgoodsSkuInfoInput;
+import com.lakala.module.goods.vo.VirtualCateVO;
+
+/**
+ * 商品业务业务接口
+ * @author liuguojie
+ *
+ */
+public interface GoodsService {
+
+	/**
+	 * 通过Psam获取平台商品虚分类列表
+	 * @throws LakalaException
+	 */
+	public ObjectOutput getCategory(CategoryInput cate) throws LakalaException;
+	
+	public ObjectOutput maketAbleGoods(MarketableInput input) throws LakalaException;
+	
+	public ObjectOutput getGoodsList(GoodsListInput input) throws LakalaException;
+	
+	/**
+	 * @Description 商品增加、修改
+	 * @author fanzhanwei
+	 */
+	public ObjectOutput<Integer> upGoodsInfo(TgoodsSkuInfoInput input) throws LakalaException;
+	
+	/**
+	 * @Description 上传商品图片
+	 * @author fanzhanwei
+	 */
+	public ObjectOutput uploadImg(TgoodsSkuInfoInput input,HttpServletRequest request);
+
+	/**
+	 * @Description 获取2C使用的所有虚分类（即营销分类）
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<List<VirtualCateVO>> queryVirtualCat() throws LakalaException;
+	
+	/**
+	 * @Description 根据四级实分类获取sku属性数据
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<List<PropertyKeyVO>> queryGoodProperty(GoodsInput input) 
+			throws LakalaException;
+
+	public Map<String, List<String>> testImg(HttpServletRequest req, String ismove, String cate) throws LakalaException;
+
+	public ObjectOutput<List<RealCateVO>> queryRealCatByVirtualcat(GoodsInput input) throws LakalaException;
+
+	/**
+	 * @Description 删除指定商品
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<String> deleteGoods(GoodsInput input) throws LakalaException;
+
+	/**
+	 * @Description 获取该用户所属商品的虚拟分类
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<List<VirtualCateVO>> queryVirCateByGoods(GoodsInput input) throws LakalaException;
+	
+}

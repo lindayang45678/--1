@@ -1,0 +1,248 @@
+package com.lakala.module.order.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+
+
+
+
+
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.dubbo.common.json.JSON;
+import com.alibaba.dubbo.common.json.ParseException;
+import com.lakala.model.ShouhuoOutputSql;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.service.QuhuoCommonService;
+import com.lakala.module.order.service.ShouhuoService;
+import com.lakala.module.order.vo.ShouhuoInput;
+import com.lakala.module.order.vo.ShouhuoInputParam;
+import com.lakala.module.order.vo.ShouhuoOutput;
+import com.lakala.module.order.vo.ShouhuoOutput_Provider;
+import com.lakala.module.order.vo.ShouhuoOutput_Provider_Goods;
+import com.lakala.util.Constants;
+import com.lakala.util.MyUtil;
+import com.lakala.util.ReturnMsg;
+/**
+ * 店主收货服务接口实现类
+ * @author ls
+ *
+ */
+@Service
+public class ShouhuoServiceImpl implements ShouhuoService {
+	@Autowired
+	private com.lakala.mapper.r.order.ShouhuoMapper shouhuoMapper_r;
+	@Autowired
+	private com.lakala.mapper.w.order.ShouhuoMapper shouhuoMapper_w;
+	@Autowired
+	private QuhuoCommonService quhuoCommonService;
+	@Override
+	public ObjectOutput<ShouhuoOutput> getShouhuoInfo(ShouhuoInput si) {
+		ObjectOutput<ShouhuoOutput> data = new ObjectOutput<ShouhuoOutput>();
+		if(si == null || si.getLogno() == null || si.getLogno().equals("")){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		//通过运单号和手机号查询收货信息(原始信息)
+		List<ShouhuoOutputSql> soslisto = shouhuoMapper_r.getShouhuoInfo(si);
+		if(soslisto == null || soslisto.size() == 0){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			data.set_ReturnMsg(Constants.MSGNULL);
+			return data;
+		}
+		List<ShouhuoOutputSql> soslist = new ArrayList<ShouhuoOutputSql>();
+		if(si.getFlag().equals(0)){
+			for(ShouhuoOutputSql  ss : soslisto){
+				if(!ss.getLstate().equals(Constants.TORDER_STATE_YQS)){
+					soslist.add(ss);
+				}
+			}
+		}else{
+			soslist = soslisto;
+		}
+		
+		if(soslist != null && soslist.size() > 0){
+			Set<String> set = new HashSet<>();
+			for(ShouhuoOutputSql sos : soslist){
+				set.add(sos.getTorderproviderid());
+			}
+			//构建输出数据
+			ShouhuoOutput so = new ShouhuoOutput();
+			so.setLogno(si.getLogno());
+			so.setCusname(soslist.get(0).getCusname());
+			so.setCustelno(soslist.get(0).getCustelno());
+			so.setDeliverycom(soslist.get(0).getDeliverycom());
+			so.setChannelcode(soslist.get(0).getChannelcode());
+			//构建输出数据child=List<ShouhuoOutput_Provider> shouhuoList 
+			List<ShouhuoOutput_Provider> shouhuoList = new ArrayList<ShouhuoOutput_Provider>();
+			for(String torderproviderid : set){
+				for(ShouhuoOutputSql sos : soslist){
+					if(sos.getTorderproviderid().equals(torderproviderid)){
+						ShouhuoOutput_Provider sop = new ShouhuoOutput_Provider();
+						sop.setTorderproviderid(torderproviderid);
+						sop.setProvidername(sos.getProvidername());
+						sop.setProviderstate(sos.getProviderstate());
+						sop.setOrdertime(sos.getOrdertime());
+						//构建输出数据child的child=List<ShouhuoOutput_Provider_Goods> sopglist
+						List<ShouhuoOutput_Provider_Goods> sopglist = new ArrayList<ShouhuoOutput_Provider_Goods>();
+						for(ShouhuoOutputSql sosgoods : soslist){
+							if(sosgoods.getTorderproviderid().equals(torderproviderid)){
+								ShouhuoOutput_Provider_Goods sopg = new ShouhuoOutput_Provider_Goods();
+								sopg.setOrderitemid(sosgoods.getOrderitemid());
+								sopg.setGoodsid(sosgoods.getGoodsid());
+								sopg.setGoodsname(sosgoods.getGoodsname());
+								sopg.setGoodsnum(sosgoods.getGoodsnum());
+								sopg.setNorms(sosgoods.getNorms());
+								sopg.setActualnum(sosgoods.getActualnum());
+								sopg.setGoodbigpic(sosgoods.getGoodbigpic());
+								sopglist.add(sopg);
+							}
+						}
+						sop.setSopglist(sopglist);
+						shouhuoList.add(sop);
+						break;
+					}
+				}
+			}
+			so.setShouhuoList(shouhuoList);
+			data.set_ReturnData(so);
+			data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			return data;
+		}
+		data.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+		data.set_ReturnMsg(Constants.MSGSIGNED);
+		return data;
+	}
+
+	@Override
+	public ObjectOutput<ShouhuoOutput> updateShouhuo(ShouhuoInput si) {
+		ObjectOutput<ShouhuoOutput> data = new ObjectOutput<ShouhuoOutput>();
+		if(si == null || si.getLogno() == null || si.getLogno().equals("")){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		List<ShouhuoOutputSql> soslisto = shouhuoMapper_r.getShouhuoInfo(si);
+		if(soslisto == null || soslisto.size() == 0){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			data.set_ReturnMsg(Constants.MSGNULL);
+			return data;
+		}
+		List<ShouhuoOutputSql> soslist = new ArrayList<ShouhuoOutputSql>();
+		for(ShouhuoOutputSql  ss : soslisto){
+			if(!ss.getLstate().equals(Constants.TORDER_STATE_YQS)){
+				soslist.add(ss);
+			}
+		}
+		if(soslist != null && soslist.size() > 0){
+			//更新物流主表
+			Set<Integer> set = new HashSet<Integer>();
+			for(ShouhuoOutputSql sos : soslist){
+				set.add(sos.getLogid());
+			}
+			if(set != null && set.size() > 0){
+				Map<String,Object> loginfomap = new HashMap<String,Object>();
+				loginfomap.put("state", Constants.TORDER_STATE_YQS);
+				for(Integer logid : set){
+					loginfomap.put("logid", logid);
+					shouhuoMapper_w.updatestateinloginfo(loginfomap);
+				}
+			}else{
+				data.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+				data.set_ReturnMsg("数据异常");
+				return data;
+			}
+			String channelcode = soslist.get(0).getChannelcode();
+			String cusname = soslist.get(0).getCusname();
+			String custelno = soslist.get(0).getCustelno();
+			String mobile = MyUtil.cusnamecheck(cusname);
+			//批发进货
+			if(channelcode.equals("27") || channelcode.equals("43") || mobile.equals(custelno)){
+				//店主即是顾客
+				//更新订单子表/更新物流子表
+				for(ShouhuoOutputSql sos : soslist){
+					Map<String,Object> map = new HashMap<String,Object>();
+					map.put("shipsignstate", Constants.SHIPSIGNSTATE_YQH);
+					map.put("torderitemsid", sos.getOrderitemid());
+					if(channelcode.equals("27")||channelcode.equals("43")){
+						//判断签收还是部分签收
+						try {
+							ShouhuoInputParam[] siparray = JSON.parse(si.getData(), ShouhuoInputParam[].class);
+							for(int i=0;i<siparray.length;i++){
+								if(sos.getOrderitemid().equals(siparray[i].getOrderitemid())){
+									int actualnum = Integer.parseInt(siparray[i].getActualnum());
+									map.put("actualnum", actualnum);
+									int goodsnum = Integer.parseInt(sos.getGoodsnum());
+									if(actualnum < goodsnum){
+										map.put("state", Constants.TORDER_STATE_BFQS);
+									}else{
+										map.put("state", Constants.TORDER_STATE_YQS);
+									}
+									break;
+								}
+							}
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+					}else{
+						map.put("state", Constants.TORDER_STATE_YQS);
+						map.put("actualnum", sos.getGoodsnum());
+					}
+					shouhuoMapper_w.updatedzcount(map);
+					//更新物流子表
+					shouhuoMapper_w.updatedzstateinlogitem(map);
+				}
+				//更新订单供应商级表
+				Set<String> providerset = new HashSet<String>();
+				for(ShouhuoOutputSql sos : soslist){
+					String torderproviderid = sos.getTorderproviderid();
+					if(torderproviderid != null && !torderproviderid.equals("")){
+						providerset.add(torderproviderid);
+					}
+				}
+				for(String torderproviderid : providerset){
+					int providerstate = quhuoCommonService.getProviderState(torderproviderid);
+					//后面的-1只是起到flag的作用
+					quhuoCommonService.updateOrderProviderState(torderproviderid,providerstate,-1);
+				}
+				//更新订单级表
+				Set<String> orderset = new HashSet<String>();
+				for(ShouhuoOutputSql sos : soslist){
+					String orderid = sos.getOrderid();
+					if(orderid != null && !orderid.equals("")){
+						orderset.add(orderid);
+					}
+				}
+				for(String orderid : orderset){
+					int orderstate = quhuoCommonService.getOrderState(orderid);
+					//后面的-1只是起到flag的作用
+					quhuoCommonService.updateOrderState(orderid,orderstate,-1);
+				}
+			}else{
+				//仅更新店主收货状态
+				for(ShouhuoOutputSql sos : soslist){
+					Map<String,Object> map = new HashMap<String,Object>();
+					map.put("shipsignstate", Constants.SHIPSIGNSTATE_YQH);
+					map.put("torderitemsid", sos.getOrderitemid());
+					shouhuoMapper_w.updatedzstatefromcus(map);
+				}
+			}
+			data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			return data;
+		}
+		data.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+		data.set_ReturnMsg(Constants.MSGSIGNED);
+		return data;
+	}
+
+}

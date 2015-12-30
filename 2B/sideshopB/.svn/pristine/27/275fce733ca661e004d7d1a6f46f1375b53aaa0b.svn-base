@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.lakala.mapper.r.goods.RealcateMapper" >
+	<cache/>
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Realcate" >
+    <id column="tRealCateId" property="trealcateid" jdbcType="INTEGER" />
+    <result column="tContractDetailId" property="tcontractdetailid" jdbcType="VARCHAR" />
+    <result column="realCateDisc" property="realcatedisc" jdbcType="VARCHAR" />
+    <result column="fatherRealCateId" property="fatherrealcateid" jdbcType="INTEGER" />
+    <result column="realCateStatus" property="realcatestatus" jdbcType="INTEGER" />
+    <result column="realCateIcon" property="realcateicon" jdbcType="VARCHAR" />
+    <result column="distributeProfitBase" property="distributeprofitbase" jdbcType="DECIMAL" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="ischildnode" property="ischildnode" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tRealCateId, tContractDetailId, realCateDisc, fatherRealCateId, realCateStatus, realCateIcon, 
+    distributeProfitBase, sort, ischildnode,returnAmount,subsidyAmount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" useCache="false">
+    select 
+    <include refid="Base_Column_List" />
+    from trealcate
+    where tRealCateId = #{trealcateid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" useCache="false">
+    select tRealCateId,realCateDisc,fatherRealCateId from trealcate
+  </select>
+</mapper>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+	<style type="text/css">
+		#search-scroll .orders-items{margin-top:44px;}
+		.pfdd-order .header{position:relative;top:0;}
+	</style>
+</head>
+<body class="orders pfdd-order search">
+	<header>
+		<div class="orders-search">
+			<div>
+				<a href="javascript:window.history.go(-1);" class="back"></a>
+				<p><input type="search" placeholder="请输入商品名称/手机号/订单号"/></p>
+				<a href="javascript:;" class="head-right" id="orderSearch">搜索</a>
+			</div>
+		</div>
+	</header>
+
+	<div id="wholesaleorders-scroll">
+		<div id="search-scroll">
+			<div class="orders-items">
+				<div class="header f-14">共搜索到 <em class="color" id="total">5</em>个相关商品 </div>
+				<ul class="orders-list body-white">
+					<li>
+						<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+						<a id="goods-items-1" class="goods" href="ordersdetail.html">
+							<span>
+								<img src="../../images/goods-img.jpg" />
+								<em>统一冰红茶500ml*15瓶</em>
+							</span>
+						</a>
+					</li>
+					<li>
+						<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+						<a id="goods-items-2" class="goods" href="ordersdetail.html">
+							<span>
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+							</span>
+						</a>
+						<p>总价：¥280.00<a class="fr" href="javascript:void(0)">去付款</a></p>
+					</li>
+				</ul>
+				<ul class="orders-list body-white">
+					<li>
+						<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+						<a id="goods-items-3" class="goods" href="ordersdetail.html">
+							<span>
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+							</span>
+						</a>
+					</li>
+				</ul>
+				<ul class="orders-list body-white">
+					<li>
+						<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+						<a id="goods-items-4" class="goods" href="ordersdetail.html">
+							<span>
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+							</span>
+						</a>
+						<p>总价：¥280.00<a class="fr" href="javascript:void(0)">店主收货</a></p>
+					</li>
+				</ul>
+				<ul class="orders-list body-white">
+					<li>
+						<h3><span>康师傅北京有限公司</span><em class="fr">2015-4-12 12:12:23</em></h3>
+						<a id="goods-items-5" class="goods" href="ordersdetail.html">
+							<span>
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+								<img src="../../images/goods-img.jpg" />
+							</span>
+						</a>
+						<p>总价：¥280.00<a class="fr" href="javascript:void(0)">全部收货</a></p>
+					</li>
+				</ul>
+			</div>
+			<div id="loading" class="hidden">
+				<img class="loading" alt="" src="../../images/loading.png" />
+			</div>
+		</div>
+	</div>
+	<div class="pop-up-box hidden">
+		<div>
+			<p class="f-18 c-gray">该订单是否已全部收货 </p>
+			<input class="btn-gray" type="button" value="取消"/>
+			<input id="confirmsignallbtn" class="btn-red" type="button" value="确认"/>
+		</div>
+	</div>
+
+	<section class="container queryfail hidden">
+ 		<section class="wrap">
+			<div class="content">
+				<img alt="没有结果" src="../../images/searchno-img.png" />
+				<p class="f-16 c-gray">很抱歉，未找到你要商品!</p>
+			<!-- 	<a href="javascript:window.history.go(-2)" class="btn-red">重新查询</a> -->
+			</div>	
+		</section>
+	</section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+	<script type="text/javascript" id="platJs"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+	<script type="text/javascript" src="../../js/orders/querysuccess.js"></script>
+</body>
+</html>

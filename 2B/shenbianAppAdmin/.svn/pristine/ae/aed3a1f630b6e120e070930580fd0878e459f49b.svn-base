@@ -1,0 +1,16 @@
+// JavaScript Document
+function mytab(n){
+	for(i=1;i<=2;i++){
+		document.getElementById('tab'+i).className='';
+		document.getElementById('content'+i).className='incurtab';
+		}
+		document.getElementById('tab'+n).className='active';
+		document.getElementById('content'+n).className='curtab';
+	}
+$(document).ready(function() {
+	var csorts=$('.sorts').find('li');
+	$(csorts).click(function(){
+		$(csorts).removeClass('redon-color');
+		$(this).toggleClass('redon-color');
+		});
+});

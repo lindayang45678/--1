@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>小店登录</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015070900" />
+</head>
+<body>
+	<header>
+		<h1>小店登录</h1>
+	</header>
+	<section class="container">
+		<div class="login">
+			<ul>
+				<li><input type="tel" placeholder="店主手机号" name="mobile" id="mobile" maxlength="11" /></li>
+				<li><input type="password" placeholder="登录密码" name="pwd" id="pwd" /></li>
+			</ul>
+			<div class="wrap">
+				<a href="javascript:;" id="btnLogin" class="btn-red">登录</a>
+				<div class="password">
+					<a href="register.html" id="btnOpen">我要开通</a>
+					<a href="forgetpassword.html" class="f-password" id="btnForgetPwd">忘记密码</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js?t=2015070900"></script>
+	<script type="text/javascript" src="../../js/common/common.js?t=2015070602"></script>
+	<script type="text/javascript" id="platJs"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+	<script type="text/javascript" src="../../js/accounts/login.js"></script>
+</body>
+</html>

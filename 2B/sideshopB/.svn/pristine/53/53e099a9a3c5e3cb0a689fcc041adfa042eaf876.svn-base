@@ -1,0 +1,85 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.module.comm.ObjectInput;
+import com.lakala.util.Constants;
+
+/**
+ * 店主收货输入参数
+ * 
+ * @author ls
+ *
+ */
+public class ShouhuoInput extends ObjectInput {
+	private String logno;
+	private Integer state = 102;
+	private String data;
+	private Integer flag = 0;
+	private String netno;
+	private Integer cancelstate = Constants.TORDER_CANCELSTATE_WQX;
+	private String orderItemsId;
+	private String psam;
+	
+	public String getPsam() {
+		return psam;
+	}
+
+	public void setPsam(String psam) {
+		this.psam = psam;
+	}
+
+	public Integer getCancelstate() {
+		return cancelstate;
+	}
+
+	public void setCancelstate(Integer cancelstate) {
+		this.cancelstate = cancelstate;
+	}
+
+	public String getNetno() {
+		return netno;
+	}
+
+	public void setNetno(String netno) {
+		this.netno = netno;
+	}
+
+	public Integer getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Integer flag) {
+		this.flag = flag;
+	}
+
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	public String getLogno() {
+		return logno;
+	}
+
+	public void setLogno(String logno) {
+		this.logno = logno;
+	}
+
+	public String getOrderItemsId() {
+		return orderItemsId;
+	}
+
+	public void setOrderItemsId(String orderItemsId) {
+		this.orderItemsId = orderItemsId;
+	}
+}

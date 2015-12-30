@@ -1,0 +1,22 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,input,button,textarea,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;}
+html,body,div,h1,h2,h3,h4,h5,h6,p,dl,dt,dd,ol,ul,li,fieldset,form,input,button,textarea,table,caption,tbody,tfoot,thead,tr,th,td{outline:none;}
+html body{height:100%;min-height:600px;max-height:800px;width:100%;min-width:800px;max-width:1280px;font:12px/1.5 '微软雅黑','宋体', arial, tahoma, simsun;color:#222;}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block;outline:none;}
+audio,canvas,video{display:inline-block;*display:inline;*zoom:1;}
+audio:not([controls]){display:none;}
+ul,ol,li{list-style:none;text-align:left;}
+img{max-width:100%;vertical-align:top;border:0 none;}
+input,label,button,textarea,select{vertical-align:middle;border:medium none;}
+table{border-collapse:collapse;border-spacing:0;}
+em,i,s,del,small,u,strike{font-style:normal;font-weight:normal;text-decoration:none;}
+
+a{outline:none;text-decoration:none;color:#222;}
+a:hover{color:#3367ac;}
+.color{color:#3367ac;}
+.c-red{color:#ff0000;}
+.clear{clear:both;}
+.clearfix:before,.clearfix:after{content:' ';display:block;overflow:hidden;visibility:hidden;width:0;height:0;}
+.clearfix:after{clear:both;}
+.clearfix{zoom:1;}
+.fl{float:left;}
+.fr{float:right;}

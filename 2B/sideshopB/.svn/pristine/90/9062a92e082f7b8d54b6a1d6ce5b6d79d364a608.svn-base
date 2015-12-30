@@ -1,0 +1,154 @@
+$(function() {
+	//计算屏幕高度，客户端发版后，删除
+	storage.setItem("windowHeight", $(window).height());
+	loadJs();
+})
+
+$(function() {
+	$("#btnLogin").on("touchend", function(e) {
+		//if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			//隐藏键盘
+			//cordova._native.navigation.hideKeyboard();
+		//}
+		$(this).removeClass("focus");
+
+		var mobile = $.trim($("#mobile").val());
+		var pwd = $.trim($("#pwd").val());
+		var terminalType = "1"; //0:其他, 1:安卓, 2:苹果
+		if(mobile == "") {
+			showAlertMsg(msgMobileNotEmpty);
+			return false;
+		}
+		if(mobile.length != 11) {
+			showAlertMsg(msgMobileError);
+			return false;
+		}
+		var patrn = /(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
+		if(!patrn.test(mobile)) {
+			showAlertMsg(msgMobileError);
+			return false;
+		}
+		if(pwd == "") {
+			showAlertMsg(msgPawFormat);
+			return;
+		}
+		if(!pwd.match(/^[A-Za-z0-9]{6,20}$/)) {
+			showAlertMsg(msgPawFormat);
+			return;
+		}
+
+		var os = osType().toLowerCase();
+		if(os != "other") {
+			//通过客户端计算手机屏幕高度--客户端发版后取消注释
+			//getDeviceHeight();
+
+			cordova._native.system.deviceInfo(function(res) {
+				platform = res.platform;
+				deviceId = res.deviceId;
+				terminalCode = deviceId;
+				subChannelId = res.subChannelId;
+				objectId = res.objectId;
+				pushToken = res.token;
+
+				if(platform.toLowerCase() === "ios") {
+					terminalType = "2";
+				}
+
+				storage.setItem("platform", platform);
+				storage.setItem("deviceId", deviceId);
+				storage.setItem("subChannelId", subChannelId);
+				storage.setItem("objectId", objectId);
+				storage.setItem("pushToken", pushToken);
+
+				//密码加密
+				cordova._native.encrypt.pwdEncrpt(pwd, function(encryptPwd) {
+					var data = {
+							"mobile":mobile, 
+							"pwd":encryptPwd, 
+							"terminalCode":pushToken, 
+							"terminalType":terminalType
+					};
+					toLogin(data);
+				});
+			});
+		} else {
+			storage.setItem("windowHeight", $(window).height());
+			storage.setItem("pushToken", "browswerTest-pushToken");
+			pwd = "1412163e967eeda3cf74341c99167ae14cd9a6c19e1c8b0658b34f4328424764cddc43da5db4c5e7f0e286a714e084c3700c5f213aaeb61c8d313c06e0b7434eab12977b6c542e7b3c7171bb251236cc26758522db4c92324529145d1e2b43618f2a6196fd06acb44b41a72eb85a830f1b49baa9244b8c9b5ec33b0bbf7fc2dd";
+			var data = {
+					"mobile":mobile, 
+					"pwd":pwd, 
+					"terminalCode":"browswerTest", 
+					"terminalType":"0"
+			};
+			toLogin(data);
+		}
+
+		e.preventDefault();
+	});
+});
+
+/* 登录*/
+function toLogin(data) {
+	var resultJson = ajaxCommon(urlLogin, data);
+	resultJson = convertNullToEmpty(resultJson);
+	var _ReturnCode = resultJson._ReturnCode;
+	if(_ReturnCode === returnCode100001){
+		//很抱歉，该手机号未开通通身边小店，请先开通
+		showAlertMsg(msgReturn100001);
+	}else if(_ReturnCode === returnCode100004) {
+		//很抱歉，您输入的手机号或密码错误，请检查后重新输入
+		showAlertMsg(msgReturn100004);
+	}else if(_ReturnCode === returnCode100008) {
+		//登录成功
+		var userToken = resultJson._ReturnData.token;
+		var userName = resultJson._ReturnData.userName;
+		var userType = resultJson._ReturnData.userType;
+		var bizType = resultJson._ReturnData.bizType;  //商户类型--加盟型:459; 标准型:460; 旗舰型:461;
+		var ecNetNo = resultJson._ReturnData.ecNetNo;  //电商网店编号
+		var psam = resultJson._ReturnData.psam;  //PSAM编号
+
+		storage.setItem("userToken", userToken);
+		storage.setItem("mobile", data.mobile);
+		storage.setItem("password", data.pwd);
+		storage.setItem(hasLogined, "1");
+		storage.setItem("bizType", bizType);  //商户类型存放到storage中
+		storage.setItem("psam", psam);  //PSAM存放到storage中
+		storage.setItem("netNo", ecNetNo);  //网点编号存放到storage中
+
+		if(typeof(cordova)!=undefined && typeof(cordova)!="undefined") {
+			//记录登录状态--true:代表已登录，false:代表未登录
+			cordova._native.saveInfo.set(hasLogined, true);
+			cordova._native.saveInfo.set("mobile", data.mobile);
+			cordova._native.saveInfo.set("userToken", userToken);
+		}
+
+		var url = window.location.href;
+		var refer = getParamValueByName(url, "refer");
+		if(refer != "") {
+			window.location.href = refer;
+		} else {
+			window.location.href = "../homepage/index.html?t=" + t;
+		}
+	}else if(_ReturnCode === returnCode100011){
+		//webService服务出错了
+		showAlertMsg(msgReturn100011);
+	}else if(_ReturnCode === returnCode100017){
+		//拒绝访问
+		showAlertMsg(msgReturn100017);
+	}
+}
+
+/**
+ * 通过客户端计算手机屏幕高度
+ */
+function getDeviceHeight() {
+	cordova._native.system.deviceScreenSize(function(success) {
+		var winHeight = success.screenHeight;
+		if(winHeight!=null && winHeight!="" && winHeight!=undefined) {
+			storage.setItem("windowHeight", winHeight);
+		} else {
+			storage.setItem("windowHeight", $(window).height());
+		}
+    });
+}

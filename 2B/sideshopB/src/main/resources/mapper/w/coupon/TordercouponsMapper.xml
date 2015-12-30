@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.coupon.TordercouponsMapper" >
+  <update id="updateTorderCouponsFree" parameterType="java.lang.Integer" >
+	   UPDATE  t_coupon f,tordercoupons  e    set f.usedNum = IFNULL(f.usedNum,0)-IFNULL(e.usenum,0)
+	   where  e.favorablecode=f.favorablecode  and e.tallorderid = #{tallorderid,jdbcType=INTEGER} and e.status = 0;
+	   
+	   <!-- 更改库存释放状态  1-标识已释放;0-标识未释放  -->
+	   UPDATE  tordercoupons  e    set e.status = 1
+	   where   e.tallorderid = #{tallorderid,jdbcType=INTEGER}  and e.status = 0;
+  </update>
+</mapper>

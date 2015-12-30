@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.goods.TimagesMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.Timages" >
+    <id column="timageId" property="timageid" jdbcType="INTEGER" />
+    <result column="imageName" property="imagename" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="targetId" property="targetid" jdbcType="BIGINT" />
+    <result column="targetType" property="targettype" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="lastModDate" property="lastmoddate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    timageId, imageName, url, targetId, targetType, sort, lastModDate
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from timages
+    where timageId = #{timageid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 更具targetid删除图片数据 zhiziwei-->
+  <delete id="deleteBytargetId" parameterType="java.lang.Integer" >
+    delete from timages
+    where targetId = #{targetId,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.lakala.base.model.Timages" >
+    insert into timages (timageId, imageName, url, 
+      targetId, targetType, sort, 
+      lastModDate)
+    values (#{timageid,jdbcType=INTEGER}, #{imagename,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{targetid,jdbcType=BIGINT}, #{targettype,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, 
+      #{lastmoddate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lakala.base.model.Timages" >
+  <!-- 返回新增数据的主键  zhiziwei-->
+  	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="timageid">  
+            SELECT LAST_INSERT_ID() AS timageid    
+    </selectKey> 
+    insert into timages
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="timageid != null" >
+        timageId,
+      </if>
+      <if test="imagename != null" >
+        imageName,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="targetid != null" >
+        targetId,
+      </if>
+      <if test="targettype != null" >
+        targetType,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="lastmoddate != null" >
+        lastModDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="timageid != null" >
+        #{timageid,jdbcType=INTEGER},
+      </if>
+      <if test="imagename != null" >
+        #{imagename,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="targetid != null" >
+        #{targetid,jdbcType=BIGINT},
+      </if>
+      <if test="targettype != null" >
+        #{targettype,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="lastmoddate != null" >
+        #{lastmoddate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lakala.base.model.Timages" >
+    update timages
+    <set >
+      <if test="imagename != null" >
+        imageName = #{imagename,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="targetid != null" >
+        targetId = #{targetid,jdbcType=BIGINT},
+      </if>
+      <if test="targettype != null" >
+        targetType = #{targettype,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="lastmoddate != null" >
+        lastModDate = #{lastmoddate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where timageId = #{timageid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lakala.base.model.Timages" >
+    update timages
+    set imageName = #{imagename,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      targetId = #{targetid,jdbcType=BIGINT},
+      targetType = #{targettype,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER},
+      lastModDate = #{lastmoddate,jdbcType=TIMESTAMP}
+    where timageId = #{timageid,jdbcType=INTEGER}
+  </update>
+</mapper>

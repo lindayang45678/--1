@@ -1,0 +1,22 @@
+package com.lakala.mapper.r.profit;
+
+import java.util.List;
+import java.util.Map;
+
+import com.lakala.model.profit.Trecharge;
+
+public interface TrechargeMapper {
+
+
+    Trecharge selectByPrimaryKey(Integer id);
+    
+    Trecharge selectDuePay(Map<String, Object> map);
+    
+    Trecharge selectByPayId(String payId);
+    
+    List<Trecharge> selectDuePayList(Map<String, Object> map);
+    
+    List<Trecharge> selectDuePayProfitList(Map<String, Object> map);
+    
+    Trecharge selectProfitByPayId(String payId);
+}

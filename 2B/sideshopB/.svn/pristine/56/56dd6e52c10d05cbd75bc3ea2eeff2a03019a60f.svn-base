@@ -1,0 +1,7 @@
+$(function() {
+	//选中查询分类
+	$(".orderquery span").on("tap",function(){
+		$(this).addClass("btn-red").siblings().removeClass();
+	});
+	
+});

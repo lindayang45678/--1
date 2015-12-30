@@ -1,0 +1,427 @@
+var page = 1;
+var pageSize = 10;
+var hasNextPage = true;
+var container = $(".orders-items");
+var ordercate = "lsdd";  //大类  批发、零售、需店主送货
+var querytype = initQuerytype();  //小类;
+var myScroll, pullDownOffset, pullUpEl, pullUpOffset;
+var proImgAreaWidth = 86;
+
+/**
+ * 初始化iScroll控件
+ */
+function loaded() {
+	pullUpEl = document.getElementById("loading");
+	pullUpOffset = pullUpEl.offsetHeight;
+	myScroll = new iScroll("retailorders-scroll", {//iScroll的对象
+		hScrollbar: false,
+		vScrollbar: false,
+		useTransition: false, 
+		checkDOMChanges: false,
+		topOffset: pullDownOffset,
+		onScrollMove: function () {
+			if(this.y < (this.maxScrollY - 5) && !pullUpEl.className.match("flip")) {
+				pullUpEl.className = "flip";
+				this.maxScrollY = this.maxScrollY;
+			} else if(this.y > (this.maxScrollY + 5) && pullUpEl.className.match("flip")) {
+				pullUpEl.className = "";
+			}
+		},
+		onScrollEnd: function () {
+			if (pullUpEl.className.match("flip")) {
+				pullUpEl.className = "hidden";
+				getretailorderlist(querytype, "", "");  //执行加载后的自定义功能	
+			}
+		}
+	});
+}
+
+document.addEventListener("touchmove", function(e) {e.preventDefault();}, false);
+document.addEventListener("DOMContentLoaded", function() {setTimeout(loaded, 200);}, false);
+
+$(function() {
+	//加载cordova
+	loadJs();
+
+	//默认显示零售订单下各订单状态的数量
+	getretailordercnt(ordercate);
+
+	//取零售订单下各状态的订单列表
+	getretailorderlist(querytype, "", "");
+
+	//元素的事件绑定
+	eleBindEvent();
+});
+
+/**
+ * 取零售订单下各状态的订单总数
+ */
+var this_retail = null;//滑动位置
+function getretailordercnt(ordercate) {
+	var headerList = $("#header-list-slide ul");
+	var result = "";
+	
+	var thisx = parseInt(sessionStorage.getItem("this_retail"));
+	if(thisx!=undefined && thisx!="") {
+		this_retail = thisx;
+	} else {
+		this_retail = 0;
+	}
+
+	var data = {"token":userToken, "ecnetno":netNo, "mobile":"", "ordercate":ordercate};
+	var resultJson = ajaxCommon(urlOrderCnt, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		var ls2waitconfirmnum = _ReturnData.ls2waitconfirmnum;	//待确认总数
+		var ls2waittakenum = _ReturnData.ls2waittakenum;	//待自提总数
+		var ls2waitsendnum = _ReturnData.ls2waitsendnum;  //待送货总数
+		var ls2nodelivernum = _ReturnData.ls2nodelivernum;  //待发货总数
+		var ls2deliverednum = _ReturnData.ls2deliverednum;  //待签收总数
+		var ls2signednum = _ReturnData.ls2signednum;  //已签收总数
+		var ls2calcelednum = _ReturnData.ls2calcelednum;  //已取消总数
+
+		result += "<li><a id='lsall' href='javascript:;' class='f-14'><span>全部</span></a></li>";
+		result += "<li><a id='lsdqr' href='javascript:;' class='f-14'><span>待确认</span>";
+		if(parseInt(ls2waitconfirmnum) > 0) {
+			result += "<i>" + ls2waitconfirmnum + "</i>";
+		}
+		result += "</a></li>";
+		result += "<li><a id='lsdzt' href='javascript:;' class='f-14'><span>待自提</span>";
+		if(parseInt(ls2waittakenum) > 0) {
+			result += "<i>" + ls2waittakenum + "</i>";
+		}
+		result += "</a></li>";
+		result += "<li><a id='lsdsh' href='javascript:;' class='f-14'><span>待送货</span>";
+		if(parseInt(ls2waitsendnum) > 0) {
+			result += "<i>" + ls2waitsendnum + "</i>";
+		}
+		result += "</a></li>";
+		result += "<li><a id='lsdfh' href='javascript:;' class='f-14'><span>待发货</span>";
+		if(parseInt(ls2nodelivernum) > 0) {
+			result += "<i>" + ls2nodelivernum + "</i>";
+		}
+		result += "</a></li>";
+		result += "<li><a id='lsyfh' href='javascript:;' class='f-14'><span>待签收</span>";
+		if(parseInt(ls2deliverednum) > 0) {
+			result += "<i>" + ls2deliverednum + "</i>";
+		}
+		result += "</a></li>";
+		result += "<li><a id='lsyqs' href='javascript:;' class='f-14'><span>已签收</span>";
+		result += "<li><a id='lsyqx' href='javascript:;' class='f-14'><span>已取消</span>";
+		headerList.append(result);
+
+		//状态选项选中样式置换
+		$("#" + querytype).addClass("active");
+
+		//订单状态支持左右滑动
+		var liWidth = null;
+		$("#header-list-slide li").each(function(index) {
+			liWidth += parseInt($(this).width());
+		});
+		$("#header-list-slide").css("width", liWidth + 1 + "px");
+		var menuScroll = new iScroll("header-list", {
+			hScroll: true,
+			vScroll: false,
+			hScrollbar: false,
+			vScrollbar: false,
+			bocune:true,
+			onScrollEnd: function () {
+				sessionStorage.setItem("this_retail", this.x);
+				$("#header-list-slide").css({"position":"absolute","top":0,"left":sessionStorage.getItem("this_retail")});	
+			},
+		});
+		$("#header-list-slide").css({"position":"absolute","top":"0", "left":this_retail});
+		$("#retailorders-scroll").css({"height":windowHeight-87,"margin-top":"87px"});
+		$("#header-list-slide").css("margin","auto");
+	} else {
+		showAlertMsg(resultJson._ReturnMsg);
+	}
+}
+
+function initQuerytype() {
+	var value = sessionStorage.getItem("lsquerytype");
+	var initvalue = "";
+	var sUrl = window.location.href;
+	var lsquerytype = getParamValueByName(sUrl, "querytype");
+	if(lsquerytype != "") {
+		initvalue = lsquerytype;
+		if(storage.getItem(hasLogined)==null || storage.getItem(hasLogined)=="" || storage.getItem(hasLogined)=="0") {
+			//没有登录时，跳转到登录页面
+			window.location.href = "../accounts/login.html?refer=" + sUrl + "&t=" + t;
+		}
+		return initvalue;
+	}
+	if(value!=undefined && value!="") {
+		initvalue = value;
+	} else {
+		//默认显示零售全部订单
+		initvalue = "lsall";
+		$("#lsall").addClass("active");
+	}
+	return initvalue;
+}
+
+/**
+ * 取零售订单下各状态的订单列表
+ * @param querytype
+ * @param queryordertotal 是否查询满足条件的订单总数:yes-标识查询订单总数；no-不查订单总数(传空也标识不查订单总数)
+ * @param searchvalue:用于订单搜索，该值匹配以下字段：1、下单手机号 2、商品名 3、供应商订单号torderproviderid 4、支付大订单号tallorderid
+ */
+function getretailorderlist(querytype, queryordertotal, searchvalue) {
+	setTimeout(function() {
+		if(hasNextPage) {
+			var data = {
+				"token": userToken,
+				"ecnetno": netNo,
+				"mobile": "",
+				"querytype": querytype,
+				"page": page,
+				"pageSize": pageSize,
+				"queryordertotal": queryordertotal,
+				"searchvalue": searchvalue
+			};
+			var resultJson = ajaxCommon(urlOrderListV2, data);
+			resultJson = convertNullToEmpty(resultJson);
+			if(resultJson._ReturnCode === returnCodeSuccess) {
+				var _ReturnData = resultJson._ReturnData;
+				generateOrderHtml(_ReturnData);  //生成零售订单列表
+			} else {
+				hasNextPage = false;
+				showAlertMsg(resultJson._ReturnMsg);
+			}
+			page ++;
+		}
+	}, 200);	
+}
+
+/**
+ * 生成零售订单列表
+ * @param _ReturnData
+ */
+function generateOrderHtml(_ReturnData) {
+	var result = "";
+	var	orderproviderlist = _ReturnData.orderproviderlist;
+
+	if(orderproviderlist.length > 0) {
+		for(var j = 0; j < orderproviderlist.length; j ++) {
+			var torderproviderid = orderproviderlist[j].torderproviderid;  //供应商级订单号
+			var providername = orderproviderlist[j].providername;  //供应商名称
+			var ordertime = orderproviderlist[j].ordertime.split(".")[0];  //下单时间
+			var actualamount = orderproviderlist[j].actualamount;  //订单金额
+			var source = orderproviderlist[j].source;  //来源渠道
+			var isdelivertohome = orderproviderlist[j].isdelivertohome;  //配送方式(86:快递到店;87:快递到家)
+
+			result += "<ul class='orders-list body-white'>";
+			result += "<li>";
+			result += "<h3><span>" + providername + "</span>";
+			result += "<em class='fr'>" + ordertime + "</em></h3>";
+			result += "<a class='goods' href='javascript:;' torderproviderid='" + torderproviderid + "'>";
+			result += "<span>";
+			//商品list
+			var orderitemslist = orderproviderlist[j].orderitemslist;
+			var state = "";  //订单状态
+			var logno = "";  //物流单号
+			var showDZQR = false;  //是否显示店主确认
+			var showGKQH = false;  //是否显示顾客取货
+			var showCKWL = false;  //是否显示查看物流
+			for(var k = 0; k < orderitemslist.length; k ++) {
+				var goodsid = orderitemslist[k].goodsid;  //商品ID
+				var goodbigpic = orderitemslist[k].goodbigpic.split(";")[0]; //商品主图
+				var goodsname = orderitemslist[k].goodsname;  //商品名称
+				var ispay = orderitemslist[k].ispay;  //付款状态(149:未支付;150:已支付)
+				state = orderitemslist[k].state;  //订单状态
+				var cancelstate = orderitemslist[k].cancelstate;  //取消状态(136:未取消;137:已取消)
+				var paychanel = orderitemslist[k].paychanel;  //付款方式
+				var platorself = orderitemslist[k].platorself;  //452-自营；453-平台
+				logno = orderitemslist[k].logisticscode;  //物流单号
+
+				result += "<img src='" + urlImage + "/" + goodsid + "/" + imgw100 + "/" + goodbigpic + "' onerror='productErrImg(this);' />";
+				//订单列表只有一个商品时，应该显示商品图片+商品名称
+				if(orderitemslist.length == 1) {
+					result += "<em>" + goodsname + "</em>";
+				}
+
+				//待确认显示【店主确认】按钮
+				if((ispay==ispayY || paychanel==paychanelCod) && 
+						(platorself == selfGoods) && 
+						(state == stateWFH) && 
+						(cancelstate == cancelstateN)) {
+					showDZQR = true;
+				}
+				//待送货、待自提：显示【顾客取货】按钮
+				if((ispay==ispayY || paychanel==paychanelCod) && 
+						(platorself == selfGoods) && 
+						(state == stateYFH) && 
+						(cancelstate == cancelstateN) && 
+						(logno != "")) {
+					showGKQH = true;
+				}
+				//待签收、已签收：显示【查看物流】按钮
+				if(logno!="" && cancelstate==cancelstateN && platorself==platGoods) {
+					showCKWL = true;
+				}
+			}
+			result += "</span>";
+			result += "</a>";
+			result += "<p>总价：¥" + formatNumber(actualamount);
+			//待确认，操作：店主确认、店主取消
+			if((querytype=="lsdqr") || (source==sourceSbApp2C && showDZQR)) {
+				result += "<a class='fr tobeconfirm' querytype='lsdqr' href='javascript:;' id='" + torderproviderid + "'>店主确认</a>";
+			}
+			//待送货、待自提，操作：顾客取货
+			if((querytype=="lsdzt") || (querytype=="lsdsh") || (source==sourceSbApp2C && showGKQH)) {
+				result += "<a class='fr tocusteceipt' querytype='lsdzt' href='javascript:;' sincecode='" + logno + "'>顾客取货</a>";
+			}
+			//待签收、已签收，操作：查看物流
+			if((querytype=="lsyfh") || (querytype=="lsyqs") || showCKWL) {
+				result += "<a class='fr todelivery hidden' querytype='lsyfh' href='javascript:;' style='display:none;'>查看物流</a>";
+			}
+			result += "</p>";
+			result += "</li>";
+			result += "</ul>";
+		}
+		$(".none-data").hide();
+		container.append(result);
+		myScroll.refresh();
+	} else if(page == 1) {
+		showNoDataMsg(msgNoOrder);
+	} else {
+		hasNextPage = false;
+	}
+}
+
+/**
+ * 元素的事件绑定
+ */
+function eleBindEvent() {
+	//各订单状态的点击事件
+	$("#header-list-slide ul li").live("tap", function() {
+		//每次调用清空数据,主要用于状态Tab点击
+		container.empty();
+		$(".none-data").hide();
+
+		$(this).siblings().find("a").removeClass("active");
+		$(this).find("a").addClass("active");
+		querytype = $(this).find("a").attr("id");
+		page = 1;
+		hasNextPage = true;
+		getretailorderlist(querytype, "", "");
+		sessionStorage.setItem("sessionquerytype", querytype);
+		sessionStorage.setItem("lsquerytype", querytype);
+		//window.location.reload(true);
+	});
+
+	//商品区域的点击事件
+	$(".goods").live("click", function(e) {
+		//e.preventDefault();
+		//如果有操作按钮时，把订单状态放到sessionquerytype中
+		if($(this).parent().find("p").find("a").length > 0) {
+			var querytype = $(this).parent().find("p").find("a").attr("querytype");
+			sessionStorage.setItem("sessionquerytype", querytype);
+		} else {
+			sessionStorage.setItem("sessionquerytype", "");
+		}
+		var torderproviderid = $(this).attr("torderproviderid");  //供应商订单号
+		window.location.href = "retaildetail.html?torderproviderid=" + torderproviderid + "&t=" + t;
+	});
+
+	//【店主确认】按钮的点击事件
+	$(".tobeconfirm").live("touchend", function(e) {
+		e.preventDefault();
+		var querytype = $(this).attr("querytype");
+		var torderproviderid = $(this).attr("id");  //供应商订单号
+		sessionStorage.setItem("sessionquerytype", querytype);
+		window.location.href = "retaildetail.html?torderproviderid=" + torderproviderid + "&t=" + t;
+	});
+
+	//【顾客取货】按钮的点击事件
+	$(".tocusteceipt").live("touchend", function(e) {
+		var sincecode = $(this).attr("sincecode");
+		var data = {"netno":netNo, "sincecode":sincecode};
+		var resultJson = ajaxCommon(urlCustreceipt, data);
+		resultJson = convertNullToEmpty(resultJson);
+		e.preventDefault();
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			if(resultJson._ReturnData.state == stateWFH) {
+				showAlertMsg("未发货，不能取货");
+				return;
+			}
+			if(resultJson._ReturnData.state == stateBFQS) {
+				showAlertMsg("已取货，不能重复取货");
+				return;
+			}
+			if(resultJson._ReturnData.state == stateYQS) {
+				showAlertMsg("已取货，不能重复取货");
+				return;
+			}
+			if(resultJson._ReturnData.returnstate == 114) {
+				showAlertMsg("已拒收，不能取货");
+				return;
+			}
+			resultJson = JSON.stringify(resultJson);
+			storage.setItem("custReceiptQuery", resultJson);
+			window.location.href = "../receipt/custreceiptinfo.html?sincecode=" + sincecode + "&t=" + t;
+		} else {
+			window.location.href = "../receipt/custreceiptfail.html?sincecode=" + sincecode + "&t=" + t;
+		}
+	});
+
+	//搜索按钮点击事件
+	$(".order-search").live("touchend", function(e) {
+		$(".orders-search").removeClass("hidden");
+		e.preventDefault();
+	});
+	//隐藏搜索层
+	$(".orders-search span").on("touchend", function(e) {
+		$(".orders-search").addClass("hidden");
+		$(".orders-search input").val("");
+		e.preventDefault();
+	});
+	$(".orders-search").live("touchend", function(e) {
+		$(".orders-search").addClass("hidden");
+		$(".orders-search input").val("");
+		e.preventDefault();
+	});
+	$(".orders-search div").on("touchend", function(e) {
+		e.stopPropagation();
+	});
+	//键盘搜索事件
+	$(".orders-search input").on("keyup",function(e) {
+		if(e.keyCode == 13) {
+			var searchvalue = $.trim($(".orders-search input").val());
+			if(searchvalue == "") {
+				showAlertMsg(msgOrderSearchEmpty);
+				return;
+			}
+			$(".orders-search input").val("");
+			window.location.href = encodeURI(encodeURI("querysuccess.html?querytype=lsall&searchvalue=" + searchvalue));
+		}
+	});
+	//点击搜索事件
+	$(".orders-search .head-right").on("touchend", function(e) {
+		$(".orders-search").removeClass("hidden");
+		e.preventDefault();
+		var searchvalue = $.trim($(".orders-search input").val());
+		if(searchvalue == "") {
+			showAlertMsg(msgOrderSearchEmpty);
+			return;
+		}
+		$(".orders-search input").val("");
+		window.location.href = encodeURI(encodeURI("querysuccess.html?querytype=lsall&searchvalue=" + searchvalue));
+	});
+}
+
+/**
+ * 得到订单商品区域商品图片的宽度
+ * @param imgsLen
+ */
+function getProImgsWidth(result, imgsLen) {
+	if(imgsLen >= 4) {
+		var imgsAreaLen = parseInt(imgsLen * proImgAreaWidth) + 10;
+		result += "<span style='width:" + imgsAreaLen + "px;overflow-x:auto;'>";
+	} else {
+		result += "<span>";
+	}
+	return result;
+}

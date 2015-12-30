@@ -1,0 +1,13 @@
+package com.lakala.mapper.w.sdbmediastatistics;
+
+import com.lakala.base.model.SDBMediaStatistics;
+
+/**
+ * 
+ * @author zjj
+ * @date 2015年3月4日
+ */
+public interface SdbMediaStatisticsMapper {
+	
+	public int updateByPrimaryKeySelective(SDBMediaStatistics sdbMediaStatistics);
+}

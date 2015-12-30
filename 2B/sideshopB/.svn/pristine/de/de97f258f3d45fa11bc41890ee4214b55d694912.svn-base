@@ -1,0 +1,299 @@
+package com.lakala.model;
+
+import java.math.BigDecimal;
+
+/**
+ * 店主收货查询数据
+ * 
+ * @author ls
+ *
+ */
+public class ShouhuoOutputSql {
+
+	private String cusname;
+	private String custelno;
+	private String deliverycom;
+	private String logno;
+	private String state;
+	private String channelcode;
+	private String torderproviderid;
+	private String providername;
+	private Integer goodsid;
+	private String goodsname;
+	private String norms;
+	private String goodsnum;
+	private String orderitemid;
+	private Integer logid;
+	private String orderid;
+	private Integer providerstate;
+	private String actualnum;
+	private Integer lstate;// 物流主表的状态
+	private String goodbigpic;
+	private String ordertime;
+
+	// 箱规
+	private BigDecimal carton;
+	// 统一售价
+	private BigDecimal salePrice;
+	// 商品单价
+	private BigDecimal goodsSalePrice;
+	// 是否生鲜商品
+	private Integer isFresh;
+	// 商品库的商品的主键（不是sku）
+	private String tGoodInfoPoolId;
+	// 商品的skuID
+	private Integer goodsSkuID;
+	// 商品毛利率
+	private BigDecimal grossProfitRatio;
+	// 店主终端号 pasm
+	private String deviceNo;
+
+	public String getOrdertime() {
+		return ordertime;
+	}
+
+	public void setOrdertime(String ordertime) {
+		this.ordertime = ordertime;
+	}
+
+	public Integer getGoodsid() {
+		return goodsid;
+	}
+
+	public void setGoodsid(Integer goodsid) {
+		this.goodsid = goodsid;
+	}
+
+	public String getGoodbigpic() {
+		return goodbigpic;
+	}
+
+	public void setGoodbigpic(String goodbigpic) {
+		this.goodbigpic = goodbigpic;
+	}
+
+	public Integer getLstate() {
+		return lstate;
+	}
+
+	public void setLstate(Integer lstate) {
+		this.lstate = lstate;
+	}
+
+	public Integer getProviderstate() {
+		return providerstate;
+	}
+
+	public void setProviderstate(Integer providerstate) {
+		this.providerstate = providerstate;
+	}
+
+	public String getActualnum() {
+		return actualnum;
+	}
+
+	public void setActualnum(String actualnum) {
+		this.actualnum = actualnum;
+	}
+
+	public String getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
+	}
+
+	public Integer getLogid() {
+		return logid;
+	}
+
+	public void setLogid(Integer logid) {
+		this.logid = logid;
+	}
+
+	public String getOrderitemid() {
+		return orderitemid;
+	}
+
+	public void setOrderitemid(String orderitemid) {
+		this.orderitemid = orderitemid;
+	}
+
+	public String getTorderproviderid() {
+		return torderproviderid;
+	}
+
+	public void setTorderproviderid(String torderproviderid) {
+		this.torderproviderid = torderproviderid;
+	}
+
+	public String getProvidername() {
+		return providername;
+	}
+
+	public void setProvidername(String providername) {
+		this.providername = providername;
+	}
+
+	public String getGoodsname() {
+		return goodsname;
+	}
+
+	public void setGoodsname(String goodsname) {
+		this.goodsname = goodsname;
+	}
+
+	public String getNorms() {
+		return norms;
+	}
+
+	public void setNorms(String norms) {
+		this.norms = norms;
+	}
+
+	public String getGoodsnum() {
+		return goodsnum;
+	}
+
+	public void setGoodsnum(String goodsnum) {
+		this.goodsnum = goodsnum;
+	}
+
+	public String getCusname() {
+		return cusname;
+	}
+
+	public void setCusname(String cusname) {
+		this.cusname = cusname;
+	}
+
+	public String getCustelno() {
+		return custelno;
+	}
+
+	public void setCustelno(String custelno) {
+		this.custelno = custelno;
+	}
+
+	public String getDeliverycom() {
+		return deliverycom;
+	}
+
+	public void setDeliverycom(String deliverycom) {
+		this.deliverycom = deliverycom;
+	}
+
+	public String getLogno() {
+		return logno;
+	}
+
+	public void setLogno(String logno) {
+		this.logno = logno;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getChannelcode() {
+		return channelcode;
+	}
+
+	public void setChannelcode(String channelcode) {
+		this.channelcode = channelcode;
+	}
+
+	public BigDecimal getCarton() {
+		return carton;
+	}
+
+	public void setCarton(BigDecimal carton) {
+		this.carton = carton;
+	}
+
+	public BigDecimal getSalePrice() {
+		return salePrice;
+	}
+
+	public void setSalePrice(BigDecimal salePrice) {
+		this.salePrice = salePrice;
+	}
+
+	public BigDecimal getGoodsSalePrice() {
+		return goodsSalePrice;
+	}
+
+	public void setGoodsSalePrice(BigDecimal goodsSalePrice) {
+		this.goodsSalePrice = goodsSalePrice;
+	}
+
+	public Integer getIsFresh() {
+		return isFresh;
+	}
+
+	public void setIsFresh(Integer isFresh) {
+		this.isFresh = isFresh;
+	}
+
+	public String gettGoodInfoPoolId() {
+		return tGoodInfoPoolId;
+	}
+
+	public void settGoodInfoPoolId(String tGoodInfoPoolId) {
+		this.tGoodInfoPoolId = tGoodInfoPoolId;
+	}
+
+	public Integer getGoodsSkuID() {
+		return goodsSkuID;
+	}
+
+	public void setGoodsSkuID(Integer goodsSkuID) {
+		this.goodsSkuID = goodsSkuID;
+	}
+
+	public BigDecimal getGrossProfitRatio() {
+		return grossProfitRatio;
+	}
+
+	public void setGrossProfitRatio(BigDecimal grossProfitRatio) {
+		this.grossProfitRatio = grossProfitRatio;
+	}
+
+	public String getDeviceNo() {
+		return deviceNo;
+	}
+
+	public void setDeviceNo(String deviceNo) {
+		this.deviceNo = deviceNo;
+	}
+
+	public static void main(String[] args) {
+		String[] arr = { "AA", "AA", "AB", "BB", "CC", "CC", "CD", "DD", "DD", "EE", "HH", "NN", "NN", "XX" };
+		java.util.Set<String> set = new java.util.HashSet<String>();
+		for (int i = 0; i < arr.length; i++) {
+			set.add(arr[i]);
+		}
+
+		for (String str : set) {
+			// for(总的){
+			// 总的的p = str;
+			// }
+			System.out.println(str);
+		}
+
+		// System.out.println(set.size());
+		// String[] strarr = new String[set.size()];
+		// int i = -1;
+		// for(String str : set){
+		// strarr[++i] = str;
+		// }
+		// java.util.Arrays.sort(strarr); //set集合是无序的，用冒泡排序
+		// System.out.println(java.util.Arrays.toString(strarr)); //输出字符串格式数组的值
+	}
+
+}

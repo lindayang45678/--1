@@ -1,0 +1,149 @@
+package com.lakala.module.user.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.lakala.base.model.SDBMediaStatistics;
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.sdbmediastatistics.SdbMediaStatisticsMapper;
+import com.lakala.mapper.r.sdbmediastatistics.TShopServiceMapper;
+import com.lakala.model.user.TShopService;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.ShopInfoService;
+import com.lakala.module.user.vo.ShopInfoInput;
+import com.lakala.module.user.vo.ShopInfoOutPut;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.TokenUtil;
+
+/**
+ * 店铺信息
+ * @author zjj
+ * @date 2015年2月28日
+ */
+@Component
+public class ShopInfoServiceImpl implements ShopInfoService{ 
+	
+	@Autowired
+	private SdbMediaStatisticsMapper sdbMediaStatisticsMapper_r;
+	
+	@Autowired
+	private com.lakala.mapper.w.sdbmediastatistics.SdbMediaStatisticsMapper sdbMediaStatisticsMapper_w;
+	
+	@Autowired
+	private TShopServiceMapper shopserviceMapper_r;
+	
+	@Autowired
+	private com.lakala.mapper.w.sdbmediastatistics.TShopServiceMapper shopServiceMapper_w;
+
+	@Override
+	public ObjectOutput findShopInfoByPK(ShopInfoInput input) throws LakalaException {	ObjectOutput info = new ObjectOutput();
+	
+	//	测试用数据
+	//	info = findShopInfoByPKTemp(input);
+		
+		/*获取店铺信息*/
+		SDBMediaStatistics sdbMediaStatistics = sdbMediaStatisticsMapper_r.selectByPrimaryKey(Long.parseLong(String.valueOf(input.getId())));
+		if(null == sdbMediaStatistics){
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg("店铺信息丢失");
+			
+			return info;
+		}
+		
+		//获取派送客服电话
+		List<TShopService> list = shopserviceMapper_r.queryShopServiceByShopId(Integer.parseInt(String.valueOf(sdbMediaStatistics.getId())));
+		
+		ShopInfoOutPut out = new ShopInfoOutPut();
+		out.setShopname(sdbMediaStatistics.getNetName());
+		out.setShoppername(sdbMediaStatistics.getContactName1());
+		out.setPhone(sdbMediaStatistics.getMobile());
+		out.setProvince(sdbMediaStatistics.getProv());
+		out.setCity(sdbMediaStatistics.getCity());
+		out.setCityarea(sdbMediaStatistics.getCityArea());
+		out.setAddress(sdbMediaStatistics.getAddr());
+		out.setId(sdbMediaStatistics.getId());
+		out.setToken(TokenUtil.getToken(out.getPhone()));
+		out.setHomeDeliver(sdbMediaStatistics.getIsDoorstep());
+		out.setAnnouncement(sdbMediaStatistics.getAnnouncement());
+		out.setWeixin_no(sdbMediaStatistics.getWeixin_no());
+		out.setLatitude(sdbMediaStatistics.getLatitude());
+		out.setLongitude(sdbMediaStatistics.getLongitude());
+		
+		out.setDispatcherlist(list);
+		
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		info.set_ReturnData(out);
+		
+		return info;
+	}
+
+	@Override
+	public ObjectOutput editShopInfo(ShopInfoInput input)
+			throws LakalaException {
+		
+		SDBMediaStatistics sdb = new SDBMediaStatistics();
+		sdb.setId(input.getId());
+		sdb.setNetName(input.getShopname());
+		sdb.setWeixin_no(input.getWeixin_no());
+		sdb.setAnnouncement(input.getAnnouncement());
+		
+		List<Map<String, String>> list = input.getDispatcherlist();
+		
+		List<TShopService> newList = new ArrayList<TShopService>();
+		if(null != list && list.size() > 0){
+			for (int i = 0; i < list.size(); i++) {
+				Map<String, String> map = list.get(i);
+				String name = map.get("name");
+				String phone = map.get("phone");
+				
+				TShopService s = new TShopService();
+				s.setName(name);
+				s.setPhone(phone);
+				s.setShopId(sdb.getId());
+				
+				newList.add(s);
+			}
+		}
+		
+		
+		sdbMediaStatisticsMapper_w.updateByPrimaryKeySelective(sdb);
+		
+		if(null != list && list.size() > 0){
+			shopServiceMapper_w.removeShopServiceList(sdb.getId());
+			shopServiceMapper_w.insertTShopServiceList(newList);
+		}
+		
+		ObjectOutput info = new ObjectOutput();
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		return info;
+	}
+	
+	
+	
+	//-------测试数据---------------------------------------------------------------
+	private ObjectOutput findShopInfoByPKTemp(ShopInfoInput input){	
+		ObjectOutput info = null;
+		info = new ObjectOutput();
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg("");
+		
+		ShopInfoOutPut out = new ShopInfoOutPut();
+		out.setProvince("北京市");
+		out.setCity("北京市");
+		out.setCityarea("海淀区");
+		out.setShopname("测试拉卡拉小店");
+		out.setPhone("18612189254");
+		out.setAddress("北京市丹棱街6号金融大厦8层");
+		out.setToken(TokenUtil.getToken(input.getPhone()));
+		
+		info.set_ReturnData(out);
+		return info;
+	}
+	
+}

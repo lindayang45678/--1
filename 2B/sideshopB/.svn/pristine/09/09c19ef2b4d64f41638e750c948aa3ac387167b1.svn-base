@@ -1,0 +1,940 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.order.TorderMapper">
+	
+	<resultMap id="BaseResultMap" type="com.lakala.model.Torder">
+		<id column="tOrderId" property="torderid" jdbcType="VARCHAR" />
+		<result column="tAllOrderId" property="tallorderid" jdbcType="INTEGER" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="isGroupPurchase" property="isgrouppurchase"
+			jdbcType="INTEGER" />
+		<result column="orderType" property="ordertype" jdbcType="INTEGER" />
+		<result column="goodsTypeCount" property="goodstypecount"
+			jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="payableAmount" property="payableamount"
+			jdbcType="DECIMAL" />
+		<result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+		<result column="coupons" property="coupons" jdbcType="VARCHAR" />
+		<result column="couponsValue" property="couponsvalue" jdbcType="DECIMAL" />
+		<result column="ruleID" property="ruleid" jdbcType="INTEGER" />
+		<result column="ruleName" property="rulename" jdbcType="VARCHAR" />
+		<result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+		<result column="cusName" property="cusname" jdbcType="VARCHAR" />
+		<result column="siteNo" property="siteno" jdbcType="VARCHAR" />
+		<result column="deviceNo" property="deviceno" jdbcType="VARCHAR" />
+		<result column="favorRuleMoney" property="favorrulemoney"
+			jdbcType="DECIMAL" />
+		<result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL" />
+		<result column="storeProfits" property="storeprofits" jdbcType="DECIMAL" />
+		<result column="billType" property="billtype" jdbcType="INTEGER" />
+		<result column="billTitle" property="billtitle" jdbcType="VARCHAR" />
+		<result column="isPay" property="ispay" jdbcType="INTEGER" />
+		<result column="payTime" property="paytime" jdbcType="TIMESTAMP" />
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="payType" property="paytype" jdbcType="INTEGER" />
+		<result column="payStage" property="paystage" jdbcType="INTEGER" />
+		<result column="payFee" property="payfee" jdbcType="DECIMAL" />
+		<result column="payHandlingCharge" property="payhandlingcharge"
+			jdbcType="DECIMAL" />
+		<result column="bankID" property="bankid" jdbcType="VARCHAR" />
+		<result column="bankName" property="bankname" jdbcType="VARCHAR" />
+		<result column="addressProvinceName" property="addressprovincename"
+			jdbcType="VARCHAR" />
+		<result column="addressProvince" property="addressprovince"
+			jdbcType="VARCHAR" />
+		<result column="addressCityName" property="addresscityname"
+			jdbcType="VARCHAR" />
+		<result column="addressCity" property="addresscity" jdbcType="VARCHAR" />
+		<result column="addressAreaName" property="addressareaname"
+			jdbcType="VARCHAR" />
+		<result column="addressArea" property="addressarea" jdbcType="VARCHAR" />
+		<result column="addressFull" property="addressfull" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="isWeekendDeliver" property="isweekenddeliver"
+			jdbcType="INTEGER" />
+		<result column="isDeliverToHome" property="isdelivertohome"
+			jdbcType="INTEGER" />
+		<result column="requireTime" property="requiretime" jdbcType="TIMESTAMP" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="favorAllMoney" property="favorallmoney"
+			jdbcType="DECIMAL" />
+		<result column="cancelState" property="cancelstate" jdbcType="INTEGER" />
+		<result column="lastModifyTime" property="lastmodifytime"
+			jdbcType="TIMESTAMP" />
+		<result column="memberName" property="membername" jdbcType="VARCHAR" />
+		<result column="custCall" property="custcall" jdbcType="VARCHAR" />
+		<result column="lockState" property="lockstate" jdbcType="INTEGER" />
+		<result column="providerSettleState" property="providersettlestate"
+			jdbcType="INTEGER" />
+		<result column="providerSettleMoney" property="providersettlemoney"
+			jdbcType="DECIMAL" />
+		<result column="shipSettleState" property="shipsettlestate"
+			jdbcType="INTEGER" />
+		<result column="shipSettleMoney" property="shipsettlemoney"
+			jdbcType="DECIMAL" />
+		<result column="phoneMemberName" property="phonemembername"
+			jdbcType="VARCHAR" />
+		<result column="phoneMemberIdCard" property="phonememberidcard"
+			jdbcType="VARCHAR" />
+		<result column="isCheckAccount" property="ischeckaccount"
+			jdbcType="INTEGER" />
+		<result column="termfbtype" property="termfbtype" jdbcType="VARCHAR" />
+		<result column="termfbtypestr" property="termfbtypestr"
+			jdbcType="VARCHAR" />
+		<result column="skbsalemobile" property="skbsalemobile"
+			jdbcType="VARCHAR" />
+		<result column="fr_ratio" property="frRatio" jdbcType="DECIMAL" />
+		<result column="re_ratio" property="reRatio" jdbcType="DECIMAL" />
+		<result column="sb_ratio" property="sbRatio" jdbcType="DECIMAL" />
+		<result column="divideProfit" property="divideprofit" jdbcType="DECIMAL" />
+		<result column="returnAmount" property="returnamount" jdbcType="DECIMAL" />
+		<result column="subsidyAmount" property="subsidyamount"
+			jdbcType="DECIMAL" />
+		<result column="salerSettleState" property="salersettlestate"
+			jdbcType="INTEGER" />
+		<result column="paytoken" property="paytoken" jdbcType="VARCHAR" />
+		<result column="customer" property="customer" jdbcType="VARCHAR" />
+		<result column="ecnetno" property="ecnetno" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.lakala.model.Torder"
+		extends="BaseResultMap">
+		<result column="fav" property="fav" jdbcType="LONGVARCHAR" />
+		<result column="towmsfalg" property="towmsfalg" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="orderWithDevResultMap" type="com.lakala.model.Torder" 
+	  extends="ResultMapWithBLOBs">
+	        <result column="netname" property="netname" jdbcType="VARCHAR"/>
+		    <result column="devprov" property="devprov" jdbcType="VARCHAR" />
+			<result column="devprovno" property="devprovno" jdbcType="VARCHAR" />
+			<result column="devcity" property="devcity" jdbcType="VARCHAR" />
+			<result column="devcityno" property="devcityno" jdbcType="VARCHAR" />
+			<result column="devcityarea" property="devcityarea" jdbcType="VARCHAR" />
+			<result column="devcityareano" property="devcityareano" jdbcType="VARCHAR" />
+			<result column="devaddr" property="devaddr" jdbcType="VARCHAR" />
+			<result column="devcontactname1" property="devcontactname1" jdbcType="VARCHAR" />
+			<result column="devmobile" property="devmobile" jdbcType="VARCHAR" />
+	  </resultMap>
+	
+	
+	<resultMap id="BaseListResultMap" type="com.lakala.model.Torder">
+		<id column="tOrderId" property="torderid" jdbcType="VARCHAR" />
+		<result column="tAllOrderId" property="tallorderid" jdbcType="INTEGER" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="CommonQueryOrderResultMap" type="com.lakala.model.order.OrderInfo">
+		<id column="torderid" property="torderid" jdbcType="VARCHAR" />
+		<result column="tallorderid" property="tallorderid" jdbcType="INTEGER" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+		<result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL" />
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="isPay" property="ispay" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="cusName" property="cusname" jdbcType="VARCHAR" />
+		<result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+		<result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER" />
+		<result column="addressFull" property="addressfull" jdbcType="VARCHAR" />
+		<result column="paytoken" property="paytoken" jdbcType="VARCHAR" />
+		<collection property="orderproviderlist"
+                    ofType="com.lakala.model.order.OrderProviderInfo" column="torderid"
+                    javaType="list"
+                    select="com.lakala.mapper.r.order.TorderMapper.viewOrderProviderByMap">
+        </collection>
+	</resultMap>
+	
+	<resultMap id="ViewOrderResultMap" type="com.lakala.model.order.OrderInfo">
+		<id column="torderid" property="torderid" jdbcType="VARCHAR" />
+		<result column="tallorderid" property="tallorderid" jdbcType="INTEGER" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+		<result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL" />
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="isPay" property="ispay" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="cusName" property="cusname" jdbcType="VARCHAR" />
+		<result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+		<result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER" />
+		<result column="addressFull" property="addressfull" jdbcType="VARCHAR" />
+		<result column="addressProvinceName" property="addressprovincename" jdbcType="VARCHAR"/>
+        <result column="addressCityName" property="addresscityname" jdbcType="VARCHAR"/>
+        <result column="addressAreaName" property="addressareaname" jdbcType="VARCHAR"/>
+        <result column="favorrulemoney" property="favorrulemoney" jdbcType="DECIMAL" />
+		<result column="paytoken" property="paytoken" jdbcType="VARCHAR" />
+		<association property="orderdatequeue" column="tallorderid" javaType="com.lakala.model.order.OrderDateInfoV2"
+	    			 select="selectOrderDateByTallorderID"/>
+		<collection property="orderproviderlist"
+                    ofType="com.lakala.model.order.OrderProviderInfo" column="tallorderid"
+                    javaType="list"
+                    select="com.lakala.mapper.r.order.TorderMapper.viewDetailOrderProviderByMapV2">
+        </collection>
+	</resultMap>
+	
+	<resultMap id="ViewOrderProviderResultMap" type="com.lakala.model.order.OrderProviderInfo">
+		<id column="tOrderProviderId" property="torderproviderid" jdbcType="VARCHAR" />
+	    <result column="orderID" property="orderid" jdbcType="VARCHAR" />
+	    <result column="providerID" property="providerid" jdbcType="INTEGER" />
+	    <result column="providerName" property="providername" jdbcType="VARCHAR" />
+	    <result column="clientservicetel" property="clientservicetel" jdbcType="VARCHAR" />
+		<collection property="orderitemslist"
+                    ofType="com.lakala.model.order.OrderItemsInfo" column="torderproviderid"
+                    javaType="list"
+                    select="com.lakala.mapper.r.order.TorderMapper.viewOrderItemsByMap">
+        </collection>
+	</resultMap>
+	
+	
+	<resultMap id="CommonQueryOrderProviderResultMap" type="com.lakala.model.order.OrderProviderQueryInfo">
+		<id column="tOrderProviderId" property="torderproviderid" jdbcType="VARCHAR" />
+		<result column="orderID" property="orderid" jdbcType="VARCHAR" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+		<result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL" />
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="isPay" property="ispay" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="cusName" property="cusname" jdbcType="VARCHAR" />
+		<result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+		<result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER" />
+		<result column="addressFull" property="addressfull" jdbcType="VARCHAR" />
+		<result column="providerID" property="providerid" jdbcType="INTEGER" />
+	    <result column="providerName" property="providername" jdbcType="VARCHAR" />
+	    <result column="clientservicetel" property="clientservicetel" jdbcType="VARCHAR" />
+		<collection property="orderitemslist"
+                    ofType="com.lakala.model.order.OrderItemsInfo" column="torderproviderid"
+                    javaType="list"
+                    select="com.lakala.mapper.r.order.TorderMapper.viewOrderItemsByMap">
+        </collection>
+	</resultMap>
+	
+	<resultMap id="ViewOrderItemsResultMap" type="com.lakala.model.order.OrderItemsInfo">
+		<id column="tOrderItemsId" property="torderitemsid" jdbcType="INTEGER" />
+		<result column="goodsID" property="goodsid" jdbcType="INTEGER" />
+		<result column="goodsName" property="goodsname" jdbcType="VARCHAR" />
+		<result column="isPay" property="ispay" jdbcType="INTEGER" />
+		<result column="goodsSalePrice" property="goodssaleprice" jdbcType="DECIMAL" />
+		<result column="goodsCount" property="goodscount" jdbcType="INTEGER" />
+		<result column="invalidState" property="invalidstate" jdbcType="INTEGER" />
+		<result column="logisticsCode" property="logisticscode" jdbcType="VARCHAR" />
+		<result column="corpName" property="corpname" jdbcType="VARCHAR" />
+		<result column="goodBigPic" property="goodbigpic" jdbcType="LONGVARCHAR" />
+		<result column="is3h" property="is3h" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="norms" property="norms" jdbcType="VARCHAR" />
+		<result column="cancelstate" property="cancelstate" jdbcType="INTEGER" />
+	</resultMap>
+	
+	
+	<resultMap id="CommonQueryOrderResultMapV2" type="com.lakala.model.order.OrderV2Info">
+		<result column="tallorderid" property="tallorderid" jdbcType="INTEGER" />
+		<result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+		<result column="favorrulemoney" property="favorrulemoney" jdbcType="DECIMAL" />
+		<result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL" />
+		<result column="isPay" property="ispay" jdbcType="INTEGER"/>
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="paytoken" property="paytoken" jdbcType="VARCHAR" />
+		<collection property="orderproviderlist"
+                    ofType="com.lakala.model.order.OrderProviderV2Info" column="tallorderid"
+                    javaType="list"
+                    select="com.lakala.mapper.r.order.TorderMapper.viewOrderProviderByMapV2">
+        </collection>
+	</resultMap>
+	
+	<resultMap id="CommonQueryOrderProviderResultMapV2" type="com.lakala.model.order.OrderProviderV2Info">
+		<id column="tOrderProviderId" property="torderproviderid" jdbcType="VARCHAR" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="providerID" property="providerid" jdbcType="INTEGER" />
+	    <result column="providerName" property="providername" jdbcType="VARCHAR" />
+	    <result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+	    <result column="state" property="state" jdbcType="INTEGER" />
+		<collection property="orderitemslist"
+                    ofType="com.lakala.model.order.OrderItemsInfo" column="torderproviderid"
+                    javaType="list"
+                    select="com.lakala.mapper.r.order.TorderMapper.viewOrderItemsByMap">
+        </collection>
+	</resultMap>
+	
+	<resultMap id="ViewOrderProviderResultMapV2" type="com.lakala.model.order.OrderProviderV2QueryInfo">
+		<id column="tOrderProviderId" property="torderproviderid" jdbcType="VARCHAR" />
+		<result column="orderID" property="orderid" jdbcType="VARCHAR" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+		<result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL" />
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="isPay" property="ispay" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="cusName" property="cusname" jdbcType="VARCHAR" />
+		<result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+		<result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER" />
+		<result column="addressFull" property="addressfull" jdbcType="VARCHAR" />
+		<result column="providerID" property="providerid" jdbcType="INTEGER" />
+	    <result column="providerName" property="providername" jdbcType="VARCHAR" />
+	    <result column="favorrulemoney" property="favorrulemoney" jdbcType="DECIMAL" />
+	    <result column="paytoken" property="paytoken" jdbcType="VARCHAR" />
+	    <result column="clientservicetel" property="clientservicetel" jdbcType="VARCHAR" />
+		<collection property="orderitemslist"
+                    ofType="com.lakala.model.order.OrderItemsInfo" column="torderproviderid"
+                    javaType="list"
+                    select="com.lakala.mapper.r.order.TorderMapper.viewOrderItemsByContainCancelMap">
+        </collection>
+	</resultMap>
+	
+	<resultMap id="ViewOrderItemsResultMapV2" type="com.lakala.model.order.OrderItemsV2Info">
+		<id column="tOrderItemsId" property="torderitemsid" jdbcType="INTEGER" />
+		<result column="goodsID" property="goodsid" jdbcType="INTEGER" />
+		<result column="goodsName" property="goodsname" jdbcType="VARCHAR" />
+		<result column="goodBigPic" property="goodbigpic" jdbcType="LONGVARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="cancelstate" property="cancelstate" jdbcType="INTEGER" />
+	</resultMap>
+	
+	
+	<resultMap id="DetailOrderProviderResultMapV2" type="com.lakala.model.order.OrderProviderV2QueryInfo">
+		<id column="tOrderProviderId" property="torderproviderid" jdbcType="VARCHAR" />
+		<result column="orderID" property="orderid" jdbcType="VARCHAR" />
+		<result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+		<result column="actualAmount" property="actualamount" jdbcType="DECIMAL" />
+		<result column="logiscalFee" property="logiscalfee" jdbcType="DECIMAL" />
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="isPay" property="ispay" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="cusName" property="cusname" jdbcType="VARCHAR" />
+		<result column="cusTelNo" property="custelno" jdbcType="VARCHAR" />
+		<result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER" />
+		<result column="addressFull" property="addressfull" jdbcType="VARCHAR" />
+		<result column="addressProvinceName" property="addressprovincename" jdbcType="VARCHAR"/>
+        <result column="addressCityName" property="addresscityname" jdbcType="VARCHAR"/>
+        <result column="addressAreaName" property="addressareaname" jdbcType="VARCHAR"/>
+		<result column="providerID" property="providerid" jdbcType="INTEGER" />
+	    <result column="providerName" property="providername" jdbcType="VARCHAR" />
+	    <result column="favorrulemoney" property="favorrulemoney" jdbcType="DECIMAL" />
+	    <result column="paytoken" property="paytoken" jdbcType="VARCHAR" />
+	    <result column="clientservicetel" property="clientservicetel" jdbcType="VARCHAR" />
+	    <association property="orderdatequeue" column="torderproviderid" javaType="com.lakala.model.order.OrderDateInfoV2"
+	    			 select="selectOrderDateByOpID"/>
+		<collection property="orderitemslist"
+                    ofType="com.lakala.model.order.OrderItemsInfo" column="torderproviderid"
+                    javaType="list"
+                    select="com.lakala.mapper.r.order.TorderMapper.viewOrderItemsByMap">
+        </collection>
+	</resultMap>
+	
+	<resultMap id="ViewOrderDateResultMapV2" type="com.lakala.model.order.OrderDateInfoV2">
+		<result column="tallorderid" property="tallorderid" jdbcType="INTEGER" />
+		<result column="tOrderProviderId" property="torderproviderid" jdbcType="INTEGER" />
+		<result column="xdsj" property="xdsj" jdbcType="TIMESTAMP" />
+	    <result column="zfsj" property="zfsj" jdbcType="TIMESTAMP" />
+	    <result column="fhsj" property="fhsj" jdbcType="TIMESTAMP" />
+	    <result column="qssj" property="qssj" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	
+	<sql id="WithMedia_Column_List">
+		a.tOrderId, a.tel, a.isGroupPurchase, a.orderType,
+		a.goodsTypeCount, a.source,
+		a.amount, a.payableAmount,
+		a.actualAmount,
+		a.coupons, a.couponsValue, a.ruleID, a.ruleName, a.cusTelNo,
+		a.cusName,
+		a.deviceNo, a.favorRuleMoney, a.logiscalFee, a.storeProfits,
+		a.billType,
+		a.billTitle, a.isPay,
+		a.payTime, a.payChanel, a.payType,
+		a.payStage, a.payFee, a.payHandlingCharge,
+		a.bankID, a.bankName,
+		a.addressProvinceName, a.addressProvince, a.addressCityName,
+		a.addressCity,
+		a.addressAreaName,
+		a.addressArea, a.addressFull, a.code,
+		a.orderTime, a.isWeekendDeliver,
+		a.isDeliverToHome, a.requireTime,
+		a.state, a.remark, a.fav, a.favorAllMoney, a.cancelState,
+		a.lastModifyTime,
+		a.memberName, a.custCall,
+		a.lockState,
+		a.providerSettleState, a.providerSettleMoney, a.shipSettleState,
+		a.shipSettleMoney,
+		a.phoneMemberName, a.phoneMemberIdCard ,
+		a.skbsalemobile, a.towmsfalg as towmsfalg,
+		m.net_no as siteNo,m.ec_net_no as ecnetno,
+		m.term_fbtype as termfbtype,
+		m.term_fbtypestr as termfbtypestr,
+		m.prov_no as devprovno,m.prov as devprov,
+		m.city_no as devcityno,m.city as devcity,
+		m.city_area_no as devcityareano,m.city_area as devcityarea,m.addr as devaddr,
+		m.contact_name_1 as devcontactname1,m.mobile as  devmobile,m.net_name as netname,
+		m.orgid as orgid,
+		a.paytoken as paytoken,
+		a.customer as customer ,
+		a.tallorderid as tallorderid
+	</sql>
+	
+	
+	<sql id="queryCommonOrderwhere">
+		
+			<if test="sourceids != null and sourceids != '' ">
+				and t.source in
+				<foreach item="sourceitem" index="index" collection="sourceids"
+					open="(" separator="," close=")">
+					#{sourceitem}
+				</foreach>
+			</if>
+			<if test="stateids != null and stateids != '' ">
+				and s.state in
+				<foreach item="stateitem" index="index" collection="stateids"
+					open="(" separator="," close=")">
+					#{stateitem}
+				</foreach>
+			</if>
+			<if test="ispays != null and ispays != '' ">
+				and s.ispay in
+				<foreach item="ispayitem" index="index" collection="ispays"
+					open="(" separator="," close=")">
+					#{ispayitem}
+				</foreach>
+			</if>
+			<if test="paychannels != null and paychannels != '' ">
+				and s.payChanel in  
+				<foreach item="paychannelitem" index="index" collection="paychannels"
+					open="(" separator="," close=")">
+					#{paychannelitem}
+				</foreach>
+			</if>
+			<if test="is3hs != null and is3hs != '' ">
+				and s.is3h in  
+				<foreach item="is3hitem" index="index" collection="is3hs"
+					open="(" separator="," close=")">
+					#{is3hitem}
+				</foreach>
+			</if>
+			<if test="ispayfornodeliver != null and ispayfornodeliver != '' ">
+				and (s.isPay = 150 OR (s.isPay = 149 and s.payChanel = 240))
+			</if>
+			<if test="source != null and source != '' ">
+				and t.source = #{source}
+			</if>
+			<if test="ordertime != null and ordertime != '' ">
+				and DATE_FORMAT(r.orderTime,'%Y-%m-%d') =
+				DATE_FORMAT(#{ordertime},'%Y-%m-%d')
+			</if>
+			<if test="custelno != null and custelno != '' ">
+				and s.cusTelNo  like CONCAT('%',#{custelno},'%')
+			</if>
+			<if test="torderproviderid != null and torderproviderid != '' ">
+				and s.orderProviderId  like CONCAT('%',#{torderproviderid},'%')
+			</if>
+			<if test="torderid != null and torderid != '' ">
+				and s.torderid  like CONCAT('%',#{torderid},'%')
+			</if>
+			<if test="tallorderid != null and tallorderid != '' ">
+				and s.tallorderid  like CONCAT('%',#{tallorderid},'%')
+			</if>
+			<if test="goodsname != null and goodsname != '' ">
+				and s.goodsname  like concat('%',#{goodsname},'%')
+			</if>
+			<if test="custname != null and custname != '' ">
+	            and t.cusName like CONCAT('%',#{custname},'%')
+	        </if>
+			<if test="ispay != null and ispay != '' ">
+				and s.ispay = #{ispay}
+			</if>
+			<if test="state != null and state != '' ">
+				and s.state = #{state}
+			</if>
+			<if test="cancelstate != null and cancelstate != '' ">
+				and s.cancelState = #{cancelstate}
+			</if>
+			<if test="siteno != null and siteno != '' ">
+				and s.siteno = #{siteno}
+			</if>
+			<if test="ecnetno != null and ecnetno != '' ">
+				and s.ecnetno = #{ecnetno}
+			</if>
+			<if test="deviceno != null and deviceno != '' ">
+				and s.deviceno = #{deviceno}
+			</if>
+			<if test="mobile != null and mobile != '' ">
+				and t.memberName = #{mobile}
+			</if>
+			<if test="is3h != null and is3h != '' ">
+				and s.is3h = #{is3h}
+			</if>
+			<if test="isdelivertohome != null and isdelivertohome != '' ">
+				and s.isdelivertohome = #{isdelivertohome}
+			</if>
+			<if test="channelcode != null and channelcode != '' ">
+				and s.channelcode = #{channelcode}
+			</if>
+			<if test="ispfchannelcode != null and ispfchannelcode != '' ">
+				and s.channelcode in ('27','43')
+			</if>
+			<if test="nopfchannelcode != null and nopfchannelcode != '' ">
+				and s.channelcode not in ('27','43')
+			</if>
+			<if test="isrestore != null and isrestore != '' ">
+				and s.isRestore = #{isrestore}
+			</if>
+			<if test="norestore != null and norestore != '' ">
+				and s.isRestore != #{norestore}
+			</if>
+			<if test="showall != null and showall != '' ">
+				and (t.payChanel=240 or (t.payChanel!=240 and t.isPay = 150) or	(t.payChanel!=240 and t.isPay=149 and t.orderTime > date_sub(NOW(), interval '0 0:30:0'  day_second)))
+			</if>
+				 	 
+			<if test="starttime != null and starttime != '' ">
+	            <![CDATA[ and DATE_FORMAT(t.orderTime,"%Y-%m-%d %H:%i:%s") >= '${starttime}' ]]>
+			</if>
+			<if test="endtime != null and endtime != '' ">
+	            <![CDATA[ and DATE_FORMAT(t.orderTime,"%Y-%m-%d %H:%i:%s") <= '${endtime}' ]]>
+			</if>
+			
+			<!-- 根据电商网点编号 和 店主手机号 查该终端的所有订单。其中待付款的订单是也可以根据电商网店编号查询，因为APP2B下的订单,订单里也会记录自己的终端号，
+			其他订单则根据电商网点编号查询.备注，待付款的订单只显示未支付未发货未释放库存未取消且订单来源是APP2B 466的  -->
+			<if test="appallecnetno != null and appallecnetno != ''">
+				and s.ecnetno = #{appallecnetno}
+			</if>
+			
+			<!-- 订单搜索 可匹配下单手机号 订单号 商品名称 -->
+			<if test="searchvalue != null and searchvalue != ''">
+				and CONCAT_WS('@lkl@',s.cusTelNo,s.orderProviderID,s.orderProviderID,s.tAllOrderId,s.goodsName) like CONCAT('%',#{searchvalue},'%') 
+			</if>
+	</sql>
+	
+	
+	<sql id="queryCommonOrderProviderwhere">
+		
+		 <if test="sourceids != null and sourceids != '' ">
+			and t.source in
+			<foreach item="sourceitem" index="index" collection="sourceids"
+				open="(" separator="," close=")">
+				#{sourceitem}
+			</foreach>
+		</if>
+		<if test="mobile != null and mobile != '' ">
+			and t.memberName = #{mobile}
+		</if>
+		<if test="source != null and source != '' ">
+			and t.source = #{source}
+		</if>
+		<if test="torderproviderid != null and torderproviderid != '' ">
+			and r.torderproviderid = #{torderproviderid}
+		</if>
+		<if test="stateids != null and stateids != '' ">
+			and s.state in
+			<foreach item="stateitem" index="index" collection="stateids"
+				open="(" separator="," close=")">
+				#{stateitem}
+			</foreach>
+		</if>
+		<if test="ispays != null and ispays != '' ">
+			and s.ispay in
+			<foreach item="ispayitem" index="index" collection="ispays"
+				open="(" separator="," close=")">
+				#{ispayitem}
+			</foreach>
+		</if>
+		<if test="paychannels != null and paychannels != '' ">
+			and s.payChanel in  
+			<foreach item="paychannelitem" index="index" collection="paychannels"
+				open="(" separator="," close=")">
+				#{paychannelitem}
+			</foreach>
+		</if>
+		<if test="is3hs != null and is3hs != '' ">
+			and s.is3h in  
+			<foreach item="is3hitem" index="index" collection="is3hs"
+				open="(" separator="," close=")">
+				#{is3hitem}
+			</foreach>
+		</if>
+		<if test="ispayfornodeliver != null and ispayfornodeliver != '' ">
+			and (s.isPay = 150 OR (s.isPay = 149 and s.payChanel = 240))
+		</if>
+		<if test="custelno != null and custelno != '' ">
+			and s.cusTelNo = #{custelno}
+		</if>
+		
+		<if test="ordertime != null and ordertime != '' ">
+			and DATE_FORMAT(r.orderTime,'%Y-%m-%d') =
+			DATE_FORMAT(#{ordertime},'%Y-%m-%d')
+		</if>
+		<if test="custelno != null and custelno != '' ">
+			and s.cusTelNo  like CONCAT('%',#{custelno},'%')
+		</if>
+		<if test="torderproviderid != null and torderproviderid != '' ">
+			and s.orderProviderId  like CONCAT('%',#{torderproviderid},'%')
+		</if>
+		<if test="torderid != null and torderid != '' ">
+			and s.torderid  like CONCAT('%',#{torderid},'%')
+		</if>
+		<if test="tallorderid != null and tallorderid != '' ">
+			and s.tallorderid  like CONCAT('%',#{tallorderid},'%')
+	    </if>
+		<if test="goodsname != null and goodsname != '' ">
+			and s.goodsname  like concat('%',#{goodsname},'%')
+		</if>
+		<if test="state != null and state != '' ">
+			and s.state = #{state}
+		</if>
+		<if test="cancelstate != null and cancelstate != '' ">
+			and s.cancelState = #{cancelstate}
+		</if>
+		<if test="siteno != null and siteno != '' ">
+			and s.siteno = #{siteno}
+		</if>
+		<if test="ecnetno != null and ecnetno != '' ">
+			and s.ecnetno = #{ecnetno}
+		</if>
+		<if test="deviceno != null and deviceno != '' ">
+			and s.deviceno = #{deviceno}
+		</if>
+		<if test="is3h != null and is3h != '' ">
+			and s.is3h = #{is3h}
+		</if>
+		<if test="isdelivertohome != null and isdelivertohome != '' ">
+			and s.isdelivertohome = #{isdelivertohome}
+		</if>
+		<if test="channelcode != null and channelcode != '' ">
+			and s.channelcode = #{channelcode}
+		</if>
+		<if test="ispfchannelcode != null and ispfchannelcode != '' ">
+			and s.channelcode in ('27','43')
+		</if>
+		<if test="nopfchannelcode != null and nopfchannelcode != '' ">
+			and s.channelcode not in ('27','43')
+		</if>
+		<if test="isrestore != null and isrestore != '' ">
+			and s.isRestore = #{isrestore}
+		</if>
+		<if test="starttime != null and starttime != '' ">
+            <![CDATA[ and DATE_FORMAT(t.orderTime,"%Y-%m-%d %H:%i:%s") >= '${starttime}' ]]>
+		</if>
+		<if test="endtime != null and endtime != '' ">
+            <![CDATA[ and DATE_FORMAT(t.orderTime,"%Y-%m-%d %H:%i:%s") <= '${endtime}' ]]>
+		</if>
+		
+		<!-- 订单搜索 可匹配下单手机号 订单号 商品名称 -->
+		<if test="searchvalue != null and searchvalue != ''">
+			and CONCAT_WS('@lklec@',s.cusTelNo,s.orderProviderID,s.orderProviderID,s.tAllOrderId) like CONCAT('%',#{searchvalue},'%') 
+		</if>
+	</sql>	
+	
+	
+	<select id="selectByPrimaryKey" resultMap="BaseListResultMap" parameterType="java.lang.String">
+		select tOrderId,tAllOrderId,tel 
+		from torder
+		where tOrderId = #{torderid,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="queryCommonOrderByMap" resultMap="CommonQueryOrderResultMap"
+		parameterType="map">
+        SELECT
+		DISTINCT t.tOrderId as torderid,t.tallorderid,t.orderTime,t.actualAmount,t.logiscalFee,t.payChanel,t.isPay,
+	    t.state,t.source,t.cusName,t.cusTelNo,t.isDeliverToHome,t.addressFull,t.paytoken
+		from
+		torder t,torderitems s 
+		where t.tOrderId = s.orderID
+		
+         <include refid="queryCommonOrderwhere"/>
+         
+		ORDER by t.orderTime DESC
+
+		<if test="start != null and rows != ''">
+			limit #{start},#{rows}
+		</if>
+	</select>
+
+
+	<select id="countCommonOrderByMap" resultType="java.lang.Integer"
+		parameterType="map">
+
+		SELECT
+		count(DISTINCT t.torderid)
+		from
+		torder t,torderitems s 
+		where t.tOrderId = s.orderID
+
+		<include refid="queryCommonOrderwhere"/>
+
+	</select>
+	
+	
+	<select id="viewOrderByMap" resultMap="ViewOrderResultMap" parameterType="com.lakala.module.order.vo.OrderDetailInput" >
+    
+       SELECT  
+	    t.tAllOrderId,t.tOrderId,t.orderTime,a.actualtotal as actualAmount,a.logisfee as logiscalfee,a.payChanel,a.isPay,
+	    t.state,t.source,t.cusName,t.cusTelNo,t.isDeliverToHome,a.favamount as favorrulemoney,t.paytoken,t.addressFull,
+        t.addressProvinceName,t.addressCityName,t.addressAreaName
+	    from  tallorder a,torder t
+	    where   a.tAllOrderId = t.tAllOrderId
+	    
+	    <if test="tallorderid != null and tallorderid != '' ">
+            and t.tallorderid = #{tallorderid}
+        </if>
+	    <if test="torderid != null and torderid != '' ">
+            and t.torderid = #{torderid}
+        </if>
+        <if test="mobile != null and mobile != '' ">
+            and t.memberName = #{mobile}
+        </if>
+        <if test="siteno != null and siteno != '' ">
+			and t.siteno = #{siteno}
+		</if>
+		<if test="ecnetno != null and ecnetno != '' ">
+			and t.ecnetno = #{ecnetno}
+		</if>
+		
+		 LIMIT 1;
+  </select>
+  
+  
+  <select id="viewOrderProviderByMap" resultMap="ViewOrderProviderResultMap" parameterType="map" >
+  	
+        SELECT  
+	    r.torderproviderid as torderproviderid,r.orderid as orderid,r.providerid, r.providername, g.clientServiceTel as clientservicetel
+	    from  torderprovider r LEFT JOIN tgoodsprovider g ON  r.providerID = g.tGoodsProviderId    
+        where  r.cancelState  = 136
+        and r.orderID = #{torderid,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="viewOrderItemsByContainCancelMap" resultMap="ViewOrderItemsResultMap" parameterType="map" >
+  	
+       SELECT  
+	    s.tOrderItemsId,s.goodsID,s.goodsName,s.isPay,
+		s.goodssaleprice,s.goodscount,s.invalidstate,s.is3h,s.invalidstate,s.state,s.norms,
+		x.logisticsCode as logisticsCode,y.corpName as corpName,
+		e.goodBigPic as goodBigPic,s.cancelState
+      from torderitems s 
+      LEFT JOIN tgoodsinfo e ON s.goodsID = e.tGoodInfoId
+      LEFT JOIN tlogisticsinfo x ON s.logisticsId = x.logisticsId
+      LEFT JOIN tlogisticcorp y ON x.tlogisticCorpId = y.tlogisticCorpId
+        where  s.orderProviderID = #{torderproviderid,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="viewOrderItemsByMap" resultMap="ViewOrderItemsResultMap" parameterType="map" >
+  	
+       SELECT  
+	    s.tOrderItemsId,s.goodsID,s.goodsName,s.isPay,
+		s.goodssaleprice,s.goodscount,s.invalidstate,s.is3h,s.invalidstate,s.state,s.norms,
+		x.logisticsCode as logisticsCode,y.corpName as corpName,
+		e.goodBigPic as goodBigPic,s.cancelState
+      from torderitems s 
+      LEFT JOIN tgoodsinfo e ON s.goodsID = e.tGoodInfoId
+      LEFT JOIN tlogisticsinfo x ON s.logisticsId = x.logisticsId
+      LEFT JOIN tlogisticcorp y ON x.tlogisticCorpId = y.tlogisticCorpId
+        where s.orderProviderID = #{torderproviderid,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="viewCommonOrderProviderByMap" resultMap="DetailOrderProviderResultMapV2" parameterType="com.lakala.module.order.vo.OrderDetailInput">
+  	
+        SELECT  
+	    r.orderId,r.tOrderProviderId,r.orderTime,r.actualAmount,r.logiscalFee,r.payChanel,r.isPay,
+	    r.state,r.source,r.cusName,r.cusTelNo,r.isDeliverToHome,g.clientServiceTel,
+	    r.providerid, r.providername,r.favorRuleMoney,t.paytoken,
+        r.addressFull,r.addressProvinceName,r.addressCityName,r.addressAreaName
+	    
+	    from  torderprovider r 
+	    LEFT JOIN tgoodsprovider g ON  r.providerID = g.tGoodsProviderId  
+        LEFT JOIN torder t ON r.orderID = t.tOrderId      
+        where  r.torderproviderid = #{torderproviderid,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="queryCommonOrderProviderByMap" resultMap="CommonQueryOrderProviderResultMap"
+		parameterType="map">
+         SELECT
+		DISTINCT r.orderId,r.tOrderProviderId,r.orderTime,r.actualAmount,r.logiscalFee,r.payChanel,r.isPay,
+	    r.state,r.source,r.cusName,r.cusTelNo,r.isDeliverToHome,r.addressFull,IFNULL(g.clientServiceTel,m.mobile) as clientServiceTel,
+	    r.providerid, r.providername
+		from
+	
+        torderprovider  r LEFT JOIN torder t ON  r.orderID = t.tOrderId
+		LEFT JOIN torderitems s ON r.orderID = s.orderID and r.tOrderProviderId = s.orderProviderID
+		LEFT JOIN tgoodsprovider g ON r.providerID = g.tGoodsProviderId and s.providerID = g.tGoodsProviderId
+		LEFT JOIN sdb_media_statistics m ON s.deviceNo = m.psam where 1=1
+    
+		<include refid="queryCommonOrderProviderwhere"/>
+
+		ORDER BY t.orderTime DESC
+
+		<if test="start != null and rows != ''">
+			limit #{start},#{rows}
+		</if>
+	</select>
+
+	<select id="countCommonOrderProviderByMap" resultType="java.lang.Integer"
+		parameterType="map">
+        SELECT
+		count(DISTINCT r.tOrderProviderId)
+		from
+		torder t,torderprovider r,torderitems s
+		where 
+	    t.tOrderId = r.orderID 
+	    and t.tOrderId = s.orderID
+	    and r.orderID = s.orderID
+	    and r.tOrderProviderId = s.orderProviderID  
+	    and r.providerID = s.providerID
+
+		<include refid="queryCommonOrderProviderwhere"/>
+
+	</select>
+	
+	
+	<select id="queryCommonOrderProviderByMapV2" resultMap="CommonQueryOrderProviderResultMapV2"
+		parameterType="map">
+        SELECT
+		DISTINCT r.tOrderProviderId,r.orderTime,r.actualAmount,
+	    r.state,r.providerid, r.providername
+		
+        from torderprovider  r ,torder t ,torderitems s 
+        where r.orderID = s.orderID and r.tOrderProviderId = s.orderProviderID  and r.orderID = t.tOrderId	
+    
+		<include refid="queryCommonOrderProviderwhere"/>
+
+		ORDER BY r.orderTime DESC
+
+		<if test="start != null and rows != ''">
+			limit #{start},#{rows}
+		</if>
+	</select>
+
+    
+    <select id="queryCommonOrderByMapV2" resultMap="CommonQueryOrderResultMapV2"
+		parameterType="map">
+        SELECT
+		DISTINCT  w.tallorderid,w.actualtotal as actualamount,w.payChanel,t.paytoken,w.isPay,
+		          w.orderTime,w.source,w.favamount favorrulemoney,w.logisfee as logiscalfee
+		from
+		tallorder w,torder t,torderitems s 
+		where w.tallorderid = t.tallorderid 
+		and w.tallorderid = s.tallorderid
+		and t.tallorderid = s.tallorderid      
+		and t.tOrderId = s.orderID
+		
+         <include refid="queryCommonOrderwhere"/>
+         
+		ORDER by t.orderTime DESC
+
+		<if test="start != null and rows != ''">
+			limit #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="viewOrderItemsByMapV2" resultMap="ViewOrderItemsResultMapV2" parameterType="map" >
+  	
+       SELECT  
+	    s.tOrderItemsId,s.goodsID,s.goodsName,
+		s.goodssaleprice,s.state,e.goodBigPic as goodBigPic,s.cancelstate
+      from torderitems s 
+      LEFT JOIN tgoodsinfo e ON s.goodsID = e.tGoodInfoId
+        where s.orderProviderID = #{torderproviderid,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="viewOrderProviderByMapV2" resultMap="ViewOrderProviderResultMapV2" parameterType="map" >
+        SELECT  
+	    r.tallorderid,r.orderId,r.tOrderProviderId,r.orderTime,r.actualAmount,r.logiscalFee,r.payChanel,r.isPay,
+	    r.state,r.source,r.cusName,r.cusTelNo,r.isDeliverToHome,r.addressFull,g.clientServiceTel,
+	    r.providerid, r.providername,r.favorRuleMoney
+	    
+	    from  torderprovider r 
+	    LEFT JOIN tgoodsprovider g ON  r.providerID = g.tGoodsProviderId  
+        where  r.tallorderid = #{tallorderid,jdbcType=VARCHAR}
+  </select>
+
+   <!--w.xdsj 下单时间,w.zfsj 支付时间,w.fhsj 发货时间,w.qssj 签收时间 -->
+   <select id="selectOrderDateByOpID" resultMap="ViewOrderDateResultMapV2" parameterType="java.lang.String">
+
+		    SELECT  w.torderproviderid as torderproviderid,w.xdsj,w.zfsj,w.fhsj,w.qssj  FROM
+			(
+				SELECT  
+				s.orderProviderId torderproviderid,
+				s.tOrderItemsId,
+				r.orderTime as xdsj,
+				r.payTime as zfsj,
+				x.startTime as fhsj,
+				x.receivertime as qssj,
+				(if(r.orderTime is NULL,0,1)+if(r.payTime is NULL,0,1)+if(x.startTime is NULL,0,1)+if(x.receivertime is NULL,0,1)) as datanum
+				
+				 from  torderprovider r LEFT JOIN torderitems s ON r.tOrderProviderId = s.orderProviderID
+				and r.orderID = s.orderID LEFT JOIN torder t ON r.orderID = t.tOrderId  
+				LEFT JOIN tlogisticsinfo x ON s.logisticsId = x.logisticsId
+				where  s.orderProviderID = #{torderproviderid,jdbcType=VARCHAR} 
+				GROUP BY s.orderProviderId,s.tOrderItemsId   
+			 )  w 
+			 ORDER BY w.datanum  DESC LIMIT 1
+	</select>
+	
+	
+	<!--w.xdsj 下单时间,w.zfsj 支付时间,w.fhsj 发货时间,w.qssj 签收时间 -->
+   <select id="selectOrderDateByTallorderID" resultMap="ViewOrderDateResultMapV2" parameterType="java.lang.String">
+
+		    SELECT  w.tallorderid as tallorderid,w.xdsj,w.zfsj,w.fhsj,w.qssj  FROM
+			(
+				SELECT  
+				s.tallorderid tallorderid,
+				s.tOrderItemsId,
+				r.orderTime as xdsj,
+				r.payTime as zfsj,
+				x.startTime as fhsj,
+				x.receivertime as qssj,
+				(if(r.orderTime is NULL,0,1)+if(r.payTime is NULL,0,1)+if(x.startTime is NULL,0,1)+if(x.receivertime is NULL,0,1)) as datanum
+				
+				 from  torderprovider r LEFT JOIN torderitems s ON r.tOrderProviderId = s.orderProviderID
+				and r.orderID = s.orderID LEFT JOIN torder t ON r.orderID = t.tOrderId  
+				LEFT JOIN tlogisticsinfo x ON s.logisticsId = x.logisticsId
+				where  s.tallorderid = #{tallorderid,jdbcType=VARCHAR} 
+				GROUP BY s.tallorderid,s.tOrderItemsId   
+			 )  w 
+			 ORDER BY w.datanum  DESC LIMIT 1
+	</select>
+	
+	
+	<select id="viewDetailOrderProviderByMapV2" resultMap="ViewOrderProviderResultMap" parameterType="map" >
+  	
+        SELECT  
+	    r.torderproviderid as torderproviderid,r.orderid as orderid,r.providerid, r.providername, g.clientServiceTel as clientservicetel
+	    from  torderprovider r LEFT JOIN tgoodsprovider g ON  r.providerID = g.tGoodsProviderId    
+        where r.tallorderid = #{tallorderid,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectOrderListByMap" resultMap="orderWithDevResultMap"
+		parameterType="map">
+		select
+		<include refid="WithMedia_Column_List" />
+		from torder a left join sdb_media_statistics m ON
+		a.deviceNo=m.psam
+		where 1 = 1
+		<if test="cancelstate != null">
+			a.cancelstate = #{cancelstate,jdbcType=INTEGER},
+		</if>
+		<if test="lockstate != null">
+			a.lockstate = #{lockstate,jdbctype=INTEGER},
+		</if>
+		<if test="tallorderid != null">
+			a.tallorderid = #{tallorderid,jdbcType=INTEGER},
+		</if>
+		<if test="torderid != null">
+			a.torderid = #{torderid,jdbcType=VARCHAR},
+		</if>
+		<if test="source != null">
+			a.source = #{source,jdbcType=VARCHAR},
+		</if>
+	</select>
+
+</mapper>

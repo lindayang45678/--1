@@ -1,0 +1,3 @@
+# lakala to pay settings  
+lakala.callbackurl=http://10.5.12.203:8083/sideshopB/app/wholesale/topay.html
+#lakala.callbackurl=http://appmts.lakalaec.com:8181/sideshopB/app/wholesale/topay.html

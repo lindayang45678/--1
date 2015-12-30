@@ -1,0 +1,225 @@
+$(function(){
+	var sUrl = window.location.href;
+	var torderproviderid = getParamValueByName(sUrl, "torderproviderid");
+	var pfstate = getParamValueByName(sUrl, "pfstate");
+
+    var data = {"ecnetno":netNo, "torderproviderid":torderproviderid}; //两级订单详情
+	var resultJson = ajaxCommon(urlOrderView,data);
+	resultJson = convertNullToEmpty(resultJson);
+	var _ReturnDataInfo = resultJson._ReturnData.orderproviderqueryinfo;//订单信息
+	var orderitemslist = _ReturnDataInfo.orderitemslist;//商品列表
+	var actualamount = _ReturnDataInfo.actualamount;//实付金额
+	var orderdatequeue = resultJson._ReturnData.orderproviderqueryinfo.orderdatequeue;//时间轴
+	if (resultJson._ReturnCode === returnCodeSuccess) {
+		$(".goods-receipt strong").text(_ReturnDataInfo.cusname.split("(")[0]);//收货人
+		$(".goods-receipt .fr").text(_ReturnDataInfo.custelno);//收货人电话
+		$(".goods-receipt em").text(_ReturnDataInfo.addressprovincename + _ReturnDataInfo.addresscityname + _ReturnDataInfo.addressareaname + _ReturnDataInfo.addressfull);//收货人地址
+		$(".order-status span em").text(_ReturnDataInfo.torderproviderid);//订单号
+		//订单状态时间轴
+		var statuscontent = $(".order-status ul");
+		var ret = "";
+		//配送各个状态的时间列表
+		function orderdate(msg,objorderdate){
+			ret += "<li>";
+			ret += "<s></s>";
+			ret += "<p><i>"+ msg +"</i><br/><span>"+ getLocalTime(objorderdate) +"</span></p>";
+			ret += "</li>";
+			return ret;
+		}
+		var querytype = sessionStorage.getItem("sessionquerytype");//批发、零售
+	
+		//取消时间
+		if (orderdatequeue.qxsj != "") {
+			var qxfl = parseInt(orderdatequeue.qxfl);
+			var msgTimeLine = "";
+			switch (qxfl) {
+			case cancelOperater:msgTimeLine = msgTimelineCancelOperater;
+				break;
+			case cancelShoper:msgTimeLine = msgTimelineCancelShoper;
+				break;
+			case cancelProvider:msgTimeLine = msgTimelineCancelProvider;
+				break;
+			case cancelCustomer:msgTimeLine = msgTimelineCancelCustomer;
+				break;
+			case cancelSystem:msgTimeLine = msgTimelineCancelSystem;
+				break;
+			}
+			orderdate(msgTimeLine, orderdatequeue.qxsj);
+		}
+		//签收时间
+		if (orderdatequeue.qssj != "") {
+			if ((querytype == "pfyfh" || querytype == "pfbfsh" || pfstate == stateBFQS) && _ReturnDataInfo.state != stateYQS) {
+				orderdate(msgSectionSign, orderdatequeue.fhsj);
+			} else {
+				orderdate(msgTimelineSign, orderdatequeue.qssj);
+			}
+		}
+		//发货时间
+		if (orderdatequeue.fhsj != "") {
+			orderdate(msgTimelineShipped, orderdatequeue.fhsj);	
+		}
+		//支付时间
+		if (orderdatequeue.zfsj != "") {
+			orderdate(msgTimelinePaymented, orderdatequeue.zfsj);
+		} 
+		//下单时间
+		if (orderdatequeue.xdsj != "") {
+			orderdate(msgTimelineSubmited, orderdatequeue.xdsj);//批发订单
+		} 
+		statuscontent.prepend(ret);
+		$(".order-status ul li:first-child").addClass("active");
+
+		$(".orders-list h3 span").text(_ReturnDataInfo.providername);//供应商名称
+		$(".orders-list .fr s").text(_ReturnDataInfo.clientservicetel);//供应商售后电话
+		//商品信息列表
+		var goodscontent = $(".orders-list li");
+		var goodsret ="";
+		var logisticscode = "";
+		var state = "";
+		var torderitemsid = "";
+		var showDZSH = false;  //是否显示店主收货
+		if (orderitemslist.length > 0) {
+			for(var j = 0; j < orderitemslist.length; j++) {
+				var goodbigpic = orderitemslist[j].goodbigpic;//商品图片
+				var goodsid = orderitemslist[j].goodsid;//商品id
+				goodsret += "<dl class='goods'>";
+				goodsret += "<dt><img src='" +urlImage + "/" + goodsid + "/" + imgw100 + "/" + goodbigpic.split(";")[0] + "' onerror='productErrImg(this);'/></dt>";
+				goodsret += "<dd>";
+				goodsret += "<span class='title'><i class='c-black'>" + orderitemslist[j].goodsname + "</i><u class='nobr'>" + orderitemslist[j].norms + "</u></span>";
+				goodsret += "<span class='total'><i class='c-black'>¥" + formatNumber(orderitemslist[j].goodssaleprice) + "</i><u>x" + orderitemslist[j].goodscount + "</u></span>";
+				goodsret += "</dd>";
+				goodsret += "</dl>"; 
+				
+				if (orderitemslist[j].logisticscode != "" && orderitemslist[j].cancelstate == cancelstateN) {
+					state = orderitemslist[j].state;
+					showDZSH = true;
+					if (_ReturnDataInfo.state == state) {
+						logisticscode = orderitemslist[j].logisticscode;
+						torderitemsid = orderitemslist[j].torderitemsid;
+					}
+				}
+			}
+			goodscontent.append(goodsret);
+			
+			//查看物流属性绑定
+			$("#ckwl").attr("logno",logisticscode)
+			.attr("state",state)
+			.attr("orderitemsid",torderitemsid);
+			//全部收货属性绑定
+			$("#qbsh").attr("torderproviderid",torderproviderid)
+			.attr("logno",logisticscode);
+			//店主收货属性绑定
+			$("#dzsh").attr("logno",logisticscode);
+			//确认订单属性绑定
+			$("#dzqr").attr("torderproviderid",torderproviderid);
+			//取消订单属性绑定
+			$("#dzqx").attr("torderproviderid",torderproviderid);
+			//顾客取货属性绑定
+			$("#gkqh").attr("sincecode",logisticscode);
+			//查看快递属性绑定
+			$("#ckkd").attr("logno",logisticscode)
+			.attr("state",state)
+			.attr("orderitemsid",torderitemsid);;
+		}
+		$(".fee p:nth-child(1) span").html("-¥"+formatNumber(_ReturnDataInfo.favorrulemoney));//优惠金额
+		$(".fee p:nth-child(2) span").html("¥"+formatNumber(_ReturnDataInfo.logiscalfee));//运费
+		$(".fee p:nth-child(3) span").html("¥"+formatNumber(actualamount));//实付金额
+		
+		//根据供应商订单状态显示按钮
+		var state = _ReturnDataInfo.state;
+		var pfstate = getParamValueByName(sUrl, "pfstate");
+		/*//配送中（部分发货：101，已发货：102）
+		if((state == stateBFFH || state == stateYFH) && showDZSH) {
+			$("#dzsh").removeClass("hidden");
+			$("#ckwl").removeClass("hidden");
+		}
+		//部分收货（部分签收：103）
+		if(state == stateBFQS) {
+			$("#qbsh").removeClass("hidden");
+			$("#ckwl").removeClass("hidden");
+		}*/
+		//批发已签收（已签收：104）
+		if(pfstate == stateYQS || state == stateYQS) {
+			$("#zcgm").removeClass("hidden");
+			$("#ckwl").removeClass("hidden");
+		}
+		//批发已发货
+		if (querytype == "pfyfh" && showDZSH) {
+			$("#dzsh").removeClass("hidden");
+			$("#ckwl").removeClass("hidden");
+		}
+		//批发部分收货--合并到待收货
+		if (querytype == "pfbfsh" && state != stateYQS) {
+			$("#dzsh").removeClass("hidden");
+			$("#ckwl").removeClass("hidden");
+		}
+		/*批发已签收
+		if (querytype == "pfysh") {
+			$("#zcgm").removeClass("hidden");
+			$("#ckwl").removeClass("hidden");
+		}*/
+	} else {
+		showAlertMsg(resultJson._ReturnMsg);
+	}
+
+	pfOrders();//批发订单操作
+});
+
+/* 批发订单操作*/
+function pfOrders() {
+	//批发订单-查看物流
+	$("#ckwl").on("tap", function(){
+		var logno = $(this).attr("logno");
+		var state = $(this).attr("state");
+		var orderitemsid = $(this).attr("orderitemsid");
+		directDeliveryHtml(logno,state,orderitemsid);
+	});
+	//批发订单-店主收货
+	$("#dzsh").on("touchend", function(e){
+		var logno = $(this).attr("logno");
+		var data = {"logno":logno,"netno":netNo};
+		var resultJson = ajaxCommon(urlreceipt, data);
+		resultJson = convertNullToEmpty(resultJson);
+		e.preventDefault();
+		if (resultJson._ReturnCode === returnCodeSuccess) {
+			resultJson = JSON.stringify(resultJson);
+			storage.setItem("shopReceiptQuery",resultJson);
+			window.location.href = "../receipt/shopreceiptinfo.html?logno="+ logno +"&t=" + t;	
+		} else {
+			window.location.href = "../receipt/shopreceiptfail.html?logno="+ logno +"&t=" + t;
+		}
+	});
+	//批发订单-店主全部收货
+	$("#qbsh").on("tap",function(){
+		$("#orderreceipt").removeClass("hidden");
+	});
+	$("#receipt-confirm").on("tap",function(){
+		var logno = $(this).attr("logno"); 
+		var torderproviderid = $("#qbsh").attr("torderproviderid");
+		var data = {"orderproviderid":torderproviderid,"psam":psam};
+		var resultJson = ajaxCommon(urlConfirmShAll,data);
+		resultJson = convertNullToEmpty(resultJson);
+		$("#orderreceipt").hide();
+		if (resultJson._ReturnCode === returnCodeSuccess){
+			showAlertMsg(msgOrderAllSigned);
+			window.location.href = "wholesaledetail.html?torderproviderid=" +torderproviderid;
+		} else {
+			showAlertMsg(resultJson._ReturnMsg);
+		}
+	});
+	$("#receipt-cancel").on("tap",function(){
+		$("#orderreceipt").addClass("hidden");
+	});
+
+	//批发订单--头部返回  back
+	$("#back").on("touchend", function(e) {
+		e.preventDefault();
+		var sUrl = window.location.href;
+		var from = getParamValueByName(sUrl, "from");
+		if(from == "search") {
+			window.history.go(-1);
+		} else {
+			window.location.href = "wholesaleorders.html?t=" + t;
+		}
+	});
+}

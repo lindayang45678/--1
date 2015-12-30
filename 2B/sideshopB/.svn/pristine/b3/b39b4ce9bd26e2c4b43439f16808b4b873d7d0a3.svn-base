@@ -1,0 +1,160 @@
+$(function() {
+	var url = window.location.href;
+	var logno = getParamValueByName(url, "logno");
+	var detail = storage.getItem("shopReceiptQuery");
+	var resultJson = $.parseJSON(detail);
+	resultJson = convertNullToEmpty(resultJson);
+
+	var ret = '';
+	var returnData = resultJson._ReturnData;
+	var deliverycom = returnData.deliverycom.substr(0, 16);  //物流公司
+	var logno = returnData.logno;  //物流单号
+	var cusname = returnData.cusname;  //收货人
+	var custelno = returnData.custelno;  //电话
+
+	ret += '<div class="receipt-info info">';
+	ret += '<div>物流公司<i>' + deliverycom + '</i></div>';
+	ret += '<div>物流单号<i>' + logno + '</i></div>';
+	ret += '<div>收货人<i>' + cusname + '</i></div>';
+	ret += '<div>电话<i>' + custelno + '</i></div>';
+	ret += '</div>';
+
+	for(var i = 0; i < returnData.shouhuoList.length; i ++) {
+		var shouhuoList = returnData.shouhuoList[i];
+		var providername = shouhuoList.providername;  //供应商名称
+		var ordertime = shouhuoList.ordertime.split(".")[0];  //下单时间
+
+		ret += '<div class="receipt-goods">';
+		ret += '<h3><span>' + providername + '</span><i class="fr">' + ordertime + '</i></h3>';
+		ret += '<ul>';
+
+		for (var j = 0; j < shouhuoList.sopglist.length; j ++) {
+			var sopglist = shouhuoList.sopglist[j];
+			var orderitemid = sopglist.orderitemid;  //子订单号
+			var goodsid = sopglist.goodsid;  //商品ID
+			var goodbigpic = sopglist.goodbigpic.split(";")[0];  //商品图片
+			if(typeof(sopglist.tgoodinfopoolid)!="undefined" && sopglist.tgoodinfopoolid!="") {
+				goodsid = sopglist.tgoodinfopoolid;
+			}
+			var goodbigpicUrl = urlImage + "/" + goodsid + "/" + imgw100 + "/" + goodbigpic;  //商品图片地址
+			var goodsname = sopglist.goodsname;  //商品名称
+			var norms = sopglist.norms;  //商品规格
+			var goodsnum = sopglist.goodsnum;  //商品数量--购买数量
+			var actualnum = sopglist.actualnum || "0";  //实收数量
+			var waitingnum = parseInt(goodsnum) - parseInt(actualnum);  //待收数量
+			var saleprice = sopglist.salePrice; //零售价
+			var unifyFlg = sopglist.unifyFlg; //是否统一售价 0：否 1：是
+			var publishFlg = sopglist.publishFlg; //是否可以发售 0：否 1：是   2：已发布
+
+			ret += '<li class="clearfix" orderitemid="' + orderitemid + '" actualnum="' + actualnum + '">';
+			if(goodsnum != actualnum) {
+				ret += '<a href="javascript:;" class="tips">待收货</a>';
+			}
+			ret += '<img src="' + goodbigpicUrl + '" onerror="productErrImg(this);" />';
+			ret += '<div class="items nobr mt6">';
+			ret += '<h4 class="c-black">' + goodsname + '</h4>';
+			if(norms != "") {
+				ret += '<p><i><em>' + norms + '</em></i></p>';
+			}
+			ret += '<p class="c-black"><i>购买数量：<em>' + goodsnum + '</em></i>';
+			if(waitingnum > 0) {
+				ret += '<i style="margin-left:14px;">待收数量：</i><em>' + waitingnum + '</em></i></p>';
+				ret += '<p class="receipt-actual c-black">';
+				ret += '<i>收货数量：</i>';
+				ret += '<a href="javascript:;">&#8722;</a>';
+				ret += '<input type="text" readonly="readonly" value="' + waitingnum + '" class="goodsnum"/>';
+				ret += '<a href="javascript:;">+</a>';
+				ret += '</p>';
+			} else {
+				ret += '</p>';
+			}
+
+			var hClass = "";
+			if(publishFlg == 0 || bizType == bizTypeJMX) {
+				hClass = "hidden";
+			}
+			ret += '<p class="receipt-actual receipt-price c-black ' +hClass+ '">';
+			ret += '<i>零售价格：</i>';
+			ret += '<input type="tel" value="' +saleprice+ '" class="price"';
+			if(unifyFlg == 1){
+				ret += 'readonly="readonly"';
+			}
+			ret += '/>';
+			ret += '</p>';
+			ret += '</div>';
+			ret += '</li>';
+		}
+
+		ret += '</ul>';
+		ret += '</div>';
+	}
+
+	$(".receipt").append(ret);
+
+	//点击确认取货按钮
+	$("#custreceiptconfirm").on("click", function(e) {
+		var subOrders = new Array(); //存放子订单号和实收数量
+		$("li").each(function(i) {
+			if($(this).find(".goodsnum").length > 0) {
+				var actualnum = parseInt($(this).find(".goodsnum").val()) + parseInt($(this).attr("actualnum"));
+				var json = {"orderitemid":$(this).attr("orderitemid"), "actualnum":actualnum, "publicPice":$(this).find(".price").val()};
+				subOrders.push(json);
+			}
+		});
+
+		if(subOrders.length>0 && bizType!=bizTypeJMX) {
+			for(var i = 0; i < subOrders.length; i ++) {
+				var publicPice = subOrders[i].publicPice;
+				if(publicPice != "") {
+					if(isNaN(publicPice)) {
+						showAlertMsg(msgSalePriceError);
+						return;
+					}
+					if(publicPice <= 0) {
+						showAlertMsg(msgSalePriceError);
+						return;
+					}
+					if(publicPice.indexOf(".") >= 0) {
+						if(publicPice.split(".")[1].length > 2) {
+							showAlertMsg(msgSalePriceError);
+							return;
+						}
+					}
+				}
+			}
+		}
+		var bat = JSON.stringify(subOrders);
+		var data = {"netno":netNo, "mobile":mobile, "logno":logno, "data":bat, "psam":psam};
+		var resultJson = ajaxCommon(urlReceiptConfirm, data);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			resultJson = JSON.stringify(resultJson);
+			storage.setItem("shopReceiptConfirm", resultJson);
+			window.location.href = "shopreceiptsuccess.html?&t=" + t;	
+		} else {
+			if(resultJson._ReturnMsg == "b") {
+				showAlertMsg("已收货，不能重复收货");
+			} else {
+				showAlertMsg(resultJson._ReturnMsg);
+			}
+		}
+
+		e.preventDefault();
+	});	
+});
+
+//收货数量加减
+$(function() {
+	$(".receipt-actual").find("a:eq(0)").on("click", function() {
+		var num = $(this).next().attr("value");
+		if (num > 1) {
+			$(this).next().attr("value", num - 1);
+		}
+	});
+	$(".receipt-actual").find("a:eq(1)").on("click", function() {
+		var num = parseInt($(this).prev().attr("value"));
+		var waitnum = parseInt($(this).parent().prev().find('em').eq(1).html());  //待收数量
+		if(num < waitnum){
+			$(this).prev().attr("value", (1 + num));
+		}
+	});
+});

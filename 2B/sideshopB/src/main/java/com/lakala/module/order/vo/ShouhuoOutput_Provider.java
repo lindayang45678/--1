@@ -1,0 +1,47 @@
+package com.lakala.module.order.vo;
+
+import java.util.ArrayList;
+import java.util.List;
+/**
+ * 供应商订单
+ * @author ls
+ *
+ */
+public class ShouhuoOutput_Provider {
+	private String torderproviderid;
+	private String providername; 
+	private Integer providerstate;
+	private String ordertime;
+	private List<ShouhuoOutput_Provider_Goods> sopglist = new ArrayList<ShouhuoOutput_Provider_Goods>();
+	
+	public String getOrdertime() {
+		return ordertime;
+	}
+	public void setOrdertime(String ordertime) {
+		this.ordertime = ordertime;
+	}
+	public Integer getProviderstate() {
+		return providerstate;
+	}
+	public void setProviderstate(Integer providerstate) {
+		this.providerstate = providerstate;
+	}
+	public String getTorderproviderid() {
+		return torderproviderid;
+	}
+	public void setTorderproviderid(String torderproviderid) {
+		this.torderproviderid = torderproviderid;
+	}
+	public String getProvidername() {
+		return providername;
+	}
+	public void setProvidername(String providername) {
+		this.providername = providername;
+	}
+	public List<ShouhuoOutput_Provider_Goods> getSopglist() {
+		return sopglist;
+	}
+	public void setSopglist(List<ShouhuoOutput_Provider_Goods> sopglist) {
+		this.sopglist = sopglist;
+	}
+}

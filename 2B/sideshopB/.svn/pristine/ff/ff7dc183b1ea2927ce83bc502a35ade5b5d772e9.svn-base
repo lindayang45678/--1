@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans    
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context 
+     	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     	http://www.springframework.org/schema/util
+     	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+        http://www.springframework.org/schema/aop
+	 	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	 	http://www.springframework.org/schema/tx
+	 	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<bean id="propertyConfigurer" 
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+           <list>  
+              <value>classpath:config.properties</value>
+              <value>classpath:redis.properties</value>
+              <value>classpath:constants.properties</value>
+              <value>classpath:config-wx.properties</value>
+              <value>classpath:config-mongo.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+	<util:properties id="propertiesReader" location="classpath:config.properties" /> 
+	
+	<context:annotation-config/>   
+
+	<context:component-scan base-package="com.lakala.module"/>
+
+	<!-- 写库  -->
+	<bean id="dataSourceSpied_w" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}" />
+	</bean>
+	
+	<bean id="dataSource_w" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="dataSourceSpied_w" />
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+				<property name="loggingType" value="SINGLE_LINE" />
+				<property name="sqlPrefix" value="SQL::" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="sqlSessionFactory_W" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource_w" />
+		<property name="mapperLocations" value="classpath*:mapper/w/**/*Mapper.xml" />
+	</bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       <property name="basePackage" value="com.lakala.mapper.w" />
+       <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory_W"></property>
+       <property name="nameGenerator" ref="mapperBeanNameGenerator"></property>
+    </bean>  
+	
+	<bean id="mapperBeanNameGenerator" class="com.lakala.util.MapperBeanNameGenerator"></bean>
+
+	
+	<!-- 读库  -->
+	<bean id="dataSourceSpied_r" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url.r}" />
+		<property name="username" value="${jdbc.username.r}" />
+		<property name="password" value="${jdbc.password.r}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}" />
+	</bean>
+	
+	<bean id="dataSource_r" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="dataSourceSpied_r" />
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+				<property name="loggingType" value="SINGLE_LINE" />
+				<property name="sqlPrefix" value="SQL::" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="sqlSessionFactory_r" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource_r" />
+		<property name="mapperLocations" value="classpath*:mapper/r/**/*Mapper.xml" />
+	</bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       <property name="basePackage" value="com.lakala.mapper.r" />
+       <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory_r"></property>
+       <property name="nameGenerator" ref="mapperBeanNameGenerator"></property>
+    </bean> 
+   
+    
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource_w" />
+	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*"   propagation="REQUIRED" />
+			<tx:method name="insert*"   propagation="REQUIRED" />
+			<tx:method name="modify*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="up*" propagation="REQUIRED" rollback-for="com.lakala.exception.LakalaException"/>
+			<tx:method name="approval*" propagation="REQUIRED" />
+			<tx:method name="autoAddGoods" propagation="REQUIRES_NEW" rollback-for="com.lakala.exception.LakalaException"/>
+			<tx:method name="autoOnsale" propagation="REQUIRES_NEW" rollback-for="com.lakala.exception.LakalaException"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="advisePointcut" expression="execution(* com.lakala.module.*.service.*.*(..)))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="advisePointcut" />
+	</aop:config>
+
+
+	<bean id="jedisConnFactory" 
+	    class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" 
+	    p:use-pool="true"
+	    p:host-name="${redis.host}" p:port="${redis.port}"/>
+	    
+	<bean id="redisTemplate" 
+	    class="org.springframework.data.redis.core.RedisTemplate" 
+	    p:connection-factory-ref="jedisConnFactory">
+	    <property name="keySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashKeySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+	</bean>
+	
+	<bean id="constantsUtil" class="com.lakala.util.ConstantsUtil">
+		<property name="callbackurl" value="${lakala.callbackurl}"/>
+		<property name="wxcallbackurl" value="${lakala.wxcallbackurl}"/>
+	</bean>
+	<bean id="wxService" class="com.lakala.util.EmallWXService">
+		<property name="url" value="${emal.wx.service}"/>
+		<property name="favcode_quanguo" value="${favcode.quanguo}"/>
+		<property name="favcode_beijing" value="${favcode.beijing}"/>
+		<property name="url_ll" value="${emal.wx.service.url.ll}"/>
+	</bean>
+	
+	<!-- 开通手机钱包 -->
+	<bean id="httpServiceBean" class="com.lakala.util.HttpServiceBean">
+		<property name="url" value="${openWallet4Login.service.url}" />
+		<property name="_t" value="${openWallet4Login.service._t}" />
+		<property name="_TransCode" value="${openWallet4Login.service._transcode}" />
+	</bean>
+
+	<!-- MONGO接口地址配置 -->
+	<bean id="mongoInterfaceUrl" class="com.lakala.util.MongoInterfaceUrl">
+		<property name="left" value="${mongo.left}" />
+		<property name="list" value="${mongo.list}" />
+		<property name="detail" value="${mongo.detail}" />
+		<property name="count" value="${mongo.count}" />
+		
+		<property name="save" value="${mongo.save}" />
+		<property name="modify" value="${mongo.modify}" />
+		<property name="down" value="${mongo.down}" />
+		<property name="publish" value="${mongo.publish}" />
+		<property name="save_sku" value="${mongo.save.sku}" />
+		<property name="modify_sku" value="${mongo.modify.sku}" />
+		<property name="mongoTestBaseUrl" value="${baseURL}"/>
+		<property name="sideshop_goodslist" value="${mongo.sideshop.goodslist}"/>
+	</bean>
+	
+</beans>

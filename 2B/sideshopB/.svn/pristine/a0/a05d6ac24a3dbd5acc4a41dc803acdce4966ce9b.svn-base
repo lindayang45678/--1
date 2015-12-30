@@ -1,0 +1,57 @@
+package com.lakala.module.user.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.CustomerService;
+import com.lakala.module.user.vo.CustomerOutput;
+import com.lakala.module.user.vo.ShopInfoInput;
+import com.lakala.util.ReturnMsg;
+
+/**
+ * 客户信息
+ * @author zjj
+ * @date 2015年3月2日
+ */
+
+@Component
+public class CustomerServiceImpl implements CustomerService{
+
+	@Override
+	public ObjectOutput customerList(ShopInfoInput input) {
+		
+		ObjectOutput info = new ObjectOutput();
+		
+		info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+		info.set_ReturnMsg(ReturnMsg.MSG_SUCCESS_DEFAULT);
+		
+		List<CustomerOutput> list = new ArrayList<CustomerOutput>();
+		
+		CustomerOutput out1 = new CustomerOutput();
+		out1.setCustomerName("张三");
+		out1.setNickName("zhangsan");
+		out1.setPhone("12345678908");
+		out1.setIcon("../image/icon1.jpg");
+		list.add(out1);
+		
+		CustomerOutput out2 = new CustomerOutput();
+		out2.setCustomerName("李四");
+		out2.setNickName("lisi");
+		out2.setPhone("43213647886");
+		list.add(out2);
+
+		CustomerOutput out3 = new CustomerOutput();
+		out3.setCustomerName("李四");
+		out3.setNickName("lisi");
+		out3.setPhone("43213647886");
+		list.add(out3);
+		
+		info.set_ReturnData(list);
+		
+		return info;
+	}
+
+}

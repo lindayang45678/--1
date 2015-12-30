@@ -1,0 +1,23 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.model.order.OrderProviderQueryInfo;
+
+/**
+ * 
+ * @author yhg
+ *
+ */
+public class OrderDetailOutput{
+	
+	private OrderProviderQueryInfo orderproviderqueryinfo;
+
+	public OrderProviderQueryInfo getOrderproviderqueryinfo() {
+		return orderproviderqueryinfo;
+	}
+
+	public void setOrderproviderqueryinfo(
+			OrderProviderQueryInfo orderproviderqueryinfo) {
+		this.orderproviderqueryinfo = orderproviderqueryinfo;
+	}
+
+}

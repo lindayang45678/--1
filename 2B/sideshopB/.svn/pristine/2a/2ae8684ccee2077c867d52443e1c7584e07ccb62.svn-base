@@ -1,0 +1,18 @@
+$(function(){
+	loadJs();
+})
+
+$("#to-pay").on("tap",function(){
+	var paychannel = storage.getItem("paychannel") || "";
+	var payurl = storage.getItem("payurl") || "";
+	cordova._native.pay.pay(
+			paychannel,
+			payurl,
+			function(){
+				window.location.href = "paysuccess.html";
+			},
+			function(){
+				window.location.href = "payfail.html";
+			}
+	)
+})

@@ -1,0 +1,36 @@
+$(function() {
+	
+	//点击该订单已全部收货,弹窗提示
+	$(".all-receipts").on("tap", function() {
+		$(".pop-up-box").show();
+	});
+	$(".pop-up-box .btn-gray").on("tap", function() {
+		$(".pop-up-box").hide();
+	});
+	//点击处理售后,弹窗提示	
+	$(".after-sale").on("tap", function() {
+		$(".pop-up-box").show();
+	});
+	$(".not-agree").on("tap", function() {
+		$(".not-agree").addClass("on").siblings().removeClass("on");
+		$(".reasons").show().siblings(".msg").hide();
+	});
+	$(".agree").on("tap", function() {
+		$(".agree").addClass("on").siblings().removeClass("on");
+		$(".msg").show().siblings(".reasons").hide();
+	});
+	//订单展开
+	$('.order-number').on('tap',function(){
+		$(this).find('div').toggleClass('down').parent().siblings().toggle();
+	});
+	
+	//订单菜单列表
+	var liWidth = $('#header-list-slide li').width();
+	var listCount = $('#header-list-slide li').length;//获取列表数量
+	$("#header-list-slide").css("width", liWidth * listCount + "px");
+	var prodetailScroll = new iScroll('header-list', {
+		hScroll : false,
+		vScroll : false
+	});
+	
+});

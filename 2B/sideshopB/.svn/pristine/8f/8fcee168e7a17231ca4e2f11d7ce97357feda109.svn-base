@@ -1,0 +1,25 @@
+package com.lakala.util;
+
+public class EmallWXService {
+	private String url = "";
+	private String favcode_quanguo = "";
+	private String favcode_beijing = "";
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public String getFavcode_beijing() {
+		return favcode_beijing;
+	}
+	public void setFavcode_beijing(String favcode_beijing) {
+		this.favcode_beijing = favcode_beijing;
+	}
+	public String getFavcode_quanguo() {
+		return favcode_quanguo;
+	}
+	public void setFavcode_quanguo(String favcode_quanguo) {
+		this.favcode_quanguo = favcode_quanguo;
+	}
+}

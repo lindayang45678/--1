@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.pay.PayRequestInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.model.pay.PayRequestInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tAllOrderId" property="tallorderid" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="INTEGER" />    
+    <result column="paytype" property="paytype" jdbcType="VARCHAR" />
+    <result column="paydata" property="paydata" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, tAllOrderId, paytype, paydata, createTime,source
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tpayrequestinfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findPayRequestInfo" resultMap="BaseResultMap" parameterType="com.lakala.module.order.vo.ToPayInput" >
+    SELECT  
+    <include refid="Base_Column_List" />
+    FROM
+	  tpayrequestinfo 
+	WHERE tAllOrderId = #{tallorderid,jdbcType=INTEGER} 
+	  AND paytype = #{paychanelstr,jdbcType=VARCHAR} 
+	  AND source =  #{source,jdbcType=INTEGER}
+  </select> 
+</mapper>

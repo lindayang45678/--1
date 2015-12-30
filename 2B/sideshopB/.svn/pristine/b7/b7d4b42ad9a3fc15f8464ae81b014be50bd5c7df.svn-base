@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+	<header>
+		<h1>订单查询</h1>
+		<a href="../../app/orders/orderquery.html" class="back"></a>
+	</header>
+	<section class="container queryfail">
+ 		<section class="wrap">
+			<div class="content">
+				<img alt="没有结果" src="../../images/searchno-img.png" />
+				<p class="f-16 c-gray">很抱歉，未找到搜索条件的订单 <br/>请重新查询！</p>
+				<a href="orderquery.html" class="btn-red">重新查询</a>
+			</div>	
+		</section>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+</html>

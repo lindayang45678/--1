@@ -1,0 +1,21 @@
+package com.lakala.util;
+
+public class ConfigUtil {
+
+	/**
+	 * @author: yhg
+	 * @project:lakala-odb-restore
+	 * @time: 2015年6月1日 上午10:10:59
+	 * @todo: TODO
+	 */
+	
+	private String mongoTestBaseUrl;  //mongo地址
+
+	public String getMongoTestBaseUrl() {
+		return mongoTestBaseUrl;
+	}
+
+	public void setMongoTestBaseUrl(String mongoTestBaseUrl) {
+		this.mongoTestBaseUrl = mongoTestBaseUrl;
+	}
+}

@@ -1,0 +1,36 @@
+package com.lakala.module.order.vo;
+
+import java.util.List;
+
+/**
+ * 
+ * @author yhg
+ *
+ */
+public class OrderInfoOutput{
+	
+	/** 订单总数 */
+	private Integer total;
+	
+	/** 显示前端的大订单号数组*/
+	private List<String> orderidlist;
+
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+
+	public List<String> getOrderidlist() {
+		return orderidlist;
+	}
+
+	public void setOrderidlist(List<String> orderidlist) {
+		this.orderidlist = orderidlist;
+	}
+
+	
+	
+}

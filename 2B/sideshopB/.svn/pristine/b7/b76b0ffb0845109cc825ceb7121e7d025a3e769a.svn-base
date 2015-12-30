@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>平台商品</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="whitebg">
+	<header>
+		<a href="../homepage/index.html" class="back"></a>
+  		<h1>平台商品</h1>
+	</header>
+    <section class="container">
+       <section class="plat-main clearfix">
+       		<section class="plat-menus">
+           		<div id="plat-left">
+                   	<ul class="plat-menu1">
+               			<li><a href="#" class="promotion">生鲜速达<i></i></a></li>
+                   		<li><a href="#">全国批发<i></i></a></li>
+                   		<li><a href="#">福建省批发<i></i></a></li>
+                   		<li>
+                   			<a href="#" class="bgwhite">河北省批发<i class="red-icon"></i></a>
+                       		<ul class="plat-menu2 hidden">
+                       			<li>
+                           			<a href="#">生鲜蔬菜<i></i></a>
+                               		<ul class="plat-menu3 hidden">
+                               			<li>
+                                   			<a href="#">苹果<i></i></a>
+                                       		<ul class="plat-menu4 hidden">
+                                       	 		<li><a href="#">红富士<i></i></a></li>
+                                            	<li><a href="#">香蕉苹果<i></i></a></li>
+                                            	<li><a href="#">青苹果<i></i></a></li>
+                                       		</ul>
+                                   		</li>
+                                   		<li>
+                                   			<a href="#">香梨<i></i></a>
+                                   		</li>
+                                   		<li>
+                                   			<a href="#">香蕉<i></i></a>
+                                   		</li>
+                                   		<li>
+                                   			<a href="#">木瓜<i></i></a>
+                                   		</li>
+                                   		<li>
+                                   			<a href="#">水蜜桃<i></i></a>
+                                   		</li>
+                                   		<li>
+                                   			<a href="#">桃子<i></i></a>
+                                   		</li>
+                                   		<li>
+                                   			<a href="#">栗子<i></i></a>
+                                   		</li>
+                               		</ul>
+                           		</li>
+                           		<li>
+                           			<a href="#">酒水饮料<i></i></a>
+                           		</li>
+                           		<li>
+                           			<a href="#">烟草<i></i></a>
+                           		</li>
+                       		</ul>
+                   		</li>
+               		</ul>
+                   </div>
+           	</section>
+           	<section class="plat-content">
+       			<div id="plat-content">
+       				<ul>
+                    	<li>
+                        	<dl>
+               					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                   				<dd>
+                   					<h3>标题标题标题标题标题标题</h3>
+                        			<div class="price"><span>¥90</span><del>¥123</del></div>
+                                    <div class="profit">商品分润：<span>19.00</span></div>
+                   				</dd>
+               				</dl>
+           				</li>
+                    	<li>
+                        	<dl>
+               					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                   				<dd>
+                   					<h3>标题标题标题标题标题标题</h3>
+                        			<div class="price"><span>¥90</span><del>¥123</del></div>
+                                    <div class="profit">商品分润：<span>19.00</span></div>
+                   				</dd>
+               				</dl>
+           				</li>
+                    	<li>
+                        	<dl>
+               					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                   				<dd>
+                   					<h3>标题标题标题标题标题标题</h3>
+                        			<div class="price"><span>¥90</span><del>¥123</del></div>
+                                    <div class="profit">商品分润：<span>19.00</span></div>
+                   				</dd>
+               				</dl>
+           				</li>
+                    	<li>
+                        	<dl>
+               					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                   				<dd>
+                   					<h3>标题标题标题标题标题标题</h3>
+                        			<div class="price"><span>¥90</span><del>¥123</del></div>
+                                    <div class="profit">商品分润：<span>19.00</span></div>
+                   				</dd>
+               				</dl>
+           				</li>                                      
+                    	<li>
+                        	<dl>
+               					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                   				<dd>
+                   					<h3>标题标题标题标题标题标题</h3>
+                        			<div class="price"><span>¥90</span><del>¥123</del></div>
+                                    <div class="profit">商品分润：<span>19.00</span></div>
+                   				</dd>
+               				</dl>
+           				</li>
+                    	<li>
+                        	<dl>
+               					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                   				<dd>
+                   					<h3>标题标题标题标题标题标题</h3>
+                        			<div class="price"><span>¥90</span><del>¥123</del></div>
+                                    <div class="profit">商品分润：<span>19.00</span></div>
+                   				</dd>
+               				</dl>
+           				</li>
+                    	<li>
+                        	<dl>
+               					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                   				<dd>
+                   					<h3>标题标题标题标题标题标题</h3>
+                        			<div class="price"><span>¥90</span><del>¥123</del></div>
+                                    <div class="profit">商品分润：<span>19.00</span></div>
+                   				</dd>
+               				</dl>
+           				</li>
+                    	<li>
+                        	<dl>
+               					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                   				<dd>
+                   					<h3>标题标题标题标题标题标题</h3>
+                        			<div class="price"><span>¥90</span><del>¥123</del></div>
+                                    <div class="profit">商品分润：<span>19.00</span></div>
+                   				</dd>
+               				</dl>
+           				</li>                                                                        
+					</ul>
+				</div>
+       		</section>
+        </section>
+    </section>
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+    <script type="text/javascript" src="../../js/incomes/platproincomes.js"></script>
+</body>
+</html>

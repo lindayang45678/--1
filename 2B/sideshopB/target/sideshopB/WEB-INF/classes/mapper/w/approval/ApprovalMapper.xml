@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.approval.ApprovalMapper">
+    <insert id="insert" parameterType="com.lakala.base.model.Approval">
+        insert into tapproval (id, wtmcode, userid,
+        docentry, objtype, approvaluserid,
+        status, createdate, updatedate,
+        sortid, url, ownerremark,
+        remarks,isreturn)
+        values (#{id,jdbcType=BIGINT}, #{wtmCode,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+        #{docentry,jdbcType=VARCHAR}, #{objType,jdbcType=VARCHAR}, #{approvalUserId,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR}, now(), null,
+        #{sortId,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ownerRemark,jdbcType=LONGVARCHAR},
+        #{remarks,jdbcType=LONGVARCHAR},#{isreturn,jdbcType=VARCHAR})
+    </insert>
+
+ 	<update id="updateSelective" parameterType="com.lakala.base.model.Approval">
+        update tapproval
+        <set>
+            <if test="wtmCode != null">
+                wtmcode = #{wtmCode,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                userid = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="docentry != null">
+                docentry = #{docentry,jdbcType=VARCHAR},
+            </if>
+            <if test="objType != null">
+                objtype = #{objType,jdbcType=VARCHAR},
+            </if>
+            <if test="approvalUserId != null">
+                approvaluserid = #{approvalUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                createdate = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                updatedate = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sortId != null">
+                sortid = #{sortId,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerRemark != null">
+                ownerremark = #{ownerRemark,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks,jdbcType=LONGVARCHAR},
+            </if>
+             <if test="isreturn!=null">
+            	isreturn = #{isreturn,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

@@ -1,0 +1,100 @@
+package com.lakala.module.order.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.module.order.service.QuhuoCommonService;
+import com.lakala.util.Constants;
+@Service
+public class QuhuoCommonServiceImpl implements QuhuoCommonService {
+	@Autowired
+	private com.lakala.mapper.w.order.QuhuoMapper quhuoMapper_w;
+	@Override
+	public int getProviderState(String torderproviderid){
+		try {
+			List<Integer> stateList = quhuoMapper_w.getProviderState(torderproviderid);
+			int signflag = 0;
+			int bfsignflag = 0;
+			for(Integer state : stateList){
+				if(state == Constants.TORDER_STATE_YQS ){
+					signflag++;
+				}
+				if(state == Constants.TORDER_STATE_BFQS){
+					bfsignflag++;
+				}
+			}
+			if(signflag == stateList.size()){
+				return Constants.TORDER_STATE_YQS;
+			}
+			if(bfsignflag > 0){
+				return Constants.TORDER_STATE_BFQS;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 默认值
+		return Constants.TORDER_STATE_DEFAULT;
+	}
+	@Override
+	public void updateOrderProviderState(String torderproviderid,int providerstate,int paychannel){
+		try {
+			if(providerstate != Constants.TORDER_STATE_DEFAULT){
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("torderproviderid", torderproviderid);
+				map.put("state", providerstate);
+				if(paychannel == Constants.TORDER_PAYCHANNEL_HDFK){
+					map.put("ispay", Constants.TORDER_ISPAY_YZF);
+				}
+				quhuoMapper_w.updateOrderProviderState(map);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void updateOrderState(String orderId,int orderstate,int paychannel){
+		try {
+			if(orderstate != Constants.TORDER_STATE_DEFAULT){
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("orderId", orderId);
+				map.put("state", orderstate);
+				if(paychannel == Constants.TORDER_PAYCHANNEL_HDFK){
+					map.put("ispay", Constants.TORDER_ISPAY_YZF);
+				}
+				quhuoMapper_w.updateOrderState(map);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public int getOrderState(String orderId){
+		try {
+			List<Integer> stateList = quhuoMapper_w.getOrderState(orderId);
+			int signflag = 0;
+			int bfsignflag = 0;
+			for(Integer state : stateList){
+				if(state == Constants.TORDER_STATE_YQS){
+					signflag++;
+				}
+				if(state == Constants.TORDER_STATE_BFQS){
+					bfsignflag++;
+				}
+			}
+			if(signflag == stateList.size()){
+				return Constants.TORDER_STATE_YQS;
+			}
+			if(bfsignflag > 0){
+				// 部分签收
+				return Constants.TORDER_STATE_BFQS;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Constants.TORDER_STATE_DEFAULT;	
+	}
+}

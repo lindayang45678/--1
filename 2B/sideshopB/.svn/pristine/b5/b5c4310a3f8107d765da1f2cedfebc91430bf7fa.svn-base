@@ -1,0 +1,18 @@
+package com.lakala.mapper.w.user;
+
+import java.util.Map;
+
+public interface TmemberMapper {
+
+	int addTmember(Map<String, Object> map);
+	
+	int addTmemberC(Map<String, Object> map);
+	
+    int updateTmemberPwdById(Map<String, Object> map);
+    
+    int updateTmemberTCodeById(Map<String, Object> map);
+    
+    int updateTmemberRegister(Map<String, Object> map);
+
+    int updateTmemberUID(Map<String, Object> map);
+}

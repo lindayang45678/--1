@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>				
+		<h1>身边小店</h1>
+	</header>
+	<section class="container">
+		<div class="accounts-shop">
+			<h2>选择管理的小店</h2>
+			<p>您是多个小店的店主，请选择以下需要管理的小店：</p>
+			<ul>
+				<li><a href="#">店主姓名：巫龙飞<br/>店主手机号：13522227272<br/>小店名称：洋酒超市<br/>小店地址：北京 北京市 海淀区  中关村金融大厦8层</a>
+				</li>
+				<li><a href="#">店主姓名：巫龙飞<br/>店主手机号：13522227272<br/>小店名称：洋酒超市<br/>小店地址：北京 北京市 海淀区  中关村金融大厦8层中关村金融大厦8层中关村金融大厦8层中关村金融大厦8层</a>
+				</li>				
+			</ul>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/accounts/shop.js"></script>
+</html>

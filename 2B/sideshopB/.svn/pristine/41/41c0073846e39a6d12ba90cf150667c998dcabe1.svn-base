@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.update.UpdateVersionMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.module.update.vo.VersionOutput">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="pre_vision" property="preVersion" jdbcType="VARCHAR"/>
+        <result column="tar_version" property="tarVersion" jdbcType="VARCHAR"/>
+        <result column="platform_type" property="platformType" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="application_type" property="appType" jdbcType="INTEGER"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="isMandatory" property="isMandatory" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="header" property="header" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id,
+      pre_vision,
+      tar_version,
+      platform_type,
+      url,
+      application_type,
+      create_date,
+      isMandatory,
+      title,
+      description,
+      header,
+      parentId 
+    </sql>
+    <select id="findByPreverPlatVerAppType" resultMap="BaseResultMap" parameterType="com.lakala.module.update.vo.VersionInput">
+        select
+        <include refid="Base_Column_List"/>
+        from update_version
+        where pre_vision = #{preVersion,jdbcType=VARCHAR} 
+        and platform_type = #{platformType,jdbcType=INTEGER}
+        and application_type = #{appType,jdbcType=INTEGER} 
+        <if test="parentId != null">
+         and parentId = #{parentId,jdbcType=INTEGER}
+         </if>
+        order by tar_version desc limit 1
+    </select>
+    
+</mapper>

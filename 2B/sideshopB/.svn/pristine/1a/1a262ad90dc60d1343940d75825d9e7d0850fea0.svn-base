@@ -1,0 +1,26 @@
+package com.lakala.module.order.vo;
+
+public class QuhuoOutputChild {
+	private String goodsname;
+	private String norms;
+	private String goodsnum;
+	public String getGoodsname() {
+		return goodsname;
+	}
+	public void setGoodsname(String goodsname) {
+		this.goodsname = goodsname;
+	}
+	public String getNorms() {
+		return norms;
+	}
+	public void setNorms(String norms) {
+		this.norms = norms;
+	}
+	public String getGoodsnum() {
+		return goodsnum;
+	}
+	public void setGoodsnum(String goodsnum) {
+		this.goodsnum = goodsnum;
+	}
+	
+}

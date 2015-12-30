@@ -1,0 +1,121 @@
+package com.lakala.model.order;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+public class OrderDateInfoV2 implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8828717831499222811L;
+
+	/**
+	 * @author: yhg
+	 * @project:sideshopB
+	 * @time: 2015年4月17日 下午17:55:10
+	 * @todo: TODO
+	 */
+	private String tallorderid; //超大订单号
+	
+	private String torderproviderid; //供应商订单号
+	
+	private Date xdsj;  //下单时间
+	
+	private Date zfsj;  //支付时间
+	
+	private Date fhsj;  //发货时间
+	
+	private Date qssj;  //签收时间
+	
+	private Date qxsj;  //取消时间
+	
+	private String qxfl;  //取消分类
+	
+	private String qrfl;  //确认分类
+	
+	private Date qrsj;  //确认时间
+
+	public String getTallorderid() {
+		return tallorderid;
+	}
+
+	public void setTallorderid(String tallorderid) {
+		this.tallorderid = tallorderid;
+	}
+
+	public String getTorderproviderid() {
+		return torderproviderid;
+	}
+
+	public void setTorderproviderid(String torderproviderid) {
+		this.torderproviderid = torderproviderid;
+	}
+
+	public Date getXdsj() {
+		return xdsj;
+	}
+
+	public void setXdsj(Date xdsj) {
+		this.xdsj = xdsj;
+	}
+
+	public Date getZfsj() {
+		return zfsj;
+	}
+
+	public void setZfsj(Date zfsj) {
+		this.zfsj = zfsj;
+	}
+
+	public Date getFhsj() {
+		return fhsj;
+	}
+
+	public void setFhsj(Date fhsj) {
+		this.fhsj = fhsj;
+	}
+
+	public Date getQssj() {
+		return qssj;
+	}
+
+	public void setQssj(Date qssj) {
+		this.qssj = qssj;
+	}
+
+	public Date getQxsj() {
+		return qxsj;
+	}
+
+	public void setQxsj(Date qxsj) {
+		this.qxsj = qxsj;
+	}
+
+	public String getQxfl() {
+		return qxfl;
+	}
+
+	public void setQxfl(String qxfl) {
+		this.qxfl = qxfl;
+	}
+
+	public String getQrfl() {
+		return qrfl;
+	}
+
+	public void setQrfl(String qrfl) {
+		this.qrfl = qrfl;
+	}
+
+	public Date getQrsj() {
+		return qrsj;
+	}
+
+	public void setQrsj(Date qrsj) {
+		this.qrsj = qrsj;
+	}
+
+}

@@ -1,0 +1,14 @@
+package com.lakala.mapper.r.news;
+
+import java.util.Map;
+
+
+/**
+ * 
+ * @author zjj
+ * @date 2015年3月9日
+ */
+public interface TNewsLogMapper {
+
+	public int countNewslog(Map<String, Object> params);
+}

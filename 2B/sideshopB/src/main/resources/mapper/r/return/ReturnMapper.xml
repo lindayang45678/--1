@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.returns.ReturnMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Return">
+        <id column="tReturnId" property="treturnid" jdbcType="INTEGER"/>
+        <result column="orderID" property="orderid" jdbcType="VARCHAR"/>
+        <result column="ReturnType" property="returntype" jdbcType="INTEGER"/>
+        <result column="ReturnTypeName" property="returntypename" jdbcType="VARCHAR"/>
+        <result column="providerID" property="providerid" jdbcType="INTEGER"/>
+        <result column="returnTime" property="returntime" jdbcType="TIMESTAMP"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="deliveryTypeName" property="deliverytypename" jdbcType="VARCHAR"/>
+        <result column="deliveryFee" property="deliveryfee" jdbcType="DECIMAL"/>
+        <result column="postCode" property="postcode" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="telNo" property="telno" jdbcType="VARCHAR"/>
+        <result column="mobileNo" property="mobileno" jdbcType="VARCHAR"/>
+        <result column="userName" property="username" jdbcType="VARCHAR"/>
+        <result column="orderAmount" property="orderamount" jdbcType="DECIMAL"/>
+        <result column="otherFee" property="otherfee" jdbcType="DECIMAL"/>
+        <result column="favorFee" property="favorfee" jdbcType="DECIMAL"/>
+        <result column="currency" property="currency" jdbcType="VARCHAR"/>
+        <result column="retrurnFrom" property="retrurnfrom" jdbcType="VARCHAR"/>
+        <result column="handlingCharge" property="handlingcharge" jdbcType="DECIMAL"/>
+        <result column="isSupportValue" property="issupportvalue" jdbcType="CHAR"/>
+        <result column="supportValue" property="supportvalue" jdbcType="DECIMAL"/>
+        <result column="waybillId" property="waybillid" jdbcType="VARCHAR"/>
+        <result column="courierCompanyName" property="couriercompanyname" jdbcType="VARCHAR"/>
+        <result column="returnFreight" property="returnfreight" jdbcType="DECIMAL"/>
+        <result column="freight" property="freight" jdbcType="DECIMAL"/>
+        <result column="productPackaging" property="productpackaging" jdbcType="VARCHAR"/>
+        <result column="productAppearance" property="productappearance" jdbcType="VARCHAR"/>
+        <result column="productFunction" property="productfunction" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="beartype" property="beartype" jdbcType="VARCHAR"/>
+        <result column="receipttime" property="receipttime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        t.tReturnId, t.orderID, t.ReturnType, t.ReturnTypeName, t.providerID, t.returnTime, t.amount, t.deliveryTypeName,
+        t.deliveryFee, t.postCode, t.email, t.telNo, t.mobileNo, t.userName, t.orderAmount, t.otherFee, t.favorFee,
+        t.currency, t.retrurnFrom, t.handlingCharge, t.isSupportValue, t.supportValue, t.waybillId, t.courierCompanyName, t.returnFreight, t.freight, t.productPackaging,
+        t.productAppearance, t.productFunction, t.remark,t.beartype, t.receipttime
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        d.nameCN as state,
+        <include refid="Base_Column_List"/>
+        from treturn t left join torder o on t.orderID = o.tOrderId
+        left join tdictionary d on o.state = d.dictionayId
+        where t.tReturnId = #{treturnid,jdbcType=INTEGER}
+    </select>
+    <select id="findAllByMobile" parameterType="map" resultType="com.lakala.module.sreturn.model.ReturnMoble">
+        SELECT
+        tri.returnID AS treturnid,
+        tri.tReturnItemsId AS treturnitemsid,
+        tri.orderID AS orderid,
+        toi.orderProviderID AS orderproviderid,
+        tr.ReturnType AS returntype,
+        tr.ReturnTypeName AS returntypename,
+        tri.providerID AS providerid,
+        tr.returnTime AS returntime,
+        tr.receipttime AS receipttime,
+        tri.goodsID AS goodsid,
+        tri.goodsName AS goodsname,
+        tgs.goodBigPic AS goodbigpic,
+        tgs.skuFrontDisNameStr AS skufrontdisnamestr,
+        tri.returnMoneyStatus AS returnmoneystatus,
+        tri.returnGoodStatus AS returngoodstatus,
+        toi.goodsCount AS goodscount,
+        toi.orderTime AS ordertime,
+        toi.goodsFinalPrice AS goodsfinalprice,
+        toi.logisticsfee AS logisticsfee,
+        toi.payChanel AS paychanel,
+        toi.isPay AS ispay,
+        toi.state AS state,
+        toi.is3h AS is3h
+        FROM
+        treturnitems tri
+        LEFT JOIN treturn tr ON tri.returnID = tr.tReturnId
+        LEFT JOIN torderitems toi ON tri.tOrderItemID = toi.tOrderItemsId
+        LEFT JOIN tgoodskuinfo tgs ON toi.goodsSkuID = tgs.tGoodSkuInfoId
+        LEFT JOIN sdb_media_statistics sdb ON sdb.id = tri.providerID
+        WHERE
+        tri.providerID = tgs.supplierId
+        and sdb.psam = #{psam,jdbcType=VARCHAR}
+        /*and toi.platorself = '452'*/
+        <if test="orderid != null and orderid != '' ">
+            and tri.orderID = #{orderid,jdbcType=VARCHAR}
+        </if>
+        ORDER BY
+        tri.returnGoodApproveFinishDate desc,
+        tri.returnMoneyApproveFinishDate desc
+        limit #{page},#{rows}
+    </select>
+    
+    <select id="countAllByMobile" parameterType="map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(DISTINCT tri.tReturnItemsId)
+        FROM
+        treturnitems tri
+        LEFT JOIN treturn tr ON tri.returnID = tr.tReturnId
+        LEFT JOIN torderitems toi ON tri.tOrderItemID = toi.tOrderItemsId
+        LEFT JOIN tgoodskuinfo tgs ON toi.goodsSkuID = tgs.tGoodSkuInfoId
+        LEFT JOIN sdb_media_statistics sdb ON sdb.id = tri.providerID
+        WHERE
+        tri.providerID = tgs.supplierId
+        and sdb.psam = #{psam,jdbcType=VARCHAR}
+        /*and toi.platorself = '452'*/
+        <if test="orderid != null and orderid != '' ">
+            and tri.orderID = #{orderid,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

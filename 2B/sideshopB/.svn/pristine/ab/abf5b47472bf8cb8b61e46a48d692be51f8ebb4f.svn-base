@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>小店设置</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="setting">
+	<header>
+		<h1>小店设置</h1>
+		<a href="javascript:window.history.go(-1)" class="back"></a>
+	</header>
+	<section class="container setting-main">
+		<p>&nbsp;</p>
+		<div class="setting-choose clearfix">
+			<h4>开启声音提醒</h4>
+			<div class="fr setting-choose on">
+				<a id="msgSound" href="javascript:void(0);"></a>
+			</div>
+		</div>
+		<div class="setting-choose clearfix">
+			<h4>开启振动提醒</h4>
+			<div class="fr setting-choose on">
+				<a id="msgShake" href="javascript:void(0);"></a>
+			</div>
+		</div>
+		<!--<div class="setting-choose setting-choose-top clearfix">
+			<h4>开启推送提醒</h4>
+			<div class="fr setting-choose on">
+				<a id="msgPush" href="javascript:void(0);"></a>
+			</div>
+		</div>-->
+        <div class="setting-choose setting-choose-top clearfix">
+			<a href="aboutus.html">
+            	<h4>关于我们</h4>
+				<em><img src="../../images/right-icon.png" alt=""/></em>
+            </a>
+		</div>
+		<a href="../accounts/login.html" class="btn-red">退出小店</a>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" id="platJs"></script>
+<script type="text/javascript" src="cordova_plugins.js"></script>
+<script type="text/javascript" src="../../js/homepage/setting.js"></script>
+</html>

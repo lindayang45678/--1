@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>身边小店领红包</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../css/master.css" />
+</head>
+
+<body class="index">
+	<img src="../images/index-bgimg.png" alt=""/>
+	<section class="index-wrap">
+   		<div class="phone"><input type="tel" placeholder="请输入11位手机号码" class="phone-num"/></div>
+   		<a href="getted.html" class="get-button">领现金券</a>
+   		<p>温情提示：同一手机号一天可领取现金券一次!</p>
+	</section>
+</body>
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script>
+/*手机号为空和非11位提示*/
+$(document).ready(function(){
+	$('.get-button').click(function(){
+		var phone=$.trim($('.phone-num').val());
+		if(phone === ''){
+			alert('手机号不能为空！');
+		}
+		else if(phone !=11){
+			alert('手机号填写有误，请核对后重新输入号！');
+		}else{
+			window.location.href="getted.html";
+			}
+	});
+})
+</script>
+</html>

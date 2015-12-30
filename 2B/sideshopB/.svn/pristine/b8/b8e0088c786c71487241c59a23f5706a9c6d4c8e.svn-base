@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.order.TorderproviderMapper">
+    <update id="updateTorderProvider" parameterType="com.lakala.base.model.Torderprovider">
+        update torderprovider
+        <set>
+            <if test="orderid != null">
+                orderID = #{orderid,jdbcType=VARCHAR},
+            </if>
+            <if test="providerid != null">
+                providerID = #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="providername != null">
+                providerName = #{providername,jdbcType=VARCHAR},
+            </if>
+            <if test="logiscalfee != null">
+                logiscalFee = #{logiscalfee,jdbcType=DECIMAL},
+            </if>
+            <if test="favorrulemoney != null">
+                favorRuleMoney = #{favorrulemoney,jdbcType=DECIMAL},
+            </if>
+            <if test="actualamount != null">
+                actualAmount = #{actualamount,jdbcType=DECIMAL},
+            </if>
+            <if test="orderamount != null">
+                orderAmount = #{orderamount,jdbcType=DECIMAL},
+            </if>
+            <if test="payoffamount != null">
+                payoffAmount = #{payoffamount,jdbcType=DECIMAL},
+            </if>
+            <if test="goodstypescount != null">
+                goodsTypesCount = #{goodstypescount,jdbcType=INTEGER},
+            </if>
+            <if test="ispay != null">
+                isPay = #{ispay,jdbcType=INTEGER},
+            </if>
+            <if test="custelno != null">
+                cusTelNo = #{custelno,jdbcType=VARCHAR},
+            </if>
+            <if test="cusname != null">
+                cusName = #{cusname,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="mergestate != null">
+                mergeState = #{mergestate,jdbcType=INTEGER},
+            </if>
+            <if test="requiretime != null">
+                requireTime = #{requiretime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isweekenddeliver != null">
+                isWeekendDeliver = #{isweekenddeliver,jdbcType=INTEGER},
+            </if>
+            <if test="isdelivertohome != null">
+                isDeliverToHome = #{isdelivertohome,jdbcType=INTEGER},
+            </if>
+            <if test="paytime != null">
+                payTime = #{paytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payfee != null">
+                payFee = #{payfee,jdbcType=DECIMAL},
+            </if>
+            <if test="paystage != null">
+                payStage = #{paystage,jdbcType=INTEGER},
+            </if>
+            <if test="paytype != null">
+                payType = #{paytype,jdbcType=INTEGER},
+            </if>
+            <if test="paychanel != null">
+                payChanel = #{paychanel,jdbcType=INTEGER},
+            </if>
+            <if test="payhandingcharge != null">
+                payHandingCharge = #{payhandingcharge,jdbcType=DECIMAL},
+            </if>
+            <if test="billtype != null">
+                billType = #{billtype,jdbcType=INTEGER},
+            </if>
+            <if test="billtitle != null">
+                billTitle = #{billtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="storeprofits != null">
+                storeProfits = #{storeprofits,jdbcType=DECIMAL},
+            </if>
+            <if test="toproviderstate != null">
+                toProviderState = #{toproviderstate,jdbcType=INTEGER},
+            </if>
+            <if test="addressprovincename != null">
+                addressProvinceName = #{addressprovincename,jdbcType=VARCHAR},
+            </if>
+            <if test="addressprovince != null">
+                addressProvince = #{addressprovince,jdbcType=VARCHAR},
+            </if>
+            <if test="addresscityname != null">
+                addressCityName = #{addresscityname,jdbcType=VARCHAR},
+            </if>
+            <if test="addresscity != null">
+                addressCity = #{addresscity,jdbcType=VARCHAR},
+            </if>
+            <if test="addressareaname != null">
+                addressAreaName = #{addressareaname,jdbcType=VARCHAR},
+            </if>
+            <if test="addressarea != null">
+                addressArea = #{addressarea,jdbcType=VARCHAR},
+            </if>
+            <if test="addressfull != null">
+                addressFull = #{addressfull,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                source = #{source,jdbcType=INTEGER},
+            </if>
+            <if test="ruleid != null">
+                ruleID = #{ruleid,jdbcType=INTEGER},
+            </if>
+            <if test="rulename != null">
+                ruleName = #{rulename,jdbcType=VARCHAR},
+            </if>
+            <if test="ordertime != null">
+                orderTime = #{ordertime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="exportstatus != null">
+                exportstatus = #{exportstatus,jdbcType=INTEGER},
+            </if>
+            <if test="cancelstate != null">
+                cancelState = #{cancelstate,jdbcType=INTEGER},
+            </if>
+            <if test="lastmodifytime != null">
+                lastModifyTime = #{lastmodifytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="membername != null">
+                memberName = #{membername,jdbcType=VARCHAR},
+            </if>
+            <if test="custcall != null">
+                custCall = #{custcall,jdbcType=VARCHAR},
+            </if>
+            <if test="lockstate != null">
+                lockState = #{lockstate,jdbcType=INTEGER},
+            </if>
+            <if test="providerremark != null">
+                providerRemark = #{providerremark,jdbcType=VARCHAR},
+            </if>
+            <if test="providersettlestate != null">
+                providerSettleState = #{providersettlestate,jdbcType=INTEGER},
+            </if>
+            <if test="providersettlemoney != null">
+                providerSettleMoney = #{providersettlemoney,jdbcType=DECIMAL},
+            </if>
+            <if test="shipsettlestate != null">
+                shipSettleState = #{shipsettlestate,jdbcType=INTEGER},
+            </if>
+            <if test="shipsettlemoney != null">
+                shipSettleMoney = #{shipsettlemoney,jdbcType=DECIMAL},
+            </if>
+            <if test="uploadid != null">
+                uploadId = #{uploadid,jdbcType=BIGINT},
+            </if>
+            <if test="approvestatue != null">
+                approveStatue = #{approvestatue,jdbcType=INTEGER},
+            </if>
+        </set>
+        where tOrderProviderId = #{torderproviderid,jdbcType=VARCHAR}
+    </update>
+    
+	  <update id="updateTorderProviderCancelByTorderProviderId" parameterType="java.lang.String" >
+	   update torderprovider
+	    set  cancelState = 137 , lastModifyTime = NOW() ,cancelTime = now(),canceltype = 494
+	    where  tOrderProviderId = #{torderproviderid,jdbcType=VARCHAR}
+	  </update>
+	  
+	  <update id="confirmOrderByTorderProviderId" parameterType="map" >
+	   	   update torderprovider set  state = #{state,jdbcType=INTEGER} , lastModifyTime = NOW() ,confirmTime = now(),confirmtype = 500  where  tOrderProviderId = #{torderproviderid,jdbcType=VARCHAR} and state = 99;
+	       update torderitems set  state = #{state,jdbcType=INTEGER} , lastModifyTime = NOW() ,confirmTime = now(),confirmtype = 500  where  orderProviderID = #{torderproviderid,jdbcType=VARCHAR} and state = 99;
+	  </update>
+	 <update id="updateTorderproviderPayChanel" parameterType="java.util.HashMap">
+  		update torderprovider set  payChanel = #{paychanel,jdbcType=INTEGER}
+
+  		where tAllOrderId=#{tAllOrderId}
+    </update>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.order.TallorderMapper">
+	<resultMap id="BaseResultMap" type="w.com.lakala.order.model.Tallorder">
+		<id column="tAllOrderId" property="tallorderid" jdbcType="INTEGER" />
+	    <result column="paybillno" property="paybillno" jdbcType="VARCHAR" />
+	    <result column="logisfee" property="logisfee" jdbcType="DECIMAL" />
+	    <result column="total" property="total" jdbcType="DECIMAL" />
+	    <result column="actualtotal" property="actualtotal" jdbcType="DECIMAL" />
+	    <result column="favamount" property="favamount" jdbcType="DECIMAL" />
+	    <result column="alltotal" property="alltotal" jdbcType="DECIMAL" />
+	    <result column="hdid" property="hdid" jdbcType="VARCHAR" />
+	    <result column="hdmoney" property="hdmoney" jdbcType="DECIMAL" />
+	    <result column="deflag" property="deflag" jdbcType="INTEGER" />
+	    <result column="servicetype" property="servicetype" jdbcType="INTEGER" />
+	    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+	    <result column="source" property="source" jdbcType="INTEGER" />
+	    <result column="ruleID" property="ruleid" jdbcType="INTEGER" />
+	    <result column="ruleName" property="rulename" jdbcType="VARCHAR" />
+	    <result column="billType" property="billtype" jdbcType="INTEGER" />
+	    <result column="billTitle" property="billtitle" jdbcType="VARCHAR" />
+	    <result column="isPay" property="ispay" jdbcType="INTEGER" />
+	    <result column="payTime" property="paytime" jdbcType="TIMESTAMP" />
+	    <result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+	    <result column="payType" property="paytype" jdbcType="INTEGER" />
+	    <result column="payStage" property="paystage" jdbcType="INTEGER" />
+	    <result column="payFee" property="payfee" jdbcType="DECIMAL" />
+	    <result column="payHandlingCharge" property="payhandlingcharge" jdbcType="DECIMAL" />
+	    <result column="bankID" property="bankid" jdbcType="VARCHAR" />
+	    <result column="bankName" property="bankname" jdbcType="VARCHAR" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP" />
+	    <result column="memberName" property="membername" jdbcType="VARCHAR" />
+	    <result column="paytoken" property="paytoken" jdbcType="VARCHAR" />
+	    <result column="payrate" property="payrate" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		tAllOrderId, paybillno, logisfee, total, actualtotal, favamount, alltotal
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tallorder
+		where tAllOrderId = #{tallorderid,jdbcType=INTEGER}
+	</select>
+</mapper>

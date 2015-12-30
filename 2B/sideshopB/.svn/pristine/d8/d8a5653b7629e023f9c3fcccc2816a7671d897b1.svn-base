@@ -1,0 +1,10 @@
+package com.lakala.mapper.w.order;
+
+
+import com.lakala.base.model.Torderitems;
+
+public interface TorderitemsMapper {
+
+    int updateByPrimaryKeySelective(Torderitems record);
+
+}

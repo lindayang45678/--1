@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.order.AfterSalesMapper">
+  <update id="updateReturnRemarkByTorderProviderId" parameterType="map">
+	    UPDATE 
+		  torderitems 
+		SET
+		  returnstate = #{returnstate,jdbcType=INTEGER},
+		  state = #{state,jdbcType=INTEGER},   
+		  invalidState = #{invalidstate,jdbcType=INTEGER}, 
+		  lastModifyTime = NOW(),
+		  rejecttime = NOW()
+		WHERE orderProviderID = #{torderproviderid,jdbcType=VARCHAR} 
+  </update>
+  <update id="updateBySkuAndNetno" parameterType="map">
+		UPDATE 
+		  tskunetinfo 
+		SET
+		  stock = (stock + #{goodscount,jdbcType=INTEGER}),
+		  soldstock = (soldstock - #{goodscount,jdbcType=INTEGER})
+		WHERE skuid = #{skuid,jdbcType=INTEGER} 
+		  AND netno = #{netno,jdbcType=VARCHAR} 
+  </update>
+  <update id="updateStore" parameterType="map" >
+	    UPDATE 
+		  tgoods_publish_kdb_sku_o2o 
+		SET
+		  store = store + #{goodscount,jdbcType=INTEGER}
+		WHERE skuId = #{goodsskuo2oid,jdbcType=INTEGER} 
+  </update>
+  <select id="findApprovalDefinitions" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select ad.wtmcode,au.approvaluserid,au.sortid 
+        from tapprovaldefinitions ad inner join tapprovaluser au on ad.wtmcode=au.wtmcode
+        where ad.objtype=#{objtype} and au.userid=#{userid}
+        and au.sortid not in (select sortid from tapproval where docentry=#{docentry} and objtype=#{objtype} and isreturn!=1 and isreturn!=2 )
+        order by au.sortid
+        limit 0,1;
+    </select>
+    <insert id="insertApprovalSelective" parameterType="com.lakala.base.model.Approval">
+        insert into tapproval
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="wtmCode != null">
+                wtmcode,
+            </if>
+            <if test="userId != null">
+                userid,
+            </if>
+            <if test="docentry != null">
+                docentry,
+            </if>
+            <if test="objType != null">
+                objtype,
+            </if>
+            <if test="approvalUserId != null">
+                approvaluserid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+                createdate,
+            <if test="updateDate != null">
+                updatedate,
+            </if>
+            <if test="sortId != null">
+                sortid,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="ownerRemark != null">
+                ownerremark,
+            </if>
+            <if test="remarks != null">
+                remarks,
+            </if>
+            <if test="isreturn!=null">
+            	isreturn,
+            </if>
+            <if test="orgid!=null">
+            	orgid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="wtmCode != null">
+                #{wtmCode,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="docentry != null">
+                #{docentry,jdbcType=VARCHAR},
+            </if>
+            <if test="objType != null">
+                #{objType,jdbcType=VARCHAR},
+            </if>
+            <if test="approvalUserId != null">
+                #{approvalUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            NOW(),
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sortId != null">
+                #{sortId,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerRemark != null">
+                #{ownerRemark,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="isreturn!=null">
+            	#{isreturn,jdbcType=VARCHAR},
+            </if>
+            <if test="orgid!=null">
+            	#{orgid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertAfterapprovalrecord" parameterType="com.lakala.base.model.Afterapprovalrecord" >
+    insert into tafterapprovalrecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="afterapprovalrecordid != null" >
+        afterApprovalRecordId,
+      </if>
+      <if test="approvinguser != null" >
+        approvingUser,
+      </if>
+      <if test="approvingusername != null" >
+        approvingUserName,
+      </if>
+      <if test="approvingtime != null" >
+        approvingTime,
+      </if>
+      <if test="approvingstatus != null" >
+        approvingStatus,
+      </if>
+      <if test="approvingremark != null" >
+        approvingRemark,
+      </if>
+      <if test="treturnitemsid != null" >
+        tReturnItemsId,
+      </if>
+      <if test="treturnid != null" >
+        tReturnId,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="afterapprovalrecordid != null" >
+        #{afterapprovalrecordid,jdbcType=INTEGER},
+      </if>
+      <if test="approvinguser != null" >
+        #{approvinguser,jdbcType=INTEGER},
+      </if>
+      <if test="approvingusername != null" >
+        #{approvingusername,jdbcType=VARCHAR},
+      </if>
+      <if test="approvingtime != null" >
+        #{approvingtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvingstatus != null" >
+        #{approvingstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="approvingremark != null" >
+        #{approvingremark,jdbcType=VARCHAR},
+      </if>
+      <if test="treturnitemsid != null" >
+        #{treturnitemsid,jdbcType=INTEGER},
+      </if>
+      <if test="treturnid != null" >
+        #{treturnid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertReturn" parameterType="com.lakala.base.model.Return" useGeneratedKeys="true" keyProperty="treturnid">
+    insert into treturn
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="treturnid != null" >
+        tReturnId,
+      </if>
+      <if test="orderid != null" >
+        orderID,
+      </if>
+      <if test="returntype != null" >
+        ReturnType,
+      </if>
+      <if test="returntypename != null" >
+        ReturnTypeName,
+      </if>
+      <if test="providerid != null" >
+        providerID,
+      </if>
+      <if test="returntime != null" >
+        returnTime,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="deliverytypename != null" >
+        deliveryTypeName,
+      </if>
+      <if test="deliveryfee != null" >
+        deliveryFee,
+      </if>
+      <if test="postcode != null" >
+        postCode,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="telno != null" >
+        telNo,
+      </if>
+      <if test="mobileno != null" >
+        mobileNo,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="orderamount != null" >
+        orderAmount,
+      </if>
+      <if test="otherfee != null" >
+        otherFee,
+      </if>
+      <if test="favorfee != null" >
+        favorFee,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="retrurnfrom != null" >
+        retrurnFrom,
+      </if>
+      <if test="beartype != null" >
+        beartype,
+      </if>
+      <if test="handlingcharge != null" >
+        handlingCharge,
+      </if>
+      <if test="issupportvalue != null" >
+        isSupportValue,
+      </if>
+      <if test="supportvalue != null" >
+        supportValue,
+      </if>
+      <if test="waybillid != null" >
+        waybillId,
+      </if>
+      <if test="couriercompanyname != null" >
+        courierCompanyName,
+      </if>
+      <if test="returnfreight != null" >
+        returnFreight,
+      </if>
+      <if test="freight != null" >
+        freight,
+      </if>
+      <if test="productpackaging != null" >
+        productPackaging,
+      </if>
+      <if test="productappearance != null" >
+        productAppearance,
+      </if>
+      <if test="productfunction != null" >
+        productFunction,
+      </if>
+      <if test="receipttime != null" >
+        receipttime,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="treturnid != null" >
+        #{treturnid,jdbcType=INTEGER},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="returntype != null" >
+        #{returntype,jdbcType=INTEGER},
+      </if>
+      <if test="returntypename != null" >
+        #{returntypename,jdbcType=VARCHAR},
+      </if>
+      <if test="providerid != null" >
+        #{providerid,jdbcType=INTEGER},
+      </if>
+      now(),
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="deliverytypename != null" >
+        #{deliverytypename,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryfee != null" >
+        #{deliveryfee,jdbcType=DECIMAL},
+      </if>
+      <if test="postcode != null" >
+        #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="telno != null" >
+        #{telno,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileno != null" >
+        #{mobileno,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="orderamount != null" >
+        #{orderamount,jdbcType=DECIMAL},
+      </if>
+      <if test="otherfee != null" >
+        #{otherfee,jdbcType=DECIMAL},
+      </if>
+      <if test="favorfee != null" >
+        #{favorfee,jdbcType=DECIMAL},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="retrurnfrom != null" >
+        #{retrurnfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="beartype != null" >
+        #{beartype,jdbcType=VARCHAR},
+      </if>
+      <if test="handlingcharge != null" >
+        #{handlingcharge,jdbcType=DECIMAL},
+      </if>
+      <if test="issupportvalue != null" >
+        #{issupportvalue,jdbcType=CHAR},
+      </if>
+      <if test="supportvalue != null" >
+        #{supportvalue,jdbcType=DECIMAL},
+      </if>
+      <if test="waybillid != null" >
+        #{waybillid,jdbcType=VARCHAR},
+      </if>
+      <if test="couriercompanyname != null" >
+        #{couriercompanyname,jdbcType=VARCHAR},
+      </if>
+      <if test="returnfreight != null" >
+        #{returnfreight,jdbcType=DECIMAL},
+      </if>
+      <if test="freight != null" >
+        #{freight,jdbcType=DECIMAL},
+      </if>
+      <if test="productpackaging != null" >
+        #{productpackaging,jdbcType=VARCHAR},
+      </if>
+      <if test="productappearance != null" >
+        #{productappearance,jdbcType=VARCHAR},
+      </if>
+      <if test="productfunction != null" >
+        #{productfunction,jdbcType=VARCHAR},
+      </if>
+      <if test="receipttime != null" >
+        #{receipttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertReturnItems" parameterType="com.lakala.base.model.ReturnItems" useGeneratedKeys="true"
+            keyProperty="treturnitemsid">
+        insert into treturnitems
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="treturnitemsid != null">
+                tReturnItemsId,
+            </if>
+            <if test="returnid != null">
+                returnID,
+            </if>
+            <if test="orderid != null">
+                orderID,
+            </if>
+            <if test="providerid != null">
+                providerID,
+            </if>
+            <if test="providername != null">
+                providerName,
+            </if>
+            <if test="torderitemid != null">
+                tOrderItemID,
+            </if>
+            <if test="goodsid != null">
+                goodsID,
+            </if>
+            <if test="goodsname != null">
+                goodsName,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="returnmoneystatus != null">
+                returnMoneyStatus,
+            </if>
+            <if test="account != null">
+                account,
+            </if>
+            <if test="shouldrefund != null">
+                shouldRefund,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="unitname != null">
+                unitName,
+            </if>
+            <if test="returngoodstatus != null">
+                returnGoodStatus,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="addressfull != null">
+                addressFull,
+            </if>
+            <if test="returnmoneyapprovefinishdate != null">
+                returnMoneyApproveFinishDate,
+            </if>
+            <if test="returngoodapprovefinishdate != null">
+                returnGoodApproveFinishDate,
+            </if>
+            <if test="refundproject != null">
+                refundProject,
+            </if>
+            <if test="orgid != null">
+                orgid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="treturnitemsid != null">
+                #{treturnitemsid,jdbcType=INTEGER},
+            </if>
+            <if test="returnid != null">
+                #{returnid,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=VARCHAR},
+            </if>
+            <if test="providerid != null">
+                #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="providername != null">
+                #{providername,jdbcType=VARCHAR},
+            </if>
+            <if test="torderitemid != null">
+                #{torderitemid,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsname != null">
+                #{goodsname,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="returnmoneystatus != null">
+                #{returnmoneystatus,jdbcType=VARCHAR},
+            </if>
+            <if test="account != null">
+                #{account,jdbcType=DECIMAL},
+            </if>
+            <if test="shouldrefund != null">
+                #{shouldrefund,jdbcType=DECIMAL},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=DOUBLE},
+            </if>
+            <if test="unitname != null">
+                #{unitname,jdbcType=VARCHAR},
+            </if>
+            <if test="returngoodstatus != null">
+                #{returngoodstatus,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="addressfull != null">
+                #{addressfull,jdbcType=VARCHAR},
+            </if>
+            <if test="returnmoneyapprovefinishdate != null">
+                #{returnmoneyapprovefinishdate,jdbcType=DATE},
+            </if>
+            <if test="returngoodapprovefinishdate != null">
+                #{returngoodapprovefinishdate,jdbcType=DATE},
+            </if>
+            <if test="refundproject != null">
+                #{refundproject,jdbcType=VARCHAR},
+            </if>
+            <if test="orgid != null">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+</mapper>

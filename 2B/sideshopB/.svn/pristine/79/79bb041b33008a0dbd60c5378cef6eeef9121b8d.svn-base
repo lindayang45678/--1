@@ -1,0 +1,18 @@
+$(function() {
+	$('#btnCustreceipt').on("tap", function() {		
+		var verificationCode = $('.receipt input').val();//顾客取货验证码
+		var data = {"sincecode":verificationCode};
+		if(verificationCode == ''){
+			showAlertMsg(msgVerificationEmpty);
+			return;
+		}
+		var resultJson = ajaxCommon(urlreceipt, data);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			resultJson =JSON. stringify(resultJson);
+			window.location.href = "custreceiptinfo.html?sincecode=" +verificationCode+ "&result=" +resultJson+ "&t=" + t;	
+		}
+		else {
+			window.location.href = "custreceiptfail.html?t=" + t;
+		}	
+	});	
+});

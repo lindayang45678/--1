@@ -1,0 +1,209 @@
+//初始化iScroll控件
+var myScroll; 
+var goodList = [];
+myScroll = new iScroll('pop-shopindex-main', {//iScroll的对象
+	hScrollbar: false, 
+	vScrollbar: false,
+	topOffset: 0,
+	useTransition: false,
+	onScrollStart: function(){
+		myScroll.refresh();
+	}
+});
+	
+//请求接口获取推送的商品
+function getGoodsList(){
+			var data = {"psam":psam,"token":userToken};
+			var resultJson = ajaxCommon(urlRecGoods, data);
+			//resultJson = convertNullToEmpty(resultJson);
+			if (resultJson._ReturnCode === returnCodeSuccess) {
+				goodList = resultJson._ReturnData;	
+		        console.log(goodList);
+				var html = $("#pop-shopindex-main ul li").eq(0);
+				if(goodList.length > 0){
+					for(var i = 0; i < goodList.length; i ++){
+						var addData = function(i){
+							var li = $("#pop-shopindex-main ul li").eq(i);
+							var imga= urlImage+ "/" + goodList[i].tGoodInfoPoolId+ "/" +imgw300+ "/" +goodList[i].goodBigPic.split(";")[0];
+							li.find("img").attr("src", imga);
+							li.find("img").attr("onerror", "productErrImg(this)");
+							li.find("h3").html(goodList[i].goodName);							
+							if(goodList[i].salePrice == 0){
+								li.find("input").eq(1).val(goodList[i].retailPrice).removeAttr("readonly");
+								li.find(".edit-new").eq(1).removeClass("hidden");
+							}else{								
+								li.find("input").eq(1).val(goodList[i].salePrice).attr("readonly",true);
+								li.find(".edit-new").eq(1).addClass("hidden");
+							}
+							if(goodList[i].isfreshfood == 0 && i != 0){				
+								li.find(".edit-all").eq(0).remove();
+							}else{
+								goodList[i].stock = 1;
+								li.find("input").eq(0).val(goodList[i].stock);
+							}
+						}
+						if( i == 1){
+							addData(i);
+						}else{
+							var temp = html.clone(true);
+							$("#pop-shopindex-main ul").append(temp);
+							addData(i);
+						}
+					}
+				    myScroll.refresh();
+				}else{
+			        //$('.pop-shopindex').addClass('hidden');
+					//$('#shade').addClass('hidden') ;
+				}
+			}else{
+				//接口返回错误			
+			}
+		}
+
+//推送商品上架
+$("#shelve1").on('tap',function(){
+	$("#pop-shopindex-main ul li").each(function(i){
+		var li = $("#pop-shopindex-main ul li").eq(i);
+		
+		if(goodList[i].stock){
+			goodList[i].stock = li.find("input").eq(0).val();			
+		}else{
+		}
+		
+		goodList[i].salePrice = li.find("input").eq(1).val();				
+        delete goodList[i].goodName;
+        delete goodList[i].goodBigPic;
+        delete goodList[i].retailPrice;
+		
+	});		
+<<<<<<< .mine
+	//调用接口
+/*	var goodLis = goodList;*/
+	//console.log(goodList);
+	
+	//var data = JSON.stringify(goodList);
+	//console.log(data);
+	
+	var data = {"deviceno":psam,"rgoods": goodList};
+	//JSON.stringify(data);
+	console.log(data);
+	
+=======
+	//调用接口	
+>>>>>>> .r6602
+	var resultJson = ajaxCommon(urlPushGood, data);
+	//this.resultJson = convertNullToEmpty(resultJson);
+	//解析结果
+<<<<<<< .mine
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		alert("aa");
+        /*storage.setItem("noTaps",noTaps);	
+		$('.pop-shopindex').addClass('hidden');
+		$('#shade').addClass('hidden');*/
+	} else{
+		showAlertMsg(resultJson._ReturnMsg);
+=======
+	if(resultJson._ReturnCode === returnCodeSuccess){		
+		 window.location.href = "index.html?t=" + t;
+		 storage.setItem("noTaps",noTaps);	
+			$('.pop-shopindex').addClass('hidden');
+			$('#shade').addClass('hidden');
+			e.preventDefault();
+	}else{
+		//showAlertMsg(resultJson._ReturnMsg);
+>>>>>>> .r6602
+	}	
+});
+
+$(function(){
+//判断小店弹窗是否出现
+    var noTaps ="yes"; 
+    if(storage.getItem("noTaps")){
+        $('.pop-shopindex').addClass('hidden');
+		$('#shade').addClass('hidden') ;		
+    }else{
+		$('.pop-shopindex').removeClass('hidden');
+        $('#shade').removeClass('hidden');    	
+    }
+    
+//点击不再提醒，小店弹窗不在出现
+    $('#noTaps').on('touchend',function(e){
+		storage.setItem("noTaps",noTaps);	
+		$('.pop-shopindex').addClass('hidden');
+		$('#shade').addClass('hidden');	
+	    e.preventDefault();
+	});
+    
+//点击忽略，本次隐藏
+    $('#refuse').on('touchend',function(e){	    	
+		$('.pop-shopindex').addClass('hidden');
+		$('#shade').addClass('hidden');
+		e.preventDefault();
+	});      
+  /*  $('#shelve1').on('touchend',function(e){    				
+		storage.setItem("noTaps",noTaps);	
+		$('.pop-shopindex').addClass('hidden');
+		$('#shade').addClass('hidden');	
+		e.preventDefault();
+	});    */ 
+    
+//点击阴影区域，弹窗隐藏
+    $('#shade').on('touchend',function(e){
+		$('.pop-shopindex').addClass('hidden');
+		$('#shade').addClass('hidden');	
+		e.preventDefault();
+	});
+   
+    if(!($('#shade').hasClass('hidden'))){
+    	getGoodsList()
+    	if(goodList[0].isfreshfood == 0){
+            $("#pop-shopindex-main ul li").eq(0).find(".edit-all").eq(0).remove();
+		}
+    }
+       
+//小店弹窗输入框编辑效果；	
+	$('.edit-all').on('tap',function(){
+		var rea = $(this).children('.before-edit');
+		if(!rea.attr("readonly")){
+			$(this).children('.before-edit').toggleClass('edit');	
+			if($(this).children('.before-edit').hasClass('edit')){
+                $(this).children('.before-edit').focus();
+			}
+		}		   
+	});
+	
+//点击其他区域时，上次出现的库存或价格编辑框自动隐藏；
+	$('.before-edit').on('blur',function(){
+		$(this).removeClass('edit');
+		var count = $(this).val();
+		if(count == 0 || count == ""){
+			$(this).val("0");
+		}
+	});				
+/*	$('.pop-shopindex ul li').on('touchend',function(){		
+		$("input:focus").blur();		
+	});*/
+	
+//推送商品库存和价格不能输入非数字,库存大于等于0
+	$('.before-edit').on('keyup',function(){		
+		var count = $(this).val();			
+		if(!count || isNaN(count)){
+            $(this).attr("value","");
+            $(this).val("");
+		}		
+	});
+
+//推送商品价格最多保留两位小数	
+	$('.prc').on('keyup',function(){
+		var count = $(this).val();
+/*		if(count == 0){
+			$(this).attr("value","");
+			$(this).val("");
+		}*/
+		if(count.indexOf(".") != -1){//金额截取两位小数
+			if(count.split(".")[1].length > 2)					
+				count = count.split(".")[0]+"."+count.split(".")[1].slice(0,2);
+			    $(this).val(count);
+		}			
+	});						
+});

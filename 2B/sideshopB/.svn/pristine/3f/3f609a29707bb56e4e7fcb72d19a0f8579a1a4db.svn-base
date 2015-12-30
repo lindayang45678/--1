@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.order.TorderitemsMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Torderitems">
+        <id column="tOrderItemsId" property="torderitemsid" jdbcType="INTEGER"/>
+        <result column="orderProviderID" property="orderproviderid" jdbcType="VARCHAR"/>
+        <result column="orderID" property="orderid" jdbcType="VARCHAR"/>
+        <result column="goodsID" property="goodsid" jdbcType="INTEGER"/>
+        <result column="goodsSkuID" property="goodsskuid" jdbcType="INTEGER"/>
+        <result column="goodsSkuO2OID" property="goodsskuo2oid" jdbcType="INTEGER"/>
+        <result column="goodsName" property="goodsname" jdbcType="VARCHAR"/>
+        <result column="goodsInProviderCode" property="goodsinprovidercode" jdbcType="VARCHAR"/>
+        <result column="providerID" property="providerid" jdbcType="INTEGER"/>
+        <result column="providerName" property="providername" jdbcType="VARCHAR"/>
+        <result column="logisticsId" property="logisticsid" jdbcType="INTEGER"/>
+        <result column="goodsIsOwnOrSupport" property="goodsisownorsupport" jdbcType="INTEGER"/>
+        <result column="goodsCount" property="goodscount" jdbcType="INTEGER"/>
+        <result column="ruleID" property="ruleid" jdbcType="INTEGER"/>
+        <result column="ruleName" property="rulename" jdbcType="VARCHAR"/>
+        <result column="goodsFavoRuleMoney" property="goodsfavorulemoney" jdbcType="DECIMAL"/>
+        <result column="goodsDeductionPoints" property="goodsdeductionpoints" jdbcType="REAL"/>
+        <result column="goodsPayOff" property="goodspayoff" jdbcType="DECIMAL"/>
+        <result column="goodsSalePrice" property="goodssaleprice" jdbcType="DECIMAL"/>
+        <result column="goodsFinalPrice" property="goodsfinalprice" jdbcType="DECIMAL"/>
+        <result column="goodsProfits" property="goodsprofits" jdbcType="DECIMAL"/>
+        <result column="goodsRetainedProfits" property="goodsretainedprofits" jdbcType="DECIMAL"/>
+        <result column="storeProfits" property="storeprofits" jdbcType="DECIMAL"/>
+        <result column="deductionBasePoints" property="deductionbasepoints" jdbcType="REAL"/>
+        <result column="companyDiscount" property="companydiscount" jdbcType="REAL"/>
+        <result column="companyProfit" property="companyprofit" jdbcType="DECIMAL"/>
+        <result column="storeDiscount" property="storediscount" jdbcType="REAL"/>
+        <result column="storeProfit" property="storeprofit" jdbcType="DECIMAL"/>
+        <result column="operatorDiscount" property="operatordiscount" jdbcType="REAL"/>
+        <result column="operatorProfit" property="operatorprofit" jdbcType="DECIMAL"/>
+        <result column="returnAmount" property="returnamount" jdbcType="DECIMAL"/>
+        <result column="subsidyAmount" property="subsidyamount" jdbcType="DECIMAL"/>
+        <result column="goodsLogisticState" property="goodslogisticstate" jdbcType="INTEGER"/>
+        <result column="channelCode" property="channelcode" jdbcType="VARCHAR"/>
+        <result column="virtualClassificationID" property="virtualclassificationid" jdbcType="VARCHAR"/>
+        <result column="goodsClassificationID" property="goodsclassificationid" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="mergeState" property="mergestate" jdbcType="INTEGER"/>
+        <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP"/>
+        <result column="fav" property="fav" jdbcType="VARCHAR"/>
+        <result column="cancelState" property="cancelstate" jdbcType="INTEGER"/>
+        <result column="lastModifyTime" property="lastmodifytime" jdbcType="TIMESTAMP"/>
+        <result column="norms" property="norms" jdbcType="VARCHAR"/>
+        <result column="lockState" property="lockstate" jdbcType="INTEGER"/>
+        <result column="discountID" property="discountid" jdbcType="INTEGER"/>
+        <result column="exportstatus" property="exportstatus" jdbcType="INTEGER"/>
+        <result column="settleState" property="settlestate" jdbcType="INTEGER"/>
+        <result column="confirmReturnRemark" property="confirmreturnremark" jdbcType="VARCHAR"/>
+        <result column="providerSettleState" property="providersettlestate" jdbcType="INTEGER"/>
+        <result column="providerSettleMoney" property="providersettlemoney" jdbcType="DECIMAL"/>
+        <result column="shipSettleState" property="shipsettlestate" jdbcType="INTEGER"/>
+        <result column="shipSettleMoney" property="shipsettlemoney" jdbcType="DECIMAL"/>
+        <result column="phoneMemberName" property="phonemembername" jdbcType="VARCHAR"/>
+        <result column="phoneMemberIdCard" property="phonememberidcard" jdbcType="VARCHAR"/>
+        <result column="giftState" property="giftstate" jdbcType="INTEGER"/>
+        <result column="giftParentId" property="giftparentid" jdbcType="VARCHAR"/>
+        <result column="returnState" property="returnstate" jdbcType="INTEGER"/>
+        <result column="invalidState" property="invalidstate" jdbcType="INTEGER"/>
+        <result column="returnParentID" property="returnparentid" jdbcType="INTEGER"/>
+        <result column="providerSettleTime" property="providersettletime" jdbcType="TIMESTAMP"/>
+        <result column="shipSettleTime" property="shipsettletime" jdbcType="TIMESTAMP"/>
+        <result column="tempStoreGoodsFlag" property="tempstoregoodsflag" jdbcType="INTEGER"/>
+        <result column="isDeliverToHome" property="isdelivertohome" jdbcType="INTEGER"/>
+        <result column="siteNo" property="siteno" jdbcType="VARCHAR"/>
+        <result column="deviceNo" property="deviceno" jdbcType="VARCHAR"/>
+        <result column="customer" property="customer" jdbcType="VARCHAR"/>
+        <result column="tAllOrderId" property="tallorderid" jdbcType="INTEGER"/>
+        <result column="cusTelNo" property="custelno" jdbcType="VARCHAR"/>
+        <result column="cusName" property="cusname" jdbcType="VARCHAR"/>
+        <result column="logisticsfee" property="logisticsfee" jdbcType="DECIMAL"/>
+        <result column="isRestore" property="isrestore" jdbcType="INTEGER"/>
+        <result column="sinceCode" property="sincecode" jdbcType="INTEGER"/>
+        <result column="addressProvinceName" property="addressprovincename" jdbcType="VARCHAR"/>
+        <result column="addressProvince" property="addressprovince" jdbcType="VARCHAR"/>
+        <result column="addressCityName" property="addresscityname" jdbcType="VARCHAR"/>
+        <result column="addressCity" property="addresscity" jdbcType="VARCHAR"/>
+        <result column="addressAreaName" property="addressareaname" jdbcType="VARCHAR"/>
+        <result column="addressArea" property="addressarea" jdbcType="VARCHAR"/>
+        <result column="addressFull" property="addressfull" jdbcType="VARCHAR"/>
+        <result column="orgid" property="orgid" jdbcType="INTEGER"/>
+        <result column="ispay" property="ispay" jdbcType="INTEGER"/>
+        <result column="tallorderid" property="tallorderid" jdbcType="INTEGER"/>
+        <result column="payTime" property="paytime" jdbcType="TIMESTAMP" />
+		<result column="payChanel" property="paychanel" jdbcType="INTEGER" />
+		<result column="platorself" property="platorself" jdbcType="INTEGER" />
+		<result column="ecnetno" property="ecnetno" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    tOrderItemsId, orderProviderID, orderID, goodsID, goodsSkuID, goodsSkuO2OID, goodsName, 
+    goodsInProviderCode, providerID, providerName, logisticsId, goodsIsOwnOrSupport, 
+    goodsCount, ruleID, ruleName, goodsRuleType, goodsFavoRuleMoney, goodsDeductionPoints, 
+    goodsPayOff, goodsSalePrice, goodsFinalPrice, goodsProfits, goodsRetainedProfits, 
+   IFNULL( storeProfits,0.00) as  storeProfits, deductionBasePoints, companyDiscount, companyProfit, storeDiscount, 
+    storeProfit, operatorDiscount, operatorProfit,IFNULL( returnAmount,0.00) as  returnAmount, 
+     IFNULL(subsidyAmount,0.00) as subsidyAmount, goodsLogisticState, 
+    channelCode, virtualClassificationID, goodsClassificationID, state, mergeState, orderTime, 
+    cancelState, lastModifyTime, norms, lockState, discountID, exportstatus, settleState, 
+    confirmReturnRemark, providerSettleTime, providerSettleState, providerSettleMoney, tempstoregoodsflag,
+    shipSettleState, shipSettleTime, shipSettleMoney, phoneMemberName, phoneMemberIdCard, 
+    giftState, giftParentId, returnState, invalidState, returnParentID, isRestore, sinceCode, 
+    returnCode, orgid,ispay,tallorderid,paytime,paychanel,platorself,
+    ecnetno,custelno,cusname,deviceno,siteno,addressfull,isdelivertohome
+  </sql>
+    <sql id="Blob_Column_List">
+    fav
+  </sql>
+  
+  
+  <sql id="where">
+        <if test="tallorderid != null and tallorderid != '' ">
+			and s.tallorderid = #{tallorderid} 
+		</if>
+		<if test="torderid != null and torderid != '' ">
+		    and s.orderid = #{torderid}
+		</if>
+		<if test="torderproviderid != null and torderproviderid != '' ">
+		    and s.orderProviderID = #{torderproviderid}
+		</if>
+		<if test="goodsname != null and goodsname != '' ">
+			and s.goodsName like    CONCAT('%',#{goodsname},'%') 
+		</if>
+	    <if test="state != null and state != '' ">
+		    and s.state = #{state}
+		</if>
+		<if test="cancelstate != null and cancelstate != '' ">
+		    and s.cancelState = #{cancelstate}
+		</if>
+		<if test="mergestate != null and mergestate != '' ">
+		    and s.mergeState = #{mergestate}
+		</if>
+		<if test="orgid != null and orgid != '' ">
+		    and s.orgid = #{orgid}
+		</if>
+		<if test="sincecode != null and sincecode != '' ">
+		    and s.sincecode = #{sincecode}
+		</if>
+  </sql>	
+  
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from torderitems
+        where tOrderItemsId = #{torderitemsid,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 查询指定psam，近一个月内，下过单的商品  zhiziwei -->
+    <select id="getGoodsListByPsam" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT DISTINCT t.goodsID
+		FROM
+			(
+				SELECT
+					t2.goodsID,
+					t2.orderTime
+				FROM
+					torder t1,
+					torderitems t2
+				WHERE
+					t1.tOrderId = t2.orderID
+				AND t1.deviceNo = #{psam,jdbcType=VARCHAR}
+				AND (t2.channelCode = 27 OR t2.channelCode = 44 OR t2.channelCode = 43)
+			) t
+		WHERE t.orderTime BETWEEN DATE_ADD(NOW(), INTERVAL - 1 MONTH) AND NOW()
+		ORDER BY t.orderTime DESC
+    </select>
+    
+    
+     <select id="checkOrderIsAllCancel" parameterType="map"
+		resultType="java.lang.Integer">
+		SELECT
+		count(s.tOrderItemsId)-sum(case when (s.cancelState = 137 or s.tOrderItemsId in (${cancelitemsids})) then 1 else 0 END)
+		
+		from torderitems s
+		where 1=1
+
+		<if test="torderid != null and torderid != '' ">
+			And s.orderid =
+			#{torderid,jdbcType=VARCHAR}
+		</if>
+		<if test="torderproviderid != null and torderproviderid != '' ">
+			And s.orderProviderID =
+			#{torderproviderid,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	
+	<select id="checkOrderIsAllComfirm" parameterType="map"
+		resultType="java.lang.Integer">
+		SELECT
+		count(s.tOrderItemsId)-sum(IF((s.state=102
+		<if test="itemjsonset != null and itemjsonset != '' ">
+            or s.tOrderItemsId in
+            <foreach item="item" index="index" collection="itemjsonset" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="torderproviderid != null and torderproviderid != '' ">
+			or s.orderProviderID =
+			#{torderproviderid,jdbcType=VARCHAR}
+		</if>
+        )
+		,1,0))
+		from torderitems s
+		where s.cancelstate = 136
+
+		<if test="torderid != null and torderid != '' ">
+			And s.orderid =
+			#{torderid,jdbcType=VARCHAR}
+		</if>
+		<if test="torderproviderid != null and torderproviderid != '' ">
+			And s.orderProviderID =
+			#{torderproviderid,jdbcType=VARCHAR}
+		</if>
+		
+	</select>
+	
+	
+	<select id="selectOrderItemsList" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		FROM
+		torderitems s
+		where 1=1
+		<include refid="where"/>
+	</select>
+	
+	<!-- 判断操作的订单是否为整单 .0标识整单，大于0非整单操作,-99标识传参异常  -->
+    <select id="checkOrderIsDoAll" parameterType="map"  resultType="java.lang.Integer" >
+    	 SELECT 
+	       (case when count(1)=0 then  -99  when  
+	       count(1)-sum(case when 
+	       
+	          <if test="flag != null and flag != '' and flag eq 'torder' ">
+	            c.orderID = #{torderid}
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'torderprovider' ">
+			    c.orderProviderID =  #{torderproviderid}
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'torderitems' ">
+			    c.tOrderItemsId =  #{torderitemsid}
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'orderids' ">
+	            c.orderID in (${orderids})
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'orderproviderids' ">
+			    c.orderProviderID  in (${orderproviderids})
+			  </if>
+			  <if test="flag != null and flag != '' and flag eq 'orderitemsids' ">
+			    c.tOrderItemsId  in (${orderitemsids})
+			  </if>
+			  <!-- 注意:stategroups,state,deliverstate三个参数建议不能同时传 -->
+	          <if test="stategroups != null and stategroups != ''">
+			    and c.state in (${stategroups})
+			  </if>
+			  <if test="state != null and state != ''">
+			    and c.state = #{state,jdbcType=INTEGER}
+			  </if>
+			  <if test="deliverstate != null and deliverstate != ''">
+			    and c.state BETWEEN 100 AND 102
+			  </if>
+	          and c.tallorderid = #{tallorderid} 
+	          and c.cancelState = 136
+	          
+	        THEN 1 else 0 END)=0
+	        then 0  else 1  end)
+    	
+    	from  torderitems  c  
+	    where  c.tallorderid = #{tallorderid}
+		   
+		 <if test="flag == null or flag eq '' ">
+		    and  1>2
+		  </if>
+	</select> 
+	
+	<select id="selectIsLastOrderitems" resultType="java.lang.Integer"  parameterType="map" >
+		  SELECT  if(SUM(IF(s.state>99,1,0))>0,99999,count(DISTINCT s.tOrderItemsId)-COUNT(DISTINCT f.tOrderItemID)) 
+          from torderitems s LEFT JOIN treturnitems f ON f.tOrderItemID =s.tOrderItemsId 
+          where  s.tallorderid = #{tallorderid,jdbcType=INTEGER}
+          <if test="torderitemsid != null and torderitemsid != '' ">
+			 and s.tOrderItemsId != #{torderitemsid,jdbcType=INTEGER}
+		  </if>
+          <if test="nowcancelitemids != null and nowcancelitemids != '' ">
+			 and s.tOrderItemsId not in (${nowcancelitemids})
+		  </if>
+	</select>
+	
+	<select id="selectIsLastOrderitemsWhenFavCheck" resultType="java.lang.Integer"  parameterType="map" >
+		SELECT  count(1)  from  torderitems s  where  s.tAllOrderId =  #{tallorderid,jdbcType=INTEGER} and s.tOrderItemsId not in  (${torderitemsids}) and s.cancelState=136;
+	</select>
+	<!-- add by ls -->
+    <select id="selectgoodsnames" resultType="java.lang.String"  parameterType="java.lang.Integer" >
+		SELECT 
+		  GROUP_CONCAT(i.`goodsName`) 
+		FROM
+		  torderitems i 
+		WHERE i.`tAllOrderId` = #{tallorderid,jdbcType=INTEGER} 
+	</select>
+</mapper>

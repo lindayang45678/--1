@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单查询-失败</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+	<header>
+		<h1>订单查询</h1>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>
+	</header>
+	<section class="container queryfail">
+ 		<section class="wrap">
+			<div class="content">
+				<img alt="没有结果" src="../../images/searchno-img.png" />
+				<p class="f-16 c-gray">很抱歉，未搜索到你要查找的订单 <br/>请重新选择查询条件！</p>
+				<a href="javascript:window.history.go(-1)" class="btn-red">重新查询</a>
+			</div>	
+		</section>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/accounts/orders.js"></script>
+</html>

@@ -1,0 +1,10 @@
+package com.lakala.module.comm;
+
+public interface Constant {
+	
+	public static final int GOODS_STATUS_ONSALE=208; //商品在售
+	public static final int GOODS_STATUS_DWONSALE=209;  //商品下架
+	
+	public static final int GOODS_PLAT=453;  //平台商品
+	public static final int GOODS_SELF=452;  //自营商品
+}

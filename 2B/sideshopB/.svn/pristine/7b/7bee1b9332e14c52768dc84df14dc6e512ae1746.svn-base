@@ -1,0 +1,26 @@
+package com.lakala.mapper.r.realcat;
+
+import java.util.List;
+
+import com.lakala.base.model.Realcate;
+
+public interface RealcateMapper {
+    Realcate selectByPrimaryKey(Integer trealcateid);
+
+    List<Realcate> selectAll();
+    
+    List<Realcate> selectByVirtualCate(Integer tVirtualCateId);
+
+    List<Realcate> selectByVirtualCates();
+    
+    List<Realcate> selectByFatherCateId(Integer fatherRealCateId);
+    
+    List<Realcate> selectByFatherCateIds(List<Realcate> rcats);
+
+    /**
+     * 根据指定营销分类关联的结算分类 zhiziwei
+     */
+    List<Integer> selectRidsByVid(Integer vid);
+    
+    List<Realcate> selectByVirtualCateByRealCate(Integer tVirtualCateId);
+}

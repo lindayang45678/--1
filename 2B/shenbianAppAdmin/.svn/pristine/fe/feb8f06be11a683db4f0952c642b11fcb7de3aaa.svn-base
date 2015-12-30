@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>编辑小店信息</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<link rel="stylesheet" href="../../css/master.css"/>
+</head>
+
+<body>
+	<header>
+		<a href="window.history.go(-1)" class="back"></a>
+  		<h1>编辑小店信息</h1>
+	</header>
+    <section class="container editshop">
+    	<div class="shopedit-3item">
+        	<div class="edit-line1">
+            	<span>小店名称:</span>
+                <div>
+                	<p class="change-tagname">张伟的小店</p>
+                	<a href="#"></a>
+                </div>
+            </div>
+            <div class="edit-line1">
+            	<span>微信号:</span>
+                <div>
+                	<p class="change-tagname">15010841736</p>
+                	<a href="#"></a>
+                </div>
+            </div>
+            <div class="editline-n">
+            	<span class="left">小店公告:</span>
+                <div class="leftborder">
+                	<p class="line-n">熟悉刘小鹰的人知道，刘小鹰的一大爱好是骑自行车，五十岁爱上自行车就不能自拔了对于骑行，是                	由于一次偶然的机会。在2013年的时候，举行一个生日的纪念，去台湾骑行</p>
+                	<div>
+                    	<span>最多200字</span>
+                        <a href="#"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shopedit-2item">
+        	<div class="edit-line1">
+            	<span>配送客服:</span>
+                <div>
+                	<p class="change-tagname">张伟</p>
+                	<a href="#"></a>
+                </div>
+            </div>
+            <div class="edit-line1">
+            	<span>客服电话:</span>
+                <div>
+                	<p class="change-tagname">15010897819</p>
+                	<a href="#"></a>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="add-service">
+        	<p>添加客服</p>
+        </a>
+        <div class="shopedit-2item pright-per7">
+        	<div class="edit-line1 eddit-line2">
+            	<span class="line2-left">小店地址:</span>
+                <p class="change-tagname">北京市海淀区中关村金融大厦7-8层</p>
+            </div>
+            <div class="edit-line1">
+            	<span>店主手机:</span>
+                <p class="change-tagname">15010897819</p>
+            </div>
+        </div>
+        <a href="" class="upload-panels">
+        	<p>上传门面照片</p>
+        </a>
+        <div class="editshop-bigimg"><img src="../../images/editshop-img.png" alt=""/></div>
+    </section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+</html>

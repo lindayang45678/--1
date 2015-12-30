@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="homepage">
+	<header>		
+		<h1>身边小店<span>店主版</span></h1>
+		<a href="notices.html" class="head-left"><em>48</em></a>
+		<a href="setting.html" class="head-right"></a>
+	</header>
+	<section class="container homepage-main">
+	<div class="wrap">
+		<a class="prev" href="#"></a>
+		<a class="next" href="#"></a>
+		<ul>
+			<li></li>
+			<li class="active"></li>
+		</ul>
+		<table>
+			<tr>
+				<td rowspan="2"><a href="#"><img src="../../images/ico-sbxd.png"><h3>身边小店</h3></a></td>
+				<td><a href="#"><img src="../../images/ico-ddgl.png"><h3>订单管理</h3></a></td>
+			</tr>
+			<tr>
+				<td><a href="#"><img src="../../images/ico-sycx.png"><h3>收益查询</h3></a></td>
+			</tr>
+			<tr>
+				<td><a href="#"><img src="../../images/ico-pfjh.png"><h3>批发进货</h3></a></td>
+				<td><a href="#"><img src="../../images/ico-wylq.png"><h3>我要领券</h3></a></td>
+			</tr>
+			<tr>
+				<td><a href="#"><img src="../../images/ico-gkqh-dzsh.png"><h3>顾客取货&店主收货</h3></a></td>
+				<td><a href="#"><img src="../../images/ico-khgl.png"><h3>客户管理</h3></a></td>
+			</tr>
+		</table>
+		<table class="hidden">
+			<tr>
+				<td><a href="#"><img src="../../images/ico-pfjh.png"><h3>批发进货</h3></a></td>
+				<td><a href="#"><img src="../../images/ico-wylq.png"><h3>我要领券</h3></a></td>
+			</tr>
+			<tr>
+				<td><a href="#"><img src="../../images/ico-jybd.png"><h3>经验宝典</h3></a></td>
+				<td><a href="#"><img src="../../images/ico-xdph.png"><h3>小店排行</h3></a></td>
+			</tr>
+		</table>
+	</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+</html>

@@ -1,0 +1,16 @@
+package com.lakala.module.news.service;
+
+import java.util.List;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.news.vo.NewsItemOutput;
+import com.lakala.module.news.vo.NewsOutput;
+
+public interface NewsService {
+	
+	public ObjectOutput<List<NewsItemOutput>> getInfo(Integer newsid,String terminalCode) throws LakalaException;
+	
+	public ObjectOutput<List<NewsItemOutput>> getConsultInfo(Integer itemsid) throws LakalaException;
+
+}

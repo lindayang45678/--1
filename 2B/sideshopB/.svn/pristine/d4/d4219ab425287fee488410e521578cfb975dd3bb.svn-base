@@ -1,0 +1,12 @@
+package com.lakala.mapper.r.goods;
+
+import java.util.Map;
+
+import com.lakala.base.model.Tgoodinfo;
+import com.lakala.model.profit.Tgoodsinfo;
+
+
+public interface TgoodsinfoMapper {
+    Tgoodinfo selectByPrimaryKey(Integer tgoodinfoid);
+
+}

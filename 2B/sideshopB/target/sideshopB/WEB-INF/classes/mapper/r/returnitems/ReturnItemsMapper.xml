@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.returnitems.ReturnItemsMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.ReturnItems">
+        <id column="tReturnItemsId" property="treturnitemsid" jdbcType="INTEGER"/>
+        <result column="returnID" property="returnid" jdbcType="INTEGER"/>
+        <result column="orderID" property="orderid" jdbcType="VARCHAR"/>
+        <result column="providerID" property="providerid" jdbcType="INTEGER"/>
+        <result column="providerName" property="providername" jdbcType="VARCHAR"/>
+        <result column="tOrderItemID" property="torderitemid" jdbcType="VARCHAR"/>
+        <result column="goodsID" property="goodsid" jdbcType="INTEGER"/>
+        <result column="goodsName" property="goodsname" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="returnMoneyStatus" property="returnmoneystatus" jdbcType="VARCHAR"/>
+        <result column="account" property="account" jdbcType="DECIMAL"/>
+        <result column="shouldRefund" property="shouldrefund" jdbcType="DECIMAL"/>
+        <result column="number" property="number" jdbcType="DOUBLE"/>
+        <result column="unitName" property="unitname" jdbcType="VARCHAR"/>
+        <result column="returnGoodStatus" property="returngoodstatus" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="addressFull" property="addressfull" jdbcType="VARCHAR"/>
+        <result column="returnMoneyApproveFinishDate" property="returnmoneyapprovefinishdate" jdbcType="DATE"/>
+        <result column="returnGoodApproveFinishDate" property="returngoodapprovefinishdate" jdbcType="DATE"/>
+        <result column="refundProject" property="refundproject" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    t.tReturnItemsId, t.returnID, t.orderID, t.providerID, t.providerName, t.tOrderItemID, t.goodsID,
+    t.goodsName, t.price, t.returnMoneyStatus, t.account, t.shouldRefund, t.number, t.unitName, t.returnGoodStatus,
+    t.remark,t.addressFull,t.returnMoneyApproveFinishDate,t.returnGoodApproveFinishDate, t.refundProject
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from treturnitems t
+        where t.tReturnItemsId = #{treturnitemsid,jdbcType=INTEGER}
+    </select>
+</mapper>

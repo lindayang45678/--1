@@ -1,0 +1,49 @@
+//分享
+//$(function() {
+//	$('#share').on('tap', function(e) {
+//		var title = $(this).siblings('h2').text();
+//		cordova._native.share.share(title, title, '', function() {
+//			
+//		}, function() {
+//			
+//		});
+//	});
+//});
+
+/* 获取店主信息 */
+$(function(){
+	var sUrl = window.location.href;
+	var id = getParamValueByName(sUrl, "id");
+	//测试用
+	id="178361";
+	
+	var data = {"id":id};
+	var resultJson = ajaxCommon(urlShopInfo, data);
+	resultJson = convertNullToEmpty(resultJson);
+	
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		$("#shopname").html("").html(_ReturnData.shopname);
+		var shipaddress = {
+			    "shipname": _ReturnData.shopname,
+			    "shipmobile": _ReturnData.phone,
+			    "shipprovinceid": _ReturnData.provinceCode,
+			    "shipprovince": _ReturnData.province,
+			    "shipcityid": _ReturnData.cityCode,
+			    "shipcity": _ReturnData.city,
+			    "shipareaid": _ReturnData.cityareaCode,
+			    "shiparea": _ReturnData.cityarea,
+			    "shipaddr": _ReturnData.address
+			};
+		storage.setItem("shipaddress",JSON.stringify(shipaddress));
+		//console.log(storage.getItem("shipaddress"));
+		
+		var hasMoreShops = storage.getItem("hasMoreShops")|| 0;
+		//如果hasMoreShops == 0时，只有一个小店，“查看我的其他小店”隐藏
+		if(hasMoreShops==0){
+			$('.list3').addClass('hidden');
+		}
+	}else{
+		//接口返回错误
+	}
+});

@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>管理商品-自营商品</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<link rel="stylesheet" href="../../css/master.css"/>
+</head>
+
+<body>
+	<header>
+		<a href="window.history.go(-1)" class="back"></a>
+  		<h1>商品列表</h1>
+        <a href="#" class="head-right-pluse"><img src="../../images/search-icon.png" alt=""/></a>
+        <a href="#" class="head-right-search"><img src="../../images/pluse.png" alt=""/></a>
+	</header>
+    <section class="container">
+    	<ul class="tabs">
+        	<li id="tab1" onClick="mytab(1)" class="active">自营商品<span class="c-red">10</span>个</li>
+   			<li id="tab2" onClick="mytab(2)">平台商品<span class="c-red">200</span>个</li>
+        </ul>
+        
+        <section>
+        	<div class="curtab">
+            	<div class="norms"  id="content1">
+                	<div class="sorts">
+                    	<ul>
+                        	<li class="redon-color">上架时间</li><li>销量</li><li>库存</li><li>下架商品</li>
+                        </ul>
+                    </div>
+                    <div class="goods-list">
+                    	<dl>
+                        	<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                            <dd>
+                            	<h3>【生鲜】信息水果</h3>
+                                <p><span>上架时间：2014-12-12<span><span>12:12</span></p>
+                                <p class="goods-num"><span>库存：300</span><span>销量：88</span></p>
+                                <p>价格：¥90</p>
+                            </dd>
+                        </dl>
+                        <div><a href="#">下架</a><a href="#">编辑</a></div>
+                    </div>
+                    <div class="goods-list">
+                    	<dl>
+                        	<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                            <dd>
+                            	<h3>【生鲜】信息水果</h3>
+                                <p><span>上架时间：2014-12-12<span><span>12:12</span></p>
+                                <p class="goods-num"><span>库存：300</span><span>销量：88</span></p>
+                                <p>价格：¥90</p>
+                            </dd>
+                        </dl>
+                        <div><a href="#">下架</a><a href="#">编辑</a></div>
+                    </div>
+                    <div class="goods-list mb-none">
+                    	<dl>
+                        	<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                            <dd>
+                            	<h3>【生鲜】信息水果</h3>
+                                <p><span>上架时间：2014-12-12<span><span>12:12</span></p>
+                                <p class="goods-num"><span>库存：300</span><span>销量：88</span></p>
+                                <p>价格：¥90</p>
+                            </dd>
+                        </dl>
+                        <div><a href="#">下架</a><a href="#">编辑</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="incurtab"  id="content2"></div>
+        </section>
+    </section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/shops/selfgoodslist.js"></script>
+</html>

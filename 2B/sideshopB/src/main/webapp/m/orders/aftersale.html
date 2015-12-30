@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>订单管理-售后</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="orders">
+	<header id="head">
+		<a href="../homepage/index.html" class="back"></a>
+		<h1><a class="opacity" href="wholesaleorders.html">批发订单</a><a href="retailorders.html">零售订单</a></h1>
+		<a href="javascript:void(0);" class="head-right"></a>
+		<div class="orders-search hidden">
+			<div>
+				<span class="back"></span>
+				<p><input type="text" placeholder="请输入商品名称／手机号"/></p>
+				<a href="querysucceed.html" class="head-right">搜索</a>
+			</div>
+		</div>
+	</header>
+	<section class="container aftersale">
+		<div id="head" class="header">
+		</div>
+		<div id="header-list" class="header-list">
+		</div>
+		<p class="tips f-14">以下是本店自营商品的售后订单，请尽快处理。</p>
+		<section id="aftersaleorders-scroll" class="aftersaleorders-scroll">
+			<div id="aftersaleorders-container" class="aftersaleorders-container">
+				<div id="scroll-items">	
+				</div>
+				<div  id="loading" class="hidden">
+					<img class="loading" alt="" src="../../images/loading.png" />
+				</div>
+			</div>
+		</section>
+		<div class="pop-up-box hidden">
+			<div class="after-sale-infor">
+				<h3>您是否同意该售后申请？</h3>
+				<div class="types">
+					<span class="not-agree" isagree="fasle">不同意</span>
+					<span class="agree" isagree="true">同意</span>
+				</div>
+				<div class="msg">
+				</div>
+				<div class="reasons hidden">
+				</div>
+				<a class="btn-red" href="#">确认</a>
+				<a class="btn-gray" href="#">稍后处理</a>
+			</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/orders/aftersale.js"></script>
+</html>

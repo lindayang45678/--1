@@ -1,0 +1,58 @@
+//点击叉的时候删除
+$('.fill-close').live('tap',function(){	
+	$(this).parent().remove();
+});
+//添加地址超过5个的时候弹窗否则添加
+$('.fill-add-address').on('tap',function(){
+	var n=$('.fill-address li').length;
+	if(n>=5)
+	{	$('.popup').removeClass('hidden');
+		$('.masker').removeClass('hidden');
+	}
+	else
+	{	$('.fill-edit-address').removeClass('hidden');
+		$('.fill-add-address').addClass('hidden');
+		$('.fill-edit-address input').val('');
+		$('.edit-area input').val('默认');
+
+		$('.btn-save-address').on('tap',function(){	
+			var ret='';
+			var newname=$('.edit-name input').val();
+			var newphone=$('.edit-phone input').val();
+			var newarea=$('.edit-area input').val();
+			var newdetail=$('.edit-address input').val();
+			ret+='<li class="f-14">';
+			ret+='<div><i class="address-name">'+newname+'</i>&nbsp;<i class="address-phone">'+newphone+'</i></div>';
+			ret+='<div><i class="address-area">'+newarea+'</i></div>';
+			ret+='<div><i class="address-detail">'+newdetail+'</i></div>';
+			ret+='<div class="fill-close"></div>';
+			ret+='<a href="javascript:;" class="fill-edit">编辑</a></li>';
+			$('.fill-address').append(ret);
+			$('.fill-edit-address').addClass('hidden');
+			$('.fill-add-address').removeClass('hidden');
+		});
+	};
+});
+//弹窗点击确定的时候弹窗消失
+$('.popup-btn').on('tap',function(){	
+	$('.popup').addClass('hidden');
+	$('.masker').addClass('hidden');
+});
+
+//点击编辑时候进行编辑
+$('.fill-edit').live('tap',function(){	
+	$('.fill-edit-address').removeClass('hidden');
+	$('.fill-add-address').addClass('hidden');
+	$('.btn-save-address').on('tap',function(){	
+		var newname=$('.edit-name input').val();
+		var newphone=$('.edit-phone input').val();
+		var newarea=$('.edit-area input').val();
+		var newdetail=$('.edit-address input').val();
+		$(this).siblings('.address-name').find('input').val(newname);
+		$(this).siblings('.address-phone').find('input').val(newphone);
+		$(this).siblings('.address-area').find('input').val(newarea);
+		$(this).siblings('.address-detail').find('input').val(newdetail);
+		$('.fill-edit-address').addClass('hidden');
+		$('.fill-add-address').removeClass('hidden');
+	});
+});

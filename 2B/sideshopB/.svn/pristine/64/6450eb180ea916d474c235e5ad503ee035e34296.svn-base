@@ -1,0 +1,17 @@
+package com.lakala.mapper.w.user;
+
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.lakala.module.user.vo.UserLoginInput;
+import com.lakala.module.user.vo.UserRegisterInput;
+
+public interface TmemberMapper {
+
+	int addTmember(Map<String, Object> map);
+	
+    int updateTmemberPwdById(@Param("record") UserRegisterInput record);
+    
+    int updateTmemberTCodeById(@Param("record") UserLoginInput record);
+}

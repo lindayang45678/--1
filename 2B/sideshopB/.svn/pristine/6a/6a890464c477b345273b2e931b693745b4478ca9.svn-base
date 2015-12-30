@@ -1,0 +1,14 @@
+package com.lakala.mapper.w.sdbmediastatistics;
+
+import java.util.List;
+
+import com.lakala.model.user.TShopService;
+
+public interface TShopServiceMapper {
+
+	public int updateTShopServiceList(List<TShopService> list);
+	
+	public int removeShopServiceList(long shopid);
+	
+	public int insertTShopServiceList(List<TShopService> list);
+}

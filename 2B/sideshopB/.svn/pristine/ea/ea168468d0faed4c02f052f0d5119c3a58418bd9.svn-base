@@ -1,0 +1,43 @@
+//点击手动和选择现金券进行切换
+$('.select-coupon-tab').on('tap',function(){
+	$(this).find('em').addClass('tab-red');	
+	$('.hand-coupon-tab em').removeClass('tab-red');	
+	$('.fill-coupon .wrap p').addClass('hidden');
+	$('.fill-coupon .wrap a').addClass('hidden');
+	$('.coupon-pa').removeClass('hidden');
+	$('.coupon-sure').removeClass('hidden');
+	$('.fill-coupon-use').addClass('hidden');
+	$('.select-coupon').removeClass('hidden');
+	
+	
+});
+$('.hand-coupon-tab').on('tap',function(){
+	$(this).find('em').addClass('tab-red');	
+	$('.select-coupon-tab em').removeClass('tab-red');	
+	$('.fill-coupon .wrap p').addClass('hidden');
+	$('.fill-coupon .wrap a').addClass('hidden');
+	$('.coupon-test-btn').removeClass('hidden');
+	$('.fill-coupon-use').removeClass('hidden');
+	$('.select-coupon').addClass('hidden');
+});
+//选择优惠券
+$('.coupon-off').on('tap',function(){
+	if($(this).hasClass('coupon-on'))
+	{	$(this).removeClass('coupon-on');}
+	else
+	{	$(this).addClass('coupon-on');}
+});
+//优惠券加减号
+$('.coupon-change').on('tap',function(event){
+	event.stopPropagation();		
+});
+$('.coupon-plus').on('tap',function(){
+	var n=parseInt($(this).prev().attr('value'));
+	var surplus=$(this).parent().siblings().find('.coupon-surplus').html(); 
+	if(n<surplus)
+	{$(this).prev().attr('value',n+1);}	
+});
+$('.coupon-minus').on('tap',function(){
+	var n=parseInt($(this).next().attr('value'));
+	if(n>1){$(this).next().attr('value',n-1);}		
+});

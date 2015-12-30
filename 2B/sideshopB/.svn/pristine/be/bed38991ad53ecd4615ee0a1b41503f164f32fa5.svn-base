@@ -1,0 +1,45 @@
+package com.lakala.service.coupon;
+
+public class CouponTest {
+
+/*
+    public static ClassPathXmlApplicationContext context = null;
+
+    @BeforeClass
+    public static void beforeClass() {
+        System.out.println("----开始启动容器...");
+        context = new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
+        context.start();
+
+        System.out.println("----容器启动完成！");
+    }
+
+
+    @Test
+    public void testCoupon() {
+        CouponService couponService = (CouponService) context.getBean("couponServiceImpl");
+
+        String status = "unused";
+        String mobile = "18712345678";
+
+        CouponInput ci = new CouponInput();
+        ci.setDisabled(1);
+        ci.setStatus(status);
+        ci.setMobile(mobile);
+        ci.setPage(1);
+        ci.setPageSize(10);
+
+        List<Coupon> couponList = couponService.findCoupon(ci);
+
+        for (Coupon c : couponList) {
+            System.out.println(c.getFavorablecode());
+        }
+
+        long count = couponService.getCouponCount(ci);
+
+        System.out.println(status + "状态的券数量：" + count);
+
+    }*/
+
+
+}

@@ -1,0 +1,23 @@
+//添加地址超过5个的时候弹窗
+$('.fill-add-address').on('tap',function(){
+	var n=$('.fill-address li').length;
+	if(n>=5)
+	{
+		$('.popup').removeClass('hidden');
+		$('.masker').removeClass('hidden');
+	}
+});
+//弹窗点击确定的时候弹窗消失
+$('.popup-btn').on('tap',function(){	
+	$('.popup').addClass('hidden');
+	$('.masker').addClass('hidden');
+});
+//点击叉的时候删除
+$('.fill-close').on('tap',function(){	
+	$(this).parent().remove();
+});
+//点击编辑时候进行编辑
+$('.fill-edit').on('tap',function(){	
+	$('.fill-edit-address').removeClass('hidden');
+	$('.fill-add-address').addClass('hidden');	
+});

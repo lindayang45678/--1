@@ -1,0 +1,11 @@
+package com.lakala.mapper.w.approval;
+
+import com.lakala.base.model.Approval;
+
+
+public interface ApprovalMapper {
+
+    public Long insert(Approval record);
+
+    public Long updateSelective(Approval record);
+}

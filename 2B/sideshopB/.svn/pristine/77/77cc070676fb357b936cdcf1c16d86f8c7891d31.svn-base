@@ -1,0 +1,21 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.model.order.OrderInfo;
+
+/**
+ * 
+ * @author yhg
+ *
+ */
+public class OrderDetailOutput{
+	
+	private OrderInfo orderinfo;
+
+	public OrderInfo getOrderinfo() {
+		return orderinfo;
+	}
+
+	public void setOrderinfo(OrderInfo orderinfo) {
+		this.orderinfo = orderinfo;
+	}
+}

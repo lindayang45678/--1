@@ -1,0 +1,297 @@
+package com.lakala.util;
+
+/**
+ * 
+ * @ClassName: ConfigUtil
+ * @Description: 系统参数配置类
+ * @author zhiziwei
+ * @date 2015-1-21 下午5:13:38
+ * 
+ */
+
+public class ConfigUtil {
+	/**
+	 * 商品主图、详情图、属性图片相关配置
+	 */
+	private String img_server_url; // 发布后
+
+	private String system_name;// 当前系统名称
+
+	private String admin_url;// 运营系统访问地址
+
+	private String provider_url;// 供应商系统访问地址
+
+	private String admin_outer_url;// 运营系统外网访问地址
+
+	private String provider_outer_url;// 供应商系统外网访问地址
+
+	private String temp;
+
+	private String local_temp_path;// 本地商品图临时存放路径
+
+	private String goods_local_path;// 本地商品图正式存放路径
+
+	private String goods_img_server_path;// 图片服务器商品图正式存放路径
+
+	private String goods_mainimg_path;// 商品主图存放路径
+
+	private String goods_detailimg_path;// 商品详情图存放路径
+
+	private String goods_proimg_path;// 商品属性值图片存放路径
+
+	private String order_qsd_path;// 已发货订单签收单上传路径
+
+	private String msg_local_path;// 本地消息图正式存放路径
+
+	private String msg_img_path;// 图片服务器消息图片存放路径
+
+	private String ad_local_path;// 广告图片本地存放路径
+
+	private String user_local_path;// 用户本地存放路径
+
+	private String ad_img_server_path;// 广告图片（图片服务器）
+
+	private String user_img_server_path;// 用户图片（图片服务器）
+
+	private String sideshopB_url;// 身边小店APP（2B）内网访问url
+
+	private String sideshopB_out_url;// 身边小店APP（2B）外网访问url
+
+	private String sideshopC_url;// 身边小店APP（2C）内网访问url
+
+	private String sideshopC_out_url;// 身边小店APP（2C）外网访问url
+
+	private String shop_header_local_path;// 小店门头（本地）
+
+	private String shop_local_path;// 店铺图片（本地）
+
+	private String shop_header_img_server_path;// 小店门头（图片服务器）
+
+	private String shop_img_server_path;// 店铺图片（图片服务器）
+
+	public String getImg_server_url() {
+		return img_server_url;
+	}
+
+	public void setImg_server_url(String img_server_url) {
+		this.img_server_url = img_server_url;
+	}
+
+	public String getSystem_name() {
+		return system_name;
+	}
+
+	public void setSystem_name(String system_name) {
+		this.system_name = system_name;
+	}
+
+	public String getAdmin_url() {
+		return admin_url;
+	}
+
+	public void setAdmin_url(String admin_url) {
+		this.admin_url = admin_url;
+	}
+
+	public String getProvider_url() {
+		return provider_url;
+	}
+
+	public void setProvider_url(String provider_url) {
+		this.provider_url = provider_url;
+	}
+
+	public String getAdmin_outer_url() {
+		return admin_outer_url;
+	}
+
+	public void setAdmin_outer_url(String admin_outer_url) {
+		this.admin_outer_url = admin_outer_url;
+	}
+
+	public String getProvider_outer_url() {
+		return provider_outer_url;
+	}
+
+	public void setProvider_outer_url(String provider_outer_url) {
+		this.provider_outer_url = provider_outer_url;
+	}
+
+	public String getTemp() {
+		return temp;
+	}
+
+	public void setTemp(String temp) {
+		this.temp = temp;
+	}
+
+	public String getLocal_temp_path() {
+		return local_temp_path;
+	}
+
+	public void setLocal_temp_path(String local_temp_path) {
+		this.local_temp_path = local_temp_path;
+	}
+
+	public String getGoods_local_path() {
+		return goods_local_path;
+	}
+
+	public void setGoods_local_path(String goods_local_path) {
+		this.goods_local_path = goods_local_path;
+	}
+
+	public String getGoods_img_server_path() {
+		return goods_img_server_path;
+	}
+
+	public void setGoods_img_server_path(String goods_img_server_path) {
+		this.goods_img_server_path = goods_img_server_path;
+	}
+
+	public String getGoods_mainimg_path() {
+		return goods_mainimg_path;
+	}
+
+	public void setGoods_mainimg_path(String goods_mainimg_path) {
+		this.goods_mainimg_path = goods_mainimg_path;
+	}
+
+	public String getGoods_detailimg_path() {
+		return goods_detailimg_path;
+	}
+
+	public void setGoods_detailimg_path(String goods_detailimg_path) {
+		this.goods_detailimg_path = goods_detailimg_path;
+	}
+
+	public String getGoods_proimg_path() {
+		return goods_proimg_path;
+	}
+
+	public void setGoods_proimg_path(String goods_proimg_path) {
+		this.goods_proimg_path = goods_proimg_path;
+	}
+
+	public String getOrder_qsd_path() {
+		return order_qsd_path;
+	}
+
+	public void setOrder_qsd_path(String order_qsd_path) {
+		this.order_qsd_path = order_qsd_path;
+	}
+
+	public String getMsg_local_path() {
+		return msg_local_path;
+	}
+
+	public void setMsg_local_path(String msg_local_path) {
+		this.msg_local_path = msg_local_path;
+	}
+
+	public String getMsg_img_path() {
+		return msg_img_path;
+	}
+
+	public void setMsg_img_path(String msg_img_path) {
+		this.msg_img_path = msg_img_path;
+	}
+
+	public String getAd_local_path() {
+		return ad_local_path;
+	}
+
+	public void setAd_local_path(String ad_local_path) {
+		this.ad_local_path = ad_local_path;
+	}
+
+	public String getUser_local_path() {
+		return user_local_path;
+	}
+
+	public void setUser_local_path(String user_local_path) {
+		this.user_local_path = user_local_path;
+	}
+
+	public String getAd_img_server_path() {
+		return ad_img_server_path;
+	}
+
+	public void setAd_img_server_path(String ad_img_server_path) {
+		this.ad_img_server_path = ad_img_server_path;
+	}
+
+	public String getUser_img_server_path() {
+		return user_img_server_path;
+	}
+
+	public void setUser_img_server_path(String user_img_server_path) {
+		this.user_img_server_path = user_img_server_path;
+	}
+
+	public String getSideshopB_url() {
+		return sideshopB_url;
+	}
+
+	public void setSideshopB_url(String sideshopB_url) {
+		this.sideshopB_url = sideshopB_url;
+	}
+
+	public String getSideshopB_out_url() {
+		return sideshopB_out_url;
+	}
+
+	public void setSideshopB_out_url(String sideshopB_out_url) {
+		this.sideshopB_out_url = sideshopB_out_url;
+	}
+
+	public String getSideshopC_url() {
+		return sideshopC_url;
+	}
+
+	public void setSideshopC_url(String sideshopC_url) {
+		this.sideshopC_url = sideshopC_url;
+	}
+
+	public String getSideshopC_out_url() {
+		return sideshopC_out_url;
+	}
+
+	public void setSideshopC_out_url(String sideshopC_out_url) {
+		this.sideshopC_out_url = sideshopC_out_url;
+	}
+
+	public String getShop_header_local_path() {
+		return shop_header_local_path;
+	}
+
+	public void setShop_header_local_path(String shop_header_local_path) {
+		this.shop_header_local_path = shop_header_local_path;
+	}
+
+	public String getShop_local_path() {
+		return shop_local_path;
+	}
+
+	public void setShop_local_path(String shop_local_path) {
+		this.shop_local_path = shop_local_path;
+	}
+
+	public String getShop_header_img_server_path() {
+		return shop_header_img_server_path;
+	}
+
+	public void setShop_header_img_server_path(
+			String shop_header_img_server_path) {
+		this.shop_header_img_server_path = shop_header_img_server_path;
+	}
+
+	public String getShop_img_server_path() {
+		return shop_img_server_path;
+	}
+
+	public void setShop_img_server_path(String shop_img_server_path) {
+		this.shop_img_server_path = shop_img_server_path;
+	}
+
+}

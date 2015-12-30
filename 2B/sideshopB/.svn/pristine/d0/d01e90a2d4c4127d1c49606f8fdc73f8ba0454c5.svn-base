@@ -1,0 +1,71 @@
+package com.lakala.model.order;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+public class OrderV2Info implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4999016618306380980L;
+
+	/**
+	 * @author: yhg
+	 * @project:sideshopB
+	 * @time: 2015年3月5日 上午9:35:51
+	 * @todo: TODO
+	 */
+	private String torderid;
+	
+	private BigDecimal actualamount;
+	
+	private Integer paychanel;
+	
+	private String paytoken;
+	
+	private List<OrderProviderV2Info> orderproviderlist;
+
+	public String getTorderid() {
+		return torderid;
+	}
+
+	public void setTorderid(String torderid) {
+		this.torderid = torderid;
+	}
+
+	public BigDecimal getActualamount() {
+		return actualamount;
+	}
+
+	public void setActualamount(BigDecimal actualamount) {
+		this.actualamount = actualamount;
+	}
+
+	public Integer getPaychanel() {
+		return paychanel;
+	}
+
+	public void setPaychanel(Integer paychanel) {
+		this.paychanel = paychanel;
+	}
+
+	public String getPaytoken() {
+		return paytoken;
+	}
+
+	public void setPaytoken(String paytoken) {
+		this.paytoken = paytoken;
+	}
+
+	public List<OrderProviderV2Info> getOrderproviderlist() {
+		return orderproviderlist;
+	}
+
+	public void setOrderproviderlist(List<OrderProviderV2Info> orderproviderlist) {
+		this.orderproviderlist = orderproviderlist;
+	}
+
+	
+}

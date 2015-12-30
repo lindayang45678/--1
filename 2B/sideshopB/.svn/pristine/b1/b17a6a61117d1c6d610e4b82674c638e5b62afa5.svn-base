@@ -1,0 +1,97 @@
+/*获取店主信息*/
+$(function(){
+	var data = {"id":"178361","type":"1"};
+	var resultJson = ajaxCommon(urlShopInfo, data);
+	//resultJson = {"_ReturnCode":"000000","_ReturnMsg":"SUCCESS","_ReturnData":{"address":"广东省广州市番禺区清河东路288号广州市科尔海悦酒店有限公司首层临街商铺自编号1号铺","id":178360,"token":"jBhD5y8xwCQ4Lm2tKVZ681IDZBlLC7luQuNC/XB1r5c=","dispatcherlist":[],"city":"广州市","phone":"13711391116","shopname":"shshhs","shoppername":"黄德娟","homeDeliver":0,"cityarea":"番禺区","province":"广东省","distince":0}};
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var _ReturnData = resultJson._ReturnData;
+		//alert(_ReturnData);
+		$("#shopadress").html("").html(_ReturnData.address);
+		$("#shopname").html("").html(_ReturnData.shopname);
+		$("#shop").html("").html(_ReturnData.id);
+		$("#shopper-phone").html("").html(_ReturnData.phone);
+		$("#shopper-name").html("").html(_ReturnData.shoppername);
+	}else{
+		//接口返回错误
+	}
+});
+$(function(){
+	$(".add-service").on('tap',function(){
+		var addcontent='';
+		addcontent+='<div class="add-del">';
+		addcontent+='<a href="javascript:;" class="del-image"></a>';
+		addcontent+='<div class="shopedit-2item del">';
+		addcontent+='<div class="editline-n">';
+		addcontent+='<span class="left1">配送客服:</span>';
+		addcontent+='<div class="leftborder">';
+		addcontent+='<div contenteditable="true" class="max-1">张伟</div>';
+		addcontent+='<a href="javascript:;" class="edit"></a>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='<div class="editline-n">';
+		addcontent+='<span class="left1">客服电话:</span>';
+		addcontent+='<div class="leftborder">';
+		addcontent+='<div contenteditable="true" class="max-1">15010897819</div>';
+		addcontent+='<a href="#" class="edit"></a>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		addcontent+='</div>';
+		$(this).siblings(".pright-per7").before(addcontent);
+	});
+	$('.del-image').live('tap',function(){
+		$(this).parent('.add-del').remove();
+	});
+});
+
+$(".head-right").on("tap",function(){
+	//接口test
+	var id=$('#shop');
+	
+	//测试数据
+	if(!id){
+		id ='178361';
+	}
+	
+	var shopName=$('#shopname').html();
+	var weChat=$('#wechat').html();
+	var shopGg=$('#xd-announce').html();
+	var pskfPhone=$('#service-phone1').html();
+	if(pskfPhone === "") {
+		showAlertMsg(msgMobileNotEmpty);
+		return;
+	}
+	if(pskfPhone.length != 11) {
+		showAlertMsg(msgMobileError);
+		return;
+	}
+	var shopAdress=$('#shopadress').html();
+	var shopperName=$('#shopper-name').html();
+	var shopperPhone=$.trim($('#shopper-phone').html());
+	if(shopperPhone === "") {
+		showAlertMsg(msgMobileNotEmpty);
+		return;
+	}
+	if(shopperPhone.length != 11) {
+		showAlertMsg(msgMobileError); 	
+		return;
+	}
+	/*push数组*/
+	var dispatcherlist = [];
+	$(".add-del").each(function() {
+		var pskfName = $(this).find("div[class='max-1']").eq("0").html();
+		var pskfPhone = $(this).find("div[class='max-1']").eq("1").html();
+		var kf = {"name":pskfName,"phone":pskfPhone};
+		dispatcherlist.push(kf);
+	});
+	var data={'id':id,'shopname':shopName,'shoppername':shopperName,'phone':shopperPhone,'shopAddress':shopAdress,'weixin_no':weChat,'announcement':shopGg,"dispatcherlist":dispatcherlist};
+	var resultJson = ajaxCommon(urlEditshop, data);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		
+		window.location.href="index.html?t="+t;//问题：接口不通
+	}else{
+		//信息格式填写有误，保存不了
+	}
+});
+

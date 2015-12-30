@@ -1,0 +1,43 @@
+package com.lakala.module.order.service;
+
+import java.util.List;
+
+import w.com.lakala.order.model.OrderInfoW;
+
+import com.lakala.base.model.SDBMediaStatistics;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.order.model.AddOrderInput;
+import com.lakala.module.order.model.CheckCouponInfo;
+import com.lakala.module.order.model.CheckCouponReturn;
+import com.lakala.module.order.model.ShopCommAddrInput;
+import com.lakala.module.order.model.TCoupon;
+
+
+/**
+ * 生成订单
+ * @author zuoyb
+ *
+ */
+public interface GenerateOrderService {
+
+	ObjectOutput<CheckCouponReturn> checkcoupon(CheckCouponInfo ei);
+	
+	/*
+	 * 
+	 * 获取终端信息，根据psam
+	 */
+	public SDBMediaStatistics getSdbMediaStatisticsByPsam(String psam);
+	
+	/*
+	 * 
+	 * 根据psam号查询可用的优惠券，2B
+	 * 
+	 */
+	public List<TCoupon> getTcouponListByPsam(String psam);
+
+	ObjectOutput getshopcommaddr(ShopCommAddrInput ei);
+
+	ObjectOutput addorder(AddOrderInput ei);
+	
+	public OrderInfoW changeOrderInfoW(AddOrderInput in);
+}

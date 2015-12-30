@@ -1,0 +1,156 @@
+package com.lakala.module.goods.controller;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.service.SideshopGoodsService;
+import com.lakala.module.goods.vo.SelfGoodsDetailInput;
+import com.lakala.module.goods.vo.SideShopGoodsListInput;
+import com.lakala.module.wholesale.model.InputModel;
+import com.lakala.module.wholesale.service.WholesaleService;
+import com.lakala.util.ReturnMsg;
+
+/**
+ * Created by zuoyb on 2015/3/18.
+ */
+@Component
+@RequestMapping("/sideshopgoods")
+public class SideshopGoodsController {
+    Logger logger = Logger.getLogger(SideshopGoodsController.class);
+
+    @Autowired
+    private SideshopGoodsService sideshopGoodsService;
+    
+    @Autowired
+    private WholesaleService wholesaleService;
+    
+
+   
+
+    /**
+     * 获得商品列表.
+     *
+     * @param inputModel the input model
+     * @return the object output
+     */
+
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @ResponseBody
+    public ObjectOutput list(SideShopGoodsListInput inputModel) {
+        ObjectOutput info = null;
+        int pageCount = 0;
+        try {
+            if ("".equals(inputModel.getSearchparm())) {
+                info = sideshopGoodsService.getGoodsByPsamAndVirtualCatId(inputModel);
+            } else {
+                info = sideshopGoodsService.searchGoods(inputModel);
+            }
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            info = new ObjectOutput();
+            info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+            info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+        }
+        return info;
+    }
+
+    /**
+     * 获得批发进货商品详情.
+     *
+     * @param inputModel the input model
+     * @return the object output
+     */
+
+    @RequestMapping(value = "/detail", method = RequestMethod.POST)
+    @ResponseBody
+    public ObjectOutput detail(InputModel inputModel) {
+        ObjectOutput info = null;
+        try {
+            info = wholesaleService.detail(inputModel.getPsam(), inputModel.getChannelid(), inputModel.getGoodsid());
+        } catch (LakalaException e) {
+            logger.error(e.getMessage());
+            info = new ObjectOutput();
+            info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+            info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+        }
+        return info;
+    }
+
+    @RequestMapping(value = "/soldoutlist", method = RequestMethod.POST)
+    @ResponseBody
+    public ObjectOutput soldoutList(InputModel inputModel) {
+        ObjectOutput info = null;
+        try {
+            info = wholesaleService.getSoldoutList(inputModel.getPsam(), inputModel.getSearchparm(), inputModel.getPage(), inputModel.getPageSize());
+        } catch (LakalaException e) {
+            logger.error(e.getMessage());
+            info = new ObjectOutput();
+            info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+            info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+        }
+        return info;
+    }
+    
+    
+    /**
+     * 获得商品列表.
+     *
+     * @param inputModel the input model
+     * @return the object output
+     */
+
+    @RequestMapping(value = "/goodslist", method = RequestMethod.POST)
+    @ResponseBody
+    public ObjectOutput goodslist(SideShopGoodsListInput inputModel) {
+        ObjectOutput info = null;
+        int pageCount = 0;
+        try {
+            
+                info = sideshopGoodsService.getSideShopGoodsByPsamAndVirtualCatId(inputModel);
+           
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            info = new ObjectOutput();
+            info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+            info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+        }
+        return info;
+    }
+    
+    
+    /**
+     * 获得商品详情，用于自营下架商品修改
+     *
+     * @param inputModel the input model
+     * @return the object output
+     */
+
+    @RequestMapping(value = "/getselfgoodsdetail", method = RequestMethod.POST)
+    @ResponseBody
+    public ObjectOutput getselfgoodsdetail(SelfGoodsDetailInput inputModel) {
+        ObjectOutput info = null;
+        try {
+            
+                info = sideshopGoodsService.getselfgoodsdetail(inputModel);
+           
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            info = new ObjectOutput();
+            info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+            info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+        }
+        return info;
+    }
+    
+    
+    
+}

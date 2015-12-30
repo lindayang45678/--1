@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>编辑小店信息</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="x-hidden">
+	<header>
+		<a href="javascript:window.history.go(-1);" class="back"></a>
+  		<h1>编辑小店信息</h1>
+        <a href="javascript:;" class="head-right">保存</a>
+	</header>
+    <section class="container editshop">
+    	<div class="shopedit-3item">
+        	<div class="editline-n">
+            	<span class="left1">小店名称:</span>
+                <div class="leftborder">
+                    <div contenteditable="true" id="shopname" class="max-3"></div>
+                	<a href="javascript:;" class="edit"></a>
+                </div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">微信号:</span>
+                <div class="leftborder">
+                	<div contenteditable="true" id="wechat" class="max-1"></div>
+                	<a href="javascript:;" class="edit"></a>
+                </div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">小店公告:</span>
+                <div class="leftborder">
+                	<div contenteditable="true" id="xd-announce" class="max-n">【欢迎光临！身边小二在这恭候多时啦！】</div>
+                    <a href="javascript:;" class="edit"></a>
+                </div>
+            </div>
+        </div>
+        <div class="shopedit-2item">
+        	<div class="editline-n">
+            	<span class="left1">配送客服:</span>
+                <div class="leftborder">
+                	<div id="service-name1" class="max-1"></div>
+                </div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">客服电话:</span>
+                <div class="leftborder">
+                	<div id="service-phone1" class="max-1"></div>
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" class="add-service">
+        	<p>添加客服</p>
+        </a>
+        <div class="shopedit-2item pright-per7">
+        	<div class="editline-n">
+            	<span class="left1">小店地址:</span>
+                <div class="leftborder non-edit"><div id="shopadress" class="max-2 non-edit"></div></div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">店主姓名:</span>
+                <div class="leftborder non-edit"><div id="shopper-name" class="max-1 non-edit"></div></div>
+            </div>
+            <div class="editline-n">
+            	<span class="left1">店主手机:</span>
+                <div class="leftborder non-edit"><div id="shopper-phone" class="max-1 non-edit"></div></div>
+            </div>
+        </div>
+        <a href="javascript:;" class="upload-panels">
+        	<p>上传门面照片</p>
+        </a>
+        <div class="editshop-bigimg"></div>
+    </section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" id="platJs"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+	<script type="text/javascript" src="../../js/shops/editshop.js"></script>
+</body>
+</html>

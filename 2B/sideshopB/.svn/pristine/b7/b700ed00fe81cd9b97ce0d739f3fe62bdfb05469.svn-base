@@ -1,0 +1,79 @@
+/*初始化iScroll*/
+var addgoodsScroll;
+function scrollAddGoods() {
+	addgoodsScroll = new iScroll("menu-left",{ hScrollbar: false, vScrollbar: false });
+}
+
+/*根据浏览器的高度计算iScroll的高度*/
+$(function() {
+	var sHeight = $(window).height();
+	$("#menu-left").css("height", sHeight-87);
+});
+
+/*批发进货首页菜单*/
+$(function() {
+	scrollAddGoods();
+	$("#menu-left a").live("tap", function() {
+		$("#menu-left").find("a").removeClass("bgwhite").find("i").removeClass("red-icon"); //去掉所有选中样式
+		$(this).addClass("bgwhite").find("i").addClass("red-icon"); //添加当前选中样式
+		
+		if($(this).siblings("ul").hasClass("hidden")) {
+			$(this).siblings("ul").removeClass("hidden");
+			addgoodsScroll.refresh();
+		} else {
+			$(this).siblings("ul").addClass("hidden");
+			$(this).parent().find("ul").addClass("hidden");
+			if($(this).siblings("ul").length != 0) {
+				$(this).removeClass("bgwhite").find("i").removeClass("red-icon"); //去掉当前选中样式
+			}
+			addgoodsScroll.refresh();
+		}
+		$(this).parent().siblings("li").find("a").siblings("ul").addClass("hidden"); //同级隐藏
+	});
+	addgoodsScroll.refresh();
+});
+
+$(function() {
+	//本店近期批发
+	getLatestWholesale();
+});
+
+/**
+ * 本店近期批发
+ */
+function getLatestWholesale() {
+	var data = {"psam":psam, "page":1, "pageSize":20};
+	var resultJson = ajaxCommon(urlGetGoodslistByPsam, data);
+	resultJson = convertNullToEmpty(resultJson);
+	//该店铺近期没有批发商品
+	if(resultJson._ReturnData.length == 0) {
+		$("#shopSales").hide();
+	} else {
+		var result = getProductsList(resultJson);
+		$(".content1").html(result);
+	}
+}
+
+function getProductsList(resultJson) {
+	var result = "";
+
+	var _ReturnData = resultJson._ReturnData;
+	for(var i = 0; i < _ReturnData.length; i ++) {
+		var tGoodInfoPoolId = _ReturnData[i].tGoodInfoPoolId; //商品池商品id
+		var distributionFlag = _ReturnData[i].distributionFlag; //配送标识
+		var goodBigPic = _ReturnData[i].goodBigPic; //商品主图
+		var goodName = _ReturnData[i].goodName; //商品名称
+
+		result += "<li>";
+		result += "<dl>";
+		result += "<dt><img src='" + urlImage + "/" + tGoodInfoPoolId + "/" + imgw100 + "/" + goodBigPic + "'></dt>";
+		result += "<dd>";
+		result += "<h3>" + goodName + "</h3>";
+		result += "</dd>";
+		result += "</dl>";
+		result += "<a href='addgoods1.html?tGoodsInfoId=" + tGoodInfoPoolId + "&t=" + t + "' class='added'>上架到小店</a>";
+		result += "</li>";
+	}
+
+	return result;
+}

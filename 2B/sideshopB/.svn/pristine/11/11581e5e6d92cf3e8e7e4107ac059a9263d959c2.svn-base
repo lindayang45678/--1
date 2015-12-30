@@ -1,0 +1,57 @@
+// JavaScript Document
+function mytab(n){
+	for(i=1;i<=2;i++){
+		document.getElementById('tab'+i).className='';
+		document.getElementById('content'+i).className='incurtab';
+	}
+		document.getElementById('tab'+n).className='active';
+		document.getElementById('content'+n).className='curtab';
+}
+function mtab(n){
+	for(i=1;i<=2;i++){
+		document.getElementById('tab'+'-'+i).className='';
+		document.getElementById('content'+'-'+i).className='incurtab-1';
+	}
+		document.getElementById('tab'+'-'+n).className='activer';
+		document.getElementById('content'+'-'+n).className='curtab-1';
+}
+/*删除*/
+$(function(){
+	$('.del').on('tap',function(){
+		$(this).parent().parent().remove('slow');
+	})
+});
+/*一级菜单选中*/
+$(function(){
+	$('.sorts-in').find('a').on('tap',function(){
+		$('.sorts-in').find('a').removeClass('color');
+		$(this).addClass('color');
+	})
+});
+/*二级菜单选中*/
+$(function(){
+	$('.menu2-in').find('a').on('tap',function(){
+		$('.menu2-in').find('a').removeClass('color');
+		$(this).addClass('color');
+	});
+});
+/*一级菜单左右滚动*/
+$(function(){
+	var oneWidth=$('.sorts-in li').width();//获取列表每个元素宽度
+	var oneNum=$('.sorts-in li').length;//获取列表元素个数
+	$('#sorts-rotate').css('width',oneWidth*oneNum+'px');//算得列表总宽度
+	var rotateScroll = new iScroll("sorts-rotate", {
+		hScroll : true,
+		vScroll : false
+	});
+});
+/*二级菜单左右滚动*/
+$(function(){
+	var twoWidth=$('.menu2-in li').width();//获取列表每个元素宽度
+	var twoNum=$('.menu2-in li').length;//获取列表元素个数
+	$('#menu2').css('width',twoWidth*twoNum+'px');//算得列表总宽度
+	var menuScroll = new iScroll("menu2", {
+		hScroll : true,
+		vScroll : false
+	});
+});

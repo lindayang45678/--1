@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goodspublishkdbskuo2o.TgoodsPublishKdbSkuO2oMapper">
+    <select id="getSkuStockAndSoldSkuStock" resultType="hashmap">
+        select
+        tg.tGoodSkuInfoId,tg.skuStock as store,tg.soldSkuStock as soldStore
+        from
+        tgoodskuinfo tg
+        where
+        tg.tGoodSkuInfoId in
+        <foreach item="item" index="index" collection="skuids" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectGoodsByO2oidsAndGoodsId" resultType="hashmap">
+        select
+        ta.id o2oId, ta.goodsId tGoodInfoId, ta.skuId
+        tGoodSkuInfoId,ta.salePrice
+        salePrice, tb.marketPrice marketPrice,
+        tb.skuIdStr skuIdStr,tb.skuFrontDisNameStr
+        skuFrontDisNameStr,tg.skuStock as store,tg.soldSkuStock as soldStore
+        from
+        tgoods_publish_kdb_sku_o2o ta , tgoods_publish_kdb_sku tb , tgoodskuinfo tg
+        where
+        ta.goodsId = tg.tGoodInfoId and ta.skuId = tg.tGoodSkuInfoId
+        and ta.goodsId = tb.tGoodInfoId and ta.skuId = tb.tGoodSkuInfoId
+        and
+        ta.id in
+        <foreach item="item" index="index" collection="o2oIds" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+        and tb.goodsStatus = 208 and ta.goodsId = #{goodsId}
+    </select>
+
+    <select id="selectSkunetListBySkuidsAndPsam" parameterType="map" resultType="hashmap">
+        SELECT o.tGoodSkuInfoId skuid,a.stock stock,a.soldstock soldstock FROM
+        tgoodskuinfo o LEFT JOIN (SELECT
+        t.skuid,t.netno,t.stock,t.soldstock,t.providerid
+        FROM tskunetinfo t ,sdb_media_statistics s where t.netno = s.net_no and
+        s.psam = #{psam}) a ON o.tGoodSkuInfoId = a.skuid where
+        o.tempStoreGoodsFlag = 378 and o.tGoodSkuInfoId IN
+        <foreach item="item" index="index" collection="skuIds" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

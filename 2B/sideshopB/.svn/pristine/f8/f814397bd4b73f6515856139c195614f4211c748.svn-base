@@ -1,0 +1,37 @@
+//临时的跳入搜索成功和失败页
+$('.w-searchbtn').on('tap',function(){
+	if($('.search-wrap input').val())
+	{	$('.w-searchbtn').attr('href','searchsuccess.html');}
+	else
+	{	$('.w-searchbtn').attr('href','searchfail.html');}
+});
+//点击右侧加入购物车按钮弹出sku
+$('.add-cart').on('tap',function(event){
+	if($(this).hasClass('add-cart-gray')){return;}
+	$('#sku').removeClass('hidden');
+	$('.masker').removeClass('hidden');
+	  event.stopPropagation();	
+});
+//点击sku取消或加入购物车按钮
+$('.sku-cancel').on('tap',function(){
+	$('#sku').addClass('hidden');
+	$('.masker').addClass('hidden');	
+});
+$('.sku-sure').on('tap',function(){
+	$('#sku').addClass('hidden');
+	$('.masker').addClass('hidden');	
+});
+//点击sku中的属性进行选择
+$('.sku-detail em').on('tap',function(){
+	$(this).siblings().removeClass('sku-red');
+	$(this).addClass('sku-red');	
+});
+//点击sku进行加减数量
+$('.sku-plus').on('tap',function(){
+	var n=parseInt($(this).prev().attr('value'));
+	$(this).prev().attr('value',n+1);	
+});
+$('.sku-minus').on('tap',function(){
+	var n=parseInt($(this).next().attr('value'));
+	if(n>=1){$(this).next().attr('value',n-1);}		
+});

@@ -1,0 +1,135 @@
+// 默认省份code
+var defaultProvCode = "110000";
+// 默认市Code
+var defaultCityCode = "110100";
+// 默认区Code
+var defaultAreaCode = "110101";
+//手机号
+var mobile = "";
+//验证码
+var verificationCode = "";
+//集团是否注册 0：未注册 ,1:已注册
+var flag = "0";
+
+$(function() {
+	loadJs();
+	var url = window.location.href;
+	mobile = getParamValueByName(url, "mobile");
+	verificationCode = getParamValueByName(url, "verificationCode");
+	flag = getParamValueByName(url, "flag");
+	$("#mobile").val(mobile);
+	$("#verificationCode").val(verificationCode);
+	if(flag == "1"){
+		//集团已注册
+		$("#pwd").removeAttr("placeholder").attr("type","text").attr("value",msgRegisterPwd).attr("readonly","readonly");
+	}
+});
+
+$("#shopadd").on("tap", function(){
+	$(this).hide();
+	$("#address").removeClass("address").addClass("line");
+	$("#shopaddress").parent().show();
+	initProvCityArea();
+})
+
+function initProvCityArea() {
+	//初始化 省市区
+	getCityNameByCode("provinceid", "0", defaultProvCode);
+	getCityNameByCode("cityid", $("#provinceid").val(), defaultCityCode);
+	getCityNameByCode("areaid", $("#cityid").val(), defaultAreaCode);
+	$("#provincename").attr("value",$("#provinceid").find("option:selected").text());
+	$("#cityname").attr("value",$("#cityid").find("option:selected").text());
+	$("#areaname").attr("value",$("#areaid").find("option:selected").text());
+	$("#provinceid").change(function() {
+		getCityNameByCode("cityid", $(this).children('option:selected').val(), "");
+		getCityNameByCode("areaid", $("#cityid").children('option:selected').val(), "");
+		$("#provincename").attr("value",$(this).find("option:selected").text());
+		$("#cityname").attr("value",$("#cityid").find("option:selected").text());
+		$("#areaname").attr("value",$("#areaid").find("option:selected").text());
+	});
+	$("#cityid").change(function() {
+		getCityNameByCode("areaid", $(this).children('option:selected').val(), "");
+		$("#cityname").attr("value",$(this).find("option:selected").text());
+		$("#areaname").attr("value",$("#areaid").find("option:selected").text());
+	});
+	$("#areaid").change(function() {
+		$("#areaname").attr("value",$(this).find("option:selected").text());
+	});
+}
+
+$(".goin-shop").on("click", function(e) {
+	$("#opencode").blur();
+
+	var mobile = $.trim($("#mobile").val());
+	var pwd = $.trim($("#pwd").val());
+	var shopperName = $.trim($("#shopername").val());
+	var provinceCode = $("#provinceid").attr("value");
+	var provinceName = $("#provincename").attr("value");
+	var cityCode = $("#cityid").attr("value");
+	var cityName = $("#cityname").attr("value");
+	var areaCode = $("#areaid").attr("value");
+	var areaName = $("#areaname").attr("value");
+	var address = $.trim($("#shopaddress").val());
+	var registerCode = $.trim($("#opencode").val());
+	var pushToken = storage.getItem("pushToken") || "";
+	var terminalType = storage.getItem("terminalType") || "";
+	if(flag == "0"){
+		if(pwd == ""){
+			showAlertMsg(msgPwdNotEmpty);
+			return;
+		}
+		if(!pwd.match(/^[A-Za-z0-9]{6,20}$/)) {
+			showAlertMsg(msgPawFormat);
+			return;
+		}
+	}
+	if(shopperName == ""){
+		showAlertMsg(msgShoperNameEmpty);
+		return;
+	}
+	if(address == ""){
+		showAlertMsg(msgShopAddressEmpty);
+		return;
+	}
+	if(registerCode == ""){
+		showAlertMsg(msgOpenCodeEmpty);
+		return;
+	}
+
+	//密码加密
+	cordova._native.encrypt.pwdEncrpt(pwd, function(encryptPwd) {
+		var data = {
+				"mobile":mobile, 
+				"pwd":encryptPwd, 
+				"shopperName":shopperName,
+				"provinceCode":provinceCode,
+				"provinceName":provinceName,
+				"cityCode":cityCode,
+				"cityName":cityName,
+				"areaCode":areaCode,
+				"areaName":areaName,
+				"address":address,
+				"registerCode":registerCode,
+				"terminalCode":pushToken, 
+				"terminalType":terminalType
+		};
+		toRegister(data);
+	});
+	e.preventDefault();
+});
+
+function toRegister(data) {
+	var resultJson = ajaxCommon(urlRegisterpwd, data);
+	resultJson = convertNullToEmpty(resultJson);
+	var _ReturnCode = resultJson._ReturnCode;
+	if(_ReturnCode === returnCode100011) {
+		//webService服务出错了
+		showAlertMsg(msgReturn100011);
+	}else if(_ReturnCode === returnCode100015) {
+		//恭喜您，注册成功！
+		$("#register-already").show();
+	}else if(_ReturnCode === returnCode100019) {
+		//开通编码输入错误，请重新输入
+		showAlertMsg(msgReturn100019);
+	}
+}

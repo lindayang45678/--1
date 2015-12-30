@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>商品搜索有结果</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<link rel="stylesheet" href="../../css/master.css"/>
+</head>
+
+<body>
+	<header>
+    	<a href="window.history.go(-1)" class="back"></a>
+        <h1>搜索商品</h1>
+    </header>
+    <section class="wrap searchgoods">
+    	<div class="goods-search yesresult">
+        	<input type="text" placeholder="商品搜索"/>
+            <button>确认</button>
+        </div>
+        <p class="search-font nobr">搜索到和【水果店】相关的商品，共<span class="color">4</span>个</p>
+    </section>
+    <section class="container">
+    	<div class="searchyes-list">
+        	<h2>平台商品<span class="color">1</span>个</h2>
+            <dl>
+            	<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                <dd>
+                	<h3>【<span class="color">生鲜</span>】新鲜水果</h3>
+                    <p class="f-16">销售价：<span class="color f-16">¥199.00</span></p>
+                    <del>批发市场价：1999.00</del>
+                </dd>
+            </dl>
+        </div>
+        <div class="searchyes-list selgoods">
+        	<h2 class="self">自营商品<span class="color">1</span>个</h2>
+            <dl>
+            	<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                <dd>
+                	<h3>【<span class="color">生鲜</span>】新鲜水果</h3>
+                    <p class="f-16">销售价：<span class="color f-16">¥199.00</span></p>
+                    <del>批发市场价：1999.00</del>
+                </dd>
+            </dl>
+        </div>
+    </section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+</html>

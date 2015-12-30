@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>升级身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="setting.html?v=20150602" class="back goto"></a>	
+		<h1>更新店铺位置</h1>
+	</header>
+	<section id="shopupdate" class="container shopupdate f-12 updatelocation">
+		<h2 class="f-14 center color hidden"><span><i></i>恭喜您，信息提交成功，等待审核！</span></h2>
+		<div class="shop-info">
+			<div class="shop-map"><span>地图位置<em>以下是您店铺的地图定位，如有偏差，可手动拖动</em></span></div>
+		</div>
+		<div class="shop-position">
+			<iframe name="baiduMapFrame" id="baiduMapFrame" src="" 
+			height="260px" style="width:100%;mairgin:0;padding:0;border:0;overflow:hidden;">
+			</iframe>
+		</div>
+		<footer>
+			<a href="javascript:;" class="tj btn-red" >提 交</a>
+		</footer>
+		<div class="disabled hidden"></div>
+		<!-- <div class="pop-up-box hidden">
+			<div>
+				<p class="f-16 c-gray">您是在店铺中操作地图定位的吗？<br/><em>如不是，您周边的顾客将找不到您的小店！</em></p>
+				<input id="confirm" class="btn-red" type="button" value="确认"/>
+				<input class="btn-gray" id="cancel" type="button" value="重新定位"/>
+			</div>
+		</div> -->
+	</section>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+	<script type="text/javascript" src="../../js/homepage/updatelocation.js?t=2015073002"></script>
+</body>
+</html>

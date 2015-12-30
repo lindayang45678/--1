@@ -1,0 +1,74 @@
+package com.lakala.util;
+
+import java.io.IOException;
+import java.math.BigInteger;
+
+/**
+ * token工具
+ * @author ph.li
+ *
+ */
+public class TokenUtil {
+
+	//失效时间7*24*60*60*1000 = 604800000
+	private final static BigInteger VALID = new BigInteger("604800000");
+	
+	//KEY
+	private final static String KEY = "lakalaSi";
+	
+	//获取TOKEN
+	public static String getToken(final String mobile){	
+		StringBuffer sb = new StringBuffer(25);
+		sb.append(System.currentTimeMillis());
+		if(mobile != null){
+			sb.append(1).append(mobile);
+		}else{
+			sb.append(0);
+		}
+		String token = null;
+		try {
+			token = DES.encrypt(sb.toString(), KEY);  
+		} catch (Exception e) {
+		}
+		sb.setLength(0);
+		return token;
+	}
+	
+	//判断TOKEN是否有效(y:有效  n:无效)
+	public static boolean isValidToken(final String mobile,final String token){
+		if(token == null) return false;
+		String value = null;
+		try {
+			value = DES.decrypt(token,KEY);
+		} catch (IOException e) {
+		} catch (Exception e) {
+			
+		}
+		if(value != null){
+			//判断时效先
+			long t = -1;
+			try{
+				t = Long.parseLong(value.substring(0,13));
+			}catch(NumberFormatException e){
+				
+			}
+			if(t == -1) return false;
+			t = System.currentTimeMillis()-t;
+			if(VALID.compareTo(BigInteger.valueOf(t))<= 0) return false;
+			if(value.charAt(13) == '0') return true;
+			if(value.indexOf(mobile) > -1){
+				//手机号是OK的
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void main(String[] args) {
+		String token = getToken("18201290254");
+		System.out.println(token.length());
+		boolean flag = isValidToken("18201290254","pHMCGV5M+LV+PwSiLDK0EfbvoGxXT2kecpeOjf89yqI=");
+		System.out.println(flag);
+	}
+	
+}

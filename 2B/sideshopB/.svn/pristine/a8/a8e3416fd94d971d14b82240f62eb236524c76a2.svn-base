@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>升级身边小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1>升级身边小店</h1>
+	</header>
+	<section class="container shopupdate f-12">
+		<!-- <h2 class="f-14 center color"><span><i></i>恭喜您，申请提交成功，等待审核！</span></h2>
+		<h2 class="f-14 center color"><span><i class="fill"></i>很抱歉，审核不通过！姓名与身份证不匹配！</span></h2> -->
+		<div class="shop-info">
+			<div><span>店主姓名<input type="text"></span></div>
+			<div><span>店主手机<input type="number" min="1" max="11"></span></div>
+			<div><span>身份证号<input type="number" min="1" max="18"></span></div>
+			<div class="id-card"><span>身份证照片<img class="zm" src="../../images/ico-idcard-p.png" /><i>+</i><img class="fm" src="../../images/ico-idcard-r.png" /></span></div>
+			<div><span>小店名称<input type="text"></span></div>
+			<div class="shop-address"><span>小店地址<input type="text"></span></div>
+			<div class="licence"><span>营业执照<img src="../../images/ico-licence.png"></span></div>
+			<div><span>地图位置<input type="text" placeholder="以下是地图定位，请确保您是在店铺进行操作！"></span></div>
+			<!-- <a href="javascript:;" class="btn-red" >修改</a> -->
+		</div>
+		<div class="shop-position"></div>
+		<footer>
+			<!-- <a href="javascript:;" class="btn-red">提 交</a> -->
+			<a href="javascript:;" class="btn-gray" >提 交</a>
+			<span>我已阅读并同意<a href="javascript:;">《拉卡拉身边小店商户平台用户协议》</a></span>
+		</footer>
+	</section>
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+</body>
+</html>

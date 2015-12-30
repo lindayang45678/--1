@@ -1,0 +1,16 @@
+package com.lakala.mapper.w.order;
+
+import java.util.List;
+import java.util.Map;
+
+public interface QuhuoMapper {
+	public void updategkinorderitem(Map<String,Object> map);
+	public void updatedzstateinlogitem(Map<String,Object> map);
+	public List<Integer> getProviderState(String torderproviderid);
+	public void updateOrderProviderState(Map<String,Object> map);
+	public List<Integer> getOrderState(String orderId);
+	public List<Integer> getAllOrderPayState(Integer allorderid);
+	public void updateOrderState(Map<String,Object> map);
+	public void updatestateinloginfo(Map<String,Object> map);
+	public void updateAllOrderPayState(Map<String,Object> map);
+}

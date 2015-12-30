@@ -1,0 +1,165 @@
+package com.lakala.module.profit.vo;
+
+/**
+ * 收益查询数据
+ * 
+ * @author pengyunle
+ *
+ */
+public class OrderEarningsOutput {
+
+	/** 验证令牌 */
+	protected String token;
+	/** 大订单号 */
+	private String providerOrderId;
+	/** 支付方式 */
+	private String payMode;
+	/** 收益日期 */
+	private String earningsDate;
+	/** 店主收益 */
+	private String earningsAmount;
+	/** 正向逆向订单区分 */
+	private int returnFlg;
+	/** 自营平台结算金额 */
+	private String settlementAmount;
+	/** 售后状态 */
+	private String afterState;
+	/** 自营平台订单金额（二级订单） */
+	private String orderAmount;
+	/** 开始时间 */
+	private String startTime;
+	/** 结束时间 */
+	private String endTime;
+	/** 支付流水号 */
+	private String payId;
+
+	/** 自营平台结算金额 */
+	private String settlementAmount2;
+
+	/** 自营店主优惠金额 */
+	private String shopCouponValue;
+
+	/** 自营平台优惠金额 */
+	private String couponValue;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getProviderOrderId() {
+		return providerOrderId;
+	}
+
+	public void setProviderOrderId(String providerOrderId) {
+		this.providerOrderId = providerOrderId;
+	}
+
+	public String getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(String payMode) {
+		this.payMode = payMode;
+	}
+
+	public String getEarningsDate() {
+		return earningsDate;
+	}
+
+	public void setEarningsDate(String earningsDate) {
+		this.earningsDate = earningsDate;
+	}
+
+	public String getEarningsAmount() {
+		return earningsAmount;
+	}
+
+	public void setEarningsAmount(String earningsAmount) {
+		this.earningsAmount = earningsAmount;
+	}
+
+	public int getReturnFlg() {
+		return returnFlg;
+	}
+
+	public void setReturnFlg(int returnFlg) {
+		this.returnFlg = returnFlg;
+	}
+
+	public String getSettlementAmount() {
+		return settlementAmount;
+	}
+
+	public void setSettlementAmount(String settlementAmount) {
+		this.settlementAmount = settlementAmount;
+	}
+
+	public String getAfterState() {
+		return afterState;
+	}
+
+	public void setAfterState(String afterState) {
+		this.afterState = afterState;
+	}
+
+	public String getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(String orderAmount) {
+		this.orderAmount = orderAmount;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getPayId() {
+		return payId;
+	}
+
+	public void setPayId(String payId) {
+		this.payId = payId;
+	}
+
+	public String getSettlementAmount2() {
+		return settlementAmount2;
+	}
+
+	public void setSettlementAmount2(String settlementAmount2) {
+		this.settlementAmount2 = settlementAmount2;
+	}
+
+	public String getShopCouponValue() {
+		return shopCouponValue;
+	}
+
+	public void setShopCouponValue(String shopCouponValue) {
+		this.shopCouponValue = shopCouponValue;
+	}
+
+	public String getCouponValue() {
+		return couponValue;
+	}
+
+	public void setCouponValue(String couponValue) {
+		this.couponValue = couponValue;
+	}
+
+}

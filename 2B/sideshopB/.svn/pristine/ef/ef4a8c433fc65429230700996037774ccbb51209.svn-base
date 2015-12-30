@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>现金券卡</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="coupon">
+	<header>
+		<a href="../homepage/index.html" class="back">返回</a>				
+		<h1>现金券卡</h1>
+	</header>
+	<section class="container expired-main clearfix">
+		<section class="wrap">
+			<div class="coupon-top hidden clearfix">
+				<a href="rules.html" class="rules">现金券规则</a>
+				<a href="mycoupons.html" class="btn-red receive">立刻领券</a>
+			</div>
+			<div class="header clearfix">
+				<a id="unusecount" href="unuse.html">未使用</a>
+				<a id="usedcount" href="used.html">已使用</a>
+				<a class="active" href="expired.html">激活</a>
+			</div>
+			<div class="fill-coupon-use">
+				<div class="coupon-use-text">现金卷号：</div><input type="text" placeholder="请输入"/><div class="coupon-use-x hidden">&nbsp;</div>
+			</div>
+			<div>
+				<p class="f-16 color test-ok hidden">验证通过可抵扣<i>20.00</i>元</p>
+				<p class="f-16 color test-fail hidden">验证失败，请确认输入券号是否有效</p>
+				<p class="coupon-pa hidden">最大可用100元全国批发券，10元本地批发券；</p>
+				<a href="#" class="btn-red coupon-sure hidden">使用</a>
+				<a href="#" class="btn-red coupon-test-btn">验证</a>
+				<a href="#" class="btn-red coupon-finish-btn hidden">完成</a>
+				<a href="#" class="btn-red coupon-cancel-btn hidden">取消</a>
+			</div>
+		</section>
+	</section>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/coupons/expired.js"></script>
+</body>
+</html>

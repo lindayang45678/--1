@@ -1,0 +1,65 @@
+package com.lakala.module.user.vo;
+
+public class CustomerOutput {
+	
+	private String id;
+
+	private String customerName;
+	
+	private String nickName;
+	
+	private String phone;
+	
+	private String icon;
+	
+	private String shopmobile;
+
+	public String getShopmobile() {
+		return shopmobile;
+	}
+
+	public void setShopmobile(String shopmobile) {
+		this.shopmobile = shopmobile;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	
+}

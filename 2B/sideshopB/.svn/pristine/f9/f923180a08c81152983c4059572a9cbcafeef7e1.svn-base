@@ -1,0 +1,168 @@
+package com.lakala.model.coupon;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**优惠券列表*/
+public class Coupon implements java.io.Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5484802931558234289L;
+
+	/**优惠券编号*/
+	private String favorablecode;
+	
+	/**券批次Id*/
+	private Long batchtickeid;
+	
+	/**优惠券名称*/
+	private String batchtickename;
+	
+	/**券类别*/
+	private Integer couponType;
+	
+	/**优惠券面值*/
+	private Double cost;
+	
+	/**单个优惠券使用次数*/
+	private Integer favusenum;
+	
+	/**优惠券剩余次数  用一次减1*/
+	private Integer usenum;
+	
+	/**已用次数*/
+	private Integer usednum;
+	
+	/**订单金额
+	 * 如果为null或0，则优惠券类别为现金券；否则为满减券，需要订单金额>=该值才可使用*/
+	private BigDecimal orderamount;
+	
+	/**优惠券状态*/
+	private Integer status;
+	
+	/**使用限制,指定频道可用
+	 * 作为VO使用，接收频道名称，多个名称使用,分割*/
+	private String frequencys;
+	
+	private String startflag;
+	
+	/**开始时间*/
+	private Date starttime;
+	
+	/**结束时间*/
+	private Date endtime;
+
+	public String getStartflag() {
+		return startflag;
+	}
+
+	public void setStartflag(String startflag) {
+		this.startflag = startflag;
+	}
+
+	public Long getBatchtickeid() {
+		return batchtickeid;
+	}
+
+	public void setBatchtickeid(Long batchtickeid) {
+		this.batchtickeid = batchtickeid;
+	}
+
+	public Integer getUsednum() {
+		return usednum;
+	}
+
+	public void setUsednum(Integer usednum) {
+		this.usednum = usednum;
+	}
+
+	public String getFavorablecode() {
+		return favorablecode;
+	}
+
+	public void setFavorablecode(String favorablecode) {
+		this.favorablecode = favorablecode;
+	}
+
+	public String getBatchtickename() {
+		return batchtickename;
+	}
+
+	public void setBatchtickename(String batchtickename) {
+		this.batchtickename = batchtickename;
+	}
+	
+	public Integer getCouponType() {
+		return couponType;
+	}
+
+	public void setCouponType(Integer couponType) {
+		this.couponType = couponType;
+	}
+
+	public Double getCost() {
+		return cost;
+	}
+
+	public void setCost(Double cost) {
+		this.cost = cost;
+	}
+
+	public Integer getFavusenum() {
+		return favusenum;
+	}
+
+	public void setFavusenum(Integer favusenum) {
+		this.favusenum = favusenum;
+	}
+
+	public Integer getUsenum() {
+		return usenum;
+	}
+
+	public void setUsenum(Integer usenum) {
+		this.usenum = usenum;
+	}
+
+	public BigDecimal getOrderamount() {
+		return orderamount;
+	}
+
+	public void setOrderamount(BigDecimal orderamount) {
+		this.orderamount = orderamount;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getFrequencys() {
+		return frequencys;
+	}
+
+	public void setFrequencys(String frequencys) {
+		this.frequencys = frequencys;
+	}
+
+	public Date getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+
+	public Date getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
+}

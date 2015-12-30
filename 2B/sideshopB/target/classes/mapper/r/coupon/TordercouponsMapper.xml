@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.coupon.TordercouponsMapper" >
+  
+  <select id="countOrderCouponsByTallorderid" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+     SELECT count(1) FROM  tordercoupons  e  where  e.tallorderid = #{tallorderid,jdbcType=INTEGER} and e.status = 0;
+  </select>
+  
+</mapper>

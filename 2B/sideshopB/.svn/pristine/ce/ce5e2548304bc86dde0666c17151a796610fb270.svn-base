@@ -1,0 +1,20 @@
+$(function() {
+	//订单展开
+	$(".order-number").on("tap",function() {
+		$(this).find("div").toggleClass("down").parent().siblings().toggle();
+		$(this).parent().siblings().find(".orders-content").hide();
+		$(this).parent().siblings().find(".order-number div").removeClass("down");
+	});
+	//订单菜单列表
+	//获取每个li的长度
+	var liWidth = null;
+	$("#header-list-slide li").each(function(){
+		liWidth += parseInt($(this).width());
+	});
+	$("#header-list-slide").css("width", liWidth + 1 + "px");
+	var menuScroll = new iScroll("header-list", {
+		hScroll : true,
+		vScroll : false
+	});
+	
+});

@@ -1,0 +1,79 @@
+package com.lakala.module.profit.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+/**
+ * 订单周期收益查询数据输入
+ * 
+ * @author pengyunle
+ *
+ */
+public class OrderCycleProfitInput extends ObjectInput {
+
+	/** 结算周期 */
+	private String settlementId;
+
+	/** 电商网点编号 */
+	private String ecNetNo;
+
+	/** 收益类型 */
+	private String earningsType;
+
+	/** 收益日期 */
+	private String earningsDate;
+
+	/** 收益日期开始 */
+	private String startTime;
+
+	/** 收益日期结束 */
+	private String endTime;
+
+	public String getSettlementId() {
+		return settlementId;
+	}
+
+	public void setSettlementId(String settlementId) {
+		this.settlementId = settlementId;
+	}
+
+	public String getEcNetNo() {
+		return ecNetNo;
+	}
+
+	public void setEcNetNo(String ecNetNo) {
+		this.ecNetNo = ecNetNo;
+	}
+
+	public String getEarningsType() {
+		return earningsType;
+	}
+
+	public void setEarningsType(String earningsType) {
+		this.earningsType = earningsType;
+	}
+
+	public String getEarningsDate() {
+		return earningsDate;
+	}
+
+	public void setEarningsDate(String earningsDate) {
+		this.earningsDate = earningsDate;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+}

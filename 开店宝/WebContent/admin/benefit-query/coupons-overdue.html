@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>我的优惠券</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+	<link rel="stylesheet" href="../../css/admin.css" />
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html">批发进货</a>
+			<a href="../order-query/order-query.html">订单查询</a>
+			<a href="../benefit-query/order-income.html" class="active">收益查询</a>
+			<a href="../sales-manage/sales-list.html">销售员管理</a>
+			<a href="../tools/index.html">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+		<menu>
+			<a href="../benefit-query/order-income.html">订单收益查询</a>
+			<a href="../benefit-query/my-coupons.html" class="active">我的优惠卷</a>
+			<a href="../benefit-query/index.html">商品预期收益</a>
+			<a href="../benefit-query/benefit-rule.html">收益规则说明</a>
+			<a href="../tools/index.html">返回店主工具</a>
+			<a href="#">返回商城首页</a>
+		</menu>
+		<section class="main">
+			<div class="title">
+				<h2>我的优惠券</h2>
+				<span>共<em>320</em></span>
+			</div>
+			<div class="my-coupons-title">
+			恭喜您，您本周的订单总额是<span>100</span>元，可领取<span>3</span>张券<a href="../benefit-query/benefit-coupons-rule.html" class="btn-blue">优惠券使用规则</a><a href="../benefit-query/receive-coupons.html" class="btn-white">领取优惠券</a>	
+			</div>
+			<div class="my-coupons">
+				<ul >
+					<li>未使用优惠券</li>
+					<li>已使用优惠券</li>
+					<li class="wb">已过期优惠券</li>
+				</ul>
+				<div id="my-coupons">
+					<table>
+						<tr>
+							<th>优惠券号</th>
+							<th>券类别</th>
+							<th>面值</th>
+							<th>所需消费金额</th>
+							<th>有效期</th>
+							<th>使用限制</th>
+						</tr>
+						<tr>
+							<td>809adfasf</td>
+							<td>现金券</td>
+							<td>￥5600.00</td>
+							<td>￥51600.00</td>
+							<td>2014.12.01-2014.12.31</td>
+							<td><a href="../benefit-query/coupons-limit.html">查看限制</a></td>
+						</tr>
+						<tr>
+							<td>809adfasf</td>
+							<td>现金券</td>
+							<td>￥5600.00</td>
+							<td>￥51600.00</td>
+							<td>2014.12.01-2014.12.31</td>
+							<td><a href="../benefit-query/coupons-limit.html">查看限制</a></td>
+						</tr>
+						<tr>
+							<td>809adfasf</td>
+							<td>现金券</td>
+							<td>￥5600.00</td>
+							<td>￥51600.00</td>
+							<td>2014.12.01-2014.12.31</td>
+							<td><a href="../benefit-query/coupons-limit.html">查看限制</a></td>
+						</tr>
+						<tr>
+							<td>809adfasf</td>
+							<td>现金券</td>
+							<td>￥5600.00</td>
+							<td>￥51600.00</td>
+							<td>2014.12.01-2014.12.31</td>
+							<td><a href="../benefit-query/coupons-limit.html">查看限制</a></td>
+						</tr>
+						<tr>
+							<td>809adfasf</td>
+							<td>现金券</td>
+							<td>￥5600.00</td>
+							<td>￥51600.00</td>
+							<td>2014.12.01-2014.12.31</td>
+							<td><a href="../benefit-query/coupons-limit.html">查看限制</a></td>
+						</tr>
+						<tr>
+							<td>809adfasf</td>
+							<td>现金券</td>
+							<td>￥5600.00</td>
+							<td>￥51600.00</td>
+							<td>2014.12.01-2014.12.31</td>
+							<td><a href="../benefit-query/coupons-limit.html">查看限制</a></td>
+						</tr>
+					</table>
+				</div>
+				<div class="foot-line"></div>
+			</div>
+		</section>
+	</section>
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myscroll = new iScroll("my-coupons",{hScrollbar:false, vScrollbar:true, fixedScrollbar:true, hideScrollbar:true});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>开店宝工具-意见反馈</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+	<link rel="stylesheet" href="../../css/admin.css" />
+</head>
+<body>
+	<header>
+		<h1 class="logo">拉卡拉社区商城</h1>
+		<nav>
+			<a href="../pifa-jinhuo/index.html">批发进货</a>
+			<a href="../order-query/order-query.html">订单查询</a>
+			<a href="../benefit-query/order-income.html">收益查询</a>
+			<a href="../sales-manage/sales-list.html">销售员管理</a>
+			<a href="../tools/index.html" class="active">门店信息</a>
+		</nav>
+	</header>
+
+	<section class="container clearfix">
+		<menu>
+			<a href="../tools/index.html" >本店信息</a>
+			<a href="../tools/feedback.html" class="active">建议反馈</a>
+			<a href="../tools/operation.html">操作说明</a>
+			<a href="../tools/index.html">返回店主工具</a>
+			<a href="javascript:;">返回商城首页</a>
+		</menu>
+		<section class="main">
+			<div class="title">
+				<h2>本店信息</h2>
+				<a href="javascript:;" class="btn-blue">刷新</a>
+				<a href="../tools/advice.html class="btn-white">提意见</a>
+			</div>
+			<section class="feedback-wrap">
+					<ul>
+						<li>类别</li>
+						<li>内容</li>
+						<li>加入时间</li>
+					</ul>
+				<section id="feedback-items">
+					<div>
+						<dl>
+							<dt>售后相关</dt>
+							<dd class="customer">
+								<div>之前购买的时候你们售前说衣服不起球的，但是我穿了2天就起球了，买的时候你们售前说衣服不起球的，但是我穿了2天就给我退了吧！
+								</div>
+								<div>2014-12-12 12:12:12</div>
+							</dd>
+							<dd class="client">
+								<div><span>PASM终端顾客回复：</span>
+									<em>之前购买的时候你们售前说衣服不起球的</em></div>
+								<div>2014-12-12 12:12:12</div>
+							</dd>
+						</dl>
+						<dl>
+							<dt>订单相关</dt>
+							<dd class="customer">
+								<div>所有的宝贝都非常棒~只是建议店主换个快递公司，当天中午发货下午两点就到我家这边了非要等到第二天下午才送货。。。。。芝士黄油和蛋挞皮都化了~芝士和黄油化了没问题，蛋挞皮报废了，一团面了。
+								</div>
+								<div>2014-12-12 12:12:12</div>
+							</dd>
+						</dl>
+						<dl class="customer">
+							<dt>订单相关</dt>
+							<dd>
+								<div>所有的宝贝都非常棒~只是建议店主换个快递公司，当天中午发货下午两点就到我家这边了非要等到第二天下午才送货。。。。。芝士黄油和蛋挞皮都化了~芝士和黄油化了没问题，蛋挞皮报废了，一团面了。</div>
+								<div>2014-12-12 12:12:12</div>
+							</dd>
+							<dd class="client">
+								<div><span>PASM终端顾客回复：</span>
+									<em>大家好店小三为您策划淘宝店铺整体营销方案，为您解决购物中售后问题。以后会经常发关于购物订单售后问题欢迎大家相互探讨</em></div>
+								<div>2014-12-12 12:59:59</div>
+							</dd>
+						</dl>
+						<dl class="customer">
+							<dt>订单相关</dt>
+							<dd>
+								<div>所有的宝贝都非常棒~只是建议店主换个快递公司，当天中午发货下午两点就到我家这边了非要等到第二天下午才送货。。。。。芝士黄油和蛋挞皮都化了~芝士和黄油化了没问题，蛋挞皮报废了，一团面了。</div>
+								<div>2014-12-12 12:12:12</div>
+							</dd>
+							<dd class="client">
+								<div><span>PASM终端顾客回复：</span>
+									<em>大家好店小三为您策划淘宝店铺整体营销方案，为您解决购物中售后问题。以后会经常发关于购物订单售后问题欢迎大家相互探讨</em></div>
+								<div>2014-12-12 12:59:59</div>
+							</dd>
+						</dl>
+					</div>
+				</section>		
+			</section>
+			<section class="feedback-footer">
+				<div class="foot-line"></div>
+				<p>使用过程中，您如果有其他问题或建议，还可以拨打拉卡拉客服电话<span>4007-666-667</span></p>
+			</section>
+		</section>
+	</section>
+
+	<script type="text/javascript" src="../../js/library/jquery.1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../js/library/iscroll.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var myscroll = new iScroll("feedback-items",{hScrollbar:false, vScrollbar:false, fixedScrollbar:true, hideScrollbar:true});
+		});
+	</script>
+</body>
+</html>

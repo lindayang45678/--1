@@ -1,0 +1,28 @@
+$(function() {
+	//如果用户已经登录，直接跳转到我的小店页面
+	if(storage.getItem(hasLogined) === "1") {
+		window.location.href = "shop.html?t=" + t;
+	}
+
+	$("#btnLogin").on("tap", function() {
+		var mobile = $.trim($("#mobile").val());
+		var pwd = $.trim($("#pwd").val());
+		var terminalCode = "12333sssssdddd"; //设备代码
+		var data = {"mobile":mobile, "pwd":pwd, "terminalCode":terminalCode};
+		var resultJson = ajaxCommon(urlLogin, data);
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			var userToken = resultJson._ReturnData.token;
+			var userName = resultJson._ReturnData.userName;
+			var userType = resultJson._ReturnData.userType;
+
+			if(token == "") {
+				storage.setItem("token", userToken);
+			}
+			storage.setItem("mobile", mobile);
+			storage.setItem(hasLogined, "1");
+			window.location.href = "shop.html?t=" + t;
+		} else {
+			alert(resultJson._ReturnMsg);
+		}
+	});
+});

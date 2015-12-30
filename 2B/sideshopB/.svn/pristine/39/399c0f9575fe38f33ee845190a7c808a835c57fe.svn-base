@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>平台商品分润</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>	
+		<a href="javascript:window.history.go(-1)" class="back"></a>	
+		<h1>2014年7月21日-8月20日</h1>
+		<a href="search.html" class="head-right wholesale-search"></a>
+	</header>
+	<section class="container">
+		<div class="order-incomes month">
+			<div>
+				<p><a class="active" id="detail-plat">分润￥200.00<br/>100单</a></p>
+				<p><a id="detail-self">到账￥200.00<br/>100单</a></p>
+			</div>
+		</div>
+		<div class="wrap detail-plat">
+			<ul>
+				<li>
+					<a href="details.html">
+					<div>
+						<div>10月25日</div>
+						<div><i>订单号：</i><em class="incomes-order">234234234234</em><em class="incomes-status">已退货</em></div>
+						<div><i>商品金额小计：</i><em>￥140.00</em></div>
+						<div><i>商品分润：</i><em>-55.00</em></div>
+					</div>
+					</a>
+				</li>
+				<li>
+					<a href="details.html">
+					<div>
+						<div>10月25日</div>
+						<div><i>订单号：</i><em class="incomes-order">234234234234</em><em class="incomes-status">已退货</em></div>
+						<div><i>商品金额小计：</i><em>￥140.00</em></div>
+						<div><i>商品分润：</i><em>-55.00</em></div>
+					</div>
+					</a>
+				</li>
+				<li>
+					<a href="details.html">
+					<div>
+						<div>10月25日</div>
+						<div><i>订单号：</i><em class="incomes-order">234234234234</em><em class="incomes-status">已退货</em></div>
+						<div><i>商品金额小计：</i><em>￥140.00</em></div>
+						<div><i>商品分润：</i><em>-55.00</em></div>
+					</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="wrap detail-self hidden">
+			<div class="detail-self-detail">
+				<p>结算金额：<em>￥110.00</em></p>
+				<p>结算状态：<em>未结算</em></p>
+				<p>支付说明：<em>3月份分润</em></p>
+				<p>支付流水号：<em>094580298023</em></p>
+				<p>到账时间：<em>2014-11-11 11:11:11</em></p>
+				<p>支付失败原因：<em>支付通道关闭了</em></p>
+			</div>
+			<ul>
+				<li>
+					<a href="details.html">
+					<div>
+						<div>10月25日</div>
+						<div><i>订单号：</i><em class="incomes-order">234234234234</em><em class="incomes-status">已退货</em></div>
+						<div><i>商品分润：</i><em>-55.00</em></div>
+					</div>
+					</a>
+				</li>
+				<li>
+					<a href="details.html">
+					<div>
+						<div>10月25日</div>
+						<div><i>订单号：</i><em class="incomes-order">234234234234</em><em class="incomes-status">已退货</em></div>
+						<div><i>商品分润：</i><em>-55.00</em></div>
+					</div>
+					</a>
+				</li>
+				<li>
+					<a href="details.html">
+					<div>
+						<div>10月25日</div>
+						<div><i>订单号：</i><em class="incomes-order">234234234234</em><em class="incomes-status">已退货</em></div>
+						<div><i>商品分润：</i><em>-55.00</em></div>
+					</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/incomes/incomesmonth.js"></script>
+</html>

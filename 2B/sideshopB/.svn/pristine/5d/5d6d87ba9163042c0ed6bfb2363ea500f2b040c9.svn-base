@@ -1,0 +1,396 @@
+package com.lakala.module.mongo.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.lakala.exception.LakalaException;
+import com.lakala.mapper.r.virtualcat.VirtualCateMapper;
+import com.lakala.model.ProductDetailedInformation;
+import com.lakala.model.virtualcate.VirtualCateMongo;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.vo.in.SideShopBDetailInPut;
+import com.lakala.module.goods.vo.in.SideShopBLeftInPut;
+import com.lakala.module.goods.vo.in.SideShopBListInPut;
+import com.lakala.module.goods.vo.out.*;
+import com.lakala.module.mongo.service.SideShopBMongoService;
+import com.lakala.module.wholesale.model.*;
+import com.lakala.util.HttpUtil;
+import com.lakala.util.MongoInterfaceUrl;
+import com.lakala.util.ReturnMsg;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
+import java.util.*;
+
+/**
+ * Created by HOT.LIU on 2015/5/20.
+ */
+@Service
+public class SideShopBMongoServiceImpl implements SideShopBMongoService {
+
+    private static final Logger logger = Logger.getLogger(SideShopBMongoServiceImpl.class);
+
+    @Autowired
+    private MongoInterfaceUrl mongoInterfaceUrl;
+
+    @Autowired
+    private VirtualCateMapper virtualCateMapper_R;
+
+    @Autowired
+    private com.lakala.mapper.r.sdbmediastatistics.SdbMediaStatisticsMapper sdbMediaStatisticsMapper_R;
+
+    @Override
+    public ObjectOutput left_mongo(String psam, String channelid) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+        SideShopBLeftInPut in = new SideShopBLeftInPut();
+        List<VirtualCateMongo> cateMongoList = new ArrayList<VirtualCateMongo>();
+        try {
+            Map<String, Object> sdbMap = sdbMediaStatisticsMapper_R.selectSdbMediaStatisticsByPsam(psam);
+            if (sdbMap.isEmpty()) {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("没有找到该终端所对应的网点信息！");
+                return data;
+            }
+
+            in.setPsam(psam);
+            in.setChannelid(Long.parseLong(channelid));
+            in.setAllArea(true);
+            in.setNet((String)sdbMap.get("ec_net_no"));
+            in.setRegion((String) sdbMap.get("city_area_no"));
+            in.setProvince((String) sdbMap.get("prov_no"));
+            in.setCity((String) sdbMap.get("city_no"));
+            in.setSection((String) sdbMap.get("community_no"));
+            in.setPlatorself(Constant.PRODUCT_PLATOR_SELF_FLAG);
+
+            String url = mongoInterfaceUrl.getLeft();
+            String inStr = JSON.toJSONString(in);
+            String json = HttpUtil.httpPostConnetion(url, inStr);
+            ObjectOutput output = JSON.parseObject(json, ObjectOutput.class);
+            if (output == null) {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("没有找到该终端下所属的分类！");
+                return data;
+            }
+            if (ReturnMsg.CODE_SUCCESS.equals(output.get_ReturnCode())) {
+                if (output.get_ReturnData() == null || "".equals(output.get_ReturnData())) {
+                    data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                    data.set_ReturnMsg("没有找到该终端下所属的分类！");
+                    return data;
+                }
+                List<SideShopBLeftOutPut> list = JSON.parseArray(output.get_ReturnData().toString(), SideShopBLeftOutPut.class);
+                Map<Integer, Object> map = new HashMap<Integer, Object>();
+                for (SideShopBLeftOutPut outPut : list) {
+                    for (LeftGoodsSKU leftGoodsSKU : outPut.getSkus()) {
+                        if (leftGoodsSKU.getVc() != null && leftGoodsSKU.getVc().size() > 0) {
+                            for (LeftVirtualCate leftVirtualCate : leftGoodsSKU.getVc()) {
+                                List idList = new ArrayList(leftVirtualCate.getIds().values());
+                                for (Object obj : idList) {
+                                    for (Integer id : (Integer[]) obj) {
+                                        map.put(id, id);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                List idList = new ArrayList(map.values());
+                List<VirtualCateMongo> virtualCateMongoList = virtualCateMapper_R.findByIds(idList);
+                VirtualCateMongo virtualCateMongo = new VirtualCateMongo(virtualCateMongoList);
+                String childJson = JSON.toJSONString(virtualCateMongo.getChild());
+                if (childJson.indexOf("本市批发") > -1) {
+                    childJson = childJson.replaceAll("本市批发", (String) sdbMap.get("city") + "批发");
+                }
+                if (childJson.indexOf("本省") > -1) {
+                    childJson = childJson.replaceAll("本省批发", (String) sdbMap.get("prov") + "批发");
+                }
+                if (childJson.indexOf("本区") > -1) {
+                    childJson = childJson.replaceAll("本区批发", (String) sdbMap.get("city_area") + "批发");
+                }
+                cateMongoList = JSON.parseArray(childJson, VirtualCateMongo.class);
+            } else {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("从mongo查询左侧菜单数据出错！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LakalaException(e);
+        }
+        data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+        data.set_ReturnData(cateMongoList);
+        return data;
+    }
+
+    @Override
+    public ObjectOutput list_mongo(String psam, String channelid, String virtualcatid, String searchparm, Integer pageIndex, Integer pageSize, Integer level, Integer platorself) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+        SideShopBListInPut in = new SideShopBListInPut();
+        Map<String, ProductDetailedInformation> idMapping = new HashMap<String, ProductDetailedInformation>();
+        List<ProductDetailedInformation> returnList = new ArrayList<ProductDetailedInformation>();
+        OutListModel outListModel = new OutListModel();
+        int count = 0;
+        if (StringUtils.isEmpty(psam) || StringUtils.isEmpty(channelid)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+        try {
+            Map<String, Object> sdbMap = sdbMediaStatisticsMapper_R.selectSdbMediaStatisticsByPsam(psam);
+            if (sdbMap.isEmpty()) {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("没有找到该终端所对应的网点信息！");
+                return data;
+            }
+            in.setPsam(psam);
+            in.setChannelid(Long.parseLong(channelid));
+            if (virtualcatid != null && !"".equals(virtualcatid) && !"all".equals(virtualcatid)) {
+                in.setVirtualcatid(Long.parseLong(virtualcatid));
+                in.setLevel(level);
+            }
+            if (searchparm != null && !"".equals(searchparm)) {
+                in.setSearchparm(searchparm);
+            }
+            if (pageIndex != null) {
+                in.setPageIndex(pageIndex);
+            }
+            if (pageSize != null) {
+                in.setPageSize(pageSize);
+            }
+            in.setAllArea(true);
+            in.setNet((String)sdbMap.get("ec_net_no"));
+            in.setRegion((String) sdbMap.get("city_area_no"));
+            in.setProvince((String) sdbMap.get("prov_no"));
+            in.setCity((String) sdbMap.get("city_no"));
+            in.setSection((String) sdbMap.get("community_no"));
+            in.setPlatorself(platorself);
+
+            String url = mongoInterfaceUrl.getList();
+            String inStr = JSON.toJSONString(in);
+            String json = HttpUtil.httpPostConnetion(url, inStr);
+            ObjectOutput output = JSON.parseObject(json, ObjectOutput.class);
+            url = mongoInterfaceUrl.getCount();
+            json = HttpUtil.httpPostConnetion(url, inStr);
+            ObjectOutput countoutput = JSON.parseObject(json, ObjectOutput.class);
+            if (ReturnMsg.CODE_SUCCESS.equals(countoutput.get_ReturnCode())) {
+                if (countoutput.get_ReturnData() != null && !"".equals(countoutput.get_ReturnData())) {
+                    count = Integer.parseInt(countoutput.get_ReturnData().toString());
+                } else {
+                    data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+                    data.set_ReturnMsg("没有找到商品！");
+                    data.set_ReturnData(outListModel);
+                    return data;
+                }
+            } else {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("从mongo查询商品数量出错！");
+                return data;
+            }
+            if (ReturnMsg.CODE_SUCCESS.equals(output.get_ReturnCode())) {
+                if (output.get_ReturnData() != null && !"".equals(output.get_ReturnData())) {
+                    List<SideShopBDetailOutPut> list = JSON.parseArray(output.get_ReturnData().toString(), SideShopBDetailOutPut.class);
+                    for (SideShopBDetailOutPut detailOutPut : list) {
+                        if (detailOutPut.getSkus() != null && !detailOutPut.getSkus().isEmpty()) {
+                            for (ListGoodsSKU goodsSKU : detailOutPut.getSkus()) {
+                                ProductDetailedInformation detailedInformation = new ProductDetailedInformation();
+                                Double saleprice = 0.00;
+                                if (goodsSKU.getVc() != null && goodsSKU.getVc().size() > 0) {
+                                    for (ListVirtualCate virtualCate : goodsSKU.getVc()) {
+                                        if (virtualCate.getPsam() != null && !virtualCate.getPsam().isEmpty()) {
+                                            if (virtualCate.getPsam().get(psam) != null) {
+                                                saleprice = (Double) virtualCate.getPsam().get(psam);
+                                                break;
+                                            }
+                                        }
+                                        if (virtualCate.getRegion() != null && !virtualCate.getRegion().isEmpty()) {
+                                            if (virtualCate.getRegion().get((String) sdbMap.get("city_area_no")) != null) {
+                                                saleprice = (Double) virtualCate.getRegion().get(sdbMap.get("city_area_no"));
+                                                break;
+                                            }
+                                        }
+                                        if (virtualCate.getAllArea() != null) {
+                                            saleprice = virtualCate.getAllArea();
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (saleprice == 0) {
+                                    break;
+                                }
+                                detailedInformation.setTgoodskuinfoid(String.valueOf(goodsSKU.getSkuGoodsId()));
+                                detailedInformation.setSaleprice_o2o(saleprice.toString());
+                                detailedInformation.setTgoodinfoid(String.valueOf(detailOutPut.get_id()));
+                                detailedInformation.setGoodname(detailOutPut.getPublishGoodsName() != null ? detailOutPut.getPublishGoodsName() : detailOutPut.getGoodsName());
+                                detailedInformation.setMarketprice(String.valueOf(goodsSKU.getMarketPrice()));
+                                detailedInformation.setGoodbigpic(org.apache.commons.lang.StringUtils.join(detailOutPut.getPics().toArray(), ","));
+                                detailedInformation.setGoodintroduce(detailOutPut.getGoodIntroduce());
+                                detailedInformation.setStore(Double.parseDouble(String.valueOf(goodsSKU.getSkuStock())));
+                                detailedInformation.setSoldstore(Double.parseDouble(String.valueOf(goodsSKU.getSoldSkuStock())));
+                                detailedInformation.setIsforeigngoods(detailOutPut.getIsForeigngoods());
+                                detailedInformation.setTempstoregoodsflag(detailOutPut.getTempStoreGoodsFlag());
+                                detailedInformation.setSort(detailOutPut.getGoodsSort() == null ? 0 : detailOutPut.getGoodsSort());
+                                detailedInformation.setPlatorself(detailOutPut.getPlatorself());
+                                detailedInformation.setDistributionFlag(detailOutPut.getDistributionFlag());
+                                detailedInformation.setDeductPercent(goodsSKU.getDeductPercent());
+                                detailedInformation.setDistributeProfitBase(goodsSKU.getDistributeProfitBase());
+                                detailedInformation.setBalancePrice(goodsSKU.getBalancePrice());
+                                detailedInformation.setIsfreshfood(detailOutPut.getIsfreshfood());
+                                detailedInformation.setSaleflag(goodsSKU.getUlf() == 208 ? 0 : 1);
+                                if (goodsSKU.getSkuStock() > 0) {
+                                    detailedInformation.setIssoldout(1);
+                                } else {
+                                    detailedInformation.setIssoldout(0);
+                                }
+                                if (detailOutPut.getSkus().size() > 1) {
+                                    detailedInformation.setIsmoresku(1);
+                                } else {
+                                    detailedInformation.setIsmoresku(0);
+                                }
+                                detailedInformation.setOnekeyupload((detailOutPut.gettGoodInfoPoolId() != null && detailOutPut.getPlatorself() == 452) ? 1 : 0);
+                                detailedInformation.setFreshgoodsflag(detailOutPut.getIsfreshfood());
+                                if (idMapping.get(detailedInformation.getTgoodinfoid()) == null) {
+                                    idMapping.put(detailedInformation.getTgoodinfoid(), detailedInformation);
+                                } else {
+                                    if (new BigDecimal(idMapping.get(detailedInformation.getTgoodinfoid()).getSaleprice_o2o()).compareTo(new BigDecimal(detailedInformation.getSaleprice_o2o())) == 1) {
+                                        idMapping.put(detailedInformation.getTgoodinfoid(), detailedInformation);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //多个sku相同只取价格最低显示
+                    returnList = new ArrayList<ProductDetailedInformation>(idMapping.values());
+                    Collections.sort(returnList, new Comparator<ProductDetailedInformation>() {
+                        public int compare(ProductDetailedInformation arg0, ProductDetailedInformation arg1) {
+                            return arg1.getSort().compareTo(arg0.getSort());
+                        }
+                    });
+                    data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+                    outListModel.setList(returnList);
+                    outListModel.setCount(count);
+                    data.set_ReturnData(outListModel);
+                } else {
+                    data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                    data.set_ReturnMsg("没有找到商品！");
+                    data.set_ReturnData(outListModel);
+                }
+            } else {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("从mongo查询商品数据出错！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LakalaException(e);
+        }
+        return data;
+    }
+
+    @Override
+    public ObjectOutput detail_mongo(String psam, String channelid, String goodid, String virtualcatid, Integer level) throws LakalaException {
+        ObjectOutput data = new ObjectOutput();
+        SideShopBDetailInPut in = new SideShopBDetailInPut();
+        ProductDetailedInformation detailedInformation = new ProductDetailedInformation();
+        List<SkuDetails> skuDetailsList = new ArrayList<SkuDetails>();
+        ProductDetailForProductList productDetailForProductList = new ProductDetailForProductList();
+        if (StringUtils.isEmpty(psam) || StringUtils.isEmpty(channelid)) {
+            data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+            data.set_ReturnMsg("参数为空!");
+            return data;
+        }
+        try {
+            Map<String, Object> sdbMap = sdbMediaStatisticsMapper_R.selectSdbMediaStatisticsByPsam(psam);
+            if (sdbMap.isEmpty()) {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("没有找到该终端所对应的网点信息！");
+                return data;
+            }
+
+            if (virtualcatid != null && !"".equals(virtualcatid) && !"all".equals(virtualcatid)) {
+                in.setVirtualcatid(Long.parseLong(virtualcatid));
+                in.setLevel(level);
+            }
+            in.setPsam(psam);
+            in.setChannelid(Long.parseLong(channelid));
+            in.setGoodid(Long.parseLong(goodid));
+            in.setAllArea(true);
+            in.setNet((String)sdbMap.get("ec_net_no"));
+            in.setRegion((String) sdbMap.get("city_area_no"));
+            in.setProvince((String) sdbMap.get("prov_no"));
+            in.setCity((String) sdbMap.get("city_no"));
+            in.setSection((String) sdbMap.get("community_no"));
+
+            String url = mongoInterfaceUrl.getDetail();
+            String inStr = JSON.toJSONString(in);
+            String json = HttpUtil.httpPostConnetion(url, inStr);
+            ObjectOutput output = JSON.parseObject(json, ObjectOutput.class);
+            if (ReturnMsg.CODE_SUCCESS.equals(output.get_ReturnCode())) {
+                if (output.get_ReturnData() != null && !"".equals(output.get_ReturnData())) {
+                    SideShopBDetailOutPut detailOutPut = JSON.parseObject(output.get_ReturnData().toString(), SideShopBDetailOutPut.class);
+                    GoodsPublishForKDB publishForKDB = new GoodsPublishForKDB();
+                    publishForKDB.setTgoodinfoid(detailOutPut.get_id().intValue());
+                    publishForKDB.setSupplierid(detailOutPut.getSupplierId());
+                    publishForKDB.setSuppliername(detailOutPut.getSupplierName());
+                    publishForKDB.setGoodname(detailOutPut.getPublishGoodsName() != null ? detailOutPut.getPublishGoodsName() : detailOutPut.getGoodsName());
+                    publishForKDB.setGoodintroduce(detailOutPut.getGoodIntroduce());
+                    publishForKDB.setIscontractmachine(detailOutPut.getIscontractmachine());
+                    publishForKDB.setIsexpresstohome(detailOutPut.getIsExpressToHome());
+                    publishForKDB.setDistributionflag(detailOutPut.getDistributionFlag());
+                    publishForKDB.setGoodbigpic(org.apache.commons.lang.StringUtils.join(detailOutPut.getPics().toArray(), ","));
+                    publishForKDB.setIsforeigngoods(detailOutPut.getIsForeigngoods());
+                    publishForKDB.setTempstoregoodsflag(detailOutPut.getTempStoreGoodsFlag());
+                    publishForKDB.setClientServiceTel(detailOutPut.getTel());
+                    publishForKDB.setReturnprovincename(detailOutPut.getAddress());
+                    if (detailOutPut.getSkus() != null && !detailOutPut.getSkus().isEmpty()) {
+                        for (ListGoodsSKU goodsSKU : detailOutPut.getSkus()) {
+                            Double saleprice = 0.00;
+                            if (goodsSKU.getVc() != null && goodsSKU.getVc().size() > 0) {
+                                for (ListVirtualCate virtualCate : goodsSKU.getVc()) {
+                                    if (virtualCate.getPsam() != null && !virtualCate.getPsam().isEmpty()) {
+                                        if (virtualCate.getPsam().get(psam) != null) {
+                                            saleprice = (Double) virtualCate.getPsam().get(psam);
+                                            break;
+                                        }
+                                    }
+                                    if (virtualCate.getRegion() != null && !virtualCate.getRegion().isEmpty()) {
+                                        if (virtualCate.getRegion().get((String) sdbMap.get("city_area_no")) != null) {
+                                            saleprice = (Double) virtualCate.getRegion().get(sdbMap.get("city_area_no"));
+                                            break;
+                                        }
+                                    }
+                                    if (virtualCate.getAllArea() != null) {
+                                        saleprice = virtualCate.getAllArea();
+                                        break;
+                                    }
+                                }
+                                SkuDetails skuDetails = new SkuDetails();
+                                skuDetails.setMarketPrice(String.valueOf(goodsSKU.getMarketPrice()));
+                                skuDetails.setSalePrice(saleprice.toString());
+                                skuDetails.setSkuFrontDisNameStr(goodsSKU.getSkuNames());
+                                skuDetails.setSkuIdStr(goodsSKU.getSkuIds());
+                                skuDetails.setSoldStore(Double.parseDouble(String.valueOf(goodsSKU.getSoldSkuStock())));
+                                skuDetails.setStore(Double.parseDouble(String.valueOf(goodsSKU.getSkuStock())));
+                                skuDetails.setTGoodInfoId(detailOutPut.get_id().intValue());
+                                skuDetails.setTGoodSkuInfoId(goodsSKU.getSkuGoodsId().intValue());
+                                skuDetailsList.add(skuDetails);
+                            }
+                        }
+                    }
+                    productDetailForProductList.setGoods(publishForKDB);
+                    productDetailForProductList.setGoodsSkuO2OList((SkuDetails[]) skuDetailsList.toArray(new SkuDetails[skuDetailsList.size()]));
+                    data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+                    data.set_ReturnData(productDetailForProductList);
+                } else {
+                    data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                    data.set_ReturnMsg("没有找到商品！");
+                    data.set_ReturnData(data);
+                }
+            } else {
+                data.set_ReturnCode(ReturnMsg.CODE_ERR_000003);
+                data.set_ReturnMsg("从mongo查询商品数据出错！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LakalaException(e);
+        }
+        return data;
+    }
+}

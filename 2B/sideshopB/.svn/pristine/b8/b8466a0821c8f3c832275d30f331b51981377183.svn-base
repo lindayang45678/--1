@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>我的小店</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015071000" />
+</head>
+
+<body class="whitebg">
+	<header>
+		<a href="../homepage/index.html" class="back"></a>
+  		<h1>我的小店</h1>
+  		<a href="editshop1.html" class="head-right">编辑</a>
+	</header>
+    <section class="container">
+    	<div class="shopindex-part1">
+        	<a href="editshop1.html">
+            	<em class="index-logo"><img src="../../images/shopindex-img.png?t=2015062501"/></em>
+            	<h2 id="shopname">店铺名称</h2>
+            	<em class="index-link"></em>
+            </a>
+        </div>
+        <div class="index-add">
+        	<span>本店商品<i id="count"></i></span>
+            <a href="addgoods.html">+ 添加商品</a>
+        </div>
+        <section class="index-404 hidden">
+        	<div class="index404-in"><div><img src="../../images/searchno-img.png" alt=""/><p class="c-gray">您还未添加本店商品！</p></div></div>
+        </section>
+       <section class="index-main clearfix">
+       		<section class="index-menus">
+           		<div id="index-left">
+                   	<ul class="index-menu1">
+               			
+               		</ul>
+                   </div>
+           	</section>
+           	<section class="index-content">
+           		<p class="no-shopgoods hidden" style="text-align:center">很抱歉，该分类下，暂未发布商品！</p>
+       			<div id="index-content">
+       				<ul class="content1">
+       				
+					</ul>
+				</div>
+       		</section>
+        </section>
+    </section>
+	<div class="register-pop-ok hidden" id="unshelf-pop">
+		<div>
+			<p class="f-16 c-gray">&nbsp;是否确认下架？ </p>
+			<a class="btn-gray fl" href="javascript:;" id="unshelf-cancel">取&nbsp;消</a>
+			<a class="btn-red fr pop-login" href="javascript:;" id="unshelf-confirm">确&nbsp;定</a>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js?t=2015071000"></script>
+	<script type="text/javascript" src="../../js/common/common.js?t=2015071000"></script>
+	<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+	<script type="text/javascript" src="../../js/shops/index.js?t=2015070800"></script>
+</body>
+</html>

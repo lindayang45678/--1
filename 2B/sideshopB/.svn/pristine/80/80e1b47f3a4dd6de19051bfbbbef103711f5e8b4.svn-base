@@ -1,0 +1,94 @@
+package com.lakala.module.goods.service;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.lakala.base.model.Tgoodskuinfo;
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.goods.vo.CategoryInput;
+import com.lakala.module.goods.vo.GoodsInput;
+import com.lakala.module.goods.vo.GoodsListInput;
+import com.lakala.module.goods.vo.MarketableInput;
+import com.lakala.module.goods.vo.PropertyKeyVO;
+import com.lakala.module.goods.vo.RealCateVO;
+import com.lakala.module.goods.vo.TgoodsSkuInfoInput;
+import com.lakala.module.goods.vo.VirtualCateVO;
+
+/**
+ * 商品业务业务接口
+ * @author liuguojie
+ *
+ */
+public interface GoodsService {
+
+	/**
+	 * 通过Psam获取平台商品虚分类列表
+	 * @throws LakalaException
+	 */
+	public ObjectOutput getCategory(CategoryInput cate) throws LakalaException;
+	
+	public ObjectOutput maketAbleGoods(MarketableInput input) throws LakalaException;
+	
+	public ObjectOutput getGoodsList(GoodsListInput input) throws LakalaException;
+	
+	/**
+	 * @Description 商品增加、修改
+	 * @author fanzhanwei
+	 */
+	public ObjectOutput<Integer> upGoodsInfo(TgoodsSkuInfoInput input) throws LakalaException;
+	
+	/**
+	 * @Description 获取2C使用的所有虚分类（即营销分类）
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<List<VirtualCateVO>> queryVirtualCat() throws LakalaException;
+	
+	/**
+	 * @Description 根据四级实分类获取sku属性数据
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<List<PropertyKeyVO>> queryGoodProperty(GoodsInput input) 
+			throws LakalaException;
+
+//	public Map<String, List<String>> testImg(HttpServletRequest req, String ismove, String cate) throws LakalaException;
+
+	public ObjectOutput<List<RealCateVO>> queryRealCatByVirtualcat(GoodsInput input) throws LakalaException;
+
+	/**
+	 * @Description 删除指定商品
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<String> deleteGoods(GoodsInput input) throws LakalaException;
+
+	/**
+	 * @Description 获取该用户所属商品的虚拟分类
+	 * @author zhiziwei
+	 */
+	public ObjectOutput<List<VirtualCateVO>> queryVirCateByGoods(GoodsInput input) throws LakalaException;
+	
+	/**
+	 * @Title: isExistLSGoods
+	 * @Description: 店主是否有相同的零售商品上架
+	 * @param psam 店主终端号
+	 * @param tGoodInfoPoolId 产品库商品ID
+	 * @return boolean true：存在零售商品;false：不存在零售商品
+	 * @throws
+     * @author zhiziwei
+	 */
+	public List<Tgoodskuinfo> isExistLSGoods(String psam, String tGoodInfoPoolId) throws LakalaException;
+	
+	/**
+	 * @Title: autoOnsale
+	 * @Description: 批发转零售接口：类似一键上传，新增的商品自动上架，关联相应的产品库商品。
+	 * 首次批发，新增商品，并自动上架，非首次批发，如果商品是生鲜商品，则在已存在的商品上累加库存，非生鲜商品，不处理。
+	 * @param in 批发的商品数据：产品库商品ID，sku ID，店主psam，生鲜标记，库存，销售价
+	 * @return ObjectOutput<List<Integer>> 操作状态，以及上架成功的新商品ID
+	 * @throws
+	 * @author zhiziwei
+	 */
+	public List<Integer> autoAddGoods(TgoodsSkuInfoInput in, HttpServletRequest req) throws LakalaException;
+
+	public List<Integer> autoOnsale(List<Integer> ids) throws LakalaException;
+}

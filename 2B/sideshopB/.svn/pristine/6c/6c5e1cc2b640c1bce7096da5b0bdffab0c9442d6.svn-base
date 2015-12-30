@@ -1,0 +1,67 @@
+
+$(function(){
+	var url = window.location.href;
+	var verificationCode = getParamValueByName(url, "sincecode");
+	//var verificationCode = 74061976//测试
+	var result = storage.getItem("custReceiptQuery");
+	var resultJson = $.parseJSON(result);
+	var ret = '';
+	var returnData = resultJson._ReturnData;
+	ret+= '<h2 class = "f-18 center c-black">验证通过，可以取货！</h2>';
+	ret+= '<div class = "receipt-info">';
+	ret+= '<div><i>订单号：</i><em>'+returnData.orderproviderid+'</em></div>';
+	ret+= '<div><i>收货人姓名：</i><em>'+returnData.cusname+'</em></div>';
+	ret+= '<div><i>收货人手机：</i><em>'+returnData.custelno+'</em></div>';
+	if(returnData.paychanel == paychanelCod)
+	{	ret+= '<div><i>付款方式：</i><em>货到付款</em></div>';
+		ret+= '<div><i>代付款金额：</i><em>￥'+returnData.actualamount+'</em><em class = "color">（需让顾客付款）</em></div>';
+	}
+	ret+= '</div>';
+	ret+= '<div class = "receipt-info">';
+	ret+= '<div><i>本订单，可获取的商品有：</i></div>';
+	ret+= '</div>';
+	ret+= '<div class = "receipt-info">';
+	for (var i = 0;i<returnData.qoclist.length;i++) {
+		ret+= '<ul>';
+		ret+= '<li>';
+		ret+= '<em>'+returnData.qoclist[i].goodsname+'</em>';
+		ret+= '<p>'+returnData.qoclist[i].norms+'</p>';
+		ret+= '<p><i>数量：</i><em>'+returnData.qoclist[i].goodsnum+'</em></p>';
+		ret+= '</li>';
+		ret+= '</ul>';
+	}
+	ret+= '</div>';
+	$('.receipt').html('').append(ret);
+	//点击确认取货按钮
+	$('#custreceiptconfirm').on("tap", function() {
+		var data = {"mobile":mobile,"sincecode":verificationCode};
+		var resultJson = ajaxCommon(urlCustReceiptConfirm, data);
+		//var resultJson = {"_ReturnCode":"000000","_ReturnData":{"state":102,"actualamount":22.0000,"custelno":"15210786169","cusname":"王小胜","paychanel":240,"returnstate":112,"orderproviderid":"15021016112095940983454","qoclist":[{"goodsname":"测试生鲜商品运费","goodsnum":"1","norms":""}]},"_ReturnMsg":null};
+		if(resultJson._ReturnCode === returnCodeSuccess) {
+			resultJson = JSON.stringify(resultJson);
+			storage.setItem("custReceiptConfirm", resultJson);
+			window.location.href = "custreceiptsuccess.html?sincecode=" +verificationCode+ "&t=" + t;	
+		} else{
+			showAlertMsg(resultJson._ReturnMsg);
+		}
+	});
+	//点击拒收按钮
+	$('#custreceiptreject').on("tap", function() {
+		$('.pop-up-box').show();
+		$('#custRejectCancel').on("tap", function() {
+		$('.pop-up-box').hide();
+		});
+		$('#custRejectConfirm').on("tap", function() {
+			var data = {"sincecode":verificationCode};
+			var resultJson = ajaxCommon(urlCustReceiptReject, data);
+			//resultJson = {"_ReturnCode":"000000","_ReturnData":null,"_ReturnMsg":null}
+			$('.pop-up-box').hide();
+			if(resultJson._ReturnCode === returnCodeSuccess) {
+				window.location.href = "custreceiptreject.html?sincecode=" +verificationCode+ "&t=" + t;	
+			} else{
+				showAlertMsg(resultJson._ReturnMsg);
+			}	
+		});
+		
+	});
+});

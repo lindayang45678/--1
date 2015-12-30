@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.order.TorderitemsMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Torderitems">
+        <id column="tOrderItemsId" property="torderitemsid" jdbcType="INTEGER"/>
+        <result column="orderProviderID" property="orderproviderid" jdbcType="VARCHAR"/>
+        <result column="orderID" property="orderid" jdbcType="VARCHAR"/>
+        <result column="goodsID" property="goodsid" jdbcType="INTEGER"/>
+        <result column="goodsSkuID" property="goodsskuid" jdbcType="INTEGER"/>
+        <result column="goodsSkuO2OID" property="goodsskuo2oid" jdbcType="INTEGER"/>
+        <result column="goodsName" property="goodsname" jdbcType="VARCHAR"/>
+        <result column="goodsInProviderCode" property="goodsinprovidercode" jdbcType="VARCHAR"/>
+        <result column="providerID" property="providerid" jdbcType="INTEGER"/>
+        <result column="providerName" property="providername" jdbcType="VARCHAR"/>
+        <result column="logisticsId" property="logisticsid" jdbcType="INTEGER"/>
+        <result column="goodsIsOwnOrSupport" property="goodsisownorsupport" jdbcType="INTEGER"/>
+        <result column="goodsCount" property="goodscount" jdbcType="INTEGER"/>
+        <result column="ruleID" property="ruleid" jdbcType="INTEGER"/>
+        <result column="ruleName" property="rulename" jdbcType="VARCHAR"/>
+        <result column="goodsFavoRuleMoney" property="goodsfavorulemoney" jdbcType="DECIMAL"/>
+        <result column="goodsDeductionPoints" property="goodsdeductionpoints" jdbcType="REAL"/>
+        <result column="goodsPayOff" property="goodspayoff" jdbcType="DECIMAL"/>
+        <result column="goodsSalePrice" property="goodssaleprice" jdbcType="DECIMAL"/>
+        <result column="goodsFinalPrice" property="goodsfinalprice" jdbcType="DECIMAL"/>
+        <result column="goodsProfits" property="goodsprofits" jdbcType="DECIMAL"/>
+        <result column="goodsRetainedProfits" property="goodsretainedprofits" jdbcType="DECIMAL"/>
+        <result column="storeProfits" property="storeprofits" jdbcType="DECIMAL"/>
+        <result column="deductionBasePoints" property="deductionbasepoints" jdbcType="REAL"/>
+        <result column="companyDiscount" property="companydiscount" jdbcType="REAL"/>
+        <result column="companyProfit" property="companyprofit" jdbcType="DECIMAL"/>
+        <result column="storeDiscount" property="storediscount" jdbcType="REAL"/>
+        <result column="storeProfit" property="storeprofit" jdbcType="DECIMAL"/>
+        <result column="operatorDiscount" property="operatordiscount" jdbcType="REAL"/>
+        <result column="operatorProfit" property="operatorprofit" jdbcType="DECIMAL"/>
+        <result column="returnAmount" property="returnamount" jdbcType="DECIMAL"/>
+        <result column="subsidyAmount" property="subsidyamount" jdbcType="DECIMAL"/>
+        <result column="goodsLogisticState" property="goodslogisticstate" jdbcType="INTEGER"/>
+        <result column="channelCode" property="channelcode" jdbcType="VARCHAR"/>
+        <result column="virtualClassificationID" property="virtualclassificationid" jdbcType="VARCHAR"/>
+        <result column="goodsClassificationID" property="goodsclassificationid" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="mergeState" property="mergestate" jdbcType="INTEGER"/>
+        <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP"/>
+        <result column="fav" property="fav" jdbcType="VARCHAR"/>
+        <result column="cancelState" property="cancelstate" jdbcType="INTEGER"/>
+        <result column="lastModifyTime" property="lastmodifytime" jdbcType="TIMESTAMP"/>
+        <result column="norms" property="norms" jdbcType="VARCHAR"/>
+        <result column="lockState" property="lockstate" jdbcType="INTEGER"/>
+        <result column="discountID" property="discountid" jdbcType="INTEGER"/>
+        <result column="exportstatus" property="exportstatus" jdbcType="INTEGER"/>
+        <result column="settleState" property="settlestate" jdbcType="INTEGER"/>
+        <result column="confirmReturnRemark" property="confirmreturnremark" jdbcType="VARCHAR"/>
+        <result column="providerSettleState" property="providersettlestate" jdbcType="INTEGER"/>
+        <result column="providerSettleMoney" property="providersettlemoney" jdbcType="DECIMAL"/>
+        <result column="shipSettleState" property="shipsettlestate" jdbcType="INTEGER"/>
+        <result column="shipSettleMoney" property="shipsettlemoney" jdbcType="DECIMAL"/>
+        <result column="phoneMemberName" property="phonemembername" jdbcType="VARCHAR"/>
+        <result column="phoneMemberIdCard" property="phonememberidcard" jdbcType="VARCHAR"/>
+        <result column="giftState" property="giftstate" jdbcType="INTEGER"/>
+        <result column="giftParentId" property="giftparentid" jdbcType="VARCHAR"/>
+        <result column="returnState" property="returnstate" jdbcType="INTEGER"/>
+        <result column="invalidState" property="invalidstate" jdbcType="INTEGER"/>
+        <result column="returnParentID" property="returnparentid" jdbcType="INTEGER"/>
+        <result column="providerSettleTime" property="providersettletime" jdbcType="TIMESTAMP"/>
+        <result column="shipSettleTime" property="shipsettletime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lakala.base.model.Torderitems">
+        update torderitems
+        <set>
+            <if test="orderproviderid != null">
+                orderProviderID = #{orderproviderid,jdbcType=VARCHAR},
+            </if>
+            <if test="orderid != null">
+                orderID = #{orderid,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsid != null">
+                goodsID = #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsskuid != null">
+                goodsSkuID = #{goodsskuid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsskuo2oid != null">
+                goodsSkuO2OID = #{goodsskuo2oid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsname != null">
+                goodsName = #{goodsname,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsinprovidercode != null">
+                goodsInProviderCode = #{goodsinprovidercode,jdbcType=VARCHAR},
+            </if>
+            <if test="providerid != null">
+                providerID = #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="providername != null">
+                providerName = #{providername,jdbcType=VARCHAR},
+            </if>
+            <if test="logisticsid != null">
+                logisticsId = #{logisticsid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsisownorsupport != null">
+                goodsIsOwnOrSupport = #{goodsisownorsupport,jdbcType=INTEGER},
+            </if>
+            <if test="goodscount != null">
+                goodsCount = #{goodscount,jdbcType=INTEGER},
+            </if>
+            <if test="ruleid != null">
+                ruleID = #{ruleid,jdbcType=INTEGER},
+            </if>
+            <if test="rulename != null">
+                ruleName = #{rulename,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsfavorulemoney != null">
+                goodsFavoRuleMoney = #{goodsfavorulemoney,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsdeductionpoints != null">
+                goodsDeductionPoints = #{goodsdeductionpoints,jdbcType=REAL},
+            </if>
+            <if test="goodspayoff != null">
+                goodsPayOff = #{goodspayoff,jdbcType=DECIMAL},
+            </if>
+            <if test="goodssaleprice != null">
+                goodsSalePrice = #{goodssaleprice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsfinalprice != null">
+                goodsFinalPrice = #{goodsfinalprice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsprofits != null">
+                goodsProfits = #{goodsprofits,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsretainedprofits != null">
+                goodsRetainedProfits = #{goodsretainedprofits,jdbcType=DECIMAL},
+            </if>
+            <if test="storeprofits != null">
+                storeProfits = #{storeprofits,jdbcType=DECIMAL},
+            </if>
+            <if test="deductionbasepoints != null">
+                deductionBasePoints = #{deductionbasepoints,jdbcType=REAL},
+            </if>
+            <if test="companydiscount != null">
+                companyDiscount = #{companydiscount,jdbcType=REAL},
+            </if>
+            <if test="companyprofit != null">
+                companyProfit = #{companyprofit,jdbcType=DECIMAL},
+            </if>
+            <if test="storediscount != null">
+                storeDiscount = #{storediscount,jdbcType=REAL},
+            </if>
+            <if test="storeprofit != null">
+                storeProfit = #{storeprofit,jdbcType=DECIMAL},
+            </if>
+            <if test="operatordiscount != null">
+                operatorDiscount = #{operatordiscount,jdbcType=REAL},
+            </if>
+            <if test="operatorprofit != null">
+                operatorProfit = #{operatorprofit,jdbcType=DECIMAL},
+            </if>
+            <if test="returnamount != null">
+                returnAmount = #{returnamount,jdbcType=DECIMAL},
+            </if>
+            <if test="subsidyamount != null">
+                subsidyAmount = #{subsidyamount,jdbcType=DECIMAL},
+            </if>
+            <if test="goodslogisticstate != null">
+                goodsLogisticState = #{goodslogisticstate,jdbcType=INTEGER},
+            </if>
+            <if test="channelcode != null">
+                channelCode = #{channelcode,jdbcType=VARCHAR},
+            </if>
+            <if test="virtualclassificationid != null">
+                virtualClassificationID = #{virtualclassificationid,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsclassificationid != null">
+                goodsClassificationID = #{goodsclassificationid,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="mergestate != null">
+                mergeState = #{mergestate,jdbcType=INTEGER},
+            </if>
+            <if test="ordertime != null">
+                orderTime = #{ordertime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fav != null">
+                fav = #{fav,jdbcType=VARCHAR},
+            </if>
+            <if test="cancelstate != null">
+                cancelState = #{cancelstate,jdbcType=INTEGER},
+            </if>
+            <if test="lastmodifytime != null">
+                lastModifyTime = #{lastmodifytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="norms != null">
+                norms = #{norms,jdbcType=VARCHAR},
+            </if>
+            <if test="lockstate != null">
+                lockState = #{lockstate,jdbcType=INTEGER},
+            </if>
+            <if test="discountid != null">
+                discountID = #{discountid,jdbcType=INTEGER},
+            </if>
+            <if test="exportstatus != null">
+                exportstatus = #{exportstatus,jdbcType=INTEGER},
+            </if>
+            <if test="settlestate != null">
+                settleState = #{settlestate,jdbcType=INTEGER},
+            </if>
+            <if test="confirmreturnremark != null">
+                confirmReturnRemark = #{confirmreturnremark,jdbcType=VARCHAR},
+            </if>
+            <if test="providersettlestate != null">
+                providerSettleState = #{providersettlestate,jdbcType=INTEGER},
+            </if>
+            <if test="providersettlemoney != null">
+                providerSettleMoney = #{providersettlemoney,jdbcType=DECIMAL},
+            </if>
+            <if test="shipsettlestate != null">
+                shipSettleState = #{shipsettlestate,jdbcType=INTEGER},
+            </if>
+            <if test="shipsettlemoney != null">
+                shipSettleMoney = #{shipsettlemoney,jdbcType=DECIMAL},
+            </if>
+            <if test="phonemembername != null">
+                phoneMemberName = #{phonemembername,jdbcType=VARCHAR},
+            </if>
+            <if test="phonememberidcard != null">
+                phoneMemberIdCard = #{phonememberidcard,jdbcType=VARCHAR},
+            </if>
+            <if test="giftstate != null">
+                giftState = #{giftstate,jdbcType=INTEGER},
+            </if>
+            <if test="giftparentid != null">
+                giftParentId = #{giftparentid,jdbcType=VARCHAR},
+            </if>
+            <if test="returnstate != null">
+                returnState = #{returnstate,jdbcType=INTEGER},
+            </if>
+            <if test="invalidstate != null">
+                invalidState = #{invalidstate,jdbcType=INTEGER},
+            </if>
+            <if test="returnparentid != null">
+                returnParentID = #{returnparentid,jdbcType=INTEGER},
+            </if>
+            <if test="providersettletime != null">
+                providerSettleTime = #{providersettletime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shipsettletime != null">
+                shipSettleTime = #{shipsettletime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where tOrderItemsId = #{torderitemsid,jdbcType=INTEGER}
+    </update>
+    
+    <update id="updateBatchRestoreByCancelOrder" parameterType="map" >
+      
+             <!-- 第一步  (非暂存到店、赠品略过) 目前只支持开店宝和wap商城，并且都共用tgoods_publish_kdb_sku表-->
+			<if test="goodscount != null and goodsskuid != null  and giftstate eq '202' and tempstoregoodsflag neq '378'" > 
+			   update tgoodskuinfo  set skuStock = skuStock+#{goodscount,jdbcType=INTEGER} 
+			   where   tGoodSkuInfoId=#{goodsskuid,jdbcType=INTEGER};
+			</if>
+			
+			<!-- 第一步 (暂存到店)  只有暂存到店的商品订单才需要执行这一步-->
+			<if test="tempstoregoodsflag != null and tempstoregoodsflag != '' and tempstoregoodsflag eq '378'" >
+			    update tskunetinfo  h,torderitems s  set h.stock=h.stock+s.goodsCount, h.soldstock = h.soldstock-s.goodsCount 
+				where  h.netno=s.siteNo and h.skuid=s.goodsSkuID
+				and s.tOrderItemsId = #{torderitemsid,jdbcType=INTEGER};
+	        </if>
+	        
+	        <!-- 第三步  -->
+	        <if test="torderitemsid != null and torderitemsid != ''" >
+			  update  torderitems    set  isRestore = 275 ,lastModifyTime = NOW()  where  tOrderItemsId = #{torderitemsid,jdbcType=INTEGER};
+	        </if>
+    </update>
+    
+	  <update id="updateTorderItemsCancelByTorderItemsId" parameterType="java.lang.Integer" >
+	    update torderitems
+	    set  cancelState = 137 , lastModifyTime = NOW(),cancelTime = now(),canceltype = 494,retirednumber = if(state=99,0,goodsCount)
+	    where tOrderItemsId = #{torderitemsid,jdbcType=INTEGER}
+	  </update>
+	  
+	  <update id="updateTorderItemsCancelByTorderItemsIdGrops" parameterType="java.lang.String" >
+	    update torderitems
+	    set  cancelState = 137 , lastModifyTime = NOW(),cancelTime = now(),canceltype = 494,retirednumber = if(state=99,0,goodsCount)
+	    where tOrderItemsId in (${torderitemsids})
+	  </update>
+	  
+	<update id="updateTorderitemsWithLogisID" parameterType="map">
+		update
+		torderitems t set t.logisticsId =#{logisid,jdbcType=INTEGER}
+		where
+		t.tOrderItemsId =
+		#{itemsid,jdbcType=INTEGER}
+	</update>
+    
+</mapper>

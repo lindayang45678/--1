@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>批发进货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>
+		<h1>批发进货</h1>
+		<a href="register.html" class="head-right wholesale-search">搜索</a>
+	</header>
+	<section class="container">
+		<div class="wholesale">
+			<div id="wholesale-l">
+				<ul class="left-l1">
+					<li><a href="#">活动推荐</a></li>
+					<li><a href="#">全国批发</a></li>
+					<li>
+						<a href="#">福建批发</a>
+						<ul class="left-l2">
+							<li>
+								<a href="#">21</a>
+								<ul class="left-l3">
+									<li><a href="#">31</a></li>
+									<li><a href="#">32</a></li>
+									<li><a href="#">33</a></li>
+								</ul>
+							</li>
+							<li><a href="#">22</a></li>
+							<li><a href="#">23</a></li>
+						</ul>
+					</li>
+				</ul>	
+			</div>
+			<div id="wholesale-r">
+				<ul id="activities">
+					<li><a href="#"><img src="../../images/example440x212.png"/></a></li>
+					<li><a href="#"><img src="../../images/example440x212.png"/></a></li>
+					<li><a href="#"><img src="../../images/example440x212.png"/></a></li>
+				</ul>
+			</div>
+			<div id="wholesale-foot">
+				<i id="goodscart">36</i>
+				<i id="total"></i>
+			</div>	
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/accounts/login.js"></script>
+</html>

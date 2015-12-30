@@ -1,0 +1,3 @@
+mongo.left=http://10.5.12.203:8085/sideb/goods/left/#psam#/#channelid#
+mongo.list=http://10.5.12.203:8085/sideb/goods/list
+mongo.detail=http://10.5.12.203:8085/sideb/goods/detail

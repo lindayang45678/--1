@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.w.order.QuhuoMapper">
+  <resultMap id="StateMap" type="java.lang.Integer" >
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <update id="updategkinorderitem" parameterType="map" >
+     UPDATE 
+	  torderitems o 
+	 SET
+	  o.`cuspickupstate` = #{cuspickupstate,jdbcType=INTEGER}, 
+	  o.`state` = #{state,jdbcType=INTEGER}
+	  <if test="ispay != null and ispay != ''">  
+            ,o.`isPay` = #{ispay,jdbcType=INTEGER},o.`payTime` = NOW()
+      </if>   
+	 WHERE o.`tOrderItemsId` = #{torderitemsid,jdbcType=INTEGER}
+  </update>
+  <update id="updatedzstateinlogitem" parameterType="map" >
+     UPDATE 
+	  tlogisticsinfoitem o 
+	 SET
+	  o.`state` = #{state,jdbcType=INTEGER} 
+	 WHERE o.`tOrderItemsId` = #{torderitemsid,jdbcType=INTEGER}
+  </update>
+  <select id="getProviderState" parameterType="java.lang.String" resultMap="StateMap">
+     SELECT 
+	  o.`state` 
+	 FROM
+	  torderitems o 
+	 WHERE o.`orderProviderID` = #{torderproviderid,jdbcType=VARCHAR}
+  </select>
+  <update id="updateOrderProviderState" parameterType="map" >
+     UPDATE 
+	  torderprovider o 
+	 SET
+	  o.`state` = #{state,jdbcType=INTEGER}
+	  <if test="ispay != null and ispay != ''">  
+            ,o.`isPay` = #{ispay,jdbcType=INTEGER},o.`payTime` = NOW()
+      </if>  
+	 WHERE o.`tOrderProviderId` = #{torderproviderid,jdbcType=VARCHAR} 
+  </update>
+  
+  <select id="getOrderState" parameterType="java.lang.String" resultMap="StateMap">
+     SELECT 
+	  o.`state` 
+	 FROM
+	  torderprovider o 
+	 WHERE o.`orderID` = #{orderId,jdbcType=VARCHAR}
+  </select>
+  <update id="updateOrderState" parameterType="map" >
+     UPDATE 
+	  torder o 
+	 SET
+	  o.`state` = #{state,jdbcType=INTEGER}
+	  <if test="ispay != null and ispay != ''">  
+            ,o.`isPay` = #{ispay,jdbcType=INTEGER},o.`payTime` = NOW()
+      </if>   
+	 WHERE o.`tOrderId` = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updatestateinloginfo" parameterType="map" >
+     UPDATE 
+	  tlogisticsinfo o 
+	 SET
+	  o.`state` = #{state,jdbcType=INTEGER},
+	  o.`receivertime` = now() 
+	 WHERE o.`logisticsId` = #{logid,jdbcType=INTEGER}
+  </update>
+</mapper>

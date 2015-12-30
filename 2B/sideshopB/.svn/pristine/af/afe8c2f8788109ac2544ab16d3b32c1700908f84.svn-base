@@ -1,0 +1,142 @@
+package com.lakala.module.profit.vo;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+public class OrderEarningsDetailOutput {
+
+	/**
+	 * 订单详细查询页面显示数据.
+	 * */
+	private String token;
+	/** 订单号 */
+	private String prvoidOrderId;
+	/** 下订时间 */
+	private String orderDate;
+	/** 收货人姓名 */
+	private String cusName;
+	/** 收货人手机号 */
+	private String cusTelNo;
+	/** 配送方式 */
+	private String isDeliverTohome;
+	/** 配置地址 */
+	private String addr;
+	/** 订单来源 */
+	private String source;
+	/** 平台商品分润 */
+	private BigDecimal terraceGoodsProfit;
+	/** 自营商品结算 */
+	private BigDecimal ownGoodsAccounts;
+	/** 商品自营平台标识 */
+	private String platorSelf;
+
+	private String returnFlg;
+
+	/** 三级订单数据 */
+	private List<Oditem> oditmList;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getPrvoidOrderId() {
+		return prvoidOrderId;
+	}
+
+	public void setPrvoidOrderId(String prvoidOrderId) {
+		this.prvoidOrderId = prvoidOrderId;
+	}
+
+	public BigDecimal getTerraceGoodsProfit() {
+		return terraceGoodsProfit;
+	}
+
+	public void setTerraceGoodsProfit(BigDecimal terraceGoodsProfit) {
+		this.terraceGoodsProfit = terraceGoodsProfit;
+	}
+
+	public BigDecimal getOwnGoodsAccounts() {
+		return ownGoodsAccounts;
+	}
+
+	public void setOwnGoodsAccounts(BigDecimal ownGoodsAccounts) {
+		this.ownGoodsAccounts = ownGoodsAccounts;
+	}
+
+	public String getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(String orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public String getCusName() {
+		return cusName;
+	}
+
+	public void setCusName(String cusName) {
+		this.cusName = cusName;
+	}
+
+	public String getCusTelNo() {
+		return cusTelNo;
+	}
+
+	public void setCusTelNo(String cusTelNo) {
+		this.cusTelNo = cusTelNo;
+	}
+
+	public String getIsDeliverTohome() {
+		return isDeliverTohome;
+	}
+
+	public void setIsDeliverTohome(String isDeliverTohome) {
+		this.isDeliverTohome = isDeliverTohome;
+	}
+
+	public String getAddr() {
+		return addr;
+	}
+
+	public void setAddr(String addr) {
+		this.addr = addr;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public List<Oditem> getOditmList() {
+		return oditmList;
+	}
+
+	public void setOditmList(List<Oditem> oditmList) {
+		this.oditmList = oditmList;
+	}
+
+	public String getPlatorSelf() {
+		return platorSelf;
+	}
+
+	public void setPlatorSelf(String platorSelf) {
+		this.platorSelf = platorSelf;
+	}
+
+	public String getReturnFlg() {
+		return returnFlg;
+	}
+
+	public void setReturnFlg(String returnFlg) {
+		this.returnFlg = returnFlg;
+	}
+
+}

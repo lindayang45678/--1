@@ -1,0 +1,96 @@
+package com.lakala.module.profit.vo;
+
+import java.math.BigDecimal;
+
+public class Oditem {
+
+	private String goodName;
+
+	private BigDecimal goodSalePrice;
+
+	private BigDecimal orderPrice;
+
+	private Integer goodCount;
+
+	private String orderState;
+
+	private String receiveDate;
+
+	private String invaliState;
+
+	private BigDecimal earningsAmount;
+
+	private String returnDate;
+
+	public String getGoodName() {
+		return goodName;
+	}
+
+	public void setGoodName(String goodName) {
+		this.goodName = goodName;
+	}
+
+	public BigDecimal getGoodSalePrice() {
+		return goodSalePrice;
+	}
+
+	public void setGoodSalePrice(BigDecimal goodSalePrice) {
+		this.goodSalePrice = goodSalePrice;
+	}
+
+	public BigDecimal getOrderPrice() {
+		return orderPrice;
+	}
+
+	public void setOrderPrice(BigDecimal orderPrice) {
+		this.orderPrice = orderPrice;
+	}
+
+	public Integer getGoodCount() {
+		return goodCount;
+	}
+
+	public void setGoodCount(Integer goodCount) {
+		this.goodCount = goodCount;
+	}
+
+	public String getOrderState() {
+		return orderState;
+	}
+
+	public void setOrderState(String orderState) {
+		this.orderState = orderState;
+	}
+
+	public String getReceiveDate() {
+		return receiveDate;
+	}
+
+	public void setReceiveDate(String receiveDate) {
+		this.receiveDate = receiveDate;
+	}
+
+	public String getInvaliState() {
+		return invaliState;
+	}
+
+	public void setInvaliState(String invaliState) {
+		this.invaliState = invaliState;
+	}
+
+	public BigDecimal getEarningsAmount() {
+		return earningsAmount;
+	}
+
+	public void setEarningsAmount(BigDecimal earningsAmount) {
+		this.earningsAmount = earningsAmount;
+	}
+
+	public String getReturnDate() {
+		return returnDate;
+	}
+
+	public void setReturnDate(String returnDate) {
+		this.returnDate = returnDate;
+	}
+}

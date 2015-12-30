@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.user.TuserMapper">
+    <resultMap id="BaseResultMap" type="com.lakala.base.model.Tuser">
+        <id column="tUserId" property="tuserid" jdbcType="INTEGER"/>
+        <result column="userName" property="username" jdbcType="VARCHAR"/>
+        <result column="userPassword" property="userpassword" jdbcType="VARCHAR"/>
+        <result column="userNickname" property="usernickname" jdbcType="VARCHAR"/>
+        <result column="userRealname" property="userrealname" jdbcType="VARCHAR"/>
+        <result column="lastLogintime" property="lastlogintime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+        <result column="bolstart" property="bolstart" jdbcType="BIT"/>
+        <result column="department" property="department" jdbcType="VARCHAR"/>
+        <result column="organizationid" property="organizationid" jdbcType="INTEGER"/>
+        <result column="toname" property="toname" jdbcType="VARCHAR"/>
+        <result column="usertype" property="usertype" jdbcType="INTEGER"/>
+        <result column="gysid" property="gysid" jdbcType="INTEGER"/>
+        <result column="gysname" property="gysname" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		tUserId,userName,userPassword,userNickname,userRealname,
+		lastLogintime,bolstart,department,organizationid,usertype, gysid, gysname
+	</sql>
+    <sql id="where">
+        <where>
+        		bolstart = '1'
+            <if test="tuserid != null and tuserid != ''">
+                and tUserId = #{tuserid,jdbcType=INTEGER}
+            </if>
+            <if test="username != null and username != ''">
+                and userName like '%${username}%'
+            </if>
+            <if test="userpassword != null and userpassword != ''">
+                and userPassword = #{userpassword,jdbcType=INTEGER}
+            </if>
+            <if test="usernickname != null and usernickname != ''">
+                and userNickname like '%${usernickname}%'
+            </if>
+            <if test="userrealname != null and userrealname != ''">
+                and userRealname like '%${userrealname}%'
+            </if>
+            <if test="usertype != null and usertype != ''">
+                and usertype = #{usertype,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+    <select id="selectByPrimaryKey" resultType="com.lakala.base.model.Tuser"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tuser
+        where tUserId = #{tuserid,jdbcType=INTEGER} and bolstart = '1'
+    </select>
+    
+    <!-- 根据供应商id，查询用户ID -->
+    <select id="selectByGysId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tuser where gysid = #{gysid,jdbcType=INTEGER}
+    </select>
+</mapper>

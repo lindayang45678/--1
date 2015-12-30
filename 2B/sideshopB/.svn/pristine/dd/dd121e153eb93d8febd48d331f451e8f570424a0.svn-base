@@ -1,0 +1,29 @@
+$(function() {
+	shipAddress();
+	var shipaddress = $.parseJSON(storage.getItem("shipaddress"));
+	var phoneno = shipaddress.shipmobile;
+	var data = {"phoneno": phoneno};
+	var resultJson = ajaxCommon(urlGetshopupdate,data);
+	resultJson = convertNullToEmpty(resultJson);
+	var result = resultJson._ReturnData;
+	var remark = result.remark;
+	console.log(result);
+	/* 商户类型--加盟型:459; 标准型:460; 旗舰型:461; */
+	if (remark == bizTypeJMX) {
+		$(".shopupdate h2").find("s").text("加盟型");
+	}
+	if (remark == bizTypeBZX) {
+		$(".shopupdate h2").find("s").text("标准型");
+	}
+	if (remark == bizTypeQJX) {
+		$(".shopupdate h2").find("s").text("旗舰型");
+	}
+	var shopkeeper = $("#shopkeeper").text(result.shopkeeper);//店主姓名
+	var phoneno = $("#phoneno").text(result.phoneno);//店主手机
+	var id_no = $("#id_no").text(result.id_no);//身份证号
+	var idimage_positive = $(".id-card .zm").attr("src",result.idimage_positive); //身份证正面
+	var idimage_negative = $(".id-card .fm").attr("src",result.idimage_negative);//身份证反面
+	var shopname = $("#shopname").text(result.shopname);//小店名称
+	var address = $("#address").text(result.district + "  " + result.community + "  " + result.address);//小店地址
+	var businessLicence = $(".licence img").attr("src",result.businessLicence);//营业执照
+});

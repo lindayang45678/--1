@@ -1,0 +1,10 @@
+package com.lakala.mapper.r.messagebase;
+
+import com.lakala.model.messagebase.MessageBase;
+
+/**
+ * Created by HOT.LIU on 2015/3/10.
+ */
+public interface MessageBaseMapper {
+    MessageBase selectByPrimaryKey(Integer id);
+}

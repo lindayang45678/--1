@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>小店首页</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<link rel="stylesheet" href="../../css/master.css"/>
+</head>
+
+<body class="whitebg">
+	<header>
+		<a href="../homepage/index.html" class="back"></a>
+  		<h1>我的小店</h1>
+  		<a href="editshop.html" class="head-right">编辑</a>
+	</header>
+    <section class="container">
+    	<div class="shopindex-part1">
+        	<a href="editshop.html">
+            	<em class="index-logo"></em>
+            		<h2 id="shopname">店铺名称-朝夕</h2>
+            	<em class="index-link"></em>
+            </a>
+        </div>
+        <div class="index-add">
+        	<span>本店商品<i>（20个）</i></span>
+            <a href="addgoods.html">添加商品</a>
+        </div>
+       <section class="index-main clearfix">
+        		<section class="index-menus">
+            		<div id="index-left">
+                    	<ul class="index-menu1">
+                			<li><a href="#" class="promotion">小店近期批发<i></i></a></li>
+                    		<li><a href="#">全国批发<i></i></a></li>
+                    		<li><a href="#">福建省批发<i></i></a></li>
+                    		<li>
+                    			<a href="#" class="bgwhite">河北省批发<i class="red-icon"></i></a>
+                        		<ul class="index-menu2 hidden">
+                        			<li>
+                            			<a href="#">生鲜蔬菜<i></i></a>
+                                		<ul class="index-menu3 hidden">
+                                			<li>
+                                    			<a href="#">苹果<i></i></a>
+                                        		<ul class="index-menu4 hidden">
+                                        	 		<li><a href="#">红富士<i></i></a></li>
+                                             		<li><a href="#">香蕉苹果<i></i></a></li>
+                                             		<li><a href="#">青苹果<i></i></a></li>
+                                        		</ul>
+                                    		</li>
+                                    		<li>
+                                    			<a href="#">香梨<i></i></a>
+                                    		</li>
+                                    		<li>
+                                    			<a href="#">香蕉<i></i></a>
+                                    		</li><li>
+                                    			<a href="#">木瓜<i></i></a>
+                                    		</li>
+                                		</ul>
+                            		</li>
+                            		<li>
+                            			<a href="#">酒水饮料<i></i></a>
+                            		</li>
+                            		<li>
+                            			<a href="#">烟草<i></i></a>
+                            		</li>
+                        		</ul>
+                    		</li>
+                		</ul>
+                    </div>
+            	</section>
+            	<section class="index-content">
+        			<ul class="content1">
+                    	<li>
+            				<a href="addgoods1.html" class="goods">
+                            	<dl>
+                					<dt><img src="../../images/goods-img.jpg" alt=""/></dt>
+                    				<dd>
+                    					<h3>标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
+                                    	<div class="num">库存:<span>300</span>销量:<span>88</span></div>
+                                    	<div class="price"><span>¥90</span><del>¥123</del></div>
+                    				</dd>
+                				</dl>
+                                <em></em>
+                            </a>
+                			<a href="#" class="unshelve">下架</a>
+            			</li>
+                        <li class="unlink">
+                            <a href="editgoods1.html" class="goods">
+                            	<dl>
+                					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                    				<dd>
+                    					<h3>标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
+                                    	<div class="num">库存:<span>300</span>销量:<span>88</span></div>
+                                    	<div class="price"><span>¥90</span><del>¥123</del></div>
+                    				</dd>
+                				</dl>
+                                <em></em>
+                            </a>
+                			<a href="#" class="unshelve done">已下架</a> 
+            			</li>
+                        <li class="unlink">
+                            <a href="editgoods1.html" class="goods">
+                            	<dl>
+                					<dt><img src="../../images/goods-img.jpg" alt=""/><div class="shade"></div></dt>
+                    				<dd>
+                    					<h3>标题标题标题标题标题标题标题标题标题标题标题标题标题</h3>
+                                    	<div class="num">库存:<span>300</span>销量:<span>88</span></div>
+                                    	<div class="price"><span>¥90</span><del>¥123</del></div>
+                    				</dd>
+                				</dl>
+                                <em></em>
+                            </a>
+                			<a href="#" class="unshelve done">已下架</a>
+            			</li>
+                      </ul>
+        		</section>
+        </section>
+    </section>
+    <i id="shop"></i>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" id="platJs"></script>
+<script type="text/javascript" src="cordova_plugins.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/shops/index.js"></script>
+<script type="text/javascript" src="../../js/shops/editshop.js"></script>
+</html>

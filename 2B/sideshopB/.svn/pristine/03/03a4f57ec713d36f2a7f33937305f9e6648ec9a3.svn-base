@@ -1,0 +1,235 @@
+var virtualid = '';
+/*初始化iScroll*/
+var addgoodsScroll;
+function scrollAddGoods() {
+	addgoodsScroll = new iScroll("menu-left",{ hScrollbar: false, vScrollbar: false });
+}
+/*根据浏览器的高度计算iScroll的高度*/
+$(function() {
+	var sHeight = $(window).height();
+	$("#menu-left").css("height", sHeight-87);
+	$("#add-content").css("height",sHeight-87);
+	scrollGood();
+});
+
+/*批发进货首页菜单*/
+$(function() {
+	scrollAddGoods();
+	$("#menu-left a").live("tap", function(e) {
+		$("#menu-left").find("a").removeClass("bgwhite").find("i").removeClass("red-icon"); //去掉所有选中样式
+		$(this).addClass("bgwhite").find("i").addClass("red-icon"); //添加当前选中样式
+		
+		if($(this).siblings("ul").hasClass("hidden")) {
+			$(this).siblings("ul").removeClass("hidden");
+			addgoodsScroll.refresh();
+		} else {
+			$(this).siblings("ul").addClass("hidden");
+			$(this).parent().find("ul").addClass("hidden");
+			if($(this).siblings("ul").length != 0) {
+				$(this).removeClass("bgwhite").find("i").removeClass("red-icon"); //去掉当前选中样式
+			}
+			addgoodsScroll.refresh();
+		}
+		$(this).parent().siblings("li").find("a").siblings("ul").addClass("hidden"); //同级隐藏
+		virtualid = parseInt($(this).attr("virtualid"));
+		
+		var virtualCateId = $(this).attr("catid");
+		catId = virtualCateId;
+		page = 0;
+		hasNextPage = true;
+		$(".add-content ul").html("");
+		scrollGood();
+		laststage (virtualid);
+		e.stopPropagation()
+	});
+	addgoodsScroll.refresh();
+});
+
+$(function() {
+	//本店近期批发
+	getLatestWholesale();
+	//加载提示
+	$("#loading").hide();
+});
+
+/**
+ * 本店近期批发
+ */
+function getLatestWholesale() {
+	var data = {"psam":psam, "page":1, "pageSize":20};
+	var resultJson = ajaxCommon(urlGetGoodslistByPsam, data);
+	resultJson = convertNullToEmpty(resultJson);
+	//该店铺近期没有批发商品
+	if(resultJson._ReturnData.length == 0) {
+		$("#shopSales").hide();
+	} else {
+		var result = getProductsList(resultJson);
+		$(".content1").html(result);
+	}
+}
+
+function getProductsList(resultJson) {
+	var result = "";
+
+	var _ReturnData = resultJson._ReturnData;
+	for(var i = 0; i < _ReturnData.length; i ++) {
+		var tGoodInfoPoolId = _ReturnData[i].tGoodInfoPoolId; //商品池商品id
+		var distributionFlag = _ReturnData[i].distributionFlag; //配送标识
+		var goodBigPic = _ReturnData[i].goodBigPic; //商品主图
+		var goodName = _ReturnData[i].goodName; //商品名称
+
+		result += "<li>";
+		result += "<dl>";
+		result += "<dt><img src='" + urlImage + "/" + tGoodInfoPoolId + "/" + imgw100 + "/" + goodBigPic + "'></dt>";
+		result += "<dd>";
+		result += "<h3>" + goodName + "</h3>";
+		result += "</dd>";
+		result += "</dl>";
+		result += "<a href='addgoods1.html?tGoodsInfoId=" + tGoodInfoPoolId + "&t=" + t + "' class='added'>上架到小店</a>";
+		result += "</li>";
+	}
+	return result;
+}
+//左侧菜单
+$(function(){
+	//alert("true");
+	var data = {};
+	var resultJson = ajaxCommon(urlgoodsqueryvirtualcat, data);
+	var container = $(".add-menu1");
+	resultJson = convertNullToEmpty(resultJson);
+	if(resultJson._ReturnCode === returnCodeSuccess) {
+		var ret = "";
+		ret += "<li><a href='javascript:;' class='promotion' id='shopSales'>小店近期批发<i></i></a></li>";
+		var virtualclass = resultJson._ReturnData;
+		console.log(virtualclass);
+		for(var i = 0; i < virtualclass.length; i++) {
+			var firstvirtualid = virtualclass[i].tVirtualCateId;//一级虚分类ID
+			var firstId = virtualclass[i].fatherVirtualCateId;//一级父分类ID
+			var firstDisc = virtualclass[i].virtualCateDisc;//一级分类描述
+			if(firstId == 0) {
+				ret +="<li><a href='javascript:;' virtualid="+ firstvirtualid +">"+ firstDisc +"<i></i></a>";
+				ret += "<ul class='add-menu2 hidden'>";
+				for(var j = 0; j < virtualclass.length; j++) {
+					var secondvirtualid = virtualclass[j].tVirtualCateId;//二级虚分类ID
+					var secondId = virtualclass[j].fatherVirtualCateId;//二级父分类ID
+					var secondDisc = virtualclass[j].virtualCateDisc;//二级分类描述
+					if(secondId == firstvirtualid) {
+						ret += "<li>";
+						ret += "<a href='#' virtualid="+ secondvirtualid +">"+ secondDisc +"<i></i></a>";
+						ret += "<ul class='add-menu3 hidden'>";
+						for(var k = 0; k < virtualclass.length; k++) {
+							var thirdvirtualid = virtualclass[k].tVirtualCateId;//三级虚分类ID
+							var thirdId = virtualclass[k].fatherVirtualCateId;//三级父分类ID
+							var thirdDisc = virtualclass[k].virtualCateDisc;//三级分类描述
+							if(thirdId == secondvirtualid) {
+								ret += "<li>";
+								ret += "<a href='#' virtualid="+ thirdvirtualid +">"+ thirdDisc +"<i></i></a>";
+								ret += "<ul class='add-menu4 hidden'>";
+								for(var l = 0; l < virtualclass.length; l++) {
+									var fourthvirtualid = virtualclass[l].tVirtualCateId;//四级虚分类ID
+									var fourthId = virtualclass[l].fatherVirtualCateId;//四级父分类ID
+									var fourthDisc = virtualclass[l].virtualCateDisc;//四级分类描述
+									if(fourthId == thirdvirtualid) {
+										ret += "<li>";
+										ret += "<a href='#' virtualid="+ fourthvirtualid +">"+ fourthDisc +"<i></i></a>";
+									}
+									ret += "</li>"
+								}
+								ret += "</ul>";
+							}
+							ret += "</li>"
+						}
+						ret += "</ul>";
+					}
+					ret += "</li>"
+				}
+				ret += "</ul>"
+				ret +="</li>";
+			}			
+		}
+		container.append(ret);
+		scrollGood();
+	}
+});
+
+var page = 0;
+var pageSize = 5;
+var hasNextPage = true;
+var goodScroll,
+pullDownOffset,
+pullUpEl, pullUpOffset,
+generatedCount = 0;
+
+//初始化iScroll控件 
+function scrollGood(virtualid) {
+pullUpEl = document.getElementById('loading');
+pullUpOffset = pullUpEl.offsetHeight;
+goodScroll = new iScroll('add-content', {//iScroll的对象
+	hScrollbar: false, 
+	vScrollbar: false,
+	hScroll:false,
+	checkDOMChanges: true,
+	useTransition: false, 
+	topOffset: pullDownOffset,
+	onRefresh: function () {
+		if (pullUpEl.className.match('loading')) {
+			pullUpEl.className = '';
+		}
+	},
+	onScrollMove: function () {
+		if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
+			pullUpEl.className = 'flip';
+			this.maxScrollY = this.maxScrollY;
+		} else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
+			pullUpEl.className = '';
+			
+			this.maxScrollY = pullUpOffset;
+		}
+	},
+	onScrollEnd: function () {
+		if (pullUpEl.className.match('flip')) {
+			pullUpEl.className = 'loading';	
+			laststage (virtualid);	// 执行加载后的自定义功能	
+		}
+	}
+});
+}
+document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
+document.addEventListener('DOMContentLoaded', function() { setTimeout(scrollGood, 200); }, false);
+//判断末级，返回数据,右侧商品
+var laststagevirtual = $(".add-content ul");
+function laststage(virtualid) {
+	page ++;
+	var data = {
+		"token" : userToken,
+		"tVirtualCateId":virtualid,
+		"page":page,
+		"pageSize":pageSize
+	}
+	var resultJson = ajaxCommon(urlgoodspoollist, data);
+	resultJson = convertNullToEmpty(resultJson);
+	if (resultJson._ReturnCode === returnCodeSuccess) {
+		var lastresult = resultJson._ReturnData;
+		var laststageret = "";
+		if(lastresult.length > 0) {
+			for(var x = 0; x < lastresult.length; x++) {
+				console.log(x);
+				var tgoodinfopoolid = lastresult[x].tGoodInfoPoolId
+				laststageret +=	"<li>";
+				laststageret +=		"<dl>";
+				laststageret +=			"<dt><img src='" + urlImage+ "/" +lastresult[x].tGoodInfoPoolId+ "/" +imgw600+ "/" +lastresult[x].goodBigPic + "' alt=''/></dt>";
+				laststageret +=			"<dd>";
+				laststageret +=				"<h3>" + lastresult[x].goodName+ "</h3>";
+				laststageret +=			"</dd>";
+				laststageret +=		"</dl>";
+				laststageret +=		"<a href='addgoods1.html' class='added' virtualid="+ tgoodinfopoolid +">上架到小店</a>";
+				laststageret +=	"</li>";
+				console.log(tgoodinfopoolid);
+			}
+		}
+		laststagevirtual.append(laststageret);
+		scrollGood(tgoodinfopoolid);
+	} else {
+		showAlertMsg(resultJson._ReturnMsg);
+	}
+}

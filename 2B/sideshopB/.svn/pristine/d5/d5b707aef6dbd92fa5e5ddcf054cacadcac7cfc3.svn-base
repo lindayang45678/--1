@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>使用优惠券</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="fill.html" class="x-close">x</a>
+		<h1>使用现金券卡</h1>
+	</header>
+	<section class="container fill-coupon">
+		<div class="fill-coupon-tab"><span class="select-coupon-tab"><em class="tab-red">未使用<i class="color">(3)</i></em></span><span class="hand-coupon-tab"><em>激活</em></span></div>
+		<ul class="select-coupon">
+			<li class="clearfix coupon-off">
+				<div class="fl">全国批发券<i class="favorablecode">DB3242</i><br/>剩余<i class="coupon-surplus">100</i>次已用12次 </div><div class="fr">抵扣100元 <br/>满100元可用</div><div class="coupon-change"><i class="coupon-minus">&minus;</i><input type="tel" value="99" readonly="readonly"/><i class="coupon-plus">+</i></div>
+			</li>
+			<li class="clearfix  coupon-off coupon-on">
+				<div class="fl">全国批发券<i class="favorablecode">DB3242</i><br/>剩余<i class="coupon-surplus">100</i>次已用12次 </div><div class="fr">抵扣100元 <br/>满100元可用</div><div class="coupon-change"><i class="coupon-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="coupon-plus">+</i></div>
+			</li>
+			<li class="clearfix coupon-off-gray">
+				<div class="fl">全国批发券<i class="favorablecode">DB3242</i><br/>剩余<i class="coupon-surplus">100</i>次已用12次 </div><div class="fr">抵扣100元 <br/>满100元可用</div><div class="coupon-change"><i class="coupon-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="coupon-plus">+</i></div>
+			</li>
+		</ul>
+		<div class="fill-coupon-use hidden">
+			<div class="coupon-use-text">现金卷号：</div><input type="text" placeholder="请输入"/><div class="coupon-use-x hidden">&nbsp;</div>
+		</div>
+		<div class="wrap">
+			<p class="f-16 color test-ok hidden">验证通过可抵扣<i>20.00</i>元</p>
+			<p class="f-16 color test-fail hidden">验证失败，请确认输入券号是否有效</p>
+			<p class="coupon-pa">最大可用100元全国批发券，10元本地批发券；</p>
+			<a href="#" class="btn-red coupon-sure">使用</a>
+			<a href="#" class="btn-red coupon-test-btn hidden">验证</a>
+			<a href="#" class="btn-red coupon-finish-btn hidden">完成</a>
+			<a href="#" class="btn-red coupon-cancel-btn hidden">取消</a>
+		</div>
+	</section>
+	<div class="masker hidden"></div>
+	<div class="popup hidden"><p>很抱歉，您购物车的商品不可使用该<br/>金额的优惠券！</p><a href="javascript:;" class="btn-red popup-btn">确定</a></div>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<!--<script type="text/javascript" src="../../js/wholesale/coupon.js"></script>
+  -->
+</html>

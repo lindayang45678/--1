@@ -1,0 +1,79 @@
+package com.lakala.module.news.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.jboss.netty.handler.codec.http.HttpResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.news.service.NewsService;
+import com.lakala.module.news.vo.NewsItemOutput;
+import com.lakala.module.news.vo.NewsOutput;
+import com.lakala.util.ReturnMsg;
+
+@Controller
+@RequestMapping("/news")
+public class NewsController {
+	Logger logger = Logger.getLogger(NewsController.class);
+	
+	@Autowired
+	private NewsService newsservice;
+	
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getInfo",method = RequestMethod.POST)
+	public ObjectOutput<List<NewsOutput>> getInfo(HttpServletRequest request){
+		ObjectOutput<List<NewsOutput>> info = new ObjectOutput<List<NewsOutput>>();
+		try {
+//			input.setNewsid("1");
+			String newsId = request.getParameter("newsId");
+			if(newsId != null){
+			//Integer number = Integer.getInteger(request.get);
+			info = newsservice.getInfo(Integer.parseInt(newsId));
+			}
+			info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			info.set_ReturnMsg("消息成功");
+
+		} catch (LakalaException e) {
+            logger.error(e.getMessage());
+			
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		return info;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getconsultinfo",method = RequestMethod.POST)
+	public ObjectOutput<List<NewsItemOutput>> getConsultInfo(HttpServletRequest request,HttpServletResponse response){
+		String itemsid = request.getParameter("itemsid");
+		ObjectOutput<List<NewsItemOutput>> info = new ObjectOutput<List<NewsItemOutput>>();
+		try {
+			info = newsservice.getConsultInfo(5);
+			
+			info.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+			info.set_ReturnMsg("消息成功");
+		} catch (LakalaException e) {
+			logger.error(e.getMessage());
+			
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		return info;
+	}
+
+}

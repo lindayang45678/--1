@@ -1,0 +1,70 @@
+$(function(){
+	var sUrl = window.location.href;
+	var torderproviderid = getParamValueByName(sUrl, "torderproviderid");
+	var data = {ecnetno:netNo,torderproviderid:torderproviderid};//两级订单详情
+	var resultJson = ajaxCommon(urlOrderView,data);
+	resultJson = convertNullToEmpty(resultJson);
+	var _ReturnDataInfo = resultJson._ReturnData.orderproviderqueryinfo;//订单信息
+	var orderitemslist = _ReturnDataInfo.orderitemslist;//商品列表
+	var actualamount = (_ReturnDataInfo.actualamount+_ReturnDataInfo.logiscalfee)-_ReturnDataInfo.favorrulemoney;//实付金额
+	var orderdatequeue = resultJson._ReturnData.orderproviderqueryinfo.orderdatequeue;//时间轴
+	if(resultJson._ReturnCode === returnCodeSuccess){
+		$(".goods-receipt strong").text(_ReturnDataInfo.cusname);//收货人
+		$(".goods-receipt .fr").text(_ReturnDataInfo.custelno);//收货人电话
+		$(".goods-receipt em").text(_ReturnDataInfo.addressfull);//收货人地址
+		$(".order-status span em").text(_ReturnDataInfo.torderproviderid);//订单号
+		//订单状态时间轴
+		var statuscontent = $(".order-status ul");
+		var ret = "";
+		if(orderdatequeue.qssj != ""){
+			ret += "<li>"
+			ret += "<s></s>"
+			ret += "<p><i>"+ msgTimelineSign +"</i><br/><span>"+ getLocalTime(orderdatequeue.qssj) +"</span></p>";
+			ret += "</li>";
+		}
+		if(orderdatequeue.fhsj != ""){
+			ret += "<li>"
+			ret += "<s></s>"
+			ret += "<p><i>"+ msgTimelineShipped +"</i><br/><span>"+ getLocalTime(orderdatequeue.fhsj) +"</span></p>";
+			ret += "</li>";
+		}
+		if(orderdatequeue.zfsj != ""){
+			ret += "<li>"
+			ret += "<s></s>"
+			ret += "<p><i>"+ msgTimelinePaymented +"</i><br/><span>"+ getLocalTime(orderdatequeue.zfsj) +"</span></p>";
+			ret += "</li>";
+		}
+		if(orderdatequeue.xdsj != ""){
+			ret += "<li>"
+			ret += "<s></s>"
+			ret += "<p><i>"+ msgTimelineSubmited +"</i><br/><span>"+ getLocalTime(orderdatequeue.xdsj) +"</span></p>";
+			ret += "</li>";
+		}
+		statuscontent.prepend(ret);
+		$(".order-status ul li:first-child").addClass("active");
+		$(".orders-list h3 span").text(_ReturnDataInfo.providername);//供应商名称
+		$(".orders-list .fr s").text(_ReturnDataInfo.clientservicetel);//供应商售后电话
+		//商品信息列表
+		var goodscontent = $(".orders-list li");
+		var goodsret ="";
+		if(orderitemslist.length > 0){
+			for(var j = 0; j < orderitemslist.length; j++) {
+				var goodbigpic = orderitemslist[j].goodbigpic;//商品图片
+				var goodsid = orderitemslist[j].goodsid;//商品id
+				goodsret += "<dl class='goods'>";
+				goodsret += "<dt><img src='" +urlImage + "/" + goodsid + "/" + imgw100 + "/" + goodbigpic.split(";")[0] + "' /></dt>";
+				goodsret += "<dd>";
+				goodsret += "<span class='title'><i class='c-black'>" + orderitemslist[j].goodsname + "</i><u class='nobr'>" + orderitemslist[j].norms + "</u></span>";
+				goodsret += "<span class='total'><i class='c-black'>¥" + orderitemslist[j].goodssaleprice + "</i><u>x" + orderitemslist[j].goodscount + "</u></span>";
+				goodsret += "</dd>";
+				goodsret += "</dl>"; 
+			}
+			goodscontent.append(goodsret);
+		}
+		$(".fee p:nth-child(1) span").html("-¥"+_ReturnDataInfo.favorrulemoney);//优惠金额
+		$(".fee p:nth-child(2) span").html("¥"+_ReturnDataInfo.logiscalfee);//运费
+		$(".fee p:nth-child(3) span").html("¥"+actualamount);//实付金额	 
+	} else {
+		showAlertMsg(resultJson._ReturnMsg);
+	}
+});

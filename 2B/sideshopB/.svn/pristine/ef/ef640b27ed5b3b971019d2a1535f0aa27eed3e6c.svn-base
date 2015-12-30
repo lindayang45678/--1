@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>批发进货</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body class="body-white">
+	<header>
+		<a href="../../html/homepage/index.html" class="back">返回</a>
+		<h1>批发进货</h1>
+		<a href="searchsuccess.html" class="head-right wholesale-search">&nbsp;</a>
+	</header>
+	<section class="container wholesale-wrap">
+		<div class="wholesale clearfix">
+			<div id="use-tips"><img src="../../images/tishi-jiajianhao.png"/></div>
+			<div id="wholesale-l">
+				<div id="menu-l">
+					<ul class="left-l1">
+						<li><a href="#">全国批发<i></i></a></li>
+						<li>
+							<a href="#">福建批发福建批发福建批发<i></i></a>
+							<ul class="left-l2 hidden">
+								<li>
+									<a href="#" class="white">21ashdahd阿红说的话<i class="sj-redr"></i></a>
+									<ul class="left-l3 hidden">
+										<li><a href="#">31<i></i></a>
+											<ul class="left-l4 hidden">
+												<li><a href="#">41<i></i></a></li>
+												<li><a href="#">42<i></i></a></li>
+												<li><a href="#">43<i></i></a></li>
+											</ul>
+										</li>
+										<li><a href="#">32<i></i></a></li>
+										<li><a href="#">33<i></i></a></li>
+									</ul>
+								</li>
+								<li><a href="#">22<i></i></a></li>
+								<li><a href="#">23<i></i></a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="#">广东批发<i></i></a>
+							<ul class="left-l2 hidden">
+								<li>
+									<a href="#" class="white">21ashdahd阿红说的话<i class="sj-redr"></i></a>
+									<ul class="left-l3 hidden">
+										<li><a href="#">31<i></i></a>
+											<ul class="left-l4 hidden">
+												<li><a href="#">41<i></i></a></li>
+												<li><a href="#">42<i></i></a></li>
+												<li><a href="#">43<i></i></a></li>
+											</ul>
+										</li>
+										<li><a href="#">32<i></i></a></li>
+										<li><a href="#">33<i></i></a></li>
+									</ul>
+								</li>
+								<li><a href="#">22<i></i></a></li>
+								<li><a href="#">23<i></i></a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div id="wholesale-r">
+				<ul class="wholesale-goods">
+					<li>
+         			    <a href="prodetail.html"><img src="../../images/example240x240.png"/><i></i></a>
+						<h3>单人床单40支纯棉斜纹加大床单</h3>
+						<div class="price-box"><i class="salePrice">¥89.00</i><del>¥100.00</del></div>
+						<div class="buttom-jiajian">
+							<a href="javascript:;" class="jiajian jia">+</a>
+							<input type="tel" class="num" value="12"/>
+							<a href="javascript:;" class="jiajian jian">&minus;</a>
+						</div>
+						<em class="number hidden">0</em>
+					</li>
+					<li>
+         			    <a href="prodetail.html"><img src="../../images/example240x240.png"/><i></i></a>
+						<h3>单人床单40支纯棉斜纹加大床单</h3>
+						<div class="price-box"><i class="salePrice">¥89.00</i><del>¥100.00</del></div>   
+						<div class="buttom-jiajian">
+							<a href="javascript:;" class="jiajian jia">+</a>
+							<input type="tel" class="num" value="12"/>
+							<a href="javascript:;" class="jiajian jian">&minus;</a>
+						</div>
+						<em class="number hidden">0</em>
+					</li>
+				</ul>
+			</div>
+			<div id="wholesale-foot" class="clearfix">
+				<i class="goodscart">436</i>
+				<i class="goodscart-total">共计436件</i>
+				<i class="goodscart-price">￥1284.00</i>
+				<a href="fill.html" class="gopay">去结算</a>
+			</div>	
+		</div>
+	</section>
+	<div class="masker hidden"></div>
+	<div id="sku" class="hidden">
+		<div class="sku-wrap">
+			<div class="sku-detail"><i>颜色：</i><br/><em class="sku-red">红色</em><em>红色</em></div>
+			<div class="sku-detail"><i>尺寸：</i><br/><em>M</em><em>Xl</em><em class="sku-red">XXl</em><em>XXXl</em></div>
+		</div>
+		<div class="sku-a"><i class="stock">库存：<em>123456</em>件</i><i class="sku-solded">已售：<em>145226</em></i></div>
+		<div class="sku-a"><i class="sku-sale">拉卡拉价：<em class="color">￥1284.00</em></i><i class="sku-market">批发市场价：<em>￥1284.00</em></i></div>
+		<div class="sku-b"><em>购买数量：</em><i class="sku-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="sku-plus">+</i></div>
+		<a href="javascript:;" class="sku-cancel fl">取消</a>
+		<a href="javascript:;" class="sku-sure fr">加入购物车</a>
+	</div>	
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/lib/iscroll.min.js"></script>
+<script type="text/javascript" src="../../js/wholesale/index.js"></script>
+</html>

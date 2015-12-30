@@ -1,0 +1,359 @@
+package com.lakala.model.user;
+
+import java.util.Date;
+
+public class Tmember {
+    private String membername;
+
+    private String memberpwd;
+
+    private Integer source;
+
+    private Integer membertype;
+
+    private String provincecode;
+
+    private String provincename;
+
+    private String citycode;
+
+    private String cityname;
+
+    private String areacode;
+
+    private String areaname;
+
+    private String address;
+
+    private String psam;
+
+    private String netno;
+
+    private String branchcorp;
+
+    private Integer deploytype;
+
+    private String sourcename;
+
+    private String name;
+
+    private String nickname;
+
+    private String sex;
+
+    private Short age;
+
+    private Date birthday;
+
+    private String email;
+
+    private String acountno;
+
+    private String acountname;
+
+    private String bankname;
+
+    private Date createddate;
+
+    private Date updateddate;
+
+    private Long groupid;
+    
+    private Integer bizType;
+    
+    private String terminalCode;
+    
+    //店铺图片
+    private String shopPic;
+    //身份证号
+    private String identityNo;
+    //身份证正面
+    private String identityFront; 
+    //身份证反面
+    private String identityReverse; 
+    //营业执照
+    private String businessLicence;
+
+    public String getMembername() {
+        return membername;
+    }
+
+    public void setMembername(String membername) {
+        this.membername = membername;
+    }
+
+    public String getMemberpwd() {
+        return memberpwd;
+    }
+
+    public void setMemberpwd(String memberpwd) {
+        this.memberpwd = memberpwd;
+    }
+
+    public Integer getSource() {
+        return source;
+    }
+
+    public void setSource(Integer source) {
+        this.source = source;
+    }
+
+    public Integer getMembertype() {
+        return membertype;
+    }
+
+    public void setMembertype(Integer membertype) {
+        this.membertype = membertype;
+    }
+
+    public String getProvincecode() {
+        return provincecode;
+    }
+
+    public void setProvincecode(String provincecode) {
+        this.provincecode = provincecode;
+    }
+
+    public String getProvincename() {
+        return provincename;
+    }
+
+    public void setProvincename(String provincename) {
+        this.provincename = provincename;
+    }
+
+    public String getCitycode() {
+        return citycode;
+    }
+
+    public void setCitycode(String citycode) {
+        this.citycode = citycode;
+    }
+
+    public String getCityname() {
+        return cityname;
+    }
+
+    public void setCityname(String cityname) {
+        this.cityname = cityname;
+    }
+
+    public String getAreacode() {
+        return areacode;
+    }
+
+    public void setAreacode(String areacode) {
+        this.areacode = areacode;
+    }
+
+    public String getAreaname() {
+        return areaname;
+    }
+
+    public void setAreaname(String areaname) {
+        this.areaname = areaname;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPsam() {
+        return psam;
+    }
+
+    public void setPsam(String psam) {
+        this.psam = psam;
+    }
+
+    public String getNetno() {
+        return netno;
+    }
+
+    public void setNetno(String netno) {
+        this.netno = netno;
+    }
+
+    public String getBranchcorp() {
+        return branchcorp;
+    }
+
+    public void setBranchcorp(String branchcorp) {
+        this.branchcorp = branchcorp;
+    }
+
+    public Integer getDeploytype() {
+        return deploytype;
+    }
+
+    public void setDeploytype(Integer deploytype) {
+        this.deploytype = deploytype;
+    }
+
+    public String getSourcename() {
+        return sourcename;
+    }
+
+    public void setSourcename(String sourcename) {
+        this.sourcename = sourcename;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Short getAge() {
+        return age;
+    }
+
+    public void setAge(Short age) {
+        this.age = age;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAcountno() {
+        return acountno;
+    }
+
+    public void setAcountno(String acountno) {
+        this.acountno = acountno;
+    }
+
+    public String getAcountname() {
+        return acountname;
+    }
+
+    public void setAcountname(String acountname) {
+        this.acountname = acountname;
+    }
+
+    public String getBankname() {
+        return bankname;
+    }
+
+    public void setBankname(String bankname) {
+        this.bankname = bankname;
+    }
+
+    public Date getCreateddate() {
+        return createddate;
+    }
+
+    public void setCreateddate(Date createddate) {
+        this.createddate = createddate;
+    }
+
+    public Date getUpdateddate() {
+        return updateddate;
+    }
+
+    public void setUpdateddate(Date updateddate) {
+        this.updateddate = updateddate;
+    }
+
+    public Long getGroupid() {
+        return groupid;
+    }
+
+    public void setGroupid(Long groupid) {
+        this.groupid = groupid;
+    }
+
+	public Integer getBizType() {
+		return bizType;
+	}
+
+	public void setBizType(Integer bizType) {
+		this.bizType = bizType;
+	}
+
+	public String getTerminalCode() {
+		return terminalCode;
+	}
+
+	public void setTerminalCode(String terminalCode) {
+		this.terminalCode = terminalCode;
+	}
+
+	public String getShopPic() {
+		return shopPic;
+	}
+
+	public void setShopPic(String shopPic) {
+		this.shopPic = shopPic;
+	}
+
+	public String getIdentityNo() {
+		return identityNo;
+	}
+
+	public void setIdentityNo(String identityNo) {
+		this.identityNo = identityNo;
+	}
+
+	public String getIdentityFront() {
+		return identityFront;
+	}
+
+	public void setIdentityFront(String identityFront) {
+		this.identityFront = identityFront;
+	}
+
+	public String getIdentityReverse() {
+		return identityReverse;
+	}
+
+	public void setIdentityReverse(String identityReverse) {
+		this.identityReverse = identityReverse;
+	}
+
+	public String getBusinessLicence() {
+		return businessLicence;
+	}
+
+	public void setBusinessLicence(String businessLicence) {
+		this.businessLicence = businessLicence;
+	}
+	
+	
+	
+}

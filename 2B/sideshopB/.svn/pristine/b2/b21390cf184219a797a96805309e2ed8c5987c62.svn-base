@@ -1,0 +1,41 @@
+package com.lakala.module.coupon.vo;
+
+import java.util.List;
+
+import com.lakala.model.coupon.Coupon;
+
+public class CouponOutput {
+	
+	/** 验证令牌 */
+	private String token;
+	
+	private List<Coupon> couponList;
+	
+	private long count;
+
+	
+	public long getCount() {
+		return count;
+	}
+
+	public void setCount(long count) {
+		this.count = count;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public List<Coupon> getCouponList() {
+		return couponList;
+	}
+
+	public void setCouponList(List<Coupon> couponList) {
+		this.couponList = couponList;
+	}
+	
+}

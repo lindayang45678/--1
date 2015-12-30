@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>收益查询</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>	
+		<a href="search.html" class="back"></a>	
+		<h1>收益查询</h1>
+		<a href="search.html" class="head-right wholesale-search">&nbsp;</a>
+	</header>
+	<section class="wrap">
+		<div class="incomes">
+			<div class="noresult-img"></div>
+			<p class="noresult-font nobr">很抱歉，未搜索到你要查找的订单</p>
+			<p class="noresult-font nobr">请重新选择查询条件！</p>
+		</div>
+	</section>
+	
+	<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js"></script>
+	<script type="text/javascript" src="../../js/common/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+package com.lakala.util;
+/**
+ * 业务返回编码
+ * @author ph.li
+ *
+ */
+public class ReturnMsg {
+
+
+	/** 返回成功编码 */
+	public final static String CODE_SUCCESS = "000000";
+	/** 内部错误  */
+	public final static String CODE_ERR_DEFAULT = "000001";
+	/** 数据检验不通过 */
+	public final static String CODE_ERR_000002 = "000002";
+
+    /** 批发进货验证及数据提示 */
+    public final static String CODE_ERR_000003 = "000003";
+
+	/** 系统出错缺省消息提示 */
+	public final static String MSG_ERR_DEFAULT = "系统忙，请稍后再试";
+
+	public final static String MSG_SUCCESS_DEFAULT="SUCCESS";
+	
+	public final static String MSG_PARAMS_ERROR="参数不合法";
+	public final static String MSG_COUPON_ACTIVE_OK="激活成功";
+	public final static String MSG_OUPON_ACTIVE_ERROR="激活失败";
+	
+	
+	/** 用户中心-返回Code */
+	/** 很抱歉，该手机号未开通电商业务，请联系拉卡拉客户经理开通！ */
+	public final static String CODE_USER_100001 = "100001";
+	/** 很抱歉，该手机号不是店主手机号，请检查后重新输入！ */
+	public final static String CODE_USER_100002 = "100002";
+	/** 请先激活！ */
+	public final static String CODE_USER_100003 = "100003";
+	/** 密码错误！ */
+	public final static String CODE_USER_100004 = "100004";
+	/** 该手机号已经登录！ */
+	public final static String CODE_USER_100005 = "100005";
+	/** 密码必须由数字或者字母或者数字字母的组合，且长度必须大于等于6小于等于20! */
+	public final static String CODE_USER_100006 = "100006";
+	/** 很抱歉，您输入的验证码错误，请确认后重新输入！ */
+	public final static String CODE_USER_100007 = "100007";
+	/** 登录成功！ */
+	public final static String CODE_USER_100008 = "100008";
+	/** 激活成功！ */
+	public final static String CODE_USER_100009 = "100009";
+	/** 登出成功！ */
+	public final static String CODE_USER_100010 = "100010";
+	/** webservice服务出错了！ */
+	public final static String CODE_USER_100011 = "100011";
+	/** 更新密码成功 */
+	public final static String CODE_USER_100012 = "100012";
+	/** 允许激活-激活成功，并可设置登录密码 */
+	public final static String CODE_USER_100013 = "100013";
+	/** 该手机号已激活，无需重复激活 */
+	public final static String CODE_USER_100014 = "100014";
+	/** 恭喜您，激活成功！     您可用拉卡拉的账号密码登录！ */
+	public final static String CODE_USER_100015 = "100015";
+	/** 返回密码成功 */
+	public final static String CODE_USER_100016 = "100016";
+	/** 拒绝访问 */
+	public final static String CODE_USER_100017 = "100017";
+}

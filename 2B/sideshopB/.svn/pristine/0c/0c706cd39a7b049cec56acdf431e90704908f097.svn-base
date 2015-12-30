@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>小店首页</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="format-detection" content="email=no" />
+<link rel="stylesheet" href="../../css/master.css"/>
+</head>
+
+<body class="bge2">
+	<header>
+		<a href="../homepage/index.html" class="back"></a>
+  		<h1>我的小店</h1>
+  		<a href="editshop.html" id="shop" class="head-right">编辑</a>
+	</header>
+    <section class="container">
+    	<div class="shopindex-part1">
+        	<a href="editshop.html" class="index-logo"></a>
+            <div>
+            	<h2><a href="editshop.html">店铺名称-朝夕</a></h2>
+                <span id="share">分享</span>
+            </div>
+            <a href="editshop.html" class="index-link"></a>
+        </div>
+        <div class="shopindex-part2">
+        	<div class="shopindex-list">
+            	<a href="selfgoodslist.html">
+                	<h3>管理本店所有商品</h3>
+                    <em></em>
+                </a>
+            </div>
+            <div class="add-goods">
+            	<a href="addgoods.html"><img src="../../images/addgoods-icon.png" alt=""/></a>
+                <p>您小区周边的用户都上网购物了！</br>快来添加商品吧~</p>
+            </div>
+            <section class="foot">
+            	<div class="shopindex-list list2">
+            		<a href="../wholesale/index.html">
+                		<h3>没有货源？丰富大牌低价商品任你选</h3>
+                        <em></em>
+                	</a>
+            	</div>
+            	<div class="shopindex-list list3">
+            		<a href="../accounts/shop.html">
+                		<h3>查看我的其他小店</h3>
+                        <em></em>
+                	</a>
+            	</div>
+            </section>
+        </div> 
+    </section>
+    <i id="shop"></i>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" id="platJs"></script>
+<script type="text/javascript" src="cordova_plugins.js"></script>
+<script type="text/javascript" src="../../js/shops/index.js"></script>
+<script type="text/javascript" src="../../js/shops/editshop.js"></script>
+</html>

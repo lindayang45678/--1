@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.goods.GoodsPublishForKDBOfSKUO2OMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.base.model.GoodsPublishForKDBOfSKUO2O" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="goodsId" property="goodsid" jdbcType="INTEGER" />
+    <result column="skuId" property="skuid" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="batchBuy" property="batchbuy" jdbcType="VARCHAR" />
+    <result column="skuStatus" property="skustatus" jdbcType="INTEGER" />
+    <result column="salePrice" property="saleprice" jdbcType="DOUBLE" />
+    <result column="store" property="store" jdbcType="DOUBLE" />
+    <result column="soldStore" property="soldStore" jdbcType="DOUBLE" />
+    <result column="soldStore" property="soldstore" jdbcType="DOUBLE" />
+    <result column="publishPerson" property="publishperson" jdbcType="VARCHAR" />
+    <result column="publishDate" property="publishdate" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="publishTiming" property="publishtiming" jdbcType="TIMESTAMP" />
+    <result column="termConMD5" property="termconmd5" jdbcType="VARCHAR" />
+    <result column="publishStatus" property="publishstatus" jdbcType="INTEGER" />
+    <result column="terminalCondition" property="terminalcondition" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, goodsId, skuId,sort,batchBuy, skuStatus, salePrice, store, soldStore, publishPerson, publishDate,
+    remark, publishTiming, termConMD5, publishStatus
+  </sql>
+  <sql id="Blob_Column_List" >
+    terminalCondition
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tgoods_publish_kdb_sku_o2o
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="selectByGoodsID" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      select 
+      <include refid="Base_Column_List" />
+      ,
+      <include refid="Blob_Column_List" />
+      from tgoods_publish_kdb_sku_o2o
+      where goodsId = #{_parameter}
+  </select>
+  
+  
+  <select id="getCountByGoodsID" parameterType="java.lang.Integer" resultType="java.lang.Long">
+      select count(id) 
+      from tgoods_publish_kdb_sku_o2o
+      where goodsId = #{_parameter} 
+  </select>
+  
+  
+</mapper>

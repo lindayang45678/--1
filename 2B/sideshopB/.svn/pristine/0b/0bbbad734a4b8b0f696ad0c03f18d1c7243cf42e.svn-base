@@ -1,0 +1,32 @@
+package com.lakala.module.order.vo;
+
+import com.lakala.module.comm.ObjectInput;
+
+public class OrderDetailInput extends ObjectInput{
+	/**
+	 * @author: yhg
+	 * @project:sideshopB
+	 * @time: 2015年3月5日 上午11:25:39
+	 * @todo: TODO
+	 */
+	private String siteno;   //网点编号
+	
+	private String torderproviderid;
+
+	public String getSiteno() {
+		return siteno;
+	}
+
+	public void setSiteno(String siteno) {
+		this.siteno = siteno;
+	}
+
+	public String getTorderproviderid() {
+		return torderproviderid;
+	}
+
+	public void setTorderproviderid(String torderproviderid) {
+		this.torderproviderid = torderproviderid;
+	}
+	
+}

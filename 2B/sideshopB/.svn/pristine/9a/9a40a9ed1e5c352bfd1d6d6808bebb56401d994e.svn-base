@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lakala.mapper.r.news.NewsMapper" >
+  <resultMap id="BaseResultMap" type="com.lakala.module.news.vo.NewsOutput" >
+    <id column="newsid" property="newsid" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="publishchannels" property="publishchannels" jdbcType="INTEGER" />
+    <result column="publishtype" property="publishtype" jdbcType="INTEGER" />
+    <result column="creatorid" property="creatorid" jdbcType="INTEGER" />
+    <result column="creatorname" property="creatorname" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="senderid" property="senderid" jdbcType="INTEGER" />
+    <result column="sendername" property="sendername" jdbcType="VARCHAR" />
+    <result column="sendtime" property="sendtime" jdbcType="TIMESTAMP" />
+    <result column="issend" property="issend" jdbcType="INTEGER" />
+    <result column="newstype" jdbcType="INTEGER" property="newstype" />
+      <collection property="newsitem" ofType="com.lakala.module.news.vo.NewsItemOutput" column="newsid"><!-- 注意此处的group_id是student表的外键 -->  
+            <id column="itemsid" property="itemsid"/>  
+            <result column="childtitle" property="childtitle"/>
+            <result column="newsid" property="newsid"/> 
+            <result column="picture" property="picture"/> 
+            <result column="content" property="content"/>
+             <result column="type" property="type"/> 
+        </collection>
+  </resultMap>
+  
+  <resultMap type="com.lakala.module.news.vo.NewsItemOutput" id="ChildResultMap">
+    <id column="itemsid" property="itemsid" jdbcType="INTEGER" />
+    <result column="childtitle" property="childtitle" jdbcType="VARCHAR" />
+    <result column="picture" property="picture" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="VARCHAR" />
+  </resultMap>
+  
+<select id="getInfo" parameterType="java.lang.Integer" resultMap="ChildResultMap">  
+       select a.itemsid,a.title as childtitle,a.picture,a.content,a.type, date_format(b.sendtime,'%c月%d日 %H:%i:%s') as date from tnewsitem a inner join tnews b on a.newsid = b.newsid where a.newsid = #{newsid} order by a.sortid 
+</select> 
+
+
+<select id="getConsultInfo" parameterType="java.lang.Integer" resultMap="ChildResultMap">  
+       select a.title as childtitle,a.itemsid,a.picture,a.content,a.type,a.newsid from tnewsitem a where itemsid = #{itemsid}
+</select> 
+  
+  
+  
+  
+  
+  
+</mapper>

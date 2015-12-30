@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>填写收货人信息</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="index.html" class="back">返回</a>
+		<h1>填写收货人信息</h1>
+	</header>
+	<section class="container fill">
+		<ul class="fill-head">
+			<li class="f-14">
+				<a href="address.html" class="clearfix">
+					<i>巫龙飞 </i>&nbsp;&nbsp;<i>13522428283</i><br/>
+					<i>北京 &nbsp;北京市&nbsp;海淀区海淀区海淀区海淀区</i><br/>
+					<i>北京海淀区中区中关关关村金额大厦8层</i><br/>
+					<i class="r-arrow"></i>
+				</a>
+			</li>
+			<li>
+				<a href="paytype.html" class="clearfix">
+					<em>付款方式</em><i class="btn-circle c-black f-14 fr">拉卡拉收款宝</i><i class="r-arrow"></i>
+				</a>
+			</li>
+			<li>
+				<a href="coupon.html" class="clearfix">
+					<em>现金券</em><i class="fr c-black f-14">请选择</i><i class="r-arrow"></i>
+				</a>
+				<i class="fill-use-coupons hidden"><em>现金券</em><i class="fr c-black f-14">暂无</i></i>
+			</li>
+			<li>
+				<a href="javascript:;" class="clearfix">
+					<em>运费</em><i class="fill-freight c-black f-14 fr">¥99.00</i>
+				</a>
+			</li>
+			<li>
+				<a href="invoice.html" class="clearfix">
+					<em class="fill-invoicem">发票</em><i class="fill-invoice fr">不需要</i><i class="r-arrow"></i>
+				</a>
+				
+			</li>
+		</ul>
+		<div class="fill-content">
+			<dl>
+				<dt>所属供应商：拉卡拉电商公司 </dt>
+				<dd class="clearfix">
+					<div class="fill-pic"><img src="../../images/example240x240.png" /></div>
+					<div class="fill-close"></div>
+					<div class="fill-pro-title">雅诗兰黛洗发水</div>
+					<div class="color">¥99.00</div>
+					<div class="fill-sku"><i>颜色：红色</i><i>颜色：红色</i></div>
+					<div class="fill-change"><i class="fill-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="fill-plus">+</i></div>
+				</dd>
+				<dd class="clearfix">
+					<div class="fill-pic"><img src="../../images/example240x240.png" /></div>
+					<div class="fill-close"></div>
+					<div class="fill-pro-title">雅诗兰黛洗发水</div>
+					<div class="color">¥99.00</div>
+					<div class="fill-sku"><i>颜色：红色</i><i>颜色：红色</i></div>
+					<div class="fill-change"><i class="fill-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="fill-plus">+</i></div>
+				</dd>
+			</dl>
+			<dl>
+				<dt>所属供应商：拉卡拉电商公司 </dt>
+				<dd class="clearfix">
+					<div class="fill-pic"><img src="../../images/example240x240.png" /></div>
+					<div class="fill-close"></div>
+					<div class="fill-pro-title">雅诗兰黛洗发水雅诗兰黛洗发水雅诗兰黛洗发水雅诗兰黛洗发水</div>
+					<div class="color">¥99.00</div>
+					<div class="fill-sku"><i>颜色：红色</i><i>颜色：红色</i></div>
+					<div class="fill-change"><i class="fill-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="fill-plus">+</i></div>
+				</dd>
+				<dd class="clearfix">
+					<div class="fill-pic"><img src="../../images/example240x240.png" /></div>
+					<div class="fill-close"></div>
+					<div class="fill-pro-title">雅诗兰黛洗发水</div>
+					<div class="color">¥99.00</div>
+					<div class="fill-sku"><i>颜色：红色</i><i>颜色：红色</i></div>
+					<div class="fill-change"><i class="fill-minus">&minus;</i><input type="tel" value="1" readonly="readonly"/><i class="fill-plus">+</i></div>
+				</dd>
+			</dl>
+		</div>
+		
+		<div id="wholesale-foot" class="clearfix">
+			<i class="goodscart">436</i>
+			<div><i class="fill-total">商品金额￥490.00 - 优惠￥10.00 +  运费￥10.00 = 应付<em class="amount-payable">￥490.00</em></i><i class="fill-middle"></i></div>
+			<a href="#" class="gopay">去结算</a>
+		</div>	
+	</section>
+	<div class="masker hidden"></div>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/wholesale/fill.js"></script>
+</html>

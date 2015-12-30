@@ -1,0 +1,607 @@
+package com.lakala.module.user.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.model.user.Tmedia;
+import com.lakala.model.user.Tmember;
+import com.lakala.model.user.Tverificationcode;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.SmsVerificationCodeService;
+import com.lakala.module.user.service.UserService;
+import com.lakala.module.user.vo.UserInfoOutput;
+import com.lakala.module.user.vo.UserLoginInput;
+import com.lakala.module.user.vo.UserRegisterInput;
+import com.lakala.util.RSA;
+import com.lakala.util.ReturnMsg;
+import com.lakala.util.TokenUtil;
+import com.lakala.vo.LoginStatusEnum;
+
+/**
+ * 用户服务接口实现
+ * @author ph.li
+ *
+ */
+@Service("UserServiceBean")
+public class UserServiceImpl implements UserService{
+	
+	private static final String SYSTEM_CODE = "LKL_MICO_MER_U";
+	
+	@Autowired
+	private com.lakala.mapper.r.user.TmemberMapper tmemberMapper_R;
+	
+	@Autowired
+	private com.lakala.mapper.w.user.TmemberMapper tmemberMapper_W;
+	
+	@Autowired
+	private SmsVerificationCodeService smsService_R;
+	
+	@Autowired
+	private SmsVerificationCodeService smsService_W;
+	
+	@Autowired
+	private com.lakala.remote.UserWebService userWebService;
+	
+	
+	/*@Autowired
+	private TokenService tokenService;*/
+	
+
+	/**
+	 * 小B用户登录验证业务
+	 * @param user @see UserLoginInput
+	 * @return @see ObjectOutput
+	 * @throws LakalaException
+	 */
+	@Override
+	public ObjectOutput<UserInfoOutput> login(UserLoginInput user) throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		
+		//debug
+		System.out.println(user.getMobile());
+
+		//查询网点表，检查是否是店主
+		List<Tmedia> mediaStatistics = 
+				tmemberMapper_R.selectSdbMediaByCriteria(user.getMobile());
+		if (null != mediaStatistics && mediaStatistics.size() > 0
+				&& user.getMobile().equals(mediaStatistics.get(0).getMobile())) {
+			
+			//查询用户表，检查用户是否注册、是否已经登录
+			Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+			if (null != tmember) {
+				//检查用户是否已经登录(用户登出的时候，清空终端编码)                                     次逻辑删除掉，暂时不用单手机登录
+//				if (null == tmember.getTerminalCode() || "".equals(tmember.getTerminalCode())) {
+				Long uid = tmember.getGroupid();
+				uid = (uid == null ? 0L : uid);
+				if (Long.compare(uid, 0L) > 0) {
+					try {
+						//RSA解密
+						String plainpwd = RSA.decrypt(user.getPwd());
+						//访问集团中心验证
+						LoginStatusEnum status = userWebService.authentication(user.getMobile(), plainpwd, SYSTEM_CODE);
+						if (status == LoginStatusEnum.LOGINSUCCESS) {
+							//返回登录信息
+							UserInfoOutput info = new UserInfoOutput();
+							info.setUserName(tmember.getMembername());
+							/*String token = TokenUtil.getToken(user.getMobile(), user.getTerminalCode());
+							if(token == null){
+								//处理异常情况
+							}
+							info.setToken(token);
+							tokenService.saveToken(user.getMobile(), 'B', token);*/
+							info.setToken(TokenUtil.getToken(user.getMobile()));
+							info.setUserType(tmember.getMembertype());
+							info.setBizType(tmember.getBizType());
+							
+							//更新终端编号
+							map.put("mobile", user.getMobile());
+							map.put("terminalCode", user.getTerminalCode());
+							map.put("terminalType", user.getTerminalType());
+							int rtn = tmemberMapper_W.updateTmemberTCodeById(map);
+							if (rtn > 0) {
+								String enpwd = RSA.encryptMTS(plainpwd);
+								map.put("mobile", user.getMobile());
+								map.put("pwd", enpwd);
+								tmemberMapper_W.updateTmemberPwdById(map); //每次登录更新数据库密码
+								
+								//返回数据
+								info.setEcNetNo(mediaStatistics.get(0).getEcNetNo()); //电商网点编号
+								info.setPsam(mediaStatistics.get(0).getPsam()); //PSAM
+								data.set_ReturnMsg("成功登录!");
+								data.set_ReturnCode(ReturnMsg.CODE_USER_100008);
+								data.set_ReturnData(info);
+							}
+						} else if (status == LoginStatusEnum.USER_NOTEXISTS) {
+							data.set_ReturnMsg("请先激活!");
+							data.set_ReturnCode(ReturnMsg.CODE_USER_100003);
+						} else if (status == LoginStatusEnum.PASSWORD_ERROR) {
+							data.set_ReturnMsg("密码错误!");
+							data.set_ReturnCode(ReturnMsg.CODE_USER_100004);
+						} else if (status == LoginStatusEnum.ACCESSDENY) {
+							data.set_ReturnMsg("拒绝访问!");
+							data.set_ReturnCode(ReturnMsg.CODE_USER_100017);
+						}
+					} catch (Exception ex) {
+						data.set_ReturnMsg("webservice服务出错了!");
+						data.set_ReturnCode(ReturnMsg.CODE_USER_100011);
+					}
+				} else {
+					data.set_ReturnMsg("请先激活!");
+					data.set_ReturnCode(ReturnMsg.CODE_USER_100003);
+				}
+//				} else {
+//					data.set_ReturnMsg("该手机号已经登录！");
+//					data.set_ReturnCode(ReturnMsg.CODE_USER_100005);
+//				}
+			} else {
+				data.set_ReturnMsg("很抱歉，该手机号不是店主手机号，请检查后重新输入!");
+				data.set_ReturnCode(ReturnMsg.CODE_USER_100002);
+			}
+		} else {
+			data.set_ReturnMsg("很抱歉，该手机号未开通电商业务，请联系拉卡拉客户经理开通！");
+			data.set_ReturnCode(ReturnMsg.CODE_USER_100001);
+		}
+		
+		return data;
+	}
+
+	/**
+	 * 小B用户获取用户密码
+	 * @param user @see UserLoginInput
+	 * @return @see ObjectOutput
+	 * @throws LakalaException
+	 */
+	@Override
+	public ObjectOutput<UserInfoOutput> getPassword(UserLoginInput user)
+			throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		//查询用户表，检查用户是否注册(用户表字段groupID是否有值)
+		Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+		if (null != tmember) {
+			//返回登录信息
+			UserInfoOutput info = new UserInfoOutput();
+			info.setUserName(tmember.getMembername());
+			info.setPwd(tmember.getMemberpwd());
+			data.set_ReturnMsg("返回密码成功!");
+			data.set_ReturnCode(ReturnMsg.CODE_USER_100016);
+			data.set_ReturnData(info);
+		} else {
+			data.set_ReturnMsg("很抱歉，该手机号不是店主手机号，请检查后重新输入!");
+			data.set_ReturnCode(ReturnMsg.CODE_USER_100002);
+		}
+		
+		return data;
+	}
+	
+	/**
+	 * 小B用户登出验证业务
+	 * @param user @see UserLoginInput
+	 * @return @see ObjectOutput
+	 * @throws LakalaException
+	 */
+	@Override
+	public ObjectOutput<UserInfoOutput> logout(UserLoginInput user) throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		
+		//debug
+		System.out.println("logout->mobile:" + user.getMobile());
+		
+		//更新终端编号
+		map.put("mobile", user.getMobile());
+		map.put("terminalCode", "");
+		map.put("terminalType", "0");
+		int rtn = tmemberMapper_W.updateTmemberTCodeById(map);
+		if (rtn > 0) {
+			data.set_ReturnMsg("用户名成功登出!");
+			data.set_ReturnCode(ReturnMsg.CODE_USER_100010);
+		} else {
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("出错了!");
+		}
+		
+		return data;
+	}
+
+	/**
+	 * 用户注册验证业务
+	 * @param user @see UserRegisterInput
+	 * @return @see ObjectOutput
+	 * @throws LakalaException
+	 */
+	@Override
+	public ObjectOutput<UserInfoOutput> saveUserRegister1(UserRegisterInput user)
+			throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		//debug
+		System.out.println("saveUserRegister->mobile:" + user.getMobile());
+		
+		//验证码
+		Tverificationcode reqCode = new Tverificationcode();
+		reqCode.setMobile(user.getMobile());
+		int code = 0;
+		try {
+			code = Integer.parseInt(user.getVerificationCode());
+		} catch (Exception ex) {
+			//ignore
+		}
+		reqCode.setCode(code);
+
+		//验证码来源(0：添加销售员；1：销售员分成；2：设置送货上门服务;3:2C注册短信验证码；4:2B注册短信验证码；5:2C忘记密码 验证码；6:2B忘记密码验证码)
+		reqCode.setSource(4);
+		
+		Tverificationcode resCode = smsService_R.queryVerificationCode(reqCode);
+		if (null != resCode && null != user.getVerificationCode() 
+				&& code == resCode.getCode().intValue()) {
+			
+			smsService_W.updateVerificationCode(reqCode); //验证码失效
+			
+			//查询网点表，检查是否是店主
+			List<Tmedia> mediaStatistics = 
+					tmemberMapper_R.selectSdbMediaByCriteria(user.getMobile());
+			if (null != mediaStatistics && mediaStatistics.size() > 0
+					&& user.getMobile().equals(mediaStatistics.get(0).getMobile())) {
+			
+				//查询用户表，检查用户是否注册
+				Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+				if (null != tmember) {
+					//查询用户中心，检查用户是否注册
+					try {
+						//验证激活
+						Long uid = tmember.getGroupid();
+						uid = (uid == null ? 0L : uid);
+						if (Long.compare(uid, 0L) > 0) {
+							data.set_ReturnMsg("该手机号已激活，无需重复激活");
+							data.set_ReturnCode(ReturnMsg.CODE_USER_100014);
+							return data;
+						}
+						//RSA解密
+						String plainpwd = RSA.decrypt(user.getPwd());
+						LoginStatusEnum status = userWebService.authentication(user.getMobile(), plainpwd, SYSTEM_CODE); //密码暂时为空
+						if (status == LoginStatusEnum.LOGINSUCCESS) {
+							//集团用户中心服务
+							Long gid = userWebService.createUserIfNotExist(user.getMobile(), plainpwd, SYSTEM_CODE);
+							gid = (gid == null ? 0L : gid);
+							if (Long.compare(gid, 0L) > 0) {
+								map.put("mobile", user.getMobile());
+								map.put("groupId", gid);
+								tmemberMapper_W.updateTmemberUID(map);
+
+								data.set_ReturnMsg("恭喜您，激活成功！     您可用拉卡拉的账号密码登录！");
+								data.set_ReturnCode(ReturnMsg.CODE_USER_100015);
+							}
+						} else if (status == LoginStatusEnum.USER_NOTEXISTS) {
+							data.set_ReturnMsg("激活成功，并可设置登录密码!");
+							data.set_ReturnCode(ReturnMsg.CODE_USER_100013);
+						} else if (status == LoginStatusEnum.PASSWORD_ERROR) {
+							//集团用户中心服务
+							Long gid = userWebService.createUserIfNotExist(user.getMobile(), plainpwd, SYSTEM_CODE);
+							gid = (gid == null ? 0L : gid);
+							if (Long.compare(gid, 0L) > 0) {
+								map.put("mobile", user.getMobile());
+								map.put("groupId", gid);
+								tmemberMapper_W.updateTmemberUID(map);
+
+								data.set_ReturnMsg("恭喜您，激活成功！     您可用拉卡拉的账号密码登录！");
+								data.set_ReturnCode(ReturnMsg.CODE_USER_100015);
+							}
+						} else if (status == LoginStatusEnum.ACCESSDENY) {
+							data.set_ReturnMsg("拒绝访问!");
+							data.set_ReturnCode(ReturnMsg.CODE_USER_100017);
+						}
+					} catch (Exception ex) {
+						data.set_ReturnMsg("webservice服务出错了!");
+						data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+					}
+				} else {
+					data.set_ReturnMsg("很抱歉，该手机号未开通电商业务，请联系拉卡拉客户经理开通！");
+					data.set_ReturnCode(ReturnMsg.CODE_USER_100001);
+				}
+			} else {
+				data.set_ReturnMsg("很抱歉，该手机号未开通电商业务，请联系拉卡拉客户经理开通！");
+				data.set_ReturnCode(ReturnMsg.CODE_USER_100001);
+			}
+		} else {
+			data.set_ReturnMsg("很抱歉，您输入的验证码错误，请确认后重新输入！");
+			data.set_ReturnCode(ReturnMsg.CODE_USER_100007);
+		}
+		
+		return data;
+	}
+
+	/**
+	 * 用户注册验证业务
+	 * @param user @see UserRegisterInput
+	 * @return @see ObjectOutput
+	 * @throws LakalaException
+	 */
+	@Override
+	public ObjectOutput<UserInfoOutput> saveUserRegister2(UserRegisterInput user)
+			throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> mapC = new HashMap<String, Object>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+		
+		List<Tmedia> mediaStatistics = 
+				tmemberMapper_R.selectSdbMediaByCriteria(user.getMobile());
+		if (null != mediaStatistics && mediaStatistics.size() > 0
+				&& user.getMobile().equals(mediaStatistics.get(0).getMobile())) {
+			
+			//查询用户表，检查用户是否注册
+			Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+			if (null != tmember) {
+				try {
+					//RSA解密
+					String plainpwd = RSA.decrypt(user.getPwd());
+					//集团用户中心服务
+					Long gid = userWebService.createUserIfNotExist(user.getMobile(), plainpwd, SYSTEM_CODE);
+					gid = (gid == null ? 0L : gid);
+					if (Long.compare(gid, 0L) > 0) {
+						map.put("mobile", user.getMobile());
+						String enpwd = RSA.encryptMTS(plainpwd);
+						map.put("pwd", enpwd);
+						map.put("groupId", gid);
+						int rtn = tmemberMapper_W.updateTmemberRegister(map);
+						if (rtn > 0) {
+							UserInfoOutput info = new UserInfoOutput();
+							info.setUserName(tmember.getMembername());
+							info.setToken(TokenUtil.getToken(user.getMobile()));
+							info.setUserType(tmember.getMembertype());
+							info.setBizType(tmember.getBizType());
+							info.setEcNetNo(mediaStatistics.get(0).getEcNetNo()); //电商网点编号
+							info.setPsam(mediaStatistics.get(0).getPsam()); //PSAM
+							
+							//为ToC添加新用户
+//							mapC.put("mobile", user.getMobile());
+//							mapC.put("pwd", enpwd);
+//							mapC.put("groupId", gid);
+//							tmemberMapper_W.addTmemberC(mapC);
+							
+							data.set_ReturnMsg("激活成功!");
+							data.set_ReturnCode(ReturnMsg.CODE_USER_100009);
+							data.set_ReturnData(info);
+						}
+					}
+				} catch (Exception ex) {
+					data.set_ReturnMsg("webservice服务出错了!");
+					data.set_ReturnCode(ReturnMsg.CODE_USER_100011);
+				}
+			} else {
+				data.set_ReturnMsg("很抱歉，该手机号未开通电商业务，请联系拉卡拉客户经理开通！");
+				data.set_ReturnCode(ReturnMsg.CODE_USER_100001);
+			}
+		} else {
+			data.set_ReturnMsg("很抱歉，该手机号未开通电商业务，请联系拉卡拉客户经理开通！");
+			data.set_ReturnCode(ReturnMsg.CODE_USER_100001);
+		}
+		
+		return data;
+	}
+	
+	/**
+	 * 小B用户更改密码验证业务
+	 * @param user @see UserRegisterInput
+	 * @return @see ObjectOutput
+	 * @throws LakalaException
+	 */
+	@Override
+	public ObjectOutput<UserInfoOutput> updateUserPwd(UserRegisterInput user)
+			throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		Map<String, Object> map  = new HashMap<String, Object>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		//debug
+		System.out.println("updateUserPwd->mobile:" + user.getMobile());
+
+		//验证用户密码
+		//根据用户名查询会员信息
+		Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+		if (null != tmember) {
+			Long uid = tmember.getGroupid();
+			uid = (uid == null ? 0L : uid);
+			if (Long.compare(uid, 0L) <= 0) {
+				data.set_ReturnMsg("请先激活");
+				data.set_ReturnCode(ReturnMsg.CODE_USER_100003);
+				return data;
+			}
+			try {
+				//RSA解密
+				String plainpwd = RSA.decrypt(user.getPwd());
+				LoginStatusEnum status = userWebService.authentication(user.getMobile(), plainpwd, SYSTEM_CODE); //密码暂时为空
+				if (status == LoginStatusEnum.LOGINSUCCESS) {
+					//集团用户中心服务
+					//RSA解密
+					String plainnewpwd = RSA.decrypt(user.getNewpwd());
+					boolean flag = userWebService.setPassword(uid, plainnewpwd, SYSTEM_CODE);
+					if (flag) {
+						//更新用户密码
+						String enpwd = RSA.encryptMTS(plainnewpwd);
+						map.put("mobile", user.getMobile());
+						map.put("pwd", enpwd);
+						int rtn = tmemberMapper_W.updateTmemberPwdById(map);
+						if (rtn > 0) {
+							UserInfoOutput info = new UserInfoOutput();
+							info.setUserName(tmember.getMembername());
+							info.setToken(user.getToken());
+							info.setUserType(tmember.getMembertype());
+							
+							data.set_ReturnMsg("更新密码成功!");
+							data.set_ReturnCode(ReturnMsg.CODE_SUCCESS);
+							data.set_ReturnData(info);
+						}
+					}
+				} else if (status == LoginStatusEnum.USER_NOTEXISTS) {
+					data.set_ReturnMsg("很抱歉，该手机号不存在，请检查后重新输入!");
+					data.set_ReturnCode(ReturnMsg.CODE_USER_100002);
+				} else if (status == LoginStatusEnum.PASSWORD_ERROR) {
+					data.set_ReturnMsg("用户密码错误!");
+					data.set_ReturnCode(ReturnMsg.CODE_USER_100004);
+				}
+			} catch (Exception ex) {
+				data.set_ReturnMsg("webservice服务出错了!");
+				data.set_ReturnCode(ReturnMsg.CODE_USER_100011);
+			}
+		} else {
+			data.set_ReturnMsg("很抱歉，该手机号不是店主手机号，请检查后重新输入!");
+			data.set_ReturnCode(ReturnMsg.CODE_USER_100002);
+		}
+
+		return data;
+	}
+
+	/**
+	 * 小B用户忘记密码验证业务
+	 * @param user @see UserRegisterInput
+	 * @return @see ObjectOutput
+	 * @throws LakalaException
+	 */
+	@Override
+	public ObjectOutput<UserInfoOutput> updateForgetPwd(UserRegisterInput user)
+			throws LakalaException {
+		ObjectOutput<UserInfoOutput> data = new ObjectOutput<UserInfoOutput>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map1 = new HashMap<String, Object>();
+		
+		if(user == null){
+			data.set_ReturnCode(ReturnMsg.CODE_ERR_000002);
+			data.set_ReturnMsg("对象为空!");
+			return data;
+		}
+
+		//debug
+		System.out.println("updateForgetPwd->mobile:" + user.getMobile());
+		
+		//验证码
+		Tverificationcode reqCode = new Tverificationcode();
+		reqCode.setMobile(user.getMobile());
+		Integer code = 0;
+		try {
+			code = Integer.parseInt(user.getVerificationCode());
+		} catch (Exception ex) {
+			//ignore
+		}
+		reqCode.setCode(code);
+
+		//验证码来源(0：添加销售员；1：销售员分成；2：设置送货上门服务;3:2C注册短信验证码；4:2B注册短信验证码；5:2C忘记密码 验证码；6:2B忘记密码验证码)
+		reqCode.setSource(6);
+		
+		Tverificationcode resCode = smsService_R.queryVerificationCode(reqCode);
+		if (null != resCode && null != user.getVerificationCode() 
+				&& code == resCode.getCode().intValue()) {
+
+			smsService_W.updateVerificationCode(reqCode); //验证码失效
+			
+			//根据用户名查询会员信息
+			Tmember tmember = tmemberMapper_R.selectTmemberById(user.getMobile());
+			if (null != tmember && user.getMobile().equals(tmember.getMembername())) {
+				try {
+					//验证激活
+					Long uid = tmember.getGroupid();
+					uid = (uid == null ? 0L : uid);
+					if (Long.compare(uid, 0L) <= 0) {
+						data.set_ReturnMsg("请先激活");
+						data.set_ReturnCode(ReturnMsg.CODE_USER_100003);
+						return data;
+					}
+					//RSA解密
+					String plainpwd = RSA.decrypt(user.getPwd());
+					//集团用户中心服务
+					boolean flag = userWebService.setPassword(uid, plainpwd, SYSTEM_CODE);
+					if (flag) {
+						//更新用户密码
+						String enpwd = RSA.encryptMTS(plainpwd);
+						map1.put("mobile", user.getMobile());
+						map1.put("pwd", enpwd);
+						int rtn = tmemberMapper_W.updateTmemberPwdById(map1);
+						if (rtn > 0) {
+							UserInfoOutput info = new UserInfoOutput();
+							info.setUserName(tmember.getMembername());
+							info.setToken(TokenUtil.getToken(user.getMobile()));
+							info.setUserType(tmember.getMembertype());
+							info.setBizType(tmember.getBizType());
+							
+							//根据用户名查询会店主信息
+							List<Tmedia> mediaStatistics = 
+									tmemberMapper_R.selectSdbMediaByCriteria(user.getMobile());
+							if (null != mediaStatistics && mediaStatistics.size() > 0
+									&& user.getMobile().equals(mediaStatistics.get(0).getMobile())) {
+								//更新终端编号
+								map.put("mobile", user.getMobile());
+								map.put("terminalCode", user.getTerminalCode());
+								map.put("terminalType", user.getTerminalType());
+								int rtn_val = tmemberMapper_W.updateTmemberTCodeById(map);
+								if (rtn_val > 0) {
+									info.setEcNetNo(mediaStatistics.get(0).getEcNetNo()); //电商网点编号
+									info.setPsam(mediaStatistics.get(0).getPsam()); //PSAM
+									data.set_ReturnMsg("更新密码成功!");
+									data.set_ReturnCode(ReturnMsg.CODE_USER_100012);
+									data.set_ReturnData(info);
+								}
+							} else {
+								data.set_ReturnMsg("很抱歉，该手机号未开通电商业务，请联系拉卡拉客户经理开通!");
+								data.set_ReturnCode(ReturnMsg.CODE_USER_100001);
+							}
+						}
+					}
+				} catch (Exception ex) {
+					data.set_ReturnMsg("webservice服务出错了!");
+					data.set_ReturnCode(ReturnMsg.CODE_USER_100011);
+				}
+			} else {
+				data.set_ReturnMsg("很抱歉，该手机号不是店主手机号，请检查后重新输入!");
+				data.set_ReturnCode(ReturnMsg.CODE_USER_100002);
+			}
+		} else {
+			data.set_ReturnMsg("很抱歉，您输入的验证码错误，请确认后重新输入！");
+			data.set_ReturnCode(ReturnMsg.CODE_USER_100007);
+		}
+
+		return data;
+	}
+
+}

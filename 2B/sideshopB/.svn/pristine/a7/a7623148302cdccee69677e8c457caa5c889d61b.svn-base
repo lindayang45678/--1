@@ -1,0 +1,203 @@
+
+var selectedrealcatobj = null;//选中的是实分类数据
+$(function(){	
+	var objsort = {};//实类id和虚类id
+	objlastresultJson = {};//对应实类商品
+	objidconnection = "";//虚拟id和末级实类id返回
+	$('.first').delegate('li','tap',function() {
+		$('.third').hide('slow');
+		$('.fourth').hide('slow');
+		$('.fifth').hide('slow');
+		$('.second').show('slow');
+		$('.second').find('li').removeClass('color');
+		$('.second').find('li:first-child').addClass('color');
+		$('.first').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid =$(this).attr("virtualid");
+		objsort.first = virtualid;
+		var laststagevirtual = $(".second ul");
+		secondVirtualfun(virtualid,laststagevirtual);
+	});
+	$('.second').delegate("li",'tap',function() {
+		$('.fourth').hide('slow');
+		$('.fifth').hide('slow');
+		$('.third').show('slow');
+		$('.third').find('li').removeClass('color');
+		$('.third').find('li:first-child').addClass('color');
+		$('.second').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid =$(this).attr("virtualid");
+		objsort.second = virtualid;
+		var laststagevirtual = $(".third ul");
+		thirdVirtualfun(virtualid,laststagevirtual);
+	});
+	$('.third').delegate("li",'tap',function() {
+		$('.fourth').show('slow');
+		$('.fifth').hide('slow');
+		$('.fourth').find('li').removeClass('color');
+		$('.fourth').find('li:first-child').addClass('color');
+		$('.third').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid =$(this).attr("virtualid");
+		objsort.third = virtualid;
+		var laststagevirtual = $(".fourth ul");
+		fourtVirtualfun(virtualid,laststagevirtual);
+	});
+	$('.fourth').delegate("li",'tap',function() {
+		$('.fifth').show('slow');
+		$('.fifth').find('li').removeClass('color');
+		$('.fifth').find('li:first-child').addClass('color');
+		$('.fourth').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid = $(this).attr("virtualid");
+		objsort.fourth = virtualid;
+		var laststagevirtual = $(".fifth ul");
+		laststage(virtualid,laststagevirtual);
+	});
+	$('.fifth').delegate("li",'tap',function(){
+		$('.fifth').find('li').removeClass('color');
+		$(this).addClass('color');
+		var virtualid = $(this).attr("virtualid");
+		$(".choi-sort").html($(this).html());
+		var objlength = count(objlastresultJson);//统计末级长度
+		var objlastresul = {};//存储末级对象
+		objidconnection = "";
+		objsort.fifth = virtualid;
+		// 返回 实分类ID		父分类ID		分类描述		完整分类描述
+		for(var z = 0; z < objlength; z++){
+			if(virtualid == objlastresultJson[z].tRealCateId) {
+				objlastresul = objlastresultJson[z];
+				selectedrealcatobj = objlastresultJson[z];
+				console.log(objlastresul);
+			}
+		};
+		for(var key in objsort) {
+			objidconnection += objsort[key] + "_";
+		};
+		console.log(objidconnection);
+		$("#schose-choi-sort").hide().siblings("#add-choi-sort").show();
+		//选择分类，获取属性 zhiziwei
+		goodsProUtils.init(selectedrealcatobj.tRealCateId);
+	});
+	$(".first ul li").first().addClass("color");
+})
+//计算对象长度
+function count(h){
+    var o = typeof h;
+    if(o == 'string'){
+            return h.length;
+    }else if(o == 'object'){
+            var p = 0;
+            for(var q in h){
+                    p++;
+            }
+            return p;
+    }
+    return false;
+};	
+//获取2C使用的所有虚分类（即营销分类）
+var firstvirtual = $(".first ul");//一级分类
+var secondvirtual = $(".second ul");//二级分类
+var thirdvirtual = $(".third ul");//三级分类
+var fourthvirtual = $(".fourth ul");//四级分类
+var laststagevirtual = $(".fifth ul");//实分类
+var connectionid = [];
+var connection = "";
+var secondret = "";
+var thirdret = "";
+var fourthret = "";
+var laststageret = "";
+var data = {"token":"1234"};
+var resultJson = ajaxCommon(urlgoodsqueryvirtualcat, data);
+resultJson = convertNullToEmpty(resultJson);
+if(resultJson._ReturnCode === returnCodeSuccess) {
+	var virtualclass = resultJson._ReturnData;
+	if(virtualclass.length > 0) {
+		//一级分类
+		firstret ="";
+		for(var i = 0; i < virtualclass.length; i++){
+			if(virtualclass[i].fatherVirtualCateId == 0){
+				firstret += "<li virtualid='" + virtualclass[i].tVirtualCateId + "'>" + virtualclass[i].virtualCateDisc + "</li>"
+			}
+		}
+		firstvirtual.append(firstret);
+	}
+	//二级分类
+	function secondVirtualfun (virtualid,laststagevirtual) {
+		secondvirtual.html("");
+		secondret = "";
+		for(var j = 0; j < virtualclass.length; j++) {
+			if(virtualid == virtualclass[j].fatherVirtualCateId) {
+				secondret += "<li virtualid='" + virtualclass[j].tVirtualCateId + "'>"+ virtualclass[j].virtualCateDisc + "</li>";
+			}
+		}
+		if(secondret == "") {
+			laststage(virtualid,laststagevirtual);
+		} else {
+			secondvirtual.html("").append(secondret);
+		}
+	}
+	//三级分类
+	function thirdVirtualfun (virtualid,laststagevirtual) {
+		thirdvirtual.html("");
+		thirdret = "";
+		for(var k = 0; k < virtualclass.length; k++) {
+			if(virtualid == virtualclass[k].fatherVirtualCateId) {
+				thirdret += "<li virtualid='" + virtualclass[k].tVirtualCateId + "'>"+ virtualclass[k].virtualCateDisc + "</li>";
+			}
+		}
+		if(thirdret == "") {
+			laststage(virtualid,laststagevirtual);
+		} else {
+			thirdvirtual.html("").append(thirdret);
+		}
+	}
+	//四级分类
+	function fourtVirtualfun (virtualid,laststagevirtual){
+		fourthvirtual.html("");
+		fourthret = "";
+		for(var l = 0; l < virtualclass.length; l++){
+			if(virtualid == virtualclass[l].fatherVirtualCateId){
+				fourthret += "<li virtualid='" + virtualclass[l].tVirtualCateId+"'>" + virtualclass[l].virtualCateDisc + "</li>";
+			}	
+		}
+		if(fourthret == "") {
+			laststage(virtualid,laststagevirtual);
+		} else {
+			fourthvirtual.append(fourthret);
+		}
+	}	
+}
+//判断末级，返回数据
+function laststage(virtualid,laststagevirtual) {
+	var data = {"tVirtualCateId":virtualid};
+	var lastresultJson = ajaxCommon(urlgoodsqueryrealcatbyvirtualcat, data);
+	lastresultJson = convertNullToEmpty(lastresultJson);
+	if (lastresultJson._ReturnCode === returnCodeSuccess) {
+		laststagevirtual.html("");
+		laststageret = "";
+		if(lastresultJson._ReturnData.length > 0) {//请求实类的接口返回数据长度是否非空
+			for(var m = 0; m < lastresultJson._ReturnData.length; m++) {
+				laststageret += "<li virtualid='" + lastresultJson._ReturnData[m].tRealCateId + "'>" + lastresultJson._ReturnData[m].realCateDisc + "</li>";
+				objlastresultJson[m] = lastresultJson._ReturnData[m];
+			}
+			laststagevirtual.append(laststageret);
+		} else {
+			laststagevirtual.parent().hide("show");//无值隐藏当前级
+		}
+	}
+}	
+
+function getSelectedrealcatobj(){
+	return selectedrealcatobj;
+}
+
+function setSelectedrealcatobj(o){
+	selectedrealcatobj = o;
+}
+
+function getObjidconnection(){
+	return objidconnection;
+}
+
+

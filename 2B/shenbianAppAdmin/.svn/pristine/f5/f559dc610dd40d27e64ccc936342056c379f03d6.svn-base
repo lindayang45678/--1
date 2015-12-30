@@ -1,0 +1,13 @@
+// JavaScript Document
+$(function(){
+	 	$(".add-service").on('tap',function(){
+		 $(".add-del").removeClass('hidden');
+		 });
+		 $('.del-image').on('tap',function(){
+			 $('.add-del').addClass('hidden');
+			 });
+	     /*点击编辑*/
+		$('.edit').on('tap',function(){
+			$(this).siblings('div').attr('contentEditable',true);
+			});
+});

@@ -1,0 +1,29 @@
+package com.lakala.util;
+/**
+ * 业务返回编码
+ * @author ph.li
+ *
+ */
+public class ReturnMsg {
+
+
+	/** 返回成功编码 */
+	public final static String CODE_SUCCESS = "000000";
+	/** 内部错误  */
+	public final static String CODE_ERR_DEFAULT = "000001";
+	/** 数据检验不通过 */
+	public final static String CODE_ERR_000002 = "000002";
+
+    /** 批发进货验证及数据提示 */
+    public final static String CODE_ERR_000003 = "000003";
+
+	/** 系统出错缺省消息提示 */
+	public final static String MSG_ERR_DEFAULT = "系统忙，请稍后再试";
+
+	public final static String MSG_SUCCESS_DEFAULT="SUCCESS";
+	
+	public final static String MSG_PARAMS_ERROR="参数不合法";
+	public final static String MSG_COUPON_ACTIVE_OK="激活成功";
+	public final static String MSG_OUPON_ACTIVE_ERROR="激活失败";
+	
+}

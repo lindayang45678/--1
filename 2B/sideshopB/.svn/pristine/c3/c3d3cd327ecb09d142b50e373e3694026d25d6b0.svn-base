@@ -1,0 +1,35 @@
+$(function() {
+	
+	var url = window.location.href;
+	var favorablecode = getParamValueByName(url, "favorablecode");
+	var couponType = getParamValueByName(url, "couponType");
+	var cost = getParamValueByName(url, "cost");
+	var orderamount = getParamValueByName(url, "orderamount");
+	var usednum = getParamValueByName(url, "usednum");
+	var usenum = getParamValueByName(url, "usenum");
+	var endtime = getParamValueByName(url, "endtime");
+	var frequencys = getParamValueByName(url, "frequencys");
+	//时间戳转换
+	var data = new Date(parseInt(endtime));
+	function formatDate(data) {     
+        var year = data.getFullYear();     
+        var month = data.getMonth()+1;     
+        var date = data.getDate();         
+        return year+"-"+month+"-"+date;     
+    }
+	var frequencys = decodeURI(frequencys).split(",");	//使用限制
+	var container = $(".coupon-details dl");
+	var content ="";
+	content +="<dt>现金券号："+ favorablecode +"</dt>";
+	content +="<dt>券类别："+ decodeURI(couponType) +"</dt>";
+	content +="<dt>面值："+ cost +"</dt>";
+	content +="<dt>所需消费金额："+ orderamount +"</dt>";
+	content +="<dt>已用："+ usenum +"次</dt>";
+	content +="<dt>剩余："+ usednum +"次</dt>";
+	content +="<dt>有效期："+ formatDate(data) +"</dt>";
+	content +="<dt>使用限制：</dt>";
+	for (var i = 0; i < frequencys.length; i++) {
+		content +="<dt>仅限&nbsp;&nbsp;"+ frequencys[i] +"</dt>";
+	};
+	container.html("").append(content);
+});

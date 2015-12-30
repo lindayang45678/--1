@@ -1,0 +1,19 @@
+$(function() {
+	shipAddress();
+	var shipaddress = $.parseJSON(storage.getItem("shipaddress"));
+	var phoneno = shipaddress.shipmobile;
+	var data = {"phoneno": phoneno};
+	var resultJson = ajaxCommon(urlGetshopupdate,data);
+	var result = resultJson._ReturnData;
+	$("#shopkeeper").text(result.shopkeeper);//店主姓名
+	$("#phoneno").text(result.phoneno);//店主手机
+	$("#id_no").text(result.id_no);//身份证号
+	$(".id-card .zm").attr("src",result.idimage_positive); //身份证正面
+	$(".id-card .fm").attr("src",result.idimage_negative);//身份证反面
+	$("#shopname").text(result.shopname);//小店名称
+	$("#address").text(result.district + "  " + result.community + "  " + result.address);//小店地址
+	var shopType = result.shopType;
+	var type = getReturntShopType(shopType);
+	$(".shop-type em").text(type);//店铺类型
+	$(".licence img").attr("src",result.businessLicence);//营业执照
+});

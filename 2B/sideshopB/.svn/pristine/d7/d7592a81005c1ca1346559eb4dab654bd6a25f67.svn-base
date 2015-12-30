@@ -1,0 +1,113 @@
+package com.lakala.module.user.controller;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lakala.exception.LakalaException;
+import com.lakala.module.comm.ObjectOutput;
+import com.lakala.module.user.service.UserService;
+import com.lakala.module.user.vo.UserInfoOutput;
+import com.lakala.module.user.vo.UserLoginInput;
+import com.lakala.module.user.vo.UserRegisterInput;
+import com.lakala.util.ReturnMsg;
+
+/**
+ * 用户登录
+ * @author ph.li
+ *
+ */
+@Controller
+@RequestMapping("/user")
+public class LoginController {
+	Logger logger = Logger.getLogger(LoginController.class);
+	@Autowired
+	private UserService userService;
+	
+	/**
+	 * 小B用户登录接口
+	 * @param user 登录输入
+	 * @see UserLoginInput
+	 * @return 登录输出
+	 * @see UserInfoOutput
+	 */
+	@RequestMapping(value = "/login",method = RequestMethod.POST)
+	public @ResponseBody ObjectOutput<UserInfoOutput> login(UserLoginInput user){
+		ObjectOutput<UserInfoOutput> info = null;
+		try{
+			info = userService.login(user);
+		}catch(LakalaException e){
+			logger.error(e.getMessage());
+			info = new ObjectOutput<UserInfoOutput>();
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		return info;
+	}
+	
+	/**
+	 * 小B用户登出接口
+	 * @param user 登出输入
+	 * @see UserLoginInput
+	 * @return 登出输出
+	 * @see UserInfoOutput
+	 */
+	@RequestMapping(value = "/logout",method = RequestMethod.POST)
+	public @ResponseBody ObjectOutput<UserInfoOutput> logout(UserLoginInput user){
+		ObjectOutput<UserInfoOutput> info = null;
+		try{
+			info = userService.logout(user);
+		}catch(LakalaException e){
+			logger.error(e.getMessage());
+			info = new ObjectOutput<UserInfoOutput>();
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		return info;
+	}
+	
+	/**
+	 * 小B用户注册接口
+	 * @param user 注册输入
+	 * @see UserRegisterInput
+	 * @return 注册输出
+	 * @see UserInfoOutput
+	 */
+	@RequestMapping(value = "/register",method = RequestMethod.POST)
+	public @ResponseBody ObjectOutput<UserInfoOutput> register(UserRegisterInput user){
+		ObjectOutput<UserInfoOutput> info = null;
+		try{
+			info = userService.addUserRegister(user);
+		}catch(LakalaException e){
+			logger.error(e.getMessage());
+			info = new ObjectOutput<UserInfoOutput>();
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		return info;
+	}
+	
+	/**
+	 * 小B用户更改/忘记密码接口
+	 * @param user 输入
+	 * @see UserUpdPwdInput
+	 * @return 注册输出
+	 * @see UserInfoOutput
+	 */
+	@RequestMapping(value = "/updpwd",method = RequestMethod.POST)
+	public @ResponseBody ObjectOutput<UserInfoOutput> updPwd(UserLoginInput user){
+		ObjectOutput<UserInfoOutput> info = null;
+		try{
+			info = userService.updateUserPwd(user);
+		}catch(LakalaException e){
+			logger.error(e.getMessage());
+			info = new ObjectOutput<UserInfoOutput>();
+			info.set_ReturnCode(ReturnMsg.CODE_ERR_DEFAULT);
+			info.set_ReturnMsg(ReturnMsg.MSG_ERR_DEFAULT);
+		}
+		return info;
+	}
+}

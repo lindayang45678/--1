@@ -1,0 +1,24 @@
+$(function(){	
+	$('.first').find('li').on('tap',function(){
+		$('.second').show('slow');
+		$('.first').find('li').removeClass('color');
+		$(this).addClass('color');
+		
+	});
+	$('.second').find('li').on('tap',function(){
+		$('.third').show('slow');
+		$('.second').find('li').removeClass('color');
+		$(this).addClass('color');
+	});
+	$('.third').find('li').on('tap',function(){
+		$('.fourth').show('slow');
+		$('.third').find('li').removeClass('color');
+		$(this).addClass('color');
+	});
+	$('.fourth').find('li').on('tap',function(){
+		$('.fourth').find('li').removeClass('color');
+		$(this).addClass('color');
+	});
+	
+	
+})

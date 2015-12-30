@@ -1,0 +1,79 @@
+$(function() {		
+	//点击获取验证码
+	var wait=60;//设定时间
+	function verificationCodetTime(obj) {
+		if (wait==0) {
+			obj.removeAttr("disabled");
+			obj.html("重新发送验证码");
+			wait=60;
+			obj.removeClass('getVerificationCode');
+		} else {	
+			obj.addClass('getVerificationCode');
+			obj.attr("disabled","disabled");
+			obj.html("获取验证码"+wait+"s");
+			wait--;
+			setTimeout(function() {
+				verificationCodetTime(obj);
+			},1000);
+		}
+	} 
+	$("#getVerificationCode").on("tap", function(event) {
+		if(wait == 60 || wait == 0){
+			var phone = $.trim($("#mobile").val());
+			var data = {"phone":phone};
+			var verificationCode = $.trim($("#verificationCode").val());
+			var resultJson = ajaxCommon(urlGetCode,data);
+			if(resultJson._ReturnCode === returnCodeSuccess){
+				verificationCodetTime($("#getVerificationCode"));	
+			}else{
+				if(phone == ""){
+					showAlertMsg("手机号不能为空");
+					return ;
+				}
+				if(!phone.match(/^1\d{10}$/)||phone.match(/^1[0-2]\d{9}$/)){
+					$('#mobile').val('');
+					showAlertMsg("很抱歉，您输入的手机号错误，请重新输入！");
+					return ;
+				}		
+			}
+		} else {
+			return;
+		}
+		event.stopPropagation();
+	});
+	
+	//进入小店
+	$("#goin-shop").on("tap",function(){
+		var moblie = $.trim($("#moblie").val());
+		var verificationCode = $.trim($("#verificationCode").val());
+		var pwd = $.trim($("#pwd").val());
+		var data = {"mobile":mobile, "pwd":pwd, "verificationCode":verificationCode};
+		
+		if(verificationCode== ""){	
+			showAlertMsg("验证码不能为空");
+			return ;
+		}
+		if(!verificationCode.match(/^[0-9]{6}$/)){
+			showAlertMsg("很抱歉，密码只能是6位的数字、字母、或数字和字母的组合，请重新输入！");
+		}
+		if(pwd== ""){	
+			showAlertMsg("密码不能为空");
+			return ;
+		}
+		if(!pwd.match(/^[A-Za-z0-9]{6,20}$/)){	
+			showAlertMsg("很抱歉，密码只能是6-20位的数字、字母、或数字和字母的组合，请重新输入！");
+			return ;
+		}
+		var resultJson = ajaxCommon(urlForgetpwd,data);
+		if(resultJson._ReturnCode === returnCodeSuccess){
+			var userName = resultJson._ReturnData.userName;
+			var userType = resultJson._ReturnData.userType;	
+
+			storage.setItem("mobile", mobile);
+			storage.setItem(hasLogined, "1");
+			window.location.href = "shop.html?t=" + t;
+		} else {			
+			showAlertMsg(resultJson._ReturnMsg);
+		}
+	});
+});

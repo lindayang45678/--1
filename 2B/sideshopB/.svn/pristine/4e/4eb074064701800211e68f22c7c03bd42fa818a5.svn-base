@@ -1,0 +1,19 @@
+package com.lakala.mapper.w.order;
+
+
+import java.util.Map;
+
+import com.lakala.base.model.Torderitems;
+
+public interface TorderitemsMapper {
+
+    int updateByPrimaryKeySelective(Torderitems record);
+    
+    //订单取消重置释放库存
+  	void updateBatchRestoreByCancelOrder(Map map);
+  	
+  	void updateTorderItemsCancelByTorderItemsId(Integer torderitemsid);
+  	
+  	void updateTorderitemsWithLogisID(Map m);
+
+}

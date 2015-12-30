@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>编辑商品</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css?t=2015070100" />
+</head>
+
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1);" class="back"></a>
+  		<h1>编辑商品</h1>
+        <a href="javascript:;" class="head-right">保存</a>
+	</header>
+	<section id="add-choi-sort">
+	    <section class="container">
+	    	<div class="nonstock-part1">
+	        	<ul>
+	            	<li id="addimg"><a href='javascript:;'><img src='../../images/pluse-image.png' alt=''/></a></li>
+	            </ul>
+	        </div>
+	        <div class="nonstock-part2 shopedit-3item">
+	        	<div class="editline-n">
+	            	<span class="left1">商品名称：</span>
+	                <div class="leftborder">
+	                    <div contenteditable="true" class="max-3"></div>
+	                	<em class="edit"></em>
+	                </div>
+	            </div>
+	            <div class="editline-n">
+	            	<span class="left1">商品描述：</span>
+	                <div class="leftborder">
+	                	<div contenteditable="true" class="max-n"></div>
+	                	<em class="edit"></em>
+	                </div>
+	            </div>
+	            <div class="edit-line1">
+	            	<span>分类：</span>
+	            	<a href="javascript:;" class="leftborder choi-sort"><div>选择分类</div><em class="edit"></em></a>
+	            	<em class="edit"></em>
+	            </div>
+	        </div>
+	    </section>
+	</section>
+    
+    <div class ="schose-choi-sort-header hidden">
+		<h1>选择分类</h1>
+	</div>
+	<div id="schose-choi-sort">
+		<section class="container">
+	    	<div class="stair first">
+	        	<ul>
+	            </ul>
+	        </div>
+	        <div class="second-level second">
+	        	<h2>二级分类</h2>
+	            <span></span>
+	            <ul>
+	            </ul>
+	        </div>
+	        <div class="second-level third">
+	        	<h2>三级分类</h2>
+	            <span></span>
+	            <ul>
+	            </ul>
+	        </div>
+	        <div class="second-level fourth">
+	        	<h2>四级分类</h2>
+	            <span></span>
+	            <ul>
+	            </ul>
+	        </div>
+	        <div class="second-level fifth">
+	        	<h2>五级分类</h2>
+	            <span></span>
+	            <ul>
+	            </ul>
+	        </div>
+	    </section>
+     </div>
+
+    <script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../../js/common/setting.js?t=2015071000"></script>
+	<script type="text/javascript" src="../../js/common/common.js?t=2015071000"></script>
+	<script type="text/javascript" id="platJs"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+	<script type="text/javascript" src="../../js/shops/editgoods1.js?t=2015071000"></script>
+	<script type="text/javascript" src="../../js/shops/selectsorts.js"></script>
+</body>
+</html>

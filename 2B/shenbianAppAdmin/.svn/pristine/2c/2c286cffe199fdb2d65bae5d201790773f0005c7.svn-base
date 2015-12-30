@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>搜索商品</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<link rel="stylesheet" href="../../css/master.css" />
+</head>
+<body>
+	<header>
+		<a href="javascript:window.history.go(-1)" class="back">返回</a>
+		<h1>批发进货</h1>
+		<a href="search.html" class="head-right wholesale-search">搜索</a>
+	</header>
+	<section class="container">
+		<div class="wrap">
+		<div class="w-search-success">
+			<div class="search-wrap"><div><input type="text" placeholder="商品搜索" /></div><a href="javascript:;" class="w-searchbtn">确&nbsp;认</a></div>	
+		</div>
+		<div class="search-title">搜索到和【水果】相关的人，共 <em>3</em>个</div>
+		<ul class="wholesale-goods search-result">
+			<li>
+				<a href="#" class="clearfix">
+					<i class="box-picture"><img src="../../images/example240x240.png"/><i></i></i>
+					<i class="box-detail">
+						<i class="detail-head">单人床单40支纯棉斜纹加大床单</i>
+						<i class="sale-price">¥8999.00</i>
+						<del class="market-price">¥12499.00</del>
+						<i class="add-cart">加入购物车</i>	
+					</i>
+					
+				</a>
+			</li>
+			<li>
+				<a href="#" class="clearfix">
+					<i class="box-picture"><img src="../../images/example240x240.png"/><i></i></i>
+					<i class="box-detail">
+						<i class="detail-head">单人床单40支纯棉斜纹加大床单</i>
+						<i class="sale-price">¥8999.00</i>
+						<del class="market-price">¥12499.00</del>
+						<i class="add-cart">加入购物车</i>	
+					</i>
+					
+				</a>
+			</li>
+			<li>
+				<a href="#" class="clearfix">
+					<i class="box-picture"><img src="../../images/example240x240.png"/><i class="soldout"></i></i>
+					<i class="box-detail">
+						<i class="detail-head">单人床单</i>
+						<i class="sale-price">¥8999.00</i>
+						<del class="market-price">¥12499.00</del>
+						<i class="add-cart">加入购物车</i>	
+					</i>
+					
+				</a>
+			</li>
+		</ul>
+	</div>
+		<div id="wholesale-foot" class="clearfix">
+			<i class="goodscart">436</i>
+			<i class="goodscart-total">共计436件</i>
+			<i class="goodscart-price">￥1284.00</i>
+			<a href="#" class="gopay">去结算</a>
+		</div>	
+	</section>
+	<div class="masker hidden"></div>
+	<div id="sku" class="hidden">
+			<div class="sku-wrap">
+				<div class="sku-detail"><i>颜色：</i><br/><em class="sku-red">红色</em><em>红黄绿黄绿色</em><em>黄绿黄绿黄绿色</em><em>红色</em></div>
+				<div class="sku-detail"><i>颜色：</i><br/><em>红色</em><em>红色</em><em>红色</em><em>红色</em><em>红黄绿黄绿色</em><em>红色</em></div>
+			</div>
+			<div class="sku-a"><i class="stock">库存：<em>123456</em>件</i><i class="sku-solded">已售：<em>145226</em></i></div>
+			<div class="sku-a"><i class="sku-sale">拉卡拉价：<em class="color">￥1284.00</em></i><i class="sku-market">批发市场价：<em>￥1284.00</em></i></div>
+			<div class="sku-b"><em>购买数量：</em><i class="sku-minus">&minus;</i><input type="tel" value="0" readonly="readonly"/><i class="sku-plus">+</i></div>
+			<a href="javascript:;" class="sku-cancel fl">取消</a>
+			<a href="javascript:;" class="sku-sure fr">加入购物车</a>
+	</div>
+</body>
+<script type="text/javascript" src="../../js/lib/zepto.min.js"></script>
+<script type="text/javascript" src="../../js/common/setting.js"></script>
+<script type="text/javascript" src="../../js/common/common.js"></script>
+<script type="text/javascript" src="../../js/wholesale/searchsuccess.js"></script>
+</html>
